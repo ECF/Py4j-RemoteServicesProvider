@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Py4j RemoteService Provider
+Bundle-SymbolicName: org.eclipse.ecf.providers.py4j
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Eclipse.org - ECF
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.eclipse.ecf.core;version="3.0.0",
+ org.eclipse.ecf.core.identity,
+ org.eclipse.ecf.core.provider;version="3.1.0",
+ org.eclipse.ecf.core.util;version="3.4.0",
+ org.eclipse.ecf.osgi.services.remoteserviceadmin;version="1.2.0",
+ org.eclipse.ecf.provider.direct;version="1.0.0",
+ org.eclipse.ecf.provider.direct.local;version="1.0.0",
+ org.eclipse.ecf.remoteservice;version="7.3.0",
+ org.eclipse.ecf.remoteservice.asyncproxy,
+ org.eclipse.ecf.remoteservice.client;version="8.1.0",
+ org.eclipse.ecf.remoteservice.provider;version="1.0.0",
+ org.eclipse.equinox.concurrent.future;version="1.1.0",
+ org.osgi.framework,
+ org.osgi.service.component.annotations;version="1.2.0",
+ org.osgi.service.remoteserviceadmin;version="1.1.0"
+Require-Bundle: org.eclipse.equinox.common
+Service-Component: OSGI-INF/org.eclipse.ecf.providers.internal.py4j.RSAComponent.xml
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclipse.ecf.providers.internal.py4j.Activator
+Bundle-ClassPath: lib/py4j0.10.1.jar,
+ .
+DynamicImport-Package: *
+Export-Package: org.eclipse.ecf.providers.py4j,
+ org.eclipse.ecf.providers.py4j.identity

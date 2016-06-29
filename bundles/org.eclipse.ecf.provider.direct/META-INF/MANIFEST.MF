@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ECF Direct RSA Provider
+Bundle-SymbolicName: org.eclipse.ecf.provider.direct
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Eclipse.org - ECF
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.eclipse.ecf.core;version="3.0.0",
+ org.eclipse.ecf.core.identity;version="3.3.0",
+ org.eclipse.ecf.core.util;version="3.5.0",
+ org.eclipse.ecf.osgi.services.remoteserviceadmin,
+ org.eclipse.ecf.remoteservice,
+ org.eclipse.ecf.remoteservice.asyncproxy,
+ org.eclipse.ecf.remoteservice.client,
+ org.eclipse.equinox.concurrent.future;version="1.1.0",
+ org.osgi.framework,
+ org.osgi.service.remoteserviceadmin;version="1.1.0",
+ org.osgi.util.tracker;version="1.5.1"
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.ecf.provider.direct;version="1.0.0",
+ org.eclipse.ecf.provider.direct.local;version="1.0.0"
+Require-Bundle: org.eclipse.equinox.common
