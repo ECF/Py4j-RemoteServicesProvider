@@ -19,6 +19,8 @@ import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
 import org.eclipse.ecf.remoteservice.AbstractRSAContainer;
 import org.eclipse.ecf.remoteservice.RSARemoteServiceContainerAdapter.RSARemoteServiceRegistration;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -35,8 +37,15 @@ public class DirectHostContainer extends AbstractRSAContainer
 	public DirectHostContainer(ID id, BundleContext context) {
 		super(id);
 		this.context = context;
-		tracker = new ServiceTracker<DirectRemoteServiceProvider, DirectRemoteServiceProvider>(context, DirectRemoteServiceProvider.class,
-				this);
+		Filter filter = null;
+		try {
+			filter = context.createFilter("(&(objectClass=org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider)("
+					+ DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP + "=python.*))");
+		} catch (InvalidSyntaxException e) {
+			// Should never happen
+			throw new RuntimeException("Could not create filter", e);
+		}
+		tracker = new ServiceTracker<DirectRemoteServiceProvider, DirectRemoteServiceProvider>(context, filter, this);
 		tracker.open();
 	}
 
@@ -65,7 +74,7 @@ public class DirectHostContainer extends AbstractRSAContainer
 		try {
 			DirectRemoteServiceProvider r = this.rsc;
 			if (r != null) {
-				r.registerService(reg.getService(), convertProps(reg));
+				r.exportService(reg.getService(), convertProps(reg));
 				exportedRegs.add(reg);
 			} else
 				unexportedRegs.add(reg);
@@ -78,8 +87,8 @@ public class DirectHostContainer extends AbstractRSAContainer
 		try {
 			DirectRemoteServiceProvider r = this.rsc;
 			if (r != null) {
-				r.unregisterService(convertProps(reg));
 				exportedRegs.remove(reg);
+				r.unexportService(convertProps(reg));
 			} else
 				unexportedRegs.remove(reg);
 		} catch (Exception e) {
@@ -119,11 +128,13 @@ public class DirectHostContainer extends AbstractRSAContainer
 	}
 
 	@Override
-	public void modifiedService(ServiceReference<DirectRemoteServiceProvider> reference, DirectRemoteServiceProvider service) {
+	public void modifiedService(ServiceReference<DirectRemoteServiceProvider> reference,
+			DirectRemoteServiceProvider service) {
 	}
 
 	@Override
-	public void removedService(ServiceReference<DirectRemoteServiceProvider> reference, DirectRemoteServiceProvider service) {
+	public void removedService(ServiceReference<DirectRemoteServiceProvider> reference,
+			DirectRemoteServiceProvider service) {
 		unexportRegs(null);
 		this.rsc = null;
 	}

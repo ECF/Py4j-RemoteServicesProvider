@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" immediate="true" name="org.eclipse.ecf.providers.internal.py4j.RSAComponent">
-   <reference bind="bindRemoteServiceAdmin" cardinality="1..1" interface="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin" name="RemoteServiceAdmin" policy="static" unbind="unbindRemoteServiceAdmin"/>
+   <reference bind="bindLocalProxyMapper" cardinality="1..1" interface="org.eclipse.ecf.provider.direct.local.LocalProxyMapper" name="LocalProxyMapper" policy="static" unbind="unbindLocalProxyMapper"/>
    <implementation class="org.eclipse.ecf.providers.internal.py4j.RSAComponent"/>
 </scr:component>

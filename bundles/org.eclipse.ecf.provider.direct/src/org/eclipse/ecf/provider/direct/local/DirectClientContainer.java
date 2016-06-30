@@ -25,7 +25,7 @@ import org.eclipse.equinox.concurrent.future.IProgressRunnable;
 
 public class DirectClientContainer extends AbstractRSAClientContainer {
 
-	private ProxyMapper mapper;
+	private LocalProxyMapper mapper;
 	private Object proxy;
 
 	public DirectClientContainer(ID containerID, Object proxy) {
@@ -34,7 +34,7 @@ public class DirectClientContainer extends AbstractRSAClientContainer {
 		this.proxy = proxy;
 	}
 
-	public DirectClientContainer(ID containerID, ProxyMapper mapper) {
+	public DirectClientContainer(ID containerID, LocalProxyMapper mapper) {
 		super(containerID);
 		Assert.isNotNull(mapper);
 		this.mapper = mapper;
@@ -44,7 +44,7 @@ public class DirectClientContainer extends AbstractRSAClientContainer {
 		return this.proxy;
 	}
 
-	protected ProxyMapper getProxyMapper() {
+	protected LocalProxyMapper getProxyMapper() {
 		return this.mapper;
 	}
 

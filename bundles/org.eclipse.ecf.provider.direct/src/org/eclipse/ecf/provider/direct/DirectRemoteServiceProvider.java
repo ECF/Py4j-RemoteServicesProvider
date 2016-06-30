@@ -12,10 +12,15 @@ import java.util.Map;
 
 public interface DirectRemoteServiceProvider {
 
-	@SuppressWarnings("rawtypes")
-	void registerService(Object service, Map rsaProps);
+	public static final String EXTERNAL_SERVICE_PROP = "org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider.external";
 
 	@SuppressWarnings("rawtypes")
-	void unregisterService(Map rsaProps);
+	void exportService(Object service, Map rsaProps);
+
+	@SuppressWarnings("rawtypes")
+	void updateService(Map rsaProps);
+
+	@SuppressWarnings("rawtypes")
+	void unexportService(Map rsaProps);
 
 }

@@ -8,16 +8,15 @@
  ******************************************************************************/
 package org.eclipse.ecf.providers.internal.py4j;
 
+import java.util.Hashtable;
+
 import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
-import org.eclipse.ecf.provider.direct.local.JavaDirectRemoteServiceProvider;
-import org.eclipse.ecf.provider.direct.local.ProxyMapper;
+import org.eclipse.ecf.provider.direct.local.LocalProxyMapper;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
 
 import py4j.GatewayServer;
 import py4j.GatewayServerListener;
@@ -26,17 +25,33 @@ import py4j.Py4JServerConnection;
 @Component(immediate = true)
 public class RSAComponent {
 
-	private static BundleContext context;
-	private static RemoteServiceAdmin rsa;
-	private static GatewayServer gateway;
+	private BundleContext context;
+	private GatewayServer gateway;
+	private DirectRemoteServiceProvider pythonConsumer;
+	private LocalProxyMapper javaConsumer;
 
-	@Reference(cardinality = ReferenceCardinality.MANDATORY)
-	void bindRemoteServiceAdmin(RemoteServiceAdmin r) {
-		rsa = r;
+	private static RSAComponent instance;
+
+	public static RSAComponent getDefault() {
+		return instance;
 	}
 
-	void unbindRemoteServiceAdmin(RemoteServiceAdmin r) {
-		rsa = null;
+	public RSAComponent() {
+		instance = this;
+	}
+
+	@Reference(service = LocalProxyMapper.class)
+	void bindLocalProxyMapper(LocalProxyMapper pmm) {
+		synchronized (this) {
+			this.javaConsumer = pmm;
+		}
+	}
+
+	void unbindLocalProxyMapper(LocalProxyMapper pmm) {
+		pmm.clear();
+		synchronized (this) {
+			this.javaConsumer = null;
+		}
 	}
 
 	private GatewayServerListener gatewayServerListener = new GatewayServerListener() {
@@ -55,8 +70,10 @@ public class RSAComponent {
 
 		@Override
 		public void connectionStopped(Py4JServerConnection arg0) {
-			if (javaConsumer != null)
-				javaConsumer.clear();
+			synchronized (RSAComponent.this) {
+				if (javaConsumer != null)
+					javaConsumer.clear();
+			}
 		}
 
 		@Override
@@ -91,35 +108,41 @@ public class RSAComponent {
 
 	};
 
-	private static JavaDirectRemoteServiceProvider javaConsumer;
-	private static DirectRemoteServiceProvider pythonConsumer;
-
-	public static ProxyMapper getJavaConsumer() {
-		System.out.println("getJavaConsumer");
+	public LocalProxyMapper getProxyMapper() {
+		System.out.println("getProxyMapper");
 		return javaConsumer;
 	}
 
-	public static void setPythonConsumer(DirectRemoteServiceProvider consumer) {
+	@SuppressWarnings("unchecked")
+	public void setPythonConsumer(DirectRemoteServiceProvider consumer) {
 		if (context != null) {
 			System.out.println("setPythonConsumer");
 			pythonConsumer = consumer;
-			context.registerService(DirectRemoteServiceProvider.class, consumer, null);
+			@SuppressWarnings("rawtypes")
+			Hashtable ht = new Hashtable();
+			ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP, "python." + this.gateway.getPythonPort());
+			context.registerService(DirectRemoteServiceProvider.class, consumer, ht);
 		}
 	}
 
-	public static DirectRemoteServiceProvider getPythonConsumer() {
+	public DirectRemoteServiceProvider getPythonConsumer() {
 		return pythonConsumer;
 	}
 
-	public static int getPort() {
-		if (gateway == null) return -1;
+	public DirectRemoteServiceProvider getJavaConsumer() {
+		return javaConsumer;
+	}
+
+	public int getPort() {
+		if (gateway == null)
+			return -1;
 		return gateway.getPort();
 	}
-	
+
 	@Activate
 	void activate(BundleContext ctxt) throws Exception {
 		context = ctxt;
-		javaConsumer = new JavaDirectRemoteServiceProvider(rsa);
+		GatewayServer.turnAllLoggingOn();
 		gateway = new GatewayServer(this);
 		gateway.addListener(gatewayServerListener);
 		gateway.start();
@@ -129,8 +152,6 @@ public class RSAComponent {
 	void deactivate() throws Exception {
 		if (gateway != null) {
 			gateway.removeListener(gatewayServerListener);
-			javaConsumer.clear();
-			javaConsumer = null;
 			pythonConsumer = null;
 			gateway.shutdown();
 			gateway = null;

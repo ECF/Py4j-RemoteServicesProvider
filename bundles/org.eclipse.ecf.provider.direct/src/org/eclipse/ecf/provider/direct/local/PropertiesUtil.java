@@ -26,6 +26,8 @@ public class PropertiesUtil {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Map conditionProperties(Map input) {
+		if (input == null)
+			throw new NullPointerException("input properties cannot be null");
 		Map result = new TreeMap();
 		for (Object key : input.keySet())
 			result.put(key, input.get(key));

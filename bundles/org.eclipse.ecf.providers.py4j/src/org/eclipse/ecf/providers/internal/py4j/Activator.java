@@ -32,20 +32,26 @@ public class Activator implements BundleActivator {
 		context.registerService(Namespace.class, new Py4jNamespace(), null);
 		context.registerService(IRemoteServiceDistributionProvider.class,
 				new RemoteServiceDistributionProvider.Builder().setName(Py4jConstants.JAVA_HOST_CONFIG_TYPE)
-						.setInstantiator(new RemoteServiceContainerInstantiator(Py4jConstants.JAVA_HOST_CONFIG_TYPE,Py4jConstants.JAVA_HOST_CONFIG_TYPE) {
+						.setInstantiator(new RemoteServiceContainerInstantiator(Py4jConstants.JAVA_HOST_CONFIG_TYPE,
+								Py4jConstants.JAVA_HOST_CONFIG_TYPE) {
 							public IContainer createInstance(ContainerTypeDescription description,
 									Map<String, ?> parameters) {
-								return new DirectHostContainer(Py4jNamespace.INSTANCE.createInstance(new Object[] { "http://localhost:"+RSAComponent.getPort()+":/java" }),context);
+								return new DirectHostContainer(
+										Py4jNamespace.INSTANCE.createInstance(new Object[] {
+												"http://localhost:" + RSAComponent.getDefault().getPort() + ":/java" }),
+										context);
 							}
 						}).setServer(true).setHidden(false).build(),
 				null);
 		context.registerService(IRemoteServiceDistributionProvider.class,
 				new RemoteServiceDistributionProvider.Builder().setName(Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE)
-						.setInstantiator(new RemoteServiceContainerInstantiator(Py4jConstants.PYTHON_HOST_CONFIG_TYPE,Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE) {
+						.setInstantiator(new RemoteServiceContainerInstantiator(Py4jConstants.PYTHON_HOST_CONFIG_TYPE,
+								Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE) {
 							public IContainer createInstance(ContainerTypeDescription description,
 									Map<String, ?> parameters) {
-								ID clientID = Py4jNamespace.getInstance().createInstance(new Object[] { "uuid:" + UUID.randomUUID().toString() });
-								return new DirectClientContainer(clientID, RSAComponent.getJavaConsumer());
+								ID clientID = Py4jNamespace.getInstance()
+										.createInstance(new Object[] { "uuid:" + UUID.randomUUID().toString() });
+								return new DirectClientContainer(clientID, RSAComponent.getDefault().getProxyMapper());
 							}
 						}).setServer(false).setHidden(false).build(),
 				null);
