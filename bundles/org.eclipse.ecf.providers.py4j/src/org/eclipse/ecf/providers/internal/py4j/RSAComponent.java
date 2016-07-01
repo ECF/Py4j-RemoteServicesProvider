@@ -11,12 +11,14 @@ package org.eclipse.ecf.providers.internal.py4j;
 import java.util.Hashtable;
 
 import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
+import org.eclipse.ecf.provider.direct.local.ContainerExporter;
 import org.eclipse.ecf.provider.direct.local.LocalProxyMapper;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 
 import py4j.GatewayServer;
 import py4j.GatewayServerListener;
@@ -54,6 +56,21 @@ public class RSAComponent {
 		}
 	}
 
+	private ContainerExporter containerExporter;
+	
+	@Reference(cardinality=ReferenceCardinality.MANDATORY)
+	void bindContainerExporter(ContainerExporter e) {
+		this.containerExporter = e;
+	}
+	
+	void unbindContainerExporter(ContainerExporter e) {
+		this.containerExporter = null;
+	}
+	
+	public ContainerExporter getContainerExporter() {
+		return this.containerExporter;
+	}
+	
 	private GatewayServerListener gatewayServerListener = new GatewayServerListener() {
 
 		@Override

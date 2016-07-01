@@ -39,7 +39,7 @@ public class Activator implements BundleActivator {
 								return new DirectHostContainer(
 										Py4jNamespace.INSTANCE.createInstance(new Object[] {
 												"http://localhost:" + RSAComponent.getDefault().getPort() + ":/java" }),
-										context);
+										RSAComponent.getDefault().getContainerExporter());
 							}
 						}).setServer(true).setHidden(false).build(),
 				null);

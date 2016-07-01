@@ -24,24 +24,6 @@ import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 @Component(immediate = true)
 public class LocalDirectRemoteServiceProvider implements LocalProxyMapper {
 
-	static class DirectEndpoint {
-		private EndpointDescription ed;
-		private Object proxy;
-
-		public DirectEndpoint(EndpointDescription ed, Object proxy) {
-			this.ed = ed;
-			this.proxy = proxy;
-		}
-
-		public Object getProxy() {
-			return this.proxy;
-		}
-
-		public EndpointDescription getEndpointDescription() {
-			return this.ed;
-		}
-	}
-
 	private Map<Long, DirectEndpoint> proxyMap = new HashMap<Long, DirectEndpoint>();
 	private List<EndpointEventListener> eels = new ArrayList<EndpointEventListener>();
 

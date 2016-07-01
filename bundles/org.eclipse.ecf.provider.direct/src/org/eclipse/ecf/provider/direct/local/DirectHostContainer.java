@@ -8,146 +8,36 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct.local;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.eclipse.ecf.core.identity.ID;
-import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
 import org.eclipse.ecf.remoteservice.AbstractRSAContainer;
 import org.eclipse.ecf.remoteservice.RSARemoteServiceContainerAdapter.RSARemoteServiceRegistration;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-public class DirectHostContainer extends AbstractRSAContainer
-		implements ServiceTrackerCustomizer<DirectRemoteServiceProvider, DirectRemoteServiceProvider> {
+public class DirectHostContainer extends AbstractRSAContainer {
 
-	private BundleContext context;
-	private ServiceTracker<DirectRemoteServiceProvider, DirectRemoteServiceProvider> tracker;
-	private Object lock = new Object();
-	private List<RSARemoteServiceRegistration> unexportedRegs = new ArrayList<RSARemoteServiceRegistration>();
-	private List<RSARemoteServiceRegistration> exportedRegs = new ArrayList<RSARemoteServiceRegistration>();
+	private ContainerExporter exporter;
 
-	public DirectHostContainer(ID id, BundleContext context) {
+	public DirectHostContainer(ID id, ContainerExporter exporter) {
 		super(id);
-		this.context = context;
-		Filter filter = null;
-		try {
-			filter = context.createFilter("(&(objectClass=org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider)("
-					+ DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP + "=python.*))");
-		} catch (InvalidSyntaxException e) {
-			// Should never happen
-			throw new RuntimeException("Could not create filter", e);
-		}
-		tracker = new ServiceTracker<DirectRemoteServiceProvider, DirectRemoteServiceProvider>(context, filter, this);
-		tracker.open();
+		this.exporter = exporter;
 	}
-
-	private DirectRemoteServiceProvider rsc;
 
 	@Override
 	protected Map<String, Object> exportRemoteService(RSARemoteServiceRegistration registration) {
-		exportRegs(registration);
+		this.exporter.exportFromContainer(registration.getID().getContainerRelativeID(), registration.getService());
 		return null;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	Map convertProps(RSARemoteServiceRegistration reg) {
-		Map result = new TreeMap();
-		for (String key : reg.getPropertyKeys())
-			result.put(key, reg.getProperty(key));
-		return result;
 	}
 
 	@Override
 	protected void unexportRemoteService(RSARemoteServiceRegistration registration) {
-		unexportRegs(registration);
-	}
-
-	void exportReg(RSARemoteServiceRegistration reg) {
-		try {
-			DirectRemoteServiceProvider r = this.rsc;
-			if (r != null) {
-				r.exportService(reg.getService(), convertProps(reg));
-				exportedRegs.add(reg);
-			} else
-				unexportedRegs.add(reg);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	void unexportReg(RSARemoteServiceRegistration reg) {
-		try {
-			DirectRemoteServiceProvider r = this.rsc;
-			if (r != null) {
-				exportedRegs.remove(reg);
-				r.unexportService(convertProps(reg));
-			} else
-				unexportedRegs.remove(reg);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	void exportRegs(RSARemoteServiceRegistration reg) {
-		synchronized (lock) {
-			if (reg != null)
-				exportReg(reg);
-			else
-				for (Iterator<RSARemoteServiceRegistration> i = unexportedRegs.iterator(); i.hasNext();) {
-					exportReg(i.next());
-					i.remove();
-				}
-		}
-	}
-
-	void unexportRegs(RSARemoteServiceRegistration reg) {
-		synchronized (lock) {
-			if (reg != null)
-				unexportReg(reg);
-			else
-				for (Iterator<RSARemoteServiceRegistration> i = unexportedRegs.iterator(); i.hasNext();) {
-					unexportReg(i.next());
-					i.remove();
-				}
-		}
-	}
-
-	@Override
-	public DirectRemoteServiceProvider addingService(ServiceReference<DirectRemoteServiceProvider> reference) {
-		this.rsc = context.getService(reference);
-		exportRegs(null);
-		return this.rsc;
-	}
-
-	@Override
-	public void modifiedService(ServiceReference<DirectRemoteServiceProvider> reference,
-			DirectRemoteServiceProvider service) {
-	}
-
-	@Override
-	public void removedService(ServiceReference<DirectRemoteServiceProvider> reference,
-			DirectRemoteServiceProvider service) {
-		unexportRegs(null);
-		this.rsc = null;
+		// Do nothing
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		if (tracker != null) {
-			tracker.close();
-			tracker = null;
-			context = null;
-			exportedRegs.clear();
-			unexportedRegs.clear();
-		}
+		this.exporter = null;
 	}
+
 }
