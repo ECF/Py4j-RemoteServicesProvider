@@ -14,11 +14,11 @@ import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.remoteservice.AbstractRSAContainer;
 import org.eclipse.ecf.remoteservice.RSARemoteServiceContainerAdapter.RSARemoteServiceRegistration;
 
-public class DirectHostContainer extends AbstractRSAContainer {
+public class RSAHostContainer extends AbstractRSAContainer {
 
-	private ContainerExporter exporter;
+	private ContainerExporterService exporter;
 
-	public DirectHostContainer(ID id, ContainerExporter exporter) {
+	public RSAHostContainer(ID id, ContainerExporterService exporter) {
 		super(id);
 		this.exporter = exporter;
 	}

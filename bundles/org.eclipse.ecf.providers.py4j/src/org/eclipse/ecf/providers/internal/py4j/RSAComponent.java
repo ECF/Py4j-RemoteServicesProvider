@@ -11,8 +11,8 @@ package org.eclipse.ecf.providers.internal.py4j;
 import java.util.Hashtable;
 
 import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
-import org.eclipse.ecf.provider.direct.local.ContainerExporter;
-import org.eclipse.ecf.provider.direct.local.LocalProxyMapper;
+import org.eclipse.ecf.provider.direct.local.ContainerExporterService;
+import org.eclipse.ecf.provider.direct.local.ProxyMapperService;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -30,7 +30,7 @@ public class RSAComponent {
 	private BundleContext context;
 	private GatewayServer gateway;
 	private DirectRemoteServiceProvider pythonConsumer;
-	private LocalProxyMapper javaConsumer;
+	private ProxyMapperService javaConsumer;
 
 	private static RSAComponent instance;
 
@@ -42,35 +42,35 @@ public class RSAComponent {
 		instance = this;
 	}
 
-	@Reference(service = LocalProxyMapper.class)
-	void bindLocalProxyMapper(LocalProxyMapper pmm) {
+	@Reference(service = ProxyMapperService.class)
+	void bindLocalProxyMapper(ProxyMapperService pmm) {
 		synchronized (this) {
 			this.javaConsumer = pmm;
 		}
 	}
 
-	void unbindLocalProxyMapper(LocalProxyMapper pmm) {
+	void unbindLocalProxyMapper(ProxyMapperService pmm) {
 		pmm.clear();
 		synchronized (this) {
 			this.javaConsumer = null;
 		}
 	}
 
-	private ContainerExporter containerExporter;
-	
-	@Reference(cardinality=ReferenceCardinality.MANDATORY)
-	void bindContainerExporter(ContainerExporter e) {
-		this.containerExporter = e;
+	private ContainerExporterService containerExporterService;
+
+	@Reference(cardinality = ReferenceCardinality.MANDATORY)
+	void bindContainerExporter(ContainerExporterService e) {
+		this.containerExporterService = e;
 	}
-	
-	void unbindContainerExporter(ContainerExporter e) {
-		this.containerExporter = null;
+
+	void unbindContainerExporter(ContainerExporterService e) {
+		this.containerExporterService = null;
 	}
-	
-	public ContainerExporter getContainerExporter() {
-		return this.containerExporter;
+
+	public ContainerExporterService getContainerExporter() {
+		return this.containerExporterService;
 	}
-	
+
 	private GatewayServerListener gatewayServerListener = new GatewayServerListener() {
 
 		@Override
@@ -90,6 +90,8 @@ public class RSAComponent {
 			synchronized (RSAComponent.this) {
 				if (javaConsumer != null)
 					javaConsumer.clear();
+				if (containerExporterService != null)
+					containerExporterService.clear();
 			}
 		}
 
@@ -125,7 +127,7 @@ public class RSAComponent {
 
 	};
 
-	public LocalProxyMapper getProxyMapper() {
+	public ProxyMapperService getProxyMapper() {
 		System.out.println("getProxyMapper");
 		return javaConsumer;
 	}

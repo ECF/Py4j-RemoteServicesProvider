@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.eclipse.ecf.provider.direct.local.LocalContainerExporter">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" immediate="true" name="org.eclipse.ecf.provider.direct.local.ContainerExporterServiceImpl">
    <service>
-      <provide interface="org.eclipse.ecf.provider.direct.local.ContainerExporter"/>
+      <provide interface="org.eclipse.ecf.provider.direct.local.ContainerExporterService"/>
       <provide interface="org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener"/>
    </service>
    <reference bind="bindDirectRemoteServiceProvider" cardinality="0..n" interface="org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider" name="DirectRemoteServiceProvider" policy="dynamic" target="(&amp;(objectClass=org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider)(org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider.external=*))" unbind="unbindDirectRemoteServiceProvider"/>
-   <implementation class="org.eclipse.ecf.provider.direct.local.LocalContainerExporter"/>
+   <implementation class="org.eclipse.ecf.provider.direct.local.ContainerExporterServiceImpl"/>
 </scr:component>

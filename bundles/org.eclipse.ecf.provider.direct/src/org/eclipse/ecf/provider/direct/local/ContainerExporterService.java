@@ -8,7 +8,9 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct.local;
 
-public interface ContainerExporter {
+public interface ContainerExporterService {
 
-		void exportFromContainer(long rsvcId, Object proxy);
+	void exportFromContainer(long rsvcId, Object proxy);
+
+	void clear();
 }

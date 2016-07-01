@@ -15,8 +15,8 @@ import org.eclipse.ecf.core.ContainerTypeDescription;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.identity.Namespace;
-import org.eclipse.ecf.provider.direct.local.DirectClientContainer;
-import org.eclipse.ecf.provider.direct.local.DirectHostContainer;
+import org.eclipse.ecf.provider.direct.local.RSAClientContainer;
+import org.eclipse.ecf.provider.direct.local.RSAHostContainer;
 import org.eclipse.ecf.providers.py4j.Py4jConstants;
 import org.eclipse.ecf.providers.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
@@ -36,9 +36,9 @@ public class Activator implements BundleActivator {
 								Py4jConstants.JAVA_HOST_CONFIG_TYPE) {
 							public IContainer createInstance(ContainerTypeDescription description,
 									Map<String, ?> parameters) {
-								return new DirectHostContainer(
+								return new RSAHostContainer(
 										Py4jNamespace.INSTANCE.createInstance(new Object[] {
-												"http://localhost:" + RSAComponent.getDefault().getPort() + ":/java" }),
+												"py4j://localhost:" + RSAComponent.getDefault().getPort() + "/java" }),
 										RSAComponent.getDefault().getContainerExporter());
 							}
 						}).setServer(true).setHidden(false).build(),
@@ -51,7 +51,7 @@ public class Activator implements BundleActivator {
 									Map<String, ?> parameters) {
 								ID clientID = Py4jNamespace.getInstance()
 										.createInstance(new Object[] { "uuid:" + UUID.randomUUID().toString() });
-								return new DirectClientContainer(clientID, RSAComponent.getDefault().getProxyMapper());
+								return new RSAClientContainer(clientID, RSAComponent.getDefault().getProxyMapper());
 							}
 						}).setServer(false).setHidden(false).build(),
 				null);

@@ -10,9 +10,10 @@ package org.eclipse.ecf.provider.direct.local;
 
 import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
 
-public interface LocalProxyMapper extends DirectRemoteServiceProvider {
+public interface ProxyMapperService extends DirectRemoteServiceProvider {
 
 	Object getProxy(long id);
+
 	void clear();
 
 }

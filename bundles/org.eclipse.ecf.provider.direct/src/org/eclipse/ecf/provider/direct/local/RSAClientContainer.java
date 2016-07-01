@@ -23,18 +23,18 @@ import org.eclipse.ecf.remoteservice.client.RemoteServiceClientRegistration;
 import org.eclipse.equinox.concurrent.future.IExecutor;
 import org.eclipse.equinox.concurrent.future.IProgressRunnable;
 
-public class DirectClientContainer extends AbstractRSAClientContainer {
+public class RSAClientContainer extends AbstractRSAClientContainer {
 
-	private LocalProxyMapper mapper;
+	private ProxyMapperService mapper;
 	private Object proxy;
 
-	public DirectClientContainer(ID containerID, Object proxy) {
+	public RSAClientContainer(ID containerID, Object proxy) {
 		super(containerID);
 		Assert.isNotNull(proxy);
 		this.proxy = proxy;
 	}
 
-	public DirectClientContainer(ID containerID, LocalProxyMapper mapper) {
+	public RSAClientContainer(ID containerID, ProxyMapperService mapper) {
 		super(containerID);
 		Assert.isNotNull(mapper);
 		this.mapper = mapper;
@@ -44,7 +44,7 @@ public class DirectClientContainer extends AbstractRSAClientContainer {
 		return this.proxy;
 	}
 
-	protected LocalProxyMapper getProxyMapper() {
+	protected ProxyMapperService getProxyMapper() {
 		return this.mapper;
 	}
 

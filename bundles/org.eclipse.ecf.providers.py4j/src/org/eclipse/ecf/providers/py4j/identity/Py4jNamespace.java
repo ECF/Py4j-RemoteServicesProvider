@@ -26,6 +26,6 @@ public class Py4jNamespace extends URIIDNamespace {
 	}
 
 	public String getScheme() {
-		return "py4j";
+		return Py4jConstants.NAMESPACE_NAME;
 	}
 }
