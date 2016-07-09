@@ -86,7 +86,7 @@ public class RSAClientContainer extends AbstractRSAClientContainer {
 								paramTypes[i] = params[i].getClass();
 						cf.complete(
 								invokeMethod(proxy.getClass().getMethod(remoteCall.getMethod(), paramTypes), params));
-					} catch (Exception e) {
+					} catch (Throwable e) {
 						cf.completeExceptionally(e);
 					}
 					return null;
@@ -95,21 +95,17 @@ public class RSAClientContainer extends AbstractRSAClientContainer {
 			return cf;
 		}
 
-		private Object invokeMethod(Method m, Object[] parameters) throws Exception {
+		private Object invokeMethod(Method m, Object[] parameters) throws ECFException {
 			try {
 				return m.invoke(proxy, parameters);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				throw new ECFException("Cannot invoke remoteCall on proxy", e);
 			}
 		}
 
 		@Override
 		protected Object invokeSync(RSARemoteCall remoteCall) throws ECFException {
-			try {
-				return invokeMethod(remoteCall.getReflectMethod(), remoteCall.getParameters());
-			} catch (Exception e) {
-				throw new ECFException("Cannot invoke method on proxy", e);
-			}
+			return invokeMethod(remoteCall.getReflectMethod(), remoteCall.getParameters());
 		}
 	}
 
