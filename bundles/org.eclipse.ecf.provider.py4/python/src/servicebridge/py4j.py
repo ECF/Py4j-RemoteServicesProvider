@@ -82,45 +82,46 @@ class Py4jServiceBridge(object):
         self._listener = listener
     
     def _import_service_from_java(self,proxy,props):
-        with self._endpoints_lock:
-            try:
-                endpointid = props[ENDPOINT_ID]
+        try:
+            endpointid = props[ENDPOINT_ID]
+            if endpointid:
                 endpoint = (proxy,props)
-                self._endpoints[endpointid] = endpoint
-                if not self._listener is None:
-                    try:
-                        self._listener.service_imported(endpointid,endpoint)
-                    except:
-                        _logger.error('_import_service_from_java listener threw exception endpointid='+endpointid)
-            except KeyError:
-                pass
+                with self._endpoints_lock:
+                    self._endpoints[endpointid] = endpoint
+        except KeyError:
+            pass
+        if self._listener and endpointid:
+            try:
+                self._listener.service_imported(endpointid,endpoint)
+            except:
+                _logger.error('_import_service_from_java listener threw exception endpointid='+endpointid)
+
     def _modify_service_from_java(self,props):
-        with self._endpoints_lock:
-            try:
-                endpointid = props[ENDPOINT_ID]
-                endpoint = self._endpoints[endpointid]
+        try:
+            endpointid = props[ENDPOINT_ID]
+            endpoint = self._endpoints[endpointid]
+            with self._endpoints_lock:
                 endpoint[1].update(props)
-                if not self._listener is None:
-                    try:
-                        self._listener.service_modified(endpointid,endpoint)
-                    except:
-                        _logger.error('_modify_service_from_java listener threw exception endpointid='+endpointid)
-            except KeyError:
-                pass
-    
-    def _unimport_service_from_java(self,props):
-        with self._endpoints_lock:
+        except KeyError:
+            pass
+        if self._listener and endpoint:
             try:
-                endpointid = props[ENDPOINT_ID]
+                self._listener.service_modified(endpointid,endpoint)
+            except:
+                _logger.error('_modify_service_from_java listener threw exception endpointid='+endpointid)
+   
+    def _unimport_service_from_java(self,props):
+        try:
+            endpointid = props[ENDPOINT_ID]
+            with self._endpoints_lock:
                 endpoint = self._endpoints.pop(endpointid)
-                if not self._listener is None:
-                    try:
-                        self._listener.service_removed(endpointid,endpoint)
-                    except:
-                        _logger.error('_unimport_service_from_java listener threw exception endpointid='+endpointid)
-                        pass
-            except KeyError:
-                pass
+        except KeyError:
+            pass
+        if self._listener and endpoint:
+            try:
+                self._listener.service_removed(endpointid,endpoint)
+            except:
+                _logger.error('_unimport_service_from_java listener threw exception endpointid='+endpointid)
 
     def get_jvm(self):
         with self._lock:
@@ -195,7 +196,7 @@ class Py4jServiceBridge(object):
     def unexport_to_java(self,props):
         with self._lock:
             self._raise_not_connected()
-        self._consumer.unexportService(self.convert_props_for_java(props))
+            self._consumer.unexportService(self.convert_props_for_java(props))
 
     def disconnect(self):
         with self._lock:
