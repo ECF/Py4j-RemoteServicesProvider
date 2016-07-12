@@ -60,8 +60,7 @@ class Py4jBridge(object):
     
     def convert_props_for_java(self,props):
         with self._lock:
-            if not self.isconnected():
-                raise ConnectionError('Not connected to java gateway')
+            self._raise_not_connected()
             result = {}
             for item in props.items():
                 val = item[1]
@@ -84,6 +83,20 @@ class Py4jBridge(object):
             self._consumer = self._gateway.entry_point.getJavaConsumer()
             self._gateway.entry_point.setPythonConsumer(self)
     
+    def _raise_not_connected(self):
+        if not self.isconnected():
+            raise ConnectionError('Not connected to java gateway')
+        
+    def export_to_java(self,svc,props):
+        with self._lock:
+            self._raise_not_connected()
+            self._consumer.exportService(svc,self._convert_map(props))
+
+    def unexport_to_java(self,props):
+        with self._lock:
+            self._raise_not_connected()
+        self._consumer.unexportService(self._convert_map(props))
+
     def disconnect(self):
         with self._lock:
             if self.isconnected():
@@ -97,7 +110,6 @@ class Py4jBridge(object):
         implements = [_JAVA_DIRECT_ENDPOINT_CLASS]
 
     def exportService(self,proxy,props):
-        print('exportService')
         with self._endpoints_lock:
             try:
                 endpointid = props[_RSA_ENDPOINT_ID]
@@ -115,7 +127,6 @@ class Py4jBridge(object):
             
 
     def modifyService(self,props):
-        print('modifyService='+props.toString())
         with self._endpoints_lock:
             try:
                 endpointid = props[_RSA_ENDPOINT_ID]
@@ -131,7 +142,6 @@ class Py4jBridge(object):
                 pass
         
     def unexportService(self,props):
-        print('unexportService props='+props.toString())
         with self._endpoints_lock:
             try:
                 endpointid = props[_RSA_ENDPOINT_ID]
