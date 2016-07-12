@@ -6,12 +6,12 @@ Created on Jul 11, 2016
 from logging import getLogger as getLibLogger
 from threading import RLock
 
-
 from py4j.java_gateway import JavaGateway, CallbackServerParameters
 from py4j.java_collections import ListConverter, MapConverter
 from servicebridge import merge_dicts, ENDPOINT_ID
 
-PY4J_EXPORTED_CONFIGS = ['ecf.py4j.host.python']
+PY4J_EXPORTED_CONFIG = 'ecf.py4j.host.python'
+PY4J_EXPORTED_CONFIGS = [PY4J_EXPORTED_CONFIG]
 PY4J_PROTOCOL = 'py4j'
 PY4J_DEFAULT_GATEWAY_PORT = 25333
 PY4J_DEFAULT_CB_PORT = 25334
