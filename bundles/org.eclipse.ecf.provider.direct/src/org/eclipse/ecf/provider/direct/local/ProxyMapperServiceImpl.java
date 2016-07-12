@@ -61,7 +61,6 @@ public class ProxyMapperServiceImpl implements ProxyMapperService {
 	public void clear() {
 		Collection<DirectEndpoint> des = null;
 		synchronized (this.proxyMap) {
-			System.out.println("clear()");
 			des = proxyMap.values();
 			proxyMap.clear();
 		}
@@ -82,7 +81,6 @@ public class ProxyMapperServiceImpl implements ProxyMapperService {
 	public void exportService(Object proxy, Map rsaProps) {
 		if (proxy == null)
 			throw new NullPointerException("Proxy cannot be null");
-		System.out.println("discoverProxy props=" + rsaProps);
 		org.eclipse.ecf.osgi.services.remoteserviceadmin.EndpointDescription ed = createEndpointDescription(rsaProps);
 		long rsId = ed.getRemoteServiceId();
 		synchronized (this.proxyMap) {
@@ -94,7 +92,6 @@ public class ProxyMapperServiceImpl implements ProxyMapperService {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void unexportService(Map rsaProps) {
-		System.out.println("undiscoverProxy props" + rsaProps);
 		org.eclipse.ecf.osgi.services.remoteserviceadmin.EndpointDescription ed = createEndpointDescription(rsaProps);
 		long rsId = ed.getRemoteServiceId();
 		DirectEndpoint de = null;

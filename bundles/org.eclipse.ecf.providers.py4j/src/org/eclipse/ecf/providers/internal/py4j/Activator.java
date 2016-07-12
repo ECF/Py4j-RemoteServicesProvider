@@ -28,6 +28,7 @@ import org.osgi.framework.BundleContext;
 public class Activator implements BundleActivator {
 
 	private static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered" };
+
 	@Override
 	public void start(BundleContext context) throws Exception {
 		context.registerService(Namespace.class, new Py4jNamespace(), null);
@@ -38,10 +39,11 @@ public class Activator implements BundleActivator {
 							public IContainer createInstance(ContainerTypeDescription description,
 									Map<String, ?> parameters) {
 								return new RSAHostContainer(
-										Py4jNamespace.INSTANCE.createInstance(new Object[] {
-												"py4j://localhost:" + RSAComponent.getDefault().getPort() + "/java" }),
+										Py4jNamespace.INSTANCE.createInstance(new Object[] { "py4j://localhost:"
+												+ RSAComponent.getDefault().getGatewayPort() + "/java" }),
 										RSAComponent.getDefault().getContainerExporter());
 							}
+
 							@Override
 							public String[] getSupportedIntents(ContainerTypeDescription description) {
 								return py4jSupportedIntents;
@@ -58,6 +60,7 @@ public class Activator implements BundleActivator {
 										.createInstance(new Object[] { "uuid:" + UUID.randomUUID().toString() });
 								return new RSAClientContainer(clientID, RSAComponent.getDefault().getProxyMapper());
 							}
+
 							public String[] getSupportedIntents(ContainerTypeDescription description) {
 								return py4jSupportedIntents;
 							}

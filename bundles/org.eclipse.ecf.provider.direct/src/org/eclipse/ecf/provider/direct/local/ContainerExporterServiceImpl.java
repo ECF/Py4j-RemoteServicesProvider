@@ -34,7 +34,7 @@ public class ContainerExporterServiceImpl implements ContainerExporterService, R
 	private BundleContext context;
 	private List<ServiceReference<DirectRemoteServiceProvider>> drsps = new ArrayList<ServiceReference<DirectRemoteServiceProvider>>();
 	private Map<Long, DirectEndpoint> exportedEndpoints = new HashMap<Long, DirectEndpoint>();
-	private Map<Long, Object> unexportedEndpoints = new HashMap<Long, Object>();
+	private Map<Long, Object> preexported = new HashMap<Long, Object>();
 
 	private DirectRemoteServiceProvider getDRSP(ServiceReference<DirectRemoteServiceProvider> ref) {
 		BundleContext ctxt = this.context;
@@ -80,7 +80,7 @@ public class ContainerExporterServiceImpl implements ContainerExporterService, R
 	@Override
 	public void exportFromContainer(long rsvcid, Object proxy) {
 		synchronized (this) {
-			this.unexportedEndpoints.put(rsvcid, proxy);
+			this.preexported.put(rsvcid, proxy);
 		}
 	}
 
@@ -94,23 +94,37 @@ public class ContainerExporterServiceImpl implements ContainerExporterService, R
 			synchronized (this) {
 				switch (event.getType()) {
 				case RemoteServiceAdminEvent.EXPORT_REGISTRATION:
-					svc = unexportedEndpoints.get(rsvcid);
+					svc = preexported.get(rsvcid);
 					if (svc != null) {
-						fireServiceChange(EndpointEvent.ADDED, ed, svc);
-						unexportedEndpoints.remove(rsvcid);
-						exportedEndpoints.put(rsvcid, new DirectEndpoint(ed, svc));
+						try {
+							fireServiceChange(EndpointEvent.ADDED, ed, svc);
+							preexported.remove(rsvcid);
+							exportedEndpoints.put(rsvcid, new DirectEndpoint(ed, svc));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 					break;
 				case RemoteServiceAdminEvent.EXPORT_UNREGISTRATION:
 					svc = exportedEndpoints.get(rsvcid);
-					if (svc != null)
-						fireServiceChange(EndpointEvent.REMOVED, ed, svc);
+					if (svc != null) {
+						try {
+							fireServiceChange(EndpointEvent.REMOVED, ed, svc);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 					exportedEndpoints.remove(rsvcid);
 					break;
 				case RemoteServiceAdminEvent.EXPORT_UPDATE:
 					svc = exportedEndpoints.get(rsvcid);
-					if (svc != null)
-						fireServiceChange(EndpointEvent.MODIFIED, ed, svc);
+					if (svc != null) {
+						try {
+							fireServiceChange(EndpointEvent.MODIFIED, ed, svc);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 					break;
 				default:
 					break;
@@ -119,22 +133,18 @@ public class ContainerExporterServiceImpl implements ContainerExporterService, R
 		}
 	}
 
-	private void fireServiceChange(int type, EndpointDescription ed, Object svc) {
+	private void fireServiceChange(int type, EndpointDescription ed, Object svc) throws Exception {
 		for (ServiceReference<DirectRemoteServiceProvider> drsp : this.drsps)
-			try {
-				switch (type) {
-				case EndpointEvent.ADDED:
-					getDRSP(drsp).exportService(svc, ed.getProperties());
-					break;
-				case EndpointEvent.REMOVED:
-					getDRSP(drsp).unexportService(ed.getProperties());
-					break;
-				case EndpointEvent.MODIFIED:
-					getDRSP(drsp).updateService(ed.getProperties());
-					break;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			switch (type) {
+			case EndpointEvent.ADDED:
+				getDRSP(drsp).exportService(svc, ed.getProperties());
+				break;
+			case EndpointEvent.REMOVED:
+				getDRSP(drsp).unexportService(ed.getProperties());
+				break;
+			case EndpointEvent.MODIFIED:
+				getDRSP(drsp).updateService(ed.getProperties());
+				break;
 			}
 	}
 
@@ -143,7 +153,7 @@ public class ContainerExporterServiceImpl implements ContainerExporterService, R
 		synchronized (this) {
 			this.drsps.clear();
 			this.exportedEndpoints.clear();
-			this.unexportedEndpoints.clear();
+			this.preexported.clear();
 		}
 	}
 

@@ -8,12 +8,15 @@
  ******************************************************************************/
 package org.eclipse.ecf.providers.internal.py4j;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
 import org.eclipse.ecf.provider.direct.local.ContainerExporterService;
 import org.eclipse.ecf.provider.direct.local.ProxyMapperService;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -27,9 +30,11 @@ import py4j.Py4JServerConnection;
 @Component(immediate = true)
 public class RSAComponent {
 
+	private static final boolean GATEWAY_DEBUG = new Boolean(
+			System.getProperty("org.eclipse.provider.direct.gateway.debug", "false")).booleanValue();
+
 	private BundleContext context;
 	private GatewayServer gateway;
-	private DirectRemoteServiceProvider pythonConsumer;
 	private ProxyMapperService javaConsumer;
 
 	private static RSAComponent instance;
@@ -76,61 +81,80 @@ public class RSAComponent {
 		@Override
 		public void connectionError(Exception arg0) {
 		}
+
 		@Override
 		public void connectionStarted(Py4JServerConnection arg0) {
+			synchronized (RSAComponent.this) {
+				RSAComponent.this.py4jConnections.add(arg0);
+			}
 		}
+
 		@Override
 		public void connectionStopped(Py4JServerConnection arg0) {
 			synchronized (RSAComponent.this) {
-				if (javaConsumer != null)
-					javaConsumer.clear();
-				if (containerExporterService != null)
-					containerExporterService.clear();
+				if (RSAComponent.this.py4jConnections.remove(arg0))
+					hardClose();
 			}
 		}
+
 		@Override
 		public void serverError(Exception arg0) {
 		}
+
 		@Override
 		public void serverPostShutdown() {
 		}
+
 		@Override
 		public void serverPreShutdown() {
 		}
+
 		@Override
 		public void serverStarted() {
 		}
+
 		@Override
 		public void serverStopped() {
+			RSAComponent.this.restartGateway();
 		}
 	};
 
 	public ProxyMapperService getProxyMapper() {
-		System.out.println("getProxyMapper");
 		return javaConsumer;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void setPythonConsumer(DirectRemoteServiceProvider consumer) {
-		if (context != null) {
-			System.out.println("setPythonConsumer");
-			pythonConsumer = consumer;
-			@SuppressWarnings("rawtypes")
-			Hashtable ht = new Hashtable();
-			ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP, "python." + this.gateway.getPythonPort());
-			context.registerService(DirectRemoteServiceProvider.class, consumer, ht);
+	private void hardClose() {
+		synchronized (this) {
+			if (drspReg != null) {
+				drspReg.unregister();
+				drspReg = null;
+			}
+			if (javaConsumer != null)
+				javaConsumer.clear();
+			py4jConnections.clear();
 		}
 	}
 
-	public DirectRemoteServiceProvider getPythonConsumer() {
-		return pythonConsumer;
+	private List<Py4JServerConnection> py4jConnections = new ArrayList<Py4JServerConnection>();
+	private ServiceRegistration<DirectRemoteServiceProvider> drspReg;
+
+	@SuppressWarnings("unchecked")
+	public void setPythonConsumer(DirectRemoteServiceProvider consumer) {
+		synchronized (this) {
+			if (context != null && py4jConnections.size() > 0) {
+				@SuppressWarnings("rawtypes")
+				Hashtable ht = new Hashtable();
+				ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP, "python." + this.gateway.getPythonPort());
+				drspReg = context.registerService(DirectRemoteServiceProvider.class, consumer, ht);
+			}
+		}
 	}
 
 	public DirectRemoteServiceProvider getJavaConsumer() {
 		return javaConsumer;
 	}
 
-	public int getPort() {
+	public int getGatewayPort() {
 		if (gateway == null)
 			return -1;
 		return gateway.getPort();
@@ -138,22 +162,47 @@ public class RSAComponent {
 
 	@Activate
 	void activate(BundleContext ctxt) throws Exception {
-		context = ctxt;
-		GatewayServer.turnAllLoggingOn();
-		gateway = new GatewayServer(this);
-		gateway.addListener(gatewayServerListener);
-		gateway.start();
+		synchronized (this) {
+			context = ctxt;
+			drspReg = null;
+			startGateway();
+		}
+	}
+
+	void startGateway() {
+		synchronized (this) {
+			if (GATEWAY_DEBUG)
+				GatewayServer.turnAllLoggingOn();
+			gateway = new GatewayServer(this);
+			gateway.addListener(gatewayServerListener);
+			gateway.start();
+		}
+	}
+
+	void stopGateway() {
+		synchronized (this) {
+			if (gateway != null) {
+				gateway.removeListener(gatewayServerListener);
+				gateway.shutdown();
+				gateway = null;
+			}
+		}
+	}
+
+	void restartGateway() {
+		synchronized (this) {
+			stopGateway();
+			startGateway();
+		}
 	}
 
 	@Deactivate
 	void deactivate() throws Exception {
-		if (gateway != null) {
-			gateway.removeListener(gatewayServerListener);
-			pythonConsumer = null;
-			gateway.shutdown();
-			gateway = null;
-			context = null;
+		synchronized (this) {
+			hardClose();
+			stopGateway();
 		}
+		context = null;
 	}
 
 }
