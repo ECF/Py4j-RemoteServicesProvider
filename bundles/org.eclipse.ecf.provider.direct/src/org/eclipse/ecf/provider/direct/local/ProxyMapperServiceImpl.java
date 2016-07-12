@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.ecf.osgi.services.remoteserviceadmin.EndpointDescription;
-import org.eclipse.ecf.osgi.services.remoteserviceadmin.RemoteConstants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.remoteserviceadmin.EndpointEvent;
@@ -24,11 +23,14 @@ import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 @Component(immediate = true)
 public class ProxyMapperServiceImpl implements ProxyMapperService {
 
+	private String ecfEndpointListenerScope;
+
 	private Map<Long, DirectEndpoint> proxyMap = new HashMap<Long, DirectEndpoint>();
 	private List<EndpointEventListener> eels = new ArrayList<EndpointEventListener>();
 
 	@Reference()
-	void bindEndpointEventListener(EndpointEventListener l) {
+	void bindEndpointEventListener(EndpointEventListener l, @SuppressWarnings("rawtypes") Map props) {
+		ecfEndpointListenerScope = ((String[]) props.get("endpoint.listener.scope"))[0];
 		synchronized (this.eels) {
 			this.eels.add(l);
 		}
@@ -46,8 +48,7 @@ public class ProxyMapperServiceImpl implements ProxyMapperService {
 			eels = new ArrayList<EndpointEventListener>(this.eels);
 		}
 		for (EndpointEventListener l : eels)
-			l.endpointChanged(new EndpointEvent(type, ed),
-					"(" + RemoteConstants.ENDPOINT_CONTAINER_ID_NAMESPACE + "=*)");
+			l.endpointChanged(new EndpointEvent(type, ed), ecfEndpointListenerScope);
 	}
 
 	public Object getProxy(long proxyid) {
