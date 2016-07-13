@@ -6,7 +6,7 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.providers.py4j;
+package org.eclipse.ecf.provider.py4j;
 
 public interface Py4jConstants {
 

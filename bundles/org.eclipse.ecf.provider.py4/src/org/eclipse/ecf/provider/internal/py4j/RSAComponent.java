@@ -6,7 +6,7 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.providers.internal.py4j;
+package org.eclipse.ecf.provider.internal.py4j;
 
 import java.util.ArrayList;
 import java.util.Hashtable;

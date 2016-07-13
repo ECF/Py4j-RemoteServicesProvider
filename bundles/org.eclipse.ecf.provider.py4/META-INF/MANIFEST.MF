@@ -21,11 +21,11 @@ Import-Package: org.eclipse.ecf.core;version="3.0.0",
  org.osgi.service.component.annotations;version="1.2.0";resolution:=optional,
  org.osgi.service.remoteserviceadmin;version="1.1.0"
 Require-Bundle: org.eclipse.equinox.common
-Service-Component: OSGI-INF/org.eclipse.ecf.providers.internal.py4j.RSAComponent.xml
+Service-Component: OSGI-INF/org.eclipse.ecf.provider.internal.py4j.RSAComponent.xml
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclipse.ecf.providers.internal.py4j.Activator
+Bundle-Activator: org.eclipse.ecf.provider.internal.py4j.Activator
 Bundle-ClassPath: lib/py4j0.10.1.jar,
  .
 DynamicImport-Package: *
-Export-Package: org.eclipse.ecf.providers.py4j,
- org.eclipse.ecf.providers.py4j.identity
+Export-Package: org.eclipse.ecf.provider.py4j,
+ org.eclipse.ecf.provider.py4j.identity

@@ -6,7 +6,7 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.providers.internal.py4j;
+package org.eclipse.ecf.provider.internal.py4j;
 
 import java.util.Map;
 
@@ -15,8 +15,8 @@ import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.identity.Namespace;
 import org.eclipse.ecf.provider.direct.local.RSAClientContainer;
 import org.eclipse.ecf.provider.direct.local.RSAHostContainer;
-import org.eclipse.ecf.providers.py4j.Py4jConstants;
-import org.eclipse.ecf.providers.py4j.identity.Py4jNamespace;
+import org.eclipse.ecf.provider.py4j.Py4jConstants;
+import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
 import org.eclipse.ecf.remoteservice.provider.RemoteServiceContainerInstantiator;
 import org.eclipse.ecf.remoteservice.provider.RemoteServiceDistributionProvider;

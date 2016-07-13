@@ -6,15 +6,15 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.providers.py4j.identity;
+package org.eclipse.ecf.provider.py4j.identity;
 
 import java.util.UUID;
 
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.identity.IDCreateException;
 import org.eclipse.ecf.core.identity.URIID.URIIDNamespace;
-import org.eclipse.ecf.providers.internal.py4j.RSAComponent;
-import org.eclipse.ecf.providers.py4j.Py4jConstants;
+import org.eclipse.ecf.provider.internal.py4j.RSAComponent;
+import org.eclipse.ecf.provider.py4j.Py4jConstants;
 
 public class Py4jNamespace extends URIIDNamespace {
 
