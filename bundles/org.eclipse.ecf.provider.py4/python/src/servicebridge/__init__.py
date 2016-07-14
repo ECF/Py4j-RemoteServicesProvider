@@ -70,15 +70,17 @@ def merge_dicts(*dict_args):
         result.update(dictionary)
     return result
 
-def get_rsa_props(object_class, rmt_configs, ep_svc_id=None, fw_id=None, pkg_ver=None):
+def get_rsa_props(object_class, exported_cfgs, intents=None, ep_svc_id=None, fw_id=None, pkg_ver=None):
     results = {}
     if not object_class:
         raise ArgumentError('object_class must be an [] of Strings')
     results['objectClass'] = object_class
-    if not rmt_configs:
+    if not exported_cfgs:
         raise ArgumentError('rmt_configs must be an array of Strings')
-    results[REMOTE_CONFIGS_SUPPORTED] = rmt_configs
-    results[SERVICE_IMPORTED_CONFIGS] = rmt_configs
+    results[SERVICE_EXPORTED_CONFIGS] = exported_cfgs
+    results[SERVICE_IMPORTED_CONFIGS] = exported_cfgs
+    if intents:
+        results[SERVICE_INTENTS] = intents
     if not ep_svc_id:
         ep_svc_id = get_next_rsid()
     results[ENDPOINT_SERVICE_ID] = ep_svc_id
@@ -89,7 +91,8 @@ def get_rsa_props(object_class, rmt_configs, ep_svc_id=None, fw_id=None, pkg_ver
     if pkg_ver:
         results[ENDPOINT_PACKAGE_VERSION_+pkg_ver[0]] = pkg_ver[1]
     results[ENDPOINT_ID] = create_uuid()
-    results[SERVICE_IMPORTED] = True
+    results[SERVICE_IMPORTED] = 'true'
+    results[SERVICE_EXPORTED_INTERFACES] = '*'
     return results
 
 def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
@@ -106,6 +109,7 @@ def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
     if not ep_ts:
         ep_ts = time_since_epoch()
     results[ECF_ENDPOINT_TIMESTAMP] = ep_ts
+    results[ECF_SERVICE_EXPORTED_ASYNC_INTERFACES] = '*'
     return results
 
 
