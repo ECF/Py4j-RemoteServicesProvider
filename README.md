@@ -17,7 +17,7 @@ Using the OSGi Service Registry and ECF's RSA standard implementation, this eval
 A Python service impl can also be dynamically injected into the Java OSGi Service Registry.
 
 <pre>
-    remoteServiceProvider.registerService(svcinstance,rsaProps)
+    Py4jServiceBridge.export(svcinstance,rsaProps)
 </pre>
 
 where the svcinstance class is declared
