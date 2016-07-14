@@ -169,7 +169,19 @@ class Py4jServiceBridge(object):
 
             self._bridge = JavaRemoteServiceExporter(self)
             self._gateway.entry_point.setPythonConsumer(self._bridge)
-
+            
+    def disconnect(self):
+        with self._lock:
+            if self.isconnected():
+                self._gateway.shutdown()
+                self._gateway = None
+                self._consumer = None   
+                self._bridge = None 
+        with self._endpoints_lock:
+            self._endpoints.clear()
+        with self._exported_endpoints_lock:
+            self._exported_endpoints.clear()
+     
     def make_rsa_props(self,object_class, rsvc_id, fw_id, pkg_ver):
         osgiprops = servicebridge.get_rsa_props(object_class, PY4J_EXPORTED_CONFIGS, PY4J_SERVICE_INTENTS, rsvc_id, fw_id, pkg_ver)
         cbserver = self._gateway.get_callback_server()
@@ -182,9 +194,7 @@ class Py4jServiceBridge(object):
         ecfprops = servicebridge.get_ecf_props(myid, PY4J_NAMESPACE, rsvc_id)
         return servicebridge.merge_dicts(osgiprops,ecfprops)
 
-    
-
-# Methods called by listener    
+# Methods called by java  
     def _import_service_from_java(self,proxy,props):
         endpointid = None
         try:
@@ -277,15 +287,3 @@ class Py4jServiceBridge(object):
             _logger.error(e)
             raise e
             
-    def disconnect(self):
-        with self._lock:
-            if self.isconnected():
-                self._gateway.shutdown()
-                self._gateway = None
-                self._consumer = None   
-                self._bridge = None 
-        with self._endpoints_lock:
-            self._endpoints.clear()
-        with self._exported_endpoints_lock:
-            self._exported_endpoints.clear()
-     
