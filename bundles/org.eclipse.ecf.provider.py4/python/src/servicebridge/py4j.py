@@ -97,6 +97,23 @@ class Py4jServiceBridge(object):
         self.__export(svc,export_props)
         return endpointid
 
+    def update(self,update_props):
+        with self._lock:
+            self._raise_not_connected()
+        endpointid = None
+        try:
+            endpointid = update_props[ENDPOINT_ID]
+        except KeyError:
+            raise ArgumentError('Cannot export service since no ENDPOINT_ID present in export_props')
+        endpoint = self.get_export_endpoint(endpointid)
+        if endpoint:
+            with self._exported_endpoints_lock:
+                self._exported_endpoints[endpointid] = (endpoint[0],update_props)
+            self.__update(update_props)
+            return True
+        else:
+            return False
+
     def unexport(self,export_props):
         with self._lock:
             self._raise_not_connected()
@@ -279,7 +296,14 @@ class Py4jServiceBridge(object):
         except Exception as e:
             _logger.error(e)
             raise e
-        
+    
+    def __update(self,props):
+        try:
+            self._consumer.modifyService(self._convert_props_for_java(props))
+        except Exception as e:
+            _logger.error(e)
+            raise e
+           
     def __unexport(self,props):
         try:
             self._consumer.unexportService(self._convert_props_for_java(props))
