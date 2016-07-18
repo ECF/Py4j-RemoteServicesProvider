@@ -18,6 +18,8 @@ public class PropertiesUtil {
 		Object val = input.get(key);
 		if (val instanceof Long)
 			return (Long) val;
+		else if (val instanceof Integer)
+			return ((Integer) val).longValue();
 		else if (val instanceof String)
 			return new Long((String) val);
 		else
