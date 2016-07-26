@@ -22,19 +22,18 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.py4j.osgi.GatewayConfiguration;
+import org.py4j.osgi.IGateway;
+import org.py4j.osgi.IGatewayConfiguration;
 
-import py4j.GatewayServer;
 import py4j.GatewayServerListener;
 import py4j.Py4JServerConnection;
 
 @Component(immediate = true)
 public class RSAComponent {
 
-	private static final boolean GATEWAY_DEBUG = new Boolean(
-			System.getProperty("org.eclipse.provider.direct.gateway.debug", "true")).booleanValue();
-
 	private BundleContext context;
-	private GatewayServer gateway;
 	private ProxyMapperService javaConsumer;
 
 	private static RSAComponent instance;
@@ -44,6 +43,8 @@ public class RSAComponent {
 
 	private ContainerExporterService containerExporterService;
 
+	private IGateway gateway;
+	
 	public static RSAComponent getDefault() {
 		return instance;
 	}
@@ -75,6 +76,15 @@ public class RSAComponent {
 		this.containerExporterService = null;
 	}
 
+	@Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
+	void bindGateway(IGateway gateway) {
+		this.gateway = gateway;
+	}
+	
+	void unbindGateway(IGateway gateway) {
+		this.gateway = null;
+	}
+	
 	public ContainerExporterService getContainerExporter() {
 		return this.containerExporterService;
 	}
@@ -95,7 +105,7 @@ public class RSAComponent {
 		@Override
 		public void connectionStopped(Py4JServerConnection arg0) {
 			synchronized (RSAComponent.this) {
-				if (RSAComponent.this.py4jConnections.remove(arg0))
+				if (RSAComponent.this.py4jConnections.remove(arg0)) 
 					hardClose();
 			}
 		}
@@ -118,7 +128,6 @@ public class RSAComponent {
 
 		@Override
 		public void serverStopped() {
-			RSAComponent.this.restartGateway();
 		}
 	};
 
@@ -144,7 +153,7 @@ public class RSAComponent {
 			if (context != null && py4jConnections.size() > 0) {
 				@SuppressWarnings("rawtypes")
 				Hashtable ht = new Hashtable();
-				ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP, "python." + this.gateway.getPythonPort());
+				ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP, "python." + this.gateway.getConfiguration().getPythonPort());
 				drspReg = context.registerService(DirectRemoteServiceProvider.class, consumer, ht);
 			}
 		}
@@ -158,7 +167,7 @@ public class RSAComponent {
 		synchronized (this) {
 			if (gateway == null)
 				throw new NullPointerException("Gateway host cannot be accessed");
-			return gateway.getAddress().getHostAddress();
+			return gateway.getConfiguration().getAddress().getHostAddress();
 		}
 	}
 
@@ -166,7 +175,7 @@ public class RSAComponent {
 		synchronized (this) {
 			if (gateway == null)
 				return -1;
-			return gateway.getConnectTimeout();
+			return gateway.getConfiguration().getConnectTimeout();
 		}
 	}
 
@@ -174,7 +183,7 @@ public class RSAComponent {
 		synchronized (this) {
 			if (gateway == null)
 				return -1;
-			return gateway.getReadTimeout();
+			return gateway.getConfiguration().getReadTimeout();
 		}
 	}
 
@@ -182,43 +191,18 @@ public class RSAComponent {
 		synchronized (this) {
 			if (gateway == null)
 				return -1;
-			return gateway.getListeningPort();
+			return gateway.getConfiguration().getListeningPort();
 		}
 	}
 
+	private ServiceRegistration<IGatewayConfiguration> gwConfigReg = null;
 	@Activate
 	void activate(BundleContext ctxt) throws Exception {
+		IGatewayConfiguration config = new GatewayConfiguration.Builder(this).addGatewayServerListener(gatewayServerListener).setUseLoadingBundleClassLoadingStrategy(true).build();
 		synchronized (this) {
 			context = ctxt;
 			drspReg = null;
-			startGateway();
-		}
-	}
-
-	void startGateway() {
-		synchronized (this) {
-			if (GATEWAY_DEBUG)
-				GatewayServer.turnAllLoggingOn();
-			gateway = new GatewayServer(this);
-			gateway.addListener(gatewayServerListener);
-			gateway.start();
-		}
-	}
-
-	void stopGateway() {
-		synchronized (this) {
-			if (gateway != null) {
-				gateway.removeListener(gatewayServerListener);
-				gateway.shutdown();
-				gateway = null;
-			}
-		}
-	}
-
-	void restartGateway() {
-		synchronized (this) {
-			stopGateway();
-			startGateway();
+			gwConfigReg = context.registerService(IGatewayConfiguration.class, config, null);
 		}
 	}
 
@@ -226,7 +210,10 @@ public class RSAComponent {
 	void deactivate() throws Exception {
 		synchronized (this) {
 			hardClose();
-			stopGateway();
+			if (gwConfigReg != null) {
+				gwConfigReg.unregister();
+				gwConfigReg = null;
+			}
 		}
 		context = null;
 	}
