@@ -25,13 +25,18 @@ Pelix service bridge package
 from logging import getLogger as getLibLogger
 from threading import RLock
 
-from py4j.java_gateway import JavaGateway, CallbackServerParameters, DEFAULT_ADDRESS, DEFAULT_PORT, DEFAULT_PYTHON_PROXY_PORT
 from py4j.java_collections import ListConverter, MapConverter, JavaArray, JavaList, JavaSet
 from servicebridge import merge_dicts, ENDPOINT_ID
 import servicebridge
 from argparse import ArgumentError
 from abc import ABCMeta, abstractmethod
 
+from py4j.java_gateway import (
+    server_connection_started, server_connection_stopped,
+    server_started, server_stopped, pre_server_shutdown, post_server_shutdown,
+    JavaGateway, CallbackServerParameters, DEFAULT_ADDRESS, DEFAULT_PORT, DEFAULT_PYTHON_PROXY_PORT)
+
+    # do something
 PY4J_EXPORTED_CONFIG = 'ecf.py4j.host.python'
 PY4J_EXPORTED_CONFIGS = [PY4J_EXPORTED_CONFIG]
 PY4J_PROTOCOL = 'py4j'
@@ -116,13 +121,34 @@ class Py4jServiceBridgeEventListener(metaclass=ABCMeta):
     @abstractmethod
     def service_unimported(self, servicebridge, endpointid, endpoint):
         _logger.info('_service_unimported endpointid='+endpointid)
+ 
+class Py4jServiceBridgeConnectionListener(metaclass=ABCMeta):
     
+    def started(self, server):
+        _logger.info("Py4j started server="+repr(server))
+
+    def connection_started(self, connection):
+        _logger.info("Py4j connection started="+repr(connection))
+    
+    def connection_stopped(self, connection):
+        _logger.info("Py4j connection stopped="+repr(connection))
+    
+    def stopped(self, server):
+        _logger.info("Py4j gateway stopped="+repr(server))
+    
+    def pre_shutdown(self, server):
+        _logger.info("Py4j gateway pre_shutdown="+repr(server))
+    
+    def post_shutdown(self, server):
+        _logger.info("Py4j gateway post_shutdown="+repr(server))
+
+   
 class Py4jServiceBridge(object):
     '''Py4jServiceBridge class
     This class provides and API for consumers to use the Py4jServiceBridge.  This 
     allows a bridge between Python and the OSGi service registry.
     '''
-    def __init__(self,listener=None):
+    def __init__(self,service_listener=None,connection_listener=None):
         self._gateway = None
         self._lock = RLock()
         self._consumer = None
@@ -132,7 +158,9 @@ class Py4jServiceBridge(object):
         self._exported_endpoints = {}
         self._map_converter = MapConverter()
         self._list_converter = ListConverter()
-        self._listener = listener
+        self._service_listener = service_listener
+        self._connection_listener = None
+        self._connection = None
     
     def export(self,svc,export_props):
         with self._lock:
@@ -212,14 +240,70 @@ class Py4jServiceBridge(object):
     def isconnected(self):
         with self._lock:
             return True if self._gateway is not None else False
-        
+
+    def _started(self, sender, **kwargs):
+        if self._connection_listener:
+            self._connection_listener.started(kwargs["server"])
+    
+    def _stopped(self, sender, **kwargs):
+        if self._connection_listener:
+            self._connection_listener.stopped(kwargs["server"])
+    
+    def _connection_started(self, sender, **kwargs):
+        with self._lock:
+            self._connection = kwargs["connection"]
+            
+        if self._connection_listener:
+            self._connection_listener.connection_started(self._connection)
+    
+    def _connection_stopped(self, sender, **kwargs):
+        with self._lock:
+            self._connection = None
+        with self._imported_endpoints_lock:
+            for endpointid in self._imported_endpoints.keys():
+                endpoint = None
+                try:
+                    endpoint = self._imported_endpoints[endpointid]
+                except KeyError:
+                    pass
+                if self._service_listener and endpoint:
+                    try:
+                        self._service_listener.service_unimported(self, endpointid, endpoint)
+                    except Exception as e:
+                        _logger.error('_unimport_service_from_java listener threw exception endpointid='+endpointid, e)
+        self.disconnect();
+        if self._connection_listener:
+            self._connection_listener.connection_stopped(kwargs['connection'])
+    
+    def _pre_shutdown(self, sender, **kwargs):
+        if self._connection_listener:
+            self._connection_listener.pre_shutdown(kwargs["server"])
+    
+    def _post_shutdown(self, sender, **kwargs):
+        if self._connection_listener:
+            self._connection_listener.post_shutdown(kwargs["server"])
+    
     def connect(self,callback_server_parameters=None):
         if not callback_server_parameters:
             callback_server_parameters = CallbackServerParameters()
         with self._lock:
             if not self._gateway is None:
                 raise ConnectionError('already connected to java gateway')
+            server_started.connect(self._started)
             self._gateway = JavaGateway(callback_server_parameters=callback_server_parameters)
+            cbserver = self._gateway.get_callback_server()
+            server_stopped.connect(
+                self._stopped, sender=cbserver)
+            server_connection_started.connect(
+                self._connection_started,
+                sender=cbserver)
+            server_connection_stopped.connect(
+                self._connection_stopped,
+                sender=cbserver)
+            pre_server_shutdown.connect(
+                self._pre_shutdown, sender=cbserver)
+            post_server_shutdown.connect(
+                self._post_shutdown, sender=cbserver)
             self._consumer = self._gateway.entry_point.getJavaConsumer()
             class JavaRemoteServiceExporter(object):
                 def __init__(self, bridge):
@@ -278,9 +362,9 @@ class Py4jServiceBridge(object):
                 endpoint = (proxy,local_props)
                 with self._imported_endpoints_lock:
                     self._imported_endpoints[endpointid] = endpoint
-            if self._listener and endpointid:
+            if self._service_listener and endpointid:
                 try:
-                    self._listener.service_imported(self, endpointid, endpoint)
+                    self._service_listener.service_imported(self, endpointid, endpoint)
                 except Exception as e:
                     _logger.error('_import_service_from_java listener threw exception endpointid='+endpointid, e)
         except Exception as e:
@@ -300,9 +384,9 @@ class Py4jServiceBridge(object):
                 self._imported_endpoints[endpointid] = newendpoint
         except KeyError:
             pass
-        if self._listener and newendpoint:
+        if self._service_listener and newendpoint:
             try:
-                self._listener.service_modified(self, endpointid, newendpoint)
+                self._service_listener.service_modified(self, endpointid, newendpoint)
             except Exception as e:
                 _logger.error('_modify_service_from_java listener threw exception endpointid='+endpointid, e)
    
@@ -316,9 +400,9 @@ class Py4jServiceBridge(object):
                 endpoint = self._imported_endpoints.pop(endpointid, None)
         except KeyError:
             pass
-        if self._listener and endpoint:
+        if self._service_listener and endpoint:
             try:
-                self._listener.service_unimported(self, endpointid, endpoint)
+                self._service_listener.service_unimported(self, endpointid, endpoint)
             except Exception as e:
                 _logger.error('_unimport_service_from_java listener threw exception endpointid='+endpointid, e)
 
@@ -349,7 +433,8 @@ class Py4jServiceBridge(object):
             raise ConnectionError('Not connected to java gateway')
 
     def get_access(self):
-        return createLocalPy4jId(port=self._gateway.get_callback_server().get_listening_port())
+        cb = self._gateway.get_callback_server()
+        return createLocalPy4jId(hostname=cb.get_listening_address(),port=cb.get_listening_port())
     
     def __export(self,svc,props):
         try:
