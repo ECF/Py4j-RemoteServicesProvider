@@ -26,9 +26,19 @@ from datetime import datetime
 from threading import Lock
 from argparse import ArgumentError
 
+"""
+Creates a uuid and returns as String
+
+:return: uuid4 as String
+"""
 def create_uuid():
     return str(uuid.uuid4())
 
+"""
+Get the time (ms) since epoch.
+
+:return: number of ms since January 1, 1970 as integer
+"""
 def time_since_epoch():
     return int(time.time() - 1000)
 
@@ -55,8 +65,12 @@ SERVICE_RANKING = 'service.ranking'
 SERVICE_COMPONENT_NAME = 'component.name'
 SERVICE_COMPONENT_ID = 'component.id'
 
+# Global list holding all OSGi RSA constants
 rsaprops = [ENDPOINT_ID,ENDPOINT_SERVICE_ID,ENDPOINT_FRAMEWORK_UUID,SERVICE_EXPORTED_INTERFACES,REMOTE_CONFIGS_SUPPORTED,REMOTE_INTENTS_SUPPORTED,SERVICE_EXPORTED_CONFIGS,SERVICE_EXPORTED_INTENTS,SERVICE_EXPORTED_INTENTS_EXTRA,SERVICE_IMPORTED,SERVICE_IMPORTED_CONFIGS,SERVICE_INTENTS,SERVICE_ID,OBJECT_CLASS,INSTANCE_NAME,SERVICE_RANKING,SERVICE_COMPONENT_ID,SERVICE_COMPONENT_NAME]
 
+#----------------------------------------------------------------------------
+# ECF RS constants (declared in org.eclipse.ecf.remoteserviceadmin.Constants
+#----------------------------------------------------------------------------
 ECF_ENDPOINT_CONTAINERID_NAMESPACE = "ecf.endpoint.id.ns"
 ECF_ENDPOINT_ID = "ecf.endpoint.id"
 ECF_RSVC_ID = "ecf.rsvc.id"
@@ -78,17 +92,27 @@ ECF_SERVICE_IMPORTED_ENDPOINT_SERVICE_ID = ENDPOINT_SERVICE_ID
 ECF_OSGI_ENDPOINT_MODIFIED = "ecf.osgi.endpoint.modified"
 ECF_OSGI_CONTAINER_ID_NS = "ecf.osgi.ns"
 
+# Global list holding all ECF RSA constants
 ecfprops = [ECF_ENDPOINT_CONTAINERID_NAMESPACE,ECF_ENDPOINT_ID,ECF_RSVC_ID,ECF_ENDPOINT_TIMESTAMP,ECF_ENDPOINT_CONNECTTARGET_ID,ECF_ENDPOINT_IDFILTER_IDS,ECF_ENDPOINT_REMOTESERVICE_FILTER,ECF_SERVICE_EXPORTED_ASYNC_INTERFACES]
+
 #----------------------------------------------------------------------------------
-REMOTE_SERVICE_ADMIN = "pelix.rsa.remoteserviceadmin"
-SERVICE_EXPORT_PROVIDER = "pelix.rsa.exportprovider"
-SERVICE_IMPORT_PROVIDER = "pelix.rsa.immportprovider"
+# iPopo RSA constants
+#----------------------------------------------------------------------------------
 ERROR_EP_ID = '0'
 ERROR_NAMESPACE = 'org.eclipse.ecf.core.identity.StringID'
 ERROR_IMPORTED_CONFIGS = ['import.error.config']
 ERROR_ECF_EP_ID = 'export.error.id'
 DEFAULT_EXPORTED_CONFIGS = ['ecf.xmlrpc.server']
 
+"""
+Get the interfaces matching from an origin parameter.   For a list of strings or single
+string (origin), if propValue is '*' return all the origin strings, otherwise return
+the propValue string
+
+:param origin: a string or string array
+:param propValue: a string with '*' to match all from origin, otherwise return propValue
+:return: value of origin if propValue == '*', otherwise propValue
+"""
 def get_matching_interfaces(origin, propValue):
     if origin is None or propValue is None:
         return None
@@ -101,6 +125,17 @@ def get_matching_interfaces(origin, propValue):
         else:
             return propValue
 
+"""
+Get the name value from props dictionary.   For a given array of strings or single
+string (origin), if propValue is '*' return all the origin strings, otherwise return
+the propValue string.  Will not throw KeyError if name not in props, but rather will
+return None
+
+:param name: a string to be used as key into props
+:param props: a dictionary
+:return: value of default if props is None.  props[name] value if present, and default if name key
+not in props
+"""
 def get_prop_value(name, props, default=None): 
     if not props:
         return default
@@ -109,11 +144,26 @@ def get_prop_value(name, props, default=None):
     except KeyError:
         return default
 
+"""
+Set the name value in props dictionary if not already present in props.   
+
+:param name: a string to be used as key into props
+:param props: a dictionary
+:return: None
+"""
 def set_prop_if_null(name, props, ifnull):     
     v = get_prop_value(name,props)
     if v is None:
         props[name] = ifnull
 
+"""
+Get a list strings given the value of a 'string plus' property.  A string plus property is defined
+as one that can be either a single string or a string[].  If a single string this function
+returns a single element list with containing the value
+
+:param value: a string or list of strings
+:return: a list of strings
+"""
 def get_string_plus_property_value(value):
     if value:
         if isinstance(value,type("")):
@@ -123,34 +173,54 @@ def get_string_plus_property_value(value):
         else:
             return None
 
+"""
+Parse a comma-separated string plus property (see above).
+
+:param value: a single string with comma separated array instances
+:return: a list of strings parsed from value via value.split(',')
+"""
 def parse_string_plus_value(value):
     return value.split(',')
-              
+
+"""
+Return the value of a string plus value from props with name.  
+
+:param name: a key into the props dictionary parameter
+:param props: a non-empty dictionary
+:return: a list of strings that represent the value of the name string-plus property.
+For example, the 'objectArray' value in OSGi Remote Services
+"""              
 def get_string_plus_property(name, props, default=None):   
     val = get_string_plus_property_value(get_prop_value(name,props,default))
     return default if val is None else val
 
-def get_current_time_millis():
-    return int((datetime.datetime.now() - datetime.datetime.utcfromtimestamp(0)).total_seconds() * 1000)
+"""
+Get the package name from a Java classname.  A fully qualified Java classname has 
+the following example structure:   [[[<pkg>].<pkg1>].<pkg2>.]classname.  This 
+function will return the fully qualified package name without the classname nor the 
+final '.' prior to the classname
 
-def get_interfaces2(svc_ref,intfValue):
-    if intfValue is None:
-        return None
-    return get_matching_interfaces(svc_ref.get_property('objectClass'), intfValue)
-
-def get_interfaces1(svc_ref):
-    return get_interfaces2(svc_ref,svc_ref.get_property(SERVICE_EXPORTED_INTERFACES))
-                           
-def get_exported_interfaces(svc_ref, props):
-    intfValue = get_prop_value(SERVICE_EXPORTED_INTERFACES, props)
-    return get_interfaces2(svc_ref,intfValue) if not intfValue is None else get_interfaces1(svc_ref)
-
+:param classname: the fully-qualified Java class name
+:return: a string that has the package name without the classname.  None if there is no
+package for the class.
+"""              
 def get_package_from_classname(classname):
     try:
         return classname[:classname.rindex('.')]
     except KeyError:
         return None
 
+"""
+Get the package name from a Java classname.  A fully qualified Java classname has 
+the following example structure:   [[[<pkg>].<pkg1>].<pkg2>.]classname.  This 
+function will return the fully qualified package name without the classname nor the 
+final '.' prior to the classname
+
+:param classname: the fully-qualified Java class name
+:param props: a non-empty dictionary
+:return: a list of strings that represent the value of the name string-plus property.
+For example, the 'objectArray' value in OSGi Remote Services
+"""              
 def get_package_versions(intfs, props):
     result = []
     for intf in intfs:
@@ -162,16 +232,31 @@ def get_package_versions(intfs, props):
                 result.append((key,val))
     return result
 
-_next_rsid = 1
-_next_rsid_lock = Lock()
+#Global remote service id.  Starts at 1 and is incremented via get_next_rsid
+_next_rsvcid = 1
+_next_rsvcid_lock = Lock()
 
+"""
+Get a unique remote service id.  Starts at 1 and increments to remain unique
+
+:return: a unique integer starting at 1 and incrementing with every access
+"""              
 def get_next_rsid():
-    with _next_rsid_lock:
-        global _next_rsid
-        n = _next_rsid
-        _next_rsid += 1
+    global _next_rsvcid_lock
+    with _next_rsvcid_lock:
+        global _next_rsvcid
+        n = _next_rsvcid
+        _next_rsvcid += 1
         return n
 
+"""
+Merge a list of dictionaries given by dict_args into a single resulting dictionary.
+
+:param dict_args: a list of dictionaries
+:return: a single dictionary containing the contents of all given dictionaries in
+dict_args list.  Returns a new dictionary and does not modify any of the given
+dictionaries.
+"""              
 def merge_dicts(*dict_args):
     '''
     Given any number of dicts, shallow copy and merge into a new dict,
@@ -182,9 +267,20 @@ def merge_dicts(*dict_args):
         result.update(dictionary)
     return result
 
+"""
+Get all of the RSA properties given the minimum required information.
+
+:param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
+:param exported_cfgs: a list of strings that are to be associated with the SERVICE_EXPORTED_CONFIGS and SERVICE_IMPORTED_CONFIGS RSA properties.  Must not be None and must contain 1 or more strings
+:param intents: a list of strings to be associated with the SERVICE_INTENTS.   May be None or not provided.
+:param ep_svc_id: the value of the ENDPOINT_SERVICE_ID.  If None, will be given a new unique number via get_next_rsid().  If not None, must be integer.
+:param fw_id: the framework id as string.  If None a new uuid will be used.
+:param pkg_vers: a list of tuples with a package name as first item in tuple (String, and the version string as the second item.  Example:  [('org.eclipse.ecf','1.0.0')].  If None, nothing is added to the returned dictionary.
+:return: a single dictionary containing all the OSGi RSA-required endpoint properties.
+"""              
 def get_rsa_props(object_class, exported_cfgs, intents=None, ep_svc_id=None, fw_id=None, pkg_vers=None):
     results = {}
-    if not object_class:
+    if not object_class or len(object_class) == 0:
         raise ArgumentError('object_class must be an [] of Strings')
     results['objectClass'] = object_class
     if not exported_cfgs:
@@ -210,6 +306,15 @@ def get_rsa_props(object_class, exported_cfgs, intents=None, ep_svc_id=None, fw_
     results[SERVICE_EXPORTED_INTERFACES] = '*'
     return results
 
+"""
+Get all of the ECF RS properties given the minimum required information.
+
+:param ep_id: an integer to be used for the ECF_ENDPOINT_ID value.
+:param ep_id_ns: a string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
+:param rsvc_id: an optional integer that will be the value of ECF_RSVC_ID
+:param ep_ts: an optional integer timestamp.   if None, the returned value of time_since_epoch() will be used.
+:return: a single dictionary containing all the ECF RS-required properties.
+"""              
 def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
     results = {}
     if not ep_id:
@@ -227,6 +332,12 @@ def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
     results[ECF_SERVICE_EXPORTED_ASYNC_INTERFACES] = '*'
     return results
 
+"""
+Get properties from given dictionary that are not OSGi RSA nor ECF RS properties.
+
+:param props: a non-empty dictionary
+:return: a single dictionary containing all the ECF RS-required properties.
+"""              
 def get_extra_props(props):
     result = {}
     for key, value in props.items():
@@ -235,11 +346,33 @@ def get_extra_props(props):
                 result[key] = value
     return result
 
+"""
+Get both OSGi RSA properties and ECF RS properties in a single dictionary.
+
+:param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
+:param exported_cfgs: a list of strings that are to be associated with the SERVICE_EXPORTED_CONFIGS and SERVICE_IMPORTED_CONFIGS RSA properties.  Must not be None and must contain 1 or more strings
+:param ep_namespace: a string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
+:param ep_id: an integer to be used for the ENDPOINT_ID value.
+:param ecf_ep_id: an integer to be used for the ECF_ENDPOINT_ID value.
+:param ep_rsvc_id: an optional integer that will be the value of ECF_RSVC_ID
+:param ep_ts: an optional integer timestamp.   if None, the returned value of time_since_epoch() will be used.
+:param intents: a list of strings to be associated with the SERVICE_INTENTS.   May be None or not provided.
+:param fw_id: the framework id as string.  If None a new uuid will be used.
+:param pkg_vers: a list of tuples with a package name as first item in tuple (String, and the version string as the second item.  Example:  [('org.eclipse.ecf','1.0.0')].  If None, nothing is added to the returned dictionary.
+:return: a single dictionary containing all the OSGI RSA + ECF RS-required properties.
+"""              
 def get_edef_props(object_class, exported_cfgs, ep_namespace, ep_id, ecf_ep_id, ep_rsvc_id, ep_ts, intents, fw_id=None, pkg_ver=None):
     osgi_props = get_rsa_props(object_class, exported_cfgs, intents, ep_rsvc_id, fw_id, pkg_ver)
     ecf_props = get_ecf_props(ecf_ep_id, ep_namespace, ep_rsvc_id, ep_ts)
     return merge_dicts(osgi_props,ecf_props)
 
+"""
+Get OSGi RSA properties and ECF RS properties in a single dictionary for an error condition.
+
+:param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
+:return: a single dictionary containing all the OSGI RSA + ECF RS-required properties.
+"""              
 def get_edef_props_error(object_class):
-    return get_edef_props(object_class, ERROR_IMPORTED_CONFIGS, ERROR_NAMESPACE, ERROR_EP_ID, ERROR_ECF_EP_ID, 0, 0, None, None)#----------------------------------------------------------------------------------
+    return get_edef_props(object_class, ERROR_IMPORTED_CONFIGS, ERROR_NAMESPACE, ERROR_EP_ID, ERROR_ECF_EP_ID, 0, 0, None, None)
+#----------------------------------------------------------------------------------
 

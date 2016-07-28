@@ -148,7 +148,7 @@ class Py4jServiceBridge(object):
     This class provides and API for consumers to use the Py4jServiceBridge.  This 
     allows a bridge between Python and the OSGi service registry.
     '''
-    def __init__(self,service_listener=None,connection_listener=None):
+    def __init__(self,service_listener=None,connection_listener=None,callback_server_parameters=None):
         self._gateway = None
         self._lock = RLock()
         self._consumer = None
@@ -161,6 +161,7 @@ class Py4jServiceBridge(object):
         self._service_listener = service_listener
         self._connection_listener = None
         self._connection = None
+        self._callback_server_parameters = callback_server_parameters
     
     def export(self,svc,export_props):
         with self._lock:
@@ -252,13 +253,21 @@ class Py4jServiceBridge(object):
     def _connection_started(self, sender, **kwargs):
         with self._lock:
             self._connection = kwargs["connection"]
-            
         if self._connection_listener:
             self._connection_listener.connection_started(self._connection)
     
     def _connection_stopped(self, sender, **kwargs):
         with self._lock:
             self._connection = None
+        if self._connection_listener:
+            self._connection_listener.connection_stopped(kwargs['connection'])
+    
+    def _pre_shutdown(self, sender, **kwargs):
+        if self._connection_listener:
+            self._connection_listener.pre_shutdown(kwargs["server"])
+
+    
+    def _post_shutdown(self, sender, **kwargs):
         with self._imported_endpoints_lock:
             for endpointid in self._imported_endpoints.keys():
                 endpoint = None
@@ -273,24 +282,19 @@ class Py4jServiceBridge(object):
                         _logger.error('_unimport_service_from_java listener threw exception endpointid='+endpointid, e)
         self.disconnect();
         if self._connection_listener:
-            self._connection_listener.connection_stopped(kwargs['connection'])
-    
-    def _pre_shutdown(self, sender, **kwargs):
-        if self._connection_listener:
-            self._connection_listener.pre_shutdown(kwargs["server"])
-    
-    def _post_shutdown(self, sender, **kwargs):
-        if self._connection_listener:
             self._connection_listener.post_shutdown(kwargs["server"])
     
     def connect(self,callback_server_parameters=None):
-        if not callback_server_parameters:
-            callback_server_parameters = CallbackServerParameters()
+        if not self._callback_server_parameters:
+            self._callback_server_parameters = callback_server_parameters if callback_server_parameters else CallbackServerParameters()
+        else:
+            self._callback_server_parameters = callback_server_parameters if callback_server_parameters else self._callback_server_parameters
+        
         with self._lock:
             if not self._gateway is None:
                 raise ConnectionError('already connected to java gateway')
             server_started.connect(self._started)
-            self._gateway = JavaGateway(callback_server_parameters=callback_server_parameters)
+            self._gateway = JavaGateway(callback_server_parameters=self._callback_server_parameters)
             cbserver = self._gateway.get_callback_server()
             server_stopped.connect(
                 self._stopped, sender=cbserver)
