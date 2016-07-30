@@ -1,10 +1,9 @@
-"""
+'''
 OSGi service bridge package
 
 :author: Scott Lewis
 :copyright: Copyright 2015, Composent, Inc.
 :license: Apache License 2.0
-..
 
     Copyright 2015 Composent, Inc. and others
 
@@ -19,26 +18,26 @@ OSGi service bridge package
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-"""
+'''
 import uuid
 from time import time
 from datetime import datetime
 from threading import Lock
 from argparse import ArgumentError
 
-"""
+'''
 Creates a uuid and returns as String
 
 :return: uuid4 as String
-"""
+'''
 def create_uuid():
     return str(uuid.uuid4())
 
-"""
+'''
 Get the time (ms) since epoch.
 
 :return: number of ms since January 1, 1970 as integer
-"""
+'''
 def time_since_epoch():
     return int(time.time() - 1000)
 
@@ -104,16 +103,16 @@ ERROR_IMPORTED_CONFIGS = ['import.error.config']
 ERROR_ECF_EP_ID = 'export.error.id'
 DEFAULT_EXPORTED_CONFIGS = ['ecf.xmlrpc.server']
 
-"""
-Get the interfaces matching from an origin parameter.   For a list of strings or single
-string (origin), if propValue is '*' return all the origin strings, otherwise return
-the propValue string
-
-:param origin: a string or string array
-:param propValue: a string with '*' to match all from origin, otherwise return propValue
-:return: value of origin if propValue == '*', otherwise propValue
-"""
 def get_matching_interfaces(origin, propValue):
+    '''
+    Get the interfaces matching from an origin parameter.   For a list of strings or single
+    string (origin), if propValue is '*' return all the origin strings, otherwise return
+    the propValue string
+    
+    :param origin: a string or string array
+    :param propValue: a string with '*' to match all from origin, otherwise return propValue
+    :return: value of origin if propValue == '*', otherwise propValue
+    '''
     if origin is None or propValue is None:
         return None
     if isinstance(propValue,type("")):
@@ -125,18 +124,18 @@ def get_matching_interfaces(origin, propValue):
         else:
             return propValue
 
-"""
-Get the name value from props dictionary.   For a given array of strings or single
-string (origin), if propValue is '*' return all the origin strings, otherwise return
-the propValue string.  Will not throw KeyError if name not in props, but rather will
-return None
-
-:param name: a string to be used as key into props
-:param props: a dictionary
-:return: value of default if props is None.  props[name] value if present, and default if name key
-not in props
-"""
 def get_prop_value(name, props, default=None): 
+    '''
+    Get the name value from props dictionary.   For a given array of strings or single
+    string (origin), if propValue is '*' return all the origin strings, otherwise return
+    the propValue string.  Will not throw KeyError if name not in props, but rather will
+    return None
+    
+    :param name: a string to be used as key into props
+    :param props: a dictionary
+    :return: value of default if props is None.  props[name] value if present, and default if name key
+    not in props
+    '''
     if not props:
         return default
     try:
@@ -144,27 +143,27 @@ def get_prop_value(name, props, default=None):
     except KeyError:
         return default
 
-"""
-Set the name value in props dictionary if not already present in props.   
-
-:param name: a string to be used as key into props
-:param props: a dictionary
-:return: None
-"""
 def set_prop_if_null(name, props, ifnull):     
+    '''
+    Set the name value in props dictionary if not already present in props.   
+    
+    :param name: a string to be used as key into props
+    :param props: a dictionary
+    :return: None
+    '''
     v = get_prop_value(name,props)
     if v is None:
         props[name] = ifnull
 
-"""
-Get a list strings given the value of a 'string plus' property.  A string plus property is defined
-as one that can be either a single string or a string[].  If a single string this function
-returns a single element list with containing the value
-
-:param value: a string or list of strings
-:return: a list of strings
-"""
 def get_string_plus_property_value(value):
+    '''
+    Get a list strings given the value of a 'string plus' property.  A string plus property is defined
+    as one that can be either a single string or a string[].  If a single string this function
+    returns a single element list with containing the value
+    
+    :param value: a string or list of strings
+    :return: a list of strings
+    '''
     if value:
         if isinstance(value,type("")):
             return [value]
@@ -173,55 +172,55 @@ def get_string_plus_property_value(value):
         else:
             return None
 
-"""
-Parse a comma-separated string plus property (see above).
-
-:param value: a single string with comma separated array instances
-:return: a list of strings parsed from value via value.split(',')
-"""
 def parse_string_plus_value(value):
+    '''
+    Parse a comma-separated string plus property (see above).
+    
+    :param value: a single string with comma separated array instances
+    :return: a list of strings parsed from value via value.split(',')
+    '''
     return value.split(',')
 
-"""
-Return the value of a string plus value from props with name.  
-
-:param name: a key into the props dictionary parameter
-:param props: a non-empty dictionary
-:return: a list of strings that represent the value of the name string-plus property.
-For example, the 'objectArray' value in OSGi Remote Services
-"""              
 def get_string_plus_property(name, props, default=None):   
+    '''
+    Return the value of a string plus value from props with name.  
+    
+    :param name: a key into the props dictionary parameter
+    :param props: a non-empty dictionary
+    :return: a list of strings that represent the value of the name string-plus property.
+    For example, the 'objectArray' value in OSGi Remote Services
+    '''              
     val = get_string_plus_property_value(get_prop_value(name,props,default))
     return default if val is None else val
 
-"""
-Get the package name from a Java classname.  A fully qualified Java classname has 
-the following example structure:   [[[<pkg>].<pkg1>].<pkg2>.]classname.  This 
-function will return the fully qualified package name without the classname nor the 
-final '.' prior to the classname
-
-:param classname: the fully-qualified Java class name
-:return: a string that has the package name without the classname.  None if there is no
-package for the class.
-"""              
 def get_package_from_classname(classname):
+    '''
+    Get the package name from a Java classname.  A fully qualified Java classname has 
+    the following example structure:   [[[<pkg>].<pkg1>].<pkg2>.]classname.  This 
+    function will return the fully qualified package name without the classname nor the 
+    final '.' prior to the classname
+    
+    :param classname: the fully-qualified Java class name
+    :return: a string that has the package name without the classname.  None if there is no
+    package for the class.
+    '''              
     try:
         return classname[:classname.rindex('.')]
     except KeyError:
         return None
 
-"""
-Get the package name from a Java classname.  A fully qualified Java classname has 
-the following example structure:   [[[<pkg>].<pkg1>].<pkg2>.]classname.  This 
-function will return the fully qualified package name without the classname nor the 
-final '.' prior to the classname
-
-:param classname: the fully-qualified Java class name
-:param props: a non-empty dictionary
-:return: a list of strings that represent the value of the name string-plus property.
-For example, the 'objectArray' value in OSGi Remote Services
-"""              
 def get_package_versions(intfs, props):
+    '''
+    Get the package name from a Java classname.  A fully qualified Java classname has 
+    the following example structure:   [[[<pkg>].<pkg1>].<pkg2>.]classname.  This 
+    function will return the fully qualified package name without the classname nor the 
+    final '.' prior to the classname
+    
+    :param classname: the fully-qualified Java class name
+    :param props: a non-empty dictionary
+    :return: a list of strings that represent the value of the name string-plus property.
+    For example, the 'objectArray' value in OSGi Remote Services
+    '''              
     result = []
     for intf in intfs:
         pkgname = get_package_from_classname(intf)
@@ -236,12 +235,12 @@ def get_package_versions(intfs, props):
 _next_rsvcid = 1
 _next_rsvcid_lock = Lock()
 
-"""
-Get a unique remote service id.  Starts at 1 and increments to remain unique
-
-:return: a unique integer starting at 1 and incrementing with every access
-"""              
 def get_next_rsid():
+    '''
+    Get a unique remote service id.  Starts at 1 and increments to remain unique
+    
+    :return: a unique integer starting at 1 and incrementing with every access
+    '''              
     global _next_rsvcid_lock
     with _next_rsvcid_lock:
         global _next_rsvcid
@@ -249,36 +248,32 @@ def get_next_rsid():
         _next_rsvcid += 1
         return n
 
-"""
-Merge a list of dictionaries given by dict_args into a single resulting dictionary.
-
-:param dict_args: a list of dictionaries
-:return: a single dictionary containing the contents of all given dictionaries in
-dict_args list.  Returns a new dictionary and does not modify any of the given
-dictionaries.
-"""              
 def merge_dicts(*dict_args):
     '''
-    Given any number of dicts, shallow copy and merge into a new dict,
-    precedence goes to key value pairs in latter dicts.
-    '''
+    Merge a list of dictionaries given by dict_args into a single resulting dictionary.
+    
+    :param dict_args: a list of dictionaries
+    :return: a single dictionary containing the contents of all given dictionaries in
+    dict_args list.  Returns a new dictionary and does not modify any of the given
+    dictionaries.
+    '''              
     result = {}
     for dictionary in dict_args:
         result.update(dictionary)
     return result
 
-"""
-Get all of the RSA properties given the minimum required information.
-
-:param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
-:param exported_cfgs: a list of strings that are to be associated with the SERVICE_EXPORTED_CONFIGS and SERVICE_IMPORTED_CONFIGS RSA properties.  Must not be None and must contain 1 or more strings
-:param intents: a list of strings to be associated with the SERVICE_INTENTS.   May be None or not provided.
-:param ep_svc_id: the value of the ENDPOINT_SERVICE_ID.  If None, will be given a new unique number via get_next_rsid().  If not None, must be integer.
-:param fw_id: the framework id as string.  If None a new uuid will be used.
-:param pkg_vers: a list of tuples with a package name as first item in tuple (String, and the version string as the second item.  Example:  [('org.eclipse.ecf','1.0.0')].  If None, nothing is added to the returned dictionary.
-:return: a single dictionary containing all the OSGi RSA-required endpoint properties.
-"""              
 def get_rsa_props(object_class, exported_cfgs, intents=None, ep_svc_id=None, fw_id=None, pkg_vers=None):
+    '''
+    Get all of the RSA properties given the minimum required information.
+    
+    :param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
+    :param exported_cfgs: a list of strings that are to be associated with the SERVICE_EXPORTED_CONFIGS and SERVICE_IMPORTED_CONFIGS RSA properties.  Must not be None and must contain 1 or more strings
+    :param intents: a list of strings to be associated with the SERVICE_INTENTS.   May be None or not provided.
+    :param ep_svc_id: the value of the ENDPOINT_SERVICE_ID.  If None, will be given a new unique number via get_next_rsid().  If not None, must be integer.
+    :param fw_id: the framework id as string.  If None a new uuid will be used.
+    :param pkg_vers: a list of tuples with a package name as first item in tuple (String, and the version string as the second item.  Example:  [('org.eclipse.ecf','1.0.0')].  If None, nothing is added to the returned dictionary.
+    :return: a single dictionary containing all the OSGi RSA-required endpoint properties.
+    '''              
     results = {}
     if not object_class or len(object_class) == 0:
         raise ArgumentError('object_class must be an [] of Strings')
@@ -306,16 +301,16 @@ def get_rsa_props(object_class, exported_cfgs, intents=None, ep_svc_id=None, fw_
     results[SERVICE_EXPORTED_INTERFACES] = '*'
     return results
 
-"""
-Get all of the ECF RS properties given the minimum required information.
-
-:param ep_id: an integer to be used for the ECF_ENDPOINT_ID value.
-:param ep_id_ns: a string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
-:param rsvc_id: an optional integer that will be the value of ECF_RSVC_ID
-:param ep_ts: an optional integer timestamp.   if None, the returned value of time_since_epoch() will be used.
-:return: a single dictionary containing all the ECF RS-required properties.
-"""              
 def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
+    '''
+    Get all of the ECF RS properties given the minimum required information.
+    
+    :param ep_id: an integer to be used for the ECF_ENDPOINT_ID value.
+    :param ep_id_ns: a string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
+    :param rsvc_id: an optional integer that will be the value of ECF_RSVC_ID
+    :param ep_ts: an optional integer timestamp.   if None, the returned value of time_since_epoch() will be used.
+    :return: a single dictionary containing all the ECF RS-required properties.
+    '''              
     results = {}
     if not ep_id:
         raise ArgumentError('ep_id must be a valid endpoint id')
@@ -332,13 +327,13 @@ def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
     results[ECF_SERVICE_EXPORTED_ASYNC_INTERFACES] = '*'
     return results
 
-"""
-Get properties from given dictionary that are not OSGi RSA nor ECF RS properties.
-
-:param props: a non-empty dictionary
-:return: a single dictionary containing all the ECF RS-required properties.
-"""              
 def get_extra_props(props):
+    '''
+    Get properties from given dictionary that are not OSGi RSA nor ECF RS properties.
+    
+    :param props: a non-empty dictionary
+    :return: a single dictionary containing all the ECF RS-required properties.
+    '''              
     result = {}
     for key, value in props.items():
         if not key in ecfprops and not key in rsaprops:
@@ -346,33 +341,33 @@ def get_extra_props(props):
                 result[key] = value
     return result
 
-"""
-Get both OSGi RSA properties and ECF RS properties in a single dictionary.
-
-:param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
-:param exported_cfgs: a list of strings that are to be associated with the SERVICE_EXPORTED_CONFIGS and SERVICE_IMPORTED_CONFIGS RSA properties.  Must not be None and must contain 1 or more strings
-:param ep_namespace: a string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
-:param ep_id: an integer to be used for the ENDPOINT_ID value.
-:param ecf_ep_id: an integer to be used for the ECF_ENDPOINT_ID value.
-:param ep_rsvc_id: an optional integer that will be the value of ECF_RSVC_ID
-:param ep_ts: an optional integer timestamp.   if None, the returned value of time_since_epoch() will be used.
-:param intents: a list of strings to be associated with the SERVICE_INTENTS.   May be None or not provided.
-:param fw_id: the framework id as string.  If None a new uuid will be used.
-:param pkg_vers: a list of tuples with a package name as first item in tuple (String, and the version string as the second item.  Example:  [('org.eclipse.ecf','1.0.0')].  If None, nothing is added to the returned dictionary.
-:return: a single dictionary containing all the OSGI RSA + ECF RS-required properties.
-"""              
 def get_edef_props(object_class, exported_cfgs, ep_namespace, ep_id, ecf_ep_id, ep_rsvc_id, ep_ts, intents, fw_id=None, pkg_ver=None):
+    '''
+    Get both OSGi RSA properties and ECF RS properties in a single dictionary.
+    
+    :param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
+    :param exported_cfgs: a list of strings that are to be associated with the SERVICE_EXPORTED_CONFIGS and SERVICE_IMPORTED_CONFIGS RSA properties.  Must not be None and must contain 1 or more strings
+    :param ep_namespace: a string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
+    :param ep_id: an integer to be used for the ENDPOINT_ID value.
+    :param ecf_ep_id: an integer to be used for the ECF_ENDPOINT_ID value.
+    :param ep_rsvc_id: an optional integer that will be the value of ECF_RSVC_ID
+    :param ep_ts: an optional integer timestamp.   if None, the returned value of time_since_epoch() will be used.
+    :param intents: a list of strings to be associated with the SERVICE_INTENTS.   May be None or not provided.
+    :param fw_id: the framework id as string.  If None a new uuid will be used.
+    :param pkg_vers: a list of tuples with a package name as first item in tuple (String, and the version string as the second item.  Example:  [('org.eclipse.ecf','1.0.0')].  If None, nothing is added to the returned dictionary.
+    :return: a single dictionary containing all the OSGI RSA + ECF RS-required properties.
+    '''              
     osgi_props = get_rsa_props(object_class, exported_cfgs, intents, ep_rsvc_id, fw_id, pkg_ver)
     ecf_props = get_ecf_props(ecf_ep_id, ep_namespace, ep_rsvc_id, ep_ts)
     return merge_dicts(osgi_props,ecf_props)
 
-"""
-Get OSGi RSA properties and ECF RS properties in a single dictionary for an error condition.
-
-:param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
-:return: a single dictionary containing all the OSGI RSA + ECF RS-required properties.
-"""              
 def get_edef_props_error(object_class):
+    '''
+    Get OSGi RSA properties and ECF RS properties in a single dictionary for an error condition.
+    
+    :param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
+    :return: a single dictionary containing all the OSGI RSA + ECF RS-required properties.
+    '''              
     return get_edef_props(object_class, ERROR_IMPORTED_CONFIGS, ERROR_NAMESPACE, ERROR_EP_ID, ERROR_ECF_EP_ID, 0, 0, None, None)
 #----------------------------------------------------------------------------------
 
