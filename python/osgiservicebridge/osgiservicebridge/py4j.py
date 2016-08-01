@@ -172,6 +172,7 @@ class Py4jServiceBridgeConnectionListener(metaclass=ABCMeta):
     the callback server is started, the connection_started, the connection_stopped, the cb server
     stopped, pre_shutdown and post_shutdown.
     '''    
+    @abstractmethod
     def started(self, server):
         '''
         Notification that the callback server has been started
@@ -179,6 +180,7 @@ class Py4jServiceBridgeConnectionListener(metaclass=ABCMeta):
         '''
         _logger.info("Py4j started server="+repr(server))
 
+    @abstractmethod
     def connection_started(self, connection):
         '''
         Notification that the a connection has been received and started
@@ -186,13 +188,15 @@ class Py4jServiceBridgeConnectionListener(metaclass=ABCMeta):
         '''
         _logger.info("Py4j connection started="+repr(connection))
     
-    def connection_stopped(self, connection):
+    @abstractmethod
+    def connection_stopped(self, connection, exception):
         '''
         Notification that the a connection has been stopped
         :param connection: The connection that has been stopped
         '''
-        _logger.info("Py4j connection stopped="+repr(connection))
+        _logger.info("Py4j connection stopped="+repr(connection)+',exception='+repr(exception))
     
+    @abstractmethod
     def stopped(self, server):
         '''
         Notification that the callback server has been stopped
@@ -200,6 +204,7 @@ class Py4jServiceBridgeConnectionListener(metaclass=ABCMeta):
         '''
         _logger.info("Py4j gateway stopped="+repr(server))
     
+    @abstractmethod
     def pre_shutdown(self, server):
         '''
         Notification that the callback server is going to be shutdown
@@ -207,6 +212,7 @@ class Py4jServiceBridgeConnectionListener(metaclass=ABCMeta):
         '''
         _logger.info("Py4j gateway pre_shutdown="+repr(server))
     
+    @abstractmethod
     def post_shutdown(self, server):
         '''
         Notification that the callback server has been shutdown
@@ -382,21 +388,21 @@ class Py4jServiceBridge(object):
         with self._lock:
             if not self._gateway is None:
                 raise ConnectionError('already connected to java gateway')
-            server_started.connect(self._started)
+            server_started.connect(self.__started)
             self._gateway = JavaGateway(callback_server_parameters=self._callback_server_parameters)
             cbserver = self._gateway.get_callback_server()
             server_stopped.connect(
                 self._stopped, sender=cbserver)
             server_connection_started.connect(
-                self._connection_started,
+                self.__connection_started,
                 sender=cbserver)
             server_connection_stopped.connect(
-                self._connection_stopped,
+                self.__connection_stopped,
                 sender=cbserver)
             pre_server_shutdown.connect(
-                self._pre_shutdown, sender=cbserver)
+                self.__pre_shutdown, sender=cbserver)
             post_server_shutdown.connect(
-                self._post_shutdown, sender=cbserver)
+                self.__post_shutdown, sender=cbserver)
             self._consumer = self._gateway.entry_point.getJavaConsumer()
             class JavaRemoteServiceExporter(object):
                 def __init__(self, bridge):
@@ -429,6 +435,14 @@ class Py4jServiceBridge(object):
             self._exported_endpoints.clear()
      
     def make_rsa_props(self,object_class, rsvc_id, fw_id, pkg_ver):
+        '''
+        Make dictionary with all RSA-required properties, using this service bridge's hostname and port to create the ENDPOIN
+        :param object_class: the value for the objectClass required property.  Must be a list of strings.
+        :param rsvc_id: the remote service id to use.  Must be of type integer.
+        :param fw_id: the framework id to use.  Must be of type string and globally unique (e.g. string of uuid4)
+        :param pkg_vers: a list of tuples with a package name as first item in tuple (String, and the version string as the second item.  Example:  [('org.eclipse.ecf','1.0.0')].  If None, nothing is added to the returned dictionary.
+        :return: Dictionary containing all required RSA properties.
+        '''
         with self._lock:
             self._raise_not_connected()
             osgiprops = osgiservicebridge.get_rsa_props(object_class, PY4J_EXPORTED_CONFIGS, PY4J_SERVICE_INTENTS, rsvc_id, fw_id, pkg_ver)
@@ -443,32 +457,32 @@ class Py4jServiceBridge(object):
             return osgiservicebridge.merge_dicts(osgiprops,ecfprops)
 
 
-    def _started(self, sender, **kwargs):
+    def __started(self, sender, **kwargs):
         if self._connection_listener:
             self._connection_listener.started(kwargs["server"])
     
-    def _stopped(self, sender, **kwargs):
+    def __stopped(self, sender, **kwargs):
         if self._connection_listener:
             self._connection_listener.stopped(kwargs["server"])
     
-    def _connection_started(self, sender, **kwargs):
+    def __connection_started(self, sender, **kwargs):
         with self._lock:
             self._connection = kwargs["connection"]
         if self._connection_listener:
             self._connection_listener.connection_started(self._connection)
     
-    def _connection_stopped(self, sender, **kwargs):
+    def __connection_stopped(self, sender, **kwargs):
         with self._lock:
             self._connection = None
         if self._connection_listener:
-            self._connection_listener.connection_stopped(kwargs['connection'])
+            self._connection_listener.connection_stopped(kwargs['connection'],kwargs.pop('exception',None))
     
-    def _pre_shutdown(self, sender, **kwargs):
+    def __pre_shutdown(self, sender, **kwargs):
         if self._connection_listener:
             self._connection_listener.pre_shutdown(kwargs["server"])
 
     
-    def _post_shutdown(self, sender, **kwargs):
+    def __ost_shutdown(self, sender, **kwargs):
         with self._imported_endpoints_lock:
             for endpointid in self._imported_endpoints.keys():
                 endpoint = None

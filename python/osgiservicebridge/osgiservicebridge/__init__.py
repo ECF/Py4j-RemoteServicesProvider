@@ -370,4 +370,3 @@ def get_edef_props_error(object_class):
     '''              
     return get_edef_props(object_class, ERROR_IMPORTED_CONFIGS, ERROR_NAMESPACE, ERROR_EP_ID, ERROR_ECF_EP_ID, 0, 0, None, None)
 #----------------------------------------------------------------------------------
-
