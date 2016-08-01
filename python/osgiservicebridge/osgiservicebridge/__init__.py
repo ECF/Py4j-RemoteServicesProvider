@@ -2,10 +2,10 @@
 OSGi service bridge package
 
 :author: Scott Lewis
-:copyright: Copyright 2015, Composent, Inc.
+:copyright: Copyright 2016, Composent, Inc.
 :license: Apache License 2.0
 
-    Copyright 2015 Composent, Inc. and others
+    Copyright 2016 Composent, Inc. and others
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
