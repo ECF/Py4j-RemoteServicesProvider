@@ -482,7 +482,7 @@ class Py4jServiceBridge(object):
             self._connection_listener.pre_shutdown(kwargs["server"])
 
     
-    def __ost_shutdown(self, sender, **kwargs):
+    def __post_shutdown(self, sender, **kwargs):
         with self._imported_endpoints_lock:
             for endpointid in self._imported_endpoints.keys():
                 endpoint = None
