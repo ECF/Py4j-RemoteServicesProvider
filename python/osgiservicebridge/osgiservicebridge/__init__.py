@@ -1,18 +1,13 @@
 '''
 OSGi service bridge package
-
 :author: Scott Lewis
 :copyright: Copyright 2016, Composent, Inc.
 :license: Apache License 2.0
-
     Copyright 2016 Composent, Inc. and others
-
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-
         http://www.apache.org/licenses/LICENSE-2.0
-
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +22,6 @@ from argparse import ArgumentError
 
 '''
 Creates a uuid and returns as String
-
 :return: uuid4 as String
 '''
 def create_uuid():
@@ -35,11 +29,10 @@ def create_uuid():
 
 '''
 Get the time (ms) since epoch.
-
 :return: number of ms since January 1, 1970 as integer
 '''
 def time_since_epoch():
-    return int(time.time() - 1000)
+    return int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
 
 #----------------------------------------------------------------------------
 # RSA constants (declared in org.osgi.service.remoteserviceadmin.RemoteConstants
@@ -324,7 +317,6 @@ def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
     if not ep_ts:
         ep_ts = time_since_epoch()
     results[ECF_ENDPOINT_TIMESTAMP] = ep_ts
-    results[ECF_SERVICE_EXPORTED_ASYNC_INTERFACES] = '*'
     return results
 
 def get_extra_props(props):
