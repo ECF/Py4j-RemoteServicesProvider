@@ -6,7 +6,7 @@ An ECF Remote Services/RSA Provider that uses Py4j as the transport.   This allo
                         "service.exported.configs=ecf.py4j.host"})   //  RS standard service property
 public class EvalImpl implements Eval {
 	public double eval(String expression) throws Exception {
-           .. impl of Eval service
+           ...Java impl here
         }
 }
 </pre>
