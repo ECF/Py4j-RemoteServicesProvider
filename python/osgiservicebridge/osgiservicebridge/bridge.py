@@ -19,7 +19,8 @@ from logging import getLogger as getLibLogger
 from threading import RLock
 
 from py4j.java_collections import ListConverter, MapConverter, JavaArray, JavaList, JavaSet
-from osgiservicebridge import merge_dicts, ENDPOINT_ID
+from osgiservicebridge import merge_dicts, ENDPOINT_ID, get_edef_props, PY4J_EXPORTED_CONFIGS, PY4J_NAMESPACE,\
+ PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH
 import osgiservicebridge
 from argparse import ArgumentError
 
@@ -31,18 +32,11 @@ from py4j.java_gateway import (
 '''
 Py4J constants
 '''
-PY4J_EXPORTED_CONFIG = 'ecf.py4j.host.python'
-PY4J_EXPORTED_CONFIGS = [PY4J_EXPORTED_CONFIG]
-PY4J_PROTOCOL = 'py4j'
 PY4J_DEFAULT_GATEWAY_PORT = DEFAULT_PORT
 PY4J_DEFAULT_CB_PORT = DEFAULT_PYTHON_PROXY_PORT
 PY4J_DEFAULT_HOSTNAME = DEFAULT_ADDRESS
-PY4J_PYTHON_PATH = "/python"
-PY4J_JAVA_PATH = "/java"
 
-PY4J_NAMESPACE = 'ecf.namespace.py4j'
 JAVA_DIRECT_ENDPOINT_CLASS = 'org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider'
-PY4J_SERVICE_INTENTS = ['passByReference', 'exactlyOnce', 'ordered']
 
 # Version
 __version_info__ = (0, 1, 0)
@@ -225,7 +219,7 @@ class Py4jServiceBridge(object):
         self._connection_listener = None
         self._connection = None
         self._callback_server_parameters = callback_server_parameters
-        
+    
     def get_id(self):
         '''
         Get the py4j id for this service bridge.
@@ -233,8 +227,8 @@ class Py4jServiceBridge(object):
         '''
         cb = self._gateway.get_callback_server()
         return createLocalPy4jId(hostname=cb.get_listening_address(),port=cb.get_listening_port())
-        
-    def export(self,svc,export_props):
+    
+    def export(self,svc,export_props=None):
         '''
         Export the given svc via the given export_props.  Note that the export_props must have and ENDPOINT_ID
         and contain the other standard Endpoint Description service properties as described by the OSGI
@@ -247,6 +241,10 @@ class Py4jServiceBridge(object):
         '''
         with self._lock:
             self._raise_not_connected()
+        if export_props is None:
+            java = getattr(svc,'Java')
+            pkgvers = getattr(java,'package_version',None)
+            export_props = get_edef_props(svc.Java.implements, self.get_id(),pkg_ver = pkgvers)
         try:
             endpointid = export_props[ENDPOINT_ID]
         except KeyError:

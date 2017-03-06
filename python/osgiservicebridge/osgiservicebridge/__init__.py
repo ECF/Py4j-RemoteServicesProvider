@@ -87,6 +87,17 @@ ECF_OSGI_CONTAINER_ID_NS = "ecf.osgi.ns"
 # Global list holding all ECF RSA constants
 ecfprops = [ECF_ENDPOINT_CONTAINERID_NAMESPACE,ECF_ENDPOINT_ID,ECF_RSVC_ID,ECF_ENDPOINT_TIMESTAMP,ECF_ENDPOINT_CONNECTTARGET_ID,ECF_ENDPOINT_IDFILTER_IDS,ECF_ENDPOINT_REMOTESERVICE_FILTER,ECF_SERVICE_EXPORTED_ASYNC_INTERFACES]
 
+'''
+Py4J constants
+'''
+PY4J_PROTOCOL = 'py4j'
+PY4J_EXPORTED_CONFIG = 'ecf.py4j.host.python'
+PY4J_EXPORTED_CONFIGS = [PY4J_EXPORTED_CONFIG]
+PY4J_NAMESPACE = 'ecf.namespace.py4j'
+PY4J_SERVICE_INTENTS = ['passByReference', 'exactlyOnce', 'ordered']
+PY4J_PYTHON_PATH = "/python"
+PY4J_JAVA_PATH = "/java"
+
 #----------------------------------------------------------------------------------
 # iPopo RSA constants
 #----------------------------------------------------------------------------------
@@ -255,7 +266,7 @@ def merge_dicts(*dict_args):
         result.update(dictionary)
     return result
 
-def get_rsa_props(object_class, exported_cfgs, intents=None, ep_svc_id=None, fw_id=None, pkg_vers=None):
+def get_rsa_props(object_class, exported_cfgs=None, intents=None, ep_svc_id=None, fw_id=None, pkg_vers=None):
     '''
     Get all of the RSA properties given the minimum required information.
     
@@ -271,12 +282,14 @@ def get_rsa_props(object_class, exported_cfgs, intents=None, ep_svc_id=None, fw_
     if not object_class or len(object_class) == 0:
         raise ArgumentError('object_class must be an [] of Strings')
     results['objectClass'] = object_class
-    if not exported_cfgs:
-        raise ArgumentError('rmt_configs must be an array of Strings')
+    if exported_cfgs is None:
+        exported_cfgs = PY4J_EXPORTED_CONFIGS
     results[SERVICE_EXPORTED_CONFIGS] = exported_cfgs
     results[SERVICE_IMPORTED_CONFIGS] = exported_cfgs
     if intents:
         results[SERVICE_INTENTS] = intents
+    else:
+        results[SERVICE_INTENTS] = PY4J_SERVICE_INTENTS
     if not ep_svc_id:
         ep_svc_id = get_next_rsid()
     results[ENDPOINT_SERVICE_ID] = ep_svc_id
@@ -288,7 +301,8 @@ def get_rsa_props(object_class, exported_cfgs, intents=None, ep_svc_id=None, fw_
         if isinstance(pkg_vers,type(tuple())):
             pkg_vers = [pkg_vers]
         for pkg_ver in pkg_vers:
-            results[pkg_ver[0]] = pkg_ver[1]
+            key = ENDPOINT_PACKAGE_VERSION_ + pkg_ver[0]
+            results[key] = pkg_ver[1]
     results[ENDPOINT_ID] = create_uuid()
     results[SERVICE_IMPORTED] = 'true'
     results[SERVICE_EXPORTED_INTERFACES] = '*'
@@ -298,8 +312,8 @@ def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
     '''
     Get all of the ECF RS properties given the minimum required information.
     
-    :param ep_id: an integer to be used for the ECF_ENDPOINT_ID value.
-    :param ep_id_ns: a string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
+    :param ep_id: a String to be used for the ECF_ENDPOINT_ID value.
+    :param ep_id_ns: an optional string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
     :param rsvc_id: an optional integer that will be the value of ECF_RSVC_ID
     :param ep_ts: an optional integer timestamp.   if None, the returned value of time_since_epoch() will be used.
     :return: a single dictionary containing all the ECF RS-required properties.
@@ -309,7 +323,7 @@ def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
         raise ArgumentError('ep_id must be a valid endpoint id')
     results[ECF_ENDPOINT_ID] = ep_id
     if not ep_id_ns:
-        raise ArgumentError('ep_id_ns must be a valid namespace')
+        ep_id_ns = PY4J_NAMESPACE
     results[ECF_ENDPOINT_CONTAINERID_NAMESPACE] = ep_id_ns
     if not rsvc_id:
         rsvc_id = get_next_rsid()
@@ -333,14 +347,13 @@ def get_extra_props(props):
                 result[key] = value
     return result
 
-def get_edef_props(object_class, exported_cfgs, ep_namespace, ep_id, ecf_ep_id, ep_rsvc_id, ep_ts, intents, fw_id=None, pkg_ver=None):
+def get_edef_props(object_class, ecf_ep_id, ep_namespace=None, ep_rsvc_id=None, exported_cfgs = None, ep_ts=None, intents=None, fw_id=None, pkg_ver=None):
     '''
     Get both OSGi RSA properties and ECF RS properties in a single dictionary.
     
     :param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
     :param exported_cfgs: a list of strings that are to be associated with the SERVICE_EXPORTED_CONFIGS and SERVICE_IMPORTED_CONFIGS RSA properties.  Must not be None and must contain 1 or more strings
     :param ep_namespace: a string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
-    :param ep_id: an integer to be used for the ENDPOINT_ID value.
     :param ecf_ep_id: an integer to be used for the ECF_ENDPOINT_ID value.
     :param ep_rsvc_id: an optional integer that will be the value of ECF_RSVC_ID
     :param ep_ts: an optional integer timestamp.   if None, the returned value of time_since_epoch() will be used.
