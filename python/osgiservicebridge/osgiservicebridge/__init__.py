@@ -97,6 +97,9 @@ PY4J_NAMESPACE = 'ecf.namespace.py4j'
 PY4J_SERVICE_INTENTS = ['passByReference', 'exactlyOnce', 'ordered']
 PY4J_PYTHON_PATH = "/python"
 PY4J_JAVA_PATH = "/java"
+PY4J_JAVA_ATTRIBUTE = 'Java'
+PY4J_JAVA_IMPLEMENTS_ATTRIBUTE = 'implements'
+PY4J_JAVA_PACKAGE_VERSION_ATTRIBUTE = 'package_version'
 
 #----------------------------------------------------------------------------------
 # iPopo RSA constants

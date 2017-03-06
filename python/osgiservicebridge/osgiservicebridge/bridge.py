@@ -20,7 +20,8 @@ from threading import RLock
 
 from py4j.java_collections import ListConverter, MapConverter, JavaArray, JavaList, JavaSet
 from osgiservicebridge import merge_dicts, ENDPOINT_ID, get_edef_props, PY4J_EXPORTED_CONFIGS, PY4J_NAMESPACE,\
- PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH
+ PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH, PY4J_JAVA_ATTRIBUTE, PY4J_JAVA_IMPLEMENTS_ATTRIBUTE,\
+ PY4J_JAVA_PACKAGE_VERSION_ATTRIBUTE
 import osgiservicebridge
 from argparse import ArgumentError
 
@@ -243,11 +244,11 @@ class Py4jServiceBridge(object):
             self._raise_not_connected()
         if export_props is None:
             '''The Java class attribute must be present'''
-            java = getattr(svc,'Java')
+            java = getattr(svc,PY4J_JAVA_ATTRIBUTE)
             '''The Java.package_version may be optionally present'''
-            pkgvers = getattr(java,'package_version',None)
+            pkgvers = getattr(java,PY4J_JAVA_PACKAGE_VERSION_ATTRIBUTE,None)
             '''The Java.implements must be present'''
-            export_props = get_edef_props(svc.Java.implements, self.get_id(),pkg_ver = pkgvers)
+            export_props = get_edef_props(getattr(java,PY4J_JAVA_IMPLEMENTS_ATTRIBUTE), self.get_id(),pkg_ver = pkgvers)
         try:
             endpointid = export_props[ENDPOINT_ID]
         except KeyError:
