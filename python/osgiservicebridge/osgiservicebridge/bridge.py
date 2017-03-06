@@ -234,16 +234,19 @@ class Py4jServiceBridge(object):
         and contain the other standard Endpoint Description service properties as described by the OSGI
         R5+ Chapter 122 (Remote Service Admin) in the enterprise specification.
         :param svc: The Python service to export to java service registry
-        :param export_props: A dictionary of Python properties.  Note that these properties must contain all
-        the properties describing the service as required by the OSGI Endpoint Description.
+        :param export_props: An optional dictionary of Python properties.  Note these properties 
+        must contain all the properties describing the service as required by the OSGI Endpoint Description.
         :return: The ENDPOINT_ID value from the export_props.  This value may be used to get subsequent
         access to the svc and/or the export_properties via get_export_endpoint
         '''
         with self._lock:
             self._raise_not_connected()
         if export_props is None:
+            '''The Java class attribute must be present'''
             java = getattr(svc,'Java')
+            '''The Java.package_version may be optionally present'''
             pkgvers = getattr(java,'package_version',None)
+            '''The Java.implements must be present'''
             export_props = get_edef_props(svc.Java.implements, self.get_id(),pkg_ver = pkgvers)
         try:
             endpointid = export_props[ENDPOINT_ID]
