@@ -15,6 +15,7 @@ import java.util.List;
 import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
 import org.eclipse.ecf.provider.direct.local.ContainerExporterService;
 import org.eclipse.ecf.provider.direct.local.ProxyMapperService;
+import org.eclipse.ecf.provider.py4j.IPy4jCallByValue;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
@@ -39,7 +40,7 @@ public class RSAComponent {
 	private static RSAComponent instance;
 
 	private List<Py4JServerConnection> py4jConnections = new ArrayList<Py4JServerConnection>();
-	private ServiceRegistration<DirectRemoteServiceProvider> drspReg;
+	private ServiceRegistration<?> drspReg;
 
 	private ContainerExporterService containerExporterService;
 
@@ -154,7 +155,7 @@ public class RSAComponent {
 				@SuppressWarnings("rawtypes")
 				Hashtable ht = new Hashtable();
 				ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP, "python." + this.gateway.getConfiguration().getPythonPort());
-				drspReg = context.registerService(DirectRemoteServiceProvider.class, consumer, ht);
+				drspReg = context.registerService(new String[] { DirectRemoteServiceProvider.class.getName(), IPy4jCallByValue.class.getName() }, consumer, ht);
 			}
 		}
 	}
