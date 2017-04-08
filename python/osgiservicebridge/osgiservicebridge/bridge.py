@@ -38,6 +38,7 @@ PY4J_DEFAULT_CB_PORT = DEFAULT_PYTHON_PROXY_PORT
 PY4J_DEFAULT_HOSTNAME = DEFAULT_ADDRESS
 
 JAVA_DIRECT_ENDPOINT_CLASS = 'org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider'
+PY4J_CALL_BY_VALUE_CLASS = 'org.eclipse.ecf.provider.py4j.IPy4jCallByValue'
 
 # Version
 __version_info__ = (0, 1, 0)
@@ -200,13 +201,17 @@ class Py4jServiceBridgeConnectionListener(object):
         '''
         _logger.info("Py4j gateway post_shutdown="+repr(server))
 
-   
+class Py4jCallByValueListener:
+    def call_by_value(self, inpBytes):
+        _logger.info("call by value bytes="+str(inpBytes))
+        return inpBytes
+
 class Py4jServiceBridge(object):
     '''Py4jServiceBridge class
     This class provides and API for consumers to use the Py4jServiceBridge.  This 
     allows a bridge between Python and the OSGi service registry.
     '''
-    def __init__(self,service_listener=None,connection_listener=None,callback_server_parameters=None):
+    def __init__(self,service_listener=None,connection_listener=None,call_by_value_listener=None,callback_server_parameters=None):
         self._gateway = None
         self._lock = RLock()
         self._consumer = None
@@ -220,6 +225,7 @@ class Py4jServiceBridge(object):
         self._connection_listener = None
         self._connection = None
         self._callback_server_parameters = callback_server_parameters
+        self._call_by_value_listener = call_by_value_listener
     
     def get_id(self):
         '''
@@ -412,8 +418,12 @@ class Py4jServiceBridge(object):
                     
                 def unexportService(self,props):
                     self._bridge.__unimport_service_from_java(props)
+                    
+                def callByValue(self,inpBytes):
+                    return self._bridge._call_by_value_from_java(inpBytes)
+               
                 class Java:
-                    implements = [JAVA_DIRECT_ENDPOINT_CLASS]
+                    implements = [JAVA_DIRECT_ENDPOINT_CLASS, PY4J_CALL_BY_VALUE_CLASS]
 
             self._bridge = JavaRemoteServiceExporter(self)
             self._gateway.entry_point.setPythonConsumer(self._bridge)
@@ -548,7 +558,13 @@ class Py4jServiceBridge(object):
                 self._service_listener.service_unimported(self, endpointid, endpoint)
             except Exception as e:
                 _logger.error('__unimport_service_from_java listener threw exception endpointid='+endpointid, e)
-
+                
+    def _call_by_value_from_java(self,inpBytes):
+        if self._call_by_value_listener:
+            return self._call_by_value_listener.call_by_value(inpBytes)
+        else:
+            return inpBytes
+        
     def _remove_export_endpoint(self,endpointid):
         with self._exported_endpoints_lock:
             return self._exported_endpoints.pop(endpointid, None)
