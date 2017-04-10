@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Protobuf
+Bundle-SymbolicName: org.eclipse.ecf.provider.direct.protobuf
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Eclipse.org - ECF
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Import-Package: com.google.protobuf;version="3.2.0",
+ org.eclipse.ecf.provider.direct;version="1.0.0",
+ org.osgi.service.component.annotations
+Service-Component: OSGI-INF/org.eclipse.ecf.provider.direct.protobuf.DirectProtocolBufImpl.xml
+Export-Package: org.eclipse.ecf.provider.direct.protobuf
