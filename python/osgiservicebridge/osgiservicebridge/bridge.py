@@ -38,7 +38,7 @@ PY4J_DEFAULT_CB_PORT = DEFAULT_PYTHON_PROXY_PORT
 PY4J_DEFAULT_HOSTNAME = DEFAULT_ADDRESS
 
 JAVA_DIRECT_ENDPOINT_CLASS = 'org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider'
-PY4J_CALL_BY_VALUE_CLASS = 'org.eclipse.ecf.provider.direct.CallByValueService'
+PY4J_CALL_BY_VALUE_CLASS = 'org.eclipse.ecf.provider.direct.CallableEndpoint'
 
 # Version
 __version_info__ = (0, 1, 0)
@@ -413,13 +413,13 @@ class Py4jServiceBridge(object):
                 def unexportService(self,props):
                     self._bridge.__unimport_service_from_java(props)
                     
-                def callByValue(self,endpointid,methodName,argBytes):
+                def _call_endpoint(self,endpointid,methodName,serializedArgs):
                     endpoint = self.get_export_endpoint(endpointid)
                     if endpoint:
                         try:
-                            return endpoint[0].methodName(argBytes)
+                            return endpoint[0].methodName(serializedArgs)
                         except Exception as e:
-                            _logger.error('Exception execing methodName='+methodName+' on object='+endpointid)
+                            _logger.error('Exception executing methodName='+methodName+' on endpointid='+endpointid)
                             raise e
                     return None
                
@@ -560,12 +560,6 @@ class Py4jServiceBridge(object):
             except Exception as e:
                 _logger.error('__unimport_service_from_java listener threw exception endpointid='+endpointid, e)
                 
-    def _call_by_value_from_java(self,inpBytes):
-        if self._call_by_value_listener:
-            return self._call_by_value_listener.call_by_value(inpBytes)
-        else:
-            return inpBytes
-        
     def _remove_export_endpoint(self,endpointid):
         with self._exported_endpoints_lock:
             return self._exported_endpoints.pop(endpointid, None)

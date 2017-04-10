@@ -15,7 +15,7 @@ import java.util.List;
 import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
 import org.eclipse.ecf.provider.direct.local.ContainerExporterService;
 import org.eclipse.ecf.provider.direct.local.ProxyMapperService;
-import org.eclipse.ecf.provider.direct.CallByValueService;
+import org.eclipse.ecf.provider.direct.CallableEndpoint;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
@@ -155,7 +155,7 @@ public class RSAComponent {
 				@SuppressWarnings("rawtypes")
 				Hashtable ht = new Hashtable();
 				ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP, "python." + this.gateway.getConfiguration().getPythonPort());
-				drspReg = context.registerService(new String[] { DirectRemoteServiceProvider.class.getName(), CallByValueService.class.getName() }, consumer, ht);
+				drspReg = context.registerService(new String[] { DirectRemoteServiceProvider.class.getName(), CallableEndpoint.class.getName() }, consumer, ht);
 			}
 		}
 	}
