@@ -38,7 +38,7 @@ PY4J_DEFAULT_CB_PORT = DEFAULT_PYTHON_PROXY_PORT
 PY4J_DEFAULT_HOSTNAME = DEFAULT_ADDRESS
 
 JAVA_DIRECT_ENDPOINT_CLASS = 'org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider'
-PY4J_CALL_BY_VALUE_CLASS = 'org.eclipse.ecf.provider.py4j.IPy4jCallByValue'
+PY4J_CALL_BY_VALUE_CLASS = 'org.eclipse.ecf.provider.direct.CallByValueService'
 
 # Version
 __version_info__ = (0, 1, 0)
@@ -201,17 +201,12 @@ class Py4jServiceBridgeConnectionListener(object):
         '''
         _logger.info("Py4j gateway post_shutdown="+repr(server))
 
-class Py4jCallByValueListener:
-    def call_by_value(self, inpBytes):
-        _logger.info("call by value bytes="+str(inpBytes))
-        return inpBytes
-
 class Py4jServiceBridge(object):
     '''Py4jServiceBridge class
     This class provides and API for consumers to use the Py4jServiceBridge.  This 
     allows a bridge between Python and the OSGi service registry.
     '''
-    def __init__(self,service_listener=None,connection_listener=None,call_by_value_listener=None,callback_server_parameters=None):
+    def __init__(self,service_listener=None,connection_listener=None,callback_server_parameters=None):
         self._gateway = None
         self._lock = RLock()
         self._consumer = None
@@ -225,7 +220,6 @@ class Py4jServiceBridge(object):
         self._connection_listener = None
         self._connection = None
         self._callback_server_parameters = callback_server_parameters
-        self._call_by_value_listener = call_by_value_listener
     
     def get_id(self):
         '''
@@ -261,7 +255,11 @@ class Py4jServiceBridge(object):
             raise ArgumentError('Cannot export service since no ENDPOINT_ID present in export_props')
         with self._exported_endpoints_lock:
             self._exported_endpoints[endpointid] = (svc,export_props)
-        self.__export(svc,export_props)
+            try:
+                self.__export(svc,export_props)
+            except Exception as e:
+                self._exported_endpoints[endpointid] = None
+                raise e
         return endpointid
 
     def update(self,update_props):
@@ -282,16 +280,16 @@ class Py4jServiceBridge(object):
             endpointid = update_props[ENDPOINT_ID]
         except KeyError:
             raise ArgumentError('Cannot export service since no ENDPOINT_ID present in export_props')
-        endpoint = self.get_export_endpoint(endpointid)
-        if endpoint:
-            with self._exported_endpoints_lock:
+        with self._exported_endpoints_lock:
+            endpoint = self.get_export_endpoint(endpointid)
+            if endpoint:
                 self._exported_endpoints[endpointid] = (endpoint[0],update_props)
-            self.__update(update_props)
-            return True
-        else:
-            return False
+                self.__update(update_props)
+                return endpointid
+            else:
+                return None
 
-    def unexport(self,export_props):
+    def unexport(self,endpointid):
         '''
         Unexport the svc via the given export_props.  Note that the export_props must have an ENDPOINT_ID
         and contain the other standard Endpoint Description service properties as described by the OSGI
@@ -303,16 +301,12 @@ class Py4jServiceBridge(object):
         '''
         with self._lock:
             self._raise_not_connected()
-        endpointid = None
-        try:
-            endpointid = export_props[ENDPOINT_ID]
-        except KeyError:
-            raise ArgumentError('Cannot export service since no ENDPOINT_ID present in export_props')
         if endpointid:
-            endpoint = self._remove_export_endpoint(endpointid)
-            if endpoint:
-                self.__unexport(endpoint[1])
-                return endpoint
+            with self._exported_endpoints_lock:
+                endpoint = self._remove_export_endpoint(endpointid)
+                if endpoint:
+                    self.__unexport(endpoint[1])
+                    return endpoint
         return None
         
     def get_jvm(self):
@@ -419,8 +413,15 @@ class Py4jServiceBridge(object):
                 def unexportService(self,props):
                     self._bridge.__unimport_service_from_java(props)
                     
-                def callByValue(self,inpBytes):
-                    return self._bridge._call_by_value_from_java(inpBytes)
+                def callByValue(self,endpointid,methodName,argBytes):
+                    endpoint = self.get_export_endpoint(endpointid)
+                    if endpoint:
+                        try:
+                            return endpoint[0].methodName(argBytes)
+                        except Exception as e:
+                            _logger.error('Exception execing methodName='+methodName+' on object='+endpointid)
+                            raise e
+                    return None
                
                 class Java:
                     implements = [JAVA_DIRECT_ENDPOINT_CLASS, PY4J_CALL_BY_VALUE_CLASS]
