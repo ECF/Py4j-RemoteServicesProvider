@@ -425,7 +425,7 @@ class Py4jServiceBridge(object):
                         endpoint = self._bridge.get_export_endpoint_for_rsid(rsId)
                         if endpoint:
                             try:
-                                return endpoint._call_by_java(methodName,serializedArgs)
+                                return endpoint._raw_bytes_from_java(methodName,serializedArgs)
                             except Exception as e:
                                 _logger.error('Exception executing methodName='+methodName+' on rsId='+rsId)
                                 raise e

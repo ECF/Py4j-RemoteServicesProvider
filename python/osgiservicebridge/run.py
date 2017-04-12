@@ -7,7 +7,7 @@ from osgiservicebridge.bridge import Py4jServiceBridge
 
 class MyClass(object):
     
-    def _call_by_java(self,methodName,serializedArgs):
+    def _raw_bytes_from_java(self,methodName,serializedArgs):
         print("methodName="+str(methodName))
         print("serializedArgs="+str(serializedArgs))
     
