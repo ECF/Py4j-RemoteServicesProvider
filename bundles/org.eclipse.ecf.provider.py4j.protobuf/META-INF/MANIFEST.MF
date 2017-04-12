@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.ecf.provider.py4j.protobuf
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.ecf.provider.py4j.internal.protobuf.Activator
 Bundle-Vendor: Eclipse.org - ECF
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.google.protobuf;version="3.2.0",
  org.eclipse.ecf.core;version="3.0.0",
  org.eclipse.ecf.core.identity;version="3.3.0",
