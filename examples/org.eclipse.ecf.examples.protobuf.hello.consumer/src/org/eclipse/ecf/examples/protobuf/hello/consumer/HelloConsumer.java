@@ -4,17 +4,19 @@ import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg;
 import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent;
 import org.eclipse.ecf.examples.protobuf.hello.IHello;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 @Component(immediate = true)
 public class HelloConsumer {
 
 	private IHello helloService;
 	
+	@Reference
 	void bindHello(IHello hello) {
 		this.helloService = hello;
 	}
 	
-	void unbindHell(IHello hello) {
+	void unbindHello(IHello hello) {
 		this.helloService = null;
 	}
 	

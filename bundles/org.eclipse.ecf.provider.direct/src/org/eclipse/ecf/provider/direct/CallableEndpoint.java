@@ -2,6 +2,6 @@ package org.eclipse.ecf.provider.direct;
 
 public interface CallableEndpoint {
 
-	byte[] _call_endpoint(String endpointid, String methodName, byte[] serializedArgs) throws Exception;
+	byte[] _call_endpoint(Long rsId, String methodName, byte[] serializedArgs) throws Exception;
 	
 }

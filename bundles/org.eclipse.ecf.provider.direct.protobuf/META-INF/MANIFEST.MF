@@ -6,8 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: com.google.protobuf;version="3.2.0",
+Import-Package: com.google.protobuf,
  org.eclipse.ecf.provider.direct;version="1.0.0",
- org.osgi.service.component.annotations
-Service-Component: OSGI-INF/org.eclipse.ecf.provider.direct.protobuf.ProtoBufCallableEndpointImpl.xml
+ org.osgi.service.component.annotations;resolution:=optional
+Service-Component: OSGI-INF/org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpointImpl.xml
 Export-Package: org.eclipse.ecf.provider.direct.protobuf

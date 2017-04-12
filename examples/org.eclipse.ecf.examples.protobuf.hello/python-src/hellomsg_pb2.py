@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='hellomsg.proto',
   package='org.eclipse.ecf.examples.protobuf.hello',
   syntax='proto3',
-  serialized_pb=_b('\n\x0ehellomsg.proto\x12\'org.eclipse.ecf.examples.protobuf.hello\"H\n\x0fHelloMsgContent\x12\x0c\n\x04\x66rom\x18\x01 \x01(\t\x12\n\n\x02to\x18\x02 \x01(\t\x12\x10\n\x08hellomsg\x18\x03 \x01(\t\x12\t\n\x01x\x18\n \x03(\x01\"R\n\x08HelloMsg\x12\x46\n\x04msgs\x18\n \x03(\x0b\x32\x38.org.eclipse.ecf.examples.protobuf.hello.HelloMsgContentb\x06proto3')
+  serialized_pb=_b('\n\x0ehellomsg.proto\x12\'org.eclipse.ecf.examples.protobuf.hello\"S\n\x0fHelloMsgContent\x12\t\n\x01h\x18\x04 \x01(\t\x12\x0c\n\x04\x66rom\x18\x01 \x01(\t\x12\n\n\x02to\x18\x02 \x01(\t\x12\x10\n\x08hellomsg\x18\x03 \x01(\t\x12\t\n\x01x\x18\n \x03(\x01\"R\n\x08HelloMsg\x12\x46\n\x04msgs\x18\n \x03(\x0b\x32\x38.org.eclipse.ecf.examples.protobuf.hello.HelloMsgContentb\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -34,28 +34,35 @@ _HELLOMSGCONTENT = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='from', full_name='org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent.from', index=0,
+      name='h', full_name='org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent.h', index=0,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='from', full_name='org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent.from', index=1,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='to', full_name='org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent.to', index=1,
+      name='to', full_name='org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent.to', index=2,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='hellomsg', full_name='org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent.hellomsg', index=2,
+      name='hellomsg', full_name='org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent.hellomsg', index=3,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='x', full_name='org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent.x', index=3,
+      name='x', full_name='org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent.x', index=4,
       number=10, type=1, cpp_type=5, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -74,7 +81,7 @@ _HELLOMSGCONTENT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=59,
-  serialized_end=131,
+  serialized_end=142,
 )
 
 
@@ -104,8 +111,8 @@ _HELLOMSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=133,
-  serialized_end=215,
+  serialized_start=144,
+  serialized_end=226,
 )
 
 _HELLOMSG.fields_by_name['msgs'].message_type = _HELLOMSGCONTENT
