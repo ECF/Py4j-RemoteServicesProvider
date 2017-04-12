@@ -29,7 +29,7 @@ from py4j.java_gateway import (
     server_connection_started, server_connection_stopped,
     server_started, server_stopped, pre_server_shutdown, post_server_shutdown,
     JavaGateway, CallbackServerParameters, DEFAULT_ADDRESS, DEFAULT_PORT, DEFAULT_PYTHON_PROXY_PORT)
-from dbus import service
+
 
 '''
 Py4J constants
@@ -380,7 +380,7 @@ class Py4jServiceBridge(object):
             
     def get_export_endpoint_for_rsid(self,rsId):  
         with self._exported_endpoints_lock:     
-            for eptuple in self._exported_endpoints.itervalues():
+            for eptuple in self._exported_endpoints.values():
                 val = eptuple[1][osgiservicebridge.ECF_RSVC_ID]
                 if not val is None and val == rsId:
                     return eptuple[0]
@@ -441,12 +441,8 @@ class Py4jServiceBridge(object):
                     try:
                         endpoint = self._bridge.get_export_endpoint_for_rsid(rsId)
                         if endpoint:
-                            try:
-                                return endpoint._raw_bytes_from_java(methodName,serializedArgs)
-                            except Exception as e:
-                                _logger.error('Exception executing methodName='+methodName+' on rsId='+rsId)
-                                raise e
-                        return None
+                            return endpoint._raw_bytes_from_java(methodName,serializedArgs)
+                        raise Exception('exception executing _raw_bytes_from_java')
                     except Exception as e:
                         _logger.error("Exception in _call_endpoint",e)
                         raise e
