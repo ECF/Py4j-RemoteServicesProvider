@@ -19,7 +19,7 @@ from logging import getLogger as getLibLogger
 from threading import RLock
 
 from py4j.java_collections import ListConverter, MapConverter, JavaArray, JavaList, JavaSet
-from osgiservicebridge import merge_dicts, ENDPOINT_ID, get_edef_props, PY4J_EXPORTED_CONFIGS, PY4J_NAMESPACE,\
+from osgiservicebridge import merge_dicts, ENDPOINT_ID, get_edef_props, PY4J_EXPORTED_CONFIGS, PY4J_EXPORTED_CONFIGS_PB, PY4J_NAMESPACE,\
  PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH, PY4J_JAVA_ATTRIBUTE, PY4J_JAVA_IMPLEMENTS_ATTRIBUTE,\
  PY4J_JAVA_PACKAGE_VERSION_ATTRIBUTE
 import osgiservicebridge
@@ -248,7 +248,7 @@ class Py4jServiceBridge(object):
             '''The Java.package_version may be optionally present'''
             pkgvers = getattr(java,PY4J_JAVA_PACKAGE_VERSION_ATTRIBUTE,None)
             '''The Java.implements must be present'''
-            export_props = get_edef_props(getattr(java,PY4J_JAVA_IMPLEMENTS_ATTRIBUTE), self.get_id(),pkg_ver = pkgvers)
+            export_props = get_edef_props(object_class=getattr(java,PY4J_JAVA_IMPLEMENTS_ATTRIBUTE), ecf_ep_id=self.get_id(),exported_cfgs=PY4J_EXPORTED_CONFIGS_PB,pkg_ver = pkgvers)
         try:
             endpointid = export_props[ENDPOINT_ID]
         except KeyError:
@@ -362,6 +362,13 @@ class Py4jServiceBridge(object):
             except KeyError:
                 return None
             
+    def get_export_endpoint_for_rsid(self,rsId):       
+        for eptuple in self._exported_endpoints.itervalues():
+            val = eptuple[1][osgiservicebridge.ECF_RSVC_ID]
+            if not val is None and val == rsId:
+                return eptuple[0]
+        return None
+                
     def isconnected(self):
         '''
         Returns True if the gateway callback server is connected,
@@ -413,15 +420,19 @@ class Py4jServiceBridge(object):
                 def unexportService(self,props):
                     self._bridge.__unimport_service_from_java(props)
                     
-                def _call_endpoint(self,endpointid,methodName,serializedArgs):
-                    endpoint = self.get_export_endpoint(endpointid)
-                    if endpoint:
-                        try:
-                            return endpoint[0].methodName(serializedArgs)
-                        except Exception as e:
-                            _logger.error('Exception executing methodName='+methodName+' on endpointid='+endpointid)
-                            raise e
-                    return None
+                def _call_endpoint(self,rsId,methodName,serializedArgs):
+                    try:
+                        endpoint = self._bridge.get_export_endpoint_for_rsid(rsId)
+                        if endpoint:
+                            try:
+                                return endpoint._call_by_java(methodName,serializedArgs)
+                            except Exception as e:
+                                _logger.error('Exception executing methodName='+methodName+' on rsId='+rsId)
+                                raise e
+                        return None
+                    except Exception as e:
+                        _logger.error("Exception in _call_endpoint",e)
+                        raise e
                
                 class Java:
                     implements = [JAVA_DIRECT_ENDPOINT_CLASS, PY4J_CALL_BY_VALUE_CLASS]

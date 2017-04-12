@@ -93,6 +93,8 @@ Py4J constants
 PY4J_PROTOCOL = 'py4j'
 PY4J_EXPORTED_CONFIG = 'ecf.py4j.host.python'
 PY4J_EXPORTED_CONFIGS = [PY4J_EXPORTED_CONFIG]
+PY4J_EXPORTED_CONFIG_PB = 'ecf.py4j.host.python.pb'
+PY4J_EXPORTED_CONFIGS_PB = [PY4J_EXPORTED_CONFIG_PB]
 PY4J_NAMESPACE = 'ecf.namespace.py4j'
 PY4J_SERVICE_INTENTS = ['passByReference', 'exactlyOnce', 'ordered']
 PY4J_PYTHON_PATH = "/python"
