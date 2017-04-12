@@ -13,6 +13,7 @@ class MyClass(object):
     
     class Java:
         implements = ['org.eclipse.ecf.examples.protobuf.hello.IHello']
+        service_exported_configs = ['ecf.py4j.host.python.pb']
 
 if __name__ == '__main__':
     bridge = Py4jServiceBridge()

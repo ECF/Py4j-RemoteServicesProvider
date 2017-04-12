@@ -19,7 +19,7 @@ from logging import getLogger as getLibLogger
 from threading import RLock
 
 from py4j.java_collections import ListConverter, MapConverter, JavaArray, JavaList, JavaSet
-from osgiservicebridge import merge_dicts, ENDPOINT_ID, get_edef_props, PY4J_EXPORTED_CONFIGS, PY4J_EXPORTED_CONFIGS_PB, PY4J_NAMESPACE,\
+from osgiservicebridge import merge_dicts, ENDPOINT_ID, get_edef_props, PY4J_EXPORTED_CONFIGS, PY4J_NAMESPACE,\
  PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH, PY4J_JAVA_ATTRIBUTE, PY4J_JAVA_IMPLEMENTS_ATTRIBUTE,\
  PY4J_JAVA_PACKAGE_VERSION_ATTRIBUTE
 import osgiservicebridge
@@ -29,6 +29,7 @@ from py4j.java_gateway import (
     server_connection_started, server_connection_stopped,
     server_started, server_stopped, pre_server_shutdown, post_server_shutdown,
     JavaGateway, CallbackServerParameters, DEFAULT_ADDRESS, DEFAULT_PORT, DEFAULT_PYTHON_PROXY_PORT)
+from dbus import service
 
 '''
 Py4J constants
@@ -248,18 +249,23 @@ class Py4jServiceBridge(object):
             '''The Java.package_version may be optionally present'''
             pkgvers = getattr(java,PY4J_JAVA_PACKAGE_VERSION_ATTRIBUTE,None)
             '''The Java.implements must be present'''
-            export_props = get_edef_props(object_class=getattr(java,PY4J_JAVA_IMPLEMENTS_ATTRIBUTE), ecf_ep_id=self.get_id(),exported_cfgs=PY4J_EXPORTED_CONFIGS_PB,pkg_ver = pkgvers)
+            objClass = getattr(java,PY4J_JAVA_IMPLEMENTS_ATTRIBUTE)
+            '''service.exported.configs maybe None'''
+            service_exported_configs = getattr(java,'service_exported_configs',None)
+            export_props = get_edef_props(object_class=objClass, ecf_ep_id=self.get_id(),exported_cfgs=service_exported_configs,pkg_ver = pkgvers)
         try:
             endpointid = export_props[ENDPOINT_ID]
         except KeyError:
             raise ArgumentError('Cannot export service since no ENDPOINT_ID present in export_props')
         with self._exported_endpoints_lock:
             self._exported_endpoints[endpointid] = (svc,export_props)
-            try:
-                self.__export(svc,export_props)
-            except Exception as e:
-                self._exported_endpoints[endpointid] = None
-                raise e
+        # without holding lock, call __export
+        try:
+            self.__export(svc,export_props)
+        except Exception as e:
+            # if it fails, remove from exported endpoints
+            self._remove_export_endpoint(endpointid)
+            raise e
         return endpointid
 
     def update(self,update_props):
@@ -270,24 +276,30 @@ class Py4jServiceBridge(object):
         :param update_props: A dictionary of Python properties.  Note that these properties must contain all
         the properties describing the service as required by the OSGI Endpoint Description and must contain
         an ENDPOINT_ID that matches the endpoint ID previously returned from export
-        :return: True if updated, False if not
+        :return: old endpoint props (dict) or None
         :raise: ArgumentError if there is not an ENDPOINT_ID value in the update_props
         '''
         with self._lock:
             self._raise_not_connected()
-        endpointid = None
         try:
             endpointid = update_props[ENDPOINT_ID]
         except KeyError:
-            raise ArgumentError('Cannot export service since no ENDPOINT_ID present in export_props')
+            raise ArgumentError('Cannot update service since no ENDPOINT_ID present in update_props')
+        # get lock and make sure oldendpoint is in exported_endpoints
         with self._exported_endpoints_lock:
-            endpoint = self.get_export_endpoint(endpointid)
-            if endpoint:
-                self._exported_endpoints[endpointid] = (endpoint[0],update_props)
-                self.__update(update_props)
-                return endpointid
+            oldendpoint = self.get_export_endpoint(endpointid)
+            if oldendpoint:
+                self._exported_endpoints[endpointid] = (oldendpoint[0],update_props)
             else:
                 return None
+        try:
+            self.__update(update_props)
+        except Exception as e:
+            # if exception, restore old endpoint
+            with self._exported_endpoints_lock:
+                self._exported_endpoints[endpointid] = oldendpoint
+            raise e
+        return oldendpoint[1]
 
     def unexport(self,endpointid):
         '''
@@ -304,10 +316,14 @@ class Py4jServiceBridge(object):
         if endpointid:
             with self._exported_endpoints_lock:
                 endpoint = self._remove_export_endpoint(endpointid)
-                if endpoint:
-                    self.__unexport(endpoint[1])
-                    return endpoint
-        return None
+        if endpoint:
+            try:
+                self.__unexport(endpoint[1])
+            except Exception as e:
+                with self._exported_endpoints_lock:
+                    self._exported_endpoints = endpoint
+                raise e
+        return endpoint
         
     def get_jvm(self):
         '''
@@ -362,11 +378,12 @@ class Py4jServiceBridge(object):
             except KeyError:
                 return None
             
-    def get_export_endpoint_for_rsid(self,rsId):       
-        for eptuple in self._exported_endpoints.itervalues():
-            val = eptuple[1][osgiservicebridge.ECF_RSVC_ID]
-            if not val is None and val == rsId:
-                return eptuple[0]
+    def get_export_endpoint_for_rsid(self,rsId):  
+        with self._exported_endpoints_lock:     
+            for eptuple in self._exported_endpoints.itervalues():
+                val = eptuple[1][osgiservicebridge.ECF_RSVC_ID]
+                if not val is None and val == rsId:
+                    return eptuple[0]
         return None
                 
     def isconnected(self):
