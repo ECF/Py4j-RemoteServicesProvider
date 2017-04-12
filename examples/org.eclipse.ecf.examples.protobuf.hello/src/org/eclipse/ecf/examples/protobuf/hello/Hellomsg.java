@@ -19,55 +19,71 @@ public final class Hellomsg {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string h = 4;</code>
+     * <code>optional string h = 1;</code>
+     */
+    boolean hasH();
+    /**
+     * <code>optional string h = 1;</code>
      */
     java.lang.String getH();
     /**
-     * <code>string h = 4;</code>
+     * <code>optional string h = 1;</code>
      */
     com.google.protobuf.ByteString
         getHBytes();
 
     /**
-     * <code>string from = 1;</code>
+     * <code>optional string f = 2;</code>
      */
-    java.lang.String getFrom();
+    boolean hasF();
     /**
-     * <code>string from = 1;</code>
+     * <code>optional string f = 2;</code>
+     */
+    java.lang.String getF();
+    /**
+     * <code>optional string f = 2;</code>
      */
     com.google.protobuf.ByteString
-        getFromBytes();
+        getFBytes();
 
     /**
-     * <code>string to = 2;</code>
+     * <code>optional string to = 3;</code>
+     */
+    boolean hasTo();
+    /**
+     * <code>optional string to = 3;</code>
      */
     java.lang.String getTo();
     /**
-     * <code>string to = 2;</code>
+     * <code>optional string to = 3;</code>
      */
     com.google.protobuf.ByteString
         getToBytes();
 
     /**
-     * <code>string hellomsg = 3;</code>
+     * <code>optional string hellomsg = 4;</code>
+     */
+    boolean hasHellomsg();
+    /**
+     * <code>optional string hellomsg = 4;</code>
      */
     java.lang.String getHellomsg();
     /**
-     * <code>string hellomsg = 3;</code>
+     * <code>optional string hellomsg = 4;</code>
      */
     com.google.protobuf.ByteString
         getHellomsgBytes();
 
     /**
-     * <code>repeated double x = 10;</code>
+     * <code>repeated double x = 5;</code>
      */
     java.util.List<java.lang.Double> getXList();
     /**
-     * <code>repeated double x = 10;</code>
+     * <code>repeated double x = 5;</code>
      */
     int getXCount();
     /**
-     * <code>repeated double x = 10;</code>
+     * <code>repeated double x = 5;</code>
      */
     double getX(int index);
   }
@@ -84,7 +100,7 @@ public final class Hellomsg {
     }
     private HelloMsgContent() {
       h_ = "";
-      from_ = "";
+      f_ = "";
       to_ = "";
       hellomsg_ = "";
       x_ = java.util.Collections.emptyList();
@@ -93,7 +109,7 @@ public final class Hellomsg {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private HelloMsgContent(
         com.google.protobuf.CodedInputStream input,
@@ -101,6 +117,8 @@ public final class Hellomsg {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -110,36 +128,37 @@ public final class Hellomsg {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
                 done = true;
               }
               break;
             }
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              from_ = s;
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000001;
+              h_ = bs;
               break;
             }
             case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              to_ = s;
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000002;
+              f_ = bs;
               break;
             }
             case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              hellomsg_ = s;
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000004;
+              to_ = bs;
               break;
             }
             case 34: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              h_ = s;
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000008;
+              hellomsg_ = bs;
               break;
             }
-            case 81: {
+            case 41: {
               if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
                 x_ = new java.util.ArrayList<java.lang.Double>();
                 mutable_bitField0_ |= 0x00000010;
@@ -147,7 +166,7 @@ public final class Hellomsg {
               x_.add(input.readDouble());
               break;
             }
-            case 82: {
+            case 42: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000010) == 0x00000010) && input.getBytesUntilLimit() > 0) {
@@ -171,6 +190,7 @@ public final class Hellomsg {
         if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
           x_ = java.util.Collections.unmodifiableList(x_);
         }
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -187,10 +207,16 @@ public final class Hellomsg {
     }
 
     private int bitField0_;
-    public static final int H_FIELD_NUMBER = 4;
+    public static final int H_FIELD_NUMBER = 1;
     private volatile java.lang.Object h_;
     /**
-     * <code>string h = 4;</code>
+     * <code>optional string h = 1;</code>
+     */
+    public boolean hasH() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional string h = 1;</code>
      */
     public java.lang.String getH() {
       java.lang.Object ref = h_;
@@ -200,12 +226,14 @@ public final class Hellomsg {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        h_ = s;
+        if (bs.isValidUtf8()) {
+          h_ = s;
+        }
         return s;
       }
     }
     /**
-     * <code>string h = 4;</code>
+     * <code>optional string h = 1;</code>
      */
     public com.google.protobuf.ByteString
         getHBytes() {
@@ -221,44 +249,58 @@ public final class Hellomsg {
       }
     }
 
-    public static final int FROM_FIELD_NUMBER = 1;
-    private volatile java.lang.Object from_;
+    public static final int F_FIELD_NUMBER = 2;
+    private volatile java.lang.Object f_;
     /**
-     * <code>string from = 1;</code>
+     * <code>optional string f = 2;</code>
      */
-    public java.lang.String getFrom() {
-      java.lang.Object ref = from_;
+    public boolean hasF() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional string f = 2;</code>
+     */
+    public java.lang.String getF() {
+      java.lang.Object ref = f_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        from_ = s;
+        if (bs.isValidUtf8()) {
+          f_ = s;
+        }
         return s;
       }
     }
     /**
-     * <code>string from = 1;</code>
+     * <code>optional string f = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getFromBytes() {
-      java.lang.Object ref = from_;
+        getFBytes() {
+      java.lang.Object ref = f_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        from_ = b;
+        f_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int TO_FIELD_NUMBER = 2;
+    public static final int TO_FIELD_NUMBER = 3;
     private volatile java.lang.Object to_;
     /**
-     * <code>string to = 2;</code>
+     * <code>optional string to = 3;</code>
+     */
+    public boolean hasTo() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string to = 3;</code>
      */
     public java.lang.String getTo() {
       java.lang.Object ref = to_;
@@ -268,12 +310,14 @@ public final class Hellomsg {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        to_ = s;
+        if (bs.isValidUtf8()) {
+          to_ = s;
+        }
         return s;
       }
     }
     /**
-     * <code>string to = 2;</code>
+     * <code>optional string to = 3;</code>
      */
     public com.google.protobuf.ByteString
         getToBytes() {
@@ -289,10 +333,16 @@ public final class Hellomsg {
       }
     }
 
-    public static final int HELLOMSG_FIELD_NUMBER = 3;
+    public static final int HELLOMSG_FIELD_NUMBER = 4;
     private volatile java.lang.Object hellomsg_;
     /**
-     * <code>string hellomsg = 3;</code>
+     * <code>optional string hellomsg = 4;</code>
+     */
+    public boolean hasHellomsg() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string hellomsg = 4;</code>
      */
     public java.lang.String getHellomsg() {
       java.lang.Object ref = hellomsg_;
@@ -302,12 +352,14 @@ public final class Hellomsg {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        hellomsg_ = s;
+        if (bs.isValidUtf8()) {
+          hellomsg_ = s;
+        }
         return s;
       }
     }
     /**
-     * <code>string hellomsg = 3;</code>
+     * <code>optional string hellomsg = 4;</code>
      */
     public com.google.protobuf.ByteString
         getHellomsgBytes() {
@@ -323,28 +375,27 @@ public final class Hellomsg {
       }
     }
 
-    public static final int X_FIELD_NUMBER = 10;
+    public static final int X_FIELD_NUMBER = 5;
     private java.util.List<java.lang.Double> x_;
     /**
-     * <code>repeated double x = 10;</code>
+     * <code>repeated double x = 5;</code>
      */
     public java.util.List<java.lang.Double>
         getXList() {
       return x_;
     }
     /**
-     * <code>repeated double x = 10;</code>
+     * <code>repeated double x = 5;</code>
      */
     public int getXCount() {
       return x_.size();
     }
     /**
-     * <code>repeated double x = 10;</code>
+     * <code>repeated double x = 5;</code>
      */
     public double getX(int index) {
       return x_.get(index);
     }
-    private int xMemoizedSerializedSize = -1;
 
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -358,26 +409,22 @@ public final class Hellomsg {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
-      if (!getFromBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, from_);
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, h_);
       }
-      if (!getToBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, to_);
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, f_);
       }
-      if (!getHellomsgBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, hellomsg_);
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, to_);
       }
-      if (!getHBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, h_);
-      }
-      if (getXList().size() > 0) {
-        output.writeUInt32NoTag(82);
-        output.writeUInt32NoTag(xMemoizedSerializedSize);
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, hellomsg_);
       }
       for (int i = 0; i < x_.size(); i++) {
-        output.writeDoubleNoTag(x_.get(i));
+        output.writeDouble(5, x_.get(i));
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -385,29 +432,25 @@ public final class Hellomsg {
       if (size != -1) return size;
 
       size = 0;
-      if (!getFromBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, from_);
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, h_);
       }
-      if (!getToBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, to_);
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, f_);
       }
-      if (!getHellomsgBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, hellomsg_);
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, to_);
       }
-      if (!getHBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, h_);
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, hellomsg_);
       }
       {
         int dataSize = 0;
         dataSize = 8 * getXList().size();
         size += dataSize;
-        if (!getXList().isEmpty()) {
-          size += 1;
-          size += com.google.protobuf.CodedOutputStream
-              .computeInt32SizeNoTag(dataSize);
-        }
-        xMemoizedSerializedSize = dataSize;
+        size += 1 * getXList().size();
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -424,16 +467,29 @@ public final class Hellomsg {
       org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent other = (org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent) obj;
 
       boolean result = true;
-      result = result && getH()
-          .equals(other.getH());
-      result = result && getFrom()
-          .equals(other.getFrom());
-      result = result && getTo()
-          .equals(other.getTo());
-      result = result && getHellomsg()
-          .equals(other.getHellomsg());
+      result = result && (hasH() == other.hasH());
+      if (hasH()) {
+        result = result && getH()
+            .equals(other.getH());
+      }
+      result = result && (hasF() == other.hasF());
+      if (hasF()) {
+        result = result && getF()
+            .equals(other.getF());
+      }
+      result = result && (hasTo() == other.hasTo());
+      if (hasTo()) {
+        result = result && getTo()
+            .equals(other.getTo());
+      }
+      result = result && (hasHellomsg() == other.hasHellomsg());
+      if (hasHellomsg()) {
+        result = result && getHellomsg()
+            .equals(other.getHellomsg());
+      }
       result = result && getXList()
           .equals(other.getXList());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -444,14 +500,22 @@ public final class Hellomsg {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + H_FIELD_NUMBER;
-      hash = (53 * hash) + getH().hashCode();
-      hash = (37 * hash) + FROM_FIELD_NUMBER;
-      hash = (53 * hash) + getFrom().hashCode();
-      hash = (37 * hash) + TO_FIELD_NUMBER;
-      hash = (53 * hash) + getTo().hashCode();
-      hash = (37 * hash) + HELLOMSG_FIELD_NUMBER;
-      hash = (53 * hash) + getHellomsg().hashCode();
+      if (hasH()) {
+        hash = (37 * hash) + H_FIELD_NUMBER;
+        hash = (53 * hash) + getH().hashCode();
+      }
+      if (hasF()) {
+        hash = (37 * hash) + F_FIELD_NUMBER;
+        hash = (53 * hash) + getF().hashCode();
+      }
+      if (hasTo()) {
+        hash = (37 * hash) + TO_FIELD_NUMBER;
+        hash = (53 * hash) + getTo().hashCode();
+      }
+      if (hasHellomsg()) {
+        hash = (37 * hash) + HELLOMSG_FIELD_NUMBER;
+        hash = (53 * hash) + getHellomsg().hashCode();
+      }
       if (getXCount() > 0) {
         hash = (37 * hash) + X_FIELD_NUMBER;
         hash = (53 * hash) + getXList().hashCode();
@@ -575,13 +639,13 @@ public final class Hellomsg {
       public Builder clear() {
         super.clear();
         h_ = "";
-
-        from_ = "";
-
+        bitField0_ = (bitField0_ & ~0x00000001);
+        f_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
         to_ = "";
-
+        bitField0_ = (bitField0_ & ~0x00000004);
         hellomsg_ = "";
-
+        bitField0_ = (bitField0_ & ~0x00000008);
         x_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
@@ -608,9 +672,21 @@ public final class Hellomsg {
         org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent result = new org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
         result.h_ = h_;
-        result.from_ = from_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.f_ = f_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
         result.to_ = to_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
         result.hellomsg_ = hellomsg_;
         if (((bitField0_ & 0x00000010) == 0x00000010)) {
           x_ = java.util.Collections.unmodifiableList(x_);
@@ -659,19 +735,23 @@ public final class Hellomsg {
 
       public Builder mergeFrom(org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent other) {
         if (other == org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.getDefaultInstance()) return this;
-        if (!other.getH().isEmpty()) {
+        if (other.hasH()) {
+          bitField0_ |= 0x00000001;
           h_ = other.h_;
           onChanged();
         }
-        if (!other.getFrom().isEmpty()) {
-          from_ = other.from_;
+        if (other.hasF()) {
+          bitField0_ |= 0x00000002;
+          f_ = other.f_;
           onChanged();
         }
-        if (!other.getTo().isEmpty()) {
+        if (other.hasTo()) {
+          bitField0_ |= 0x00000004;
           to_ = other.to_;
           onChanged();
         }
-        if (!other.getHellomsg().isEmpty()) {
+        if (other.hasHellomsg()) {
+          bitField0_ |= 0x00000008;
           hellomsg_ = other.hellomsg_;
           onChanged();
         }
@@ -685,6 +765,7 @@ public final class Hellomsg {
           }
           onChanged();
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -714,7 +795,13 @@ public final class Hellomsg {
 
       private java.lang.Object h_ = "";
       /**
-       * <code>string h = 4;</code>
+       * <code>optional string h = 1;</code>
+       */
+      public boolean hasH() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional string h = 1;</code>
        */
       public java.lang.String getH() {
         java.lang.Object ref = h_;
@@ -722,14 +809,16 @@ public final class Hellomsg {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          h_ = s;
+          if (bs.isValidUtf8()) {
+            h_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string h = 4;</code>
+       * <code>optional string h = 1;</code>
        */
       public com.google.protobuf.ByteString
           getHBytes() {
@@ -745,114 +834,126 @@ public final class Hellomsg {
         }
       }
       /**
-       * <code>string h = 4;</code>
+       * <code>optional string h = 1;</code>
        */
       public Builder setH(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000001;
         h_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string h = 4;</code>
+       * <code>optional string h = 1;</code>
        */
       public Builder clearH() {
-        
+        bitField0_ = (bitField0_ & ~0x00000001);
         h_ = getDefaultInstance().getH();
         onChanged();
         return this;
       }
       /**
-       * <code>string h = 4;</code>
+       * <code>optional string h = 1;</code>
        */
       public Builder setHBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  checkByteStringIsUtf8(value);
-        
+  bitField0_ |= 0x00000001;
         h_ = value;
         onChanged();
         return this;
       }
 
-      private java.lang.Object from_ = "";
+      private java.lang.Object f_ = "";
       /**
-       * <code>string from = 1;</code>
+       * <code>optional string f = 2;</code>
        */
-      public java.lang.String getFrom() {
-        java.lang.Object ref = from_;
+      public boolean hasF() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string f = 2;</code>
+       */
+      public java.lang.String getF() {
+        java.lang.Object ref = f_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          from_ = s;
+          if (bs.isValidUtf8()) {
+            f_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string from = 1;</code>
+       * <code>optional string f = 2;</code>
        */
       public com.google.protobuf.ByteString
-          getFromBytes() {
-        java.lang.Object ref = from_;
+          getFBytes() {
+        java.lang.Object ref = f_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          from_ = b;
+          f_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string from = 1;</code>
+       * <code>optional string f = 2;</code>
        */
-      public Builder setFrom(
+      public Builder setF(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  
-        from_ = value;
+  bitField0_ |= 0x00000002;
+        f_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string from = 1;</code>
+       * <code>optional string f = 2;</code>
        */
-      public Builder clearFrom() {
-        
-        from_ = getDefaultInstance().getFrom();
+      public Builder clearF() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        f_ = getDefaultInstance().getF();
         onChanged();
         return this;
       }
       /**
-       * <code>string from = 1;</code>
+       * <code>optional string f = 2;</code>
        */
-      public Builder setFromBytes(
+      public Builder setFBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  checkByteStringIsUtf8(value);
-        
-        from_ = value;
+  bitField0_ |= 0x00000002;
+        f_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object to_ = "";
       /**
-       * <code>string to = 2;</code>
+       * <code>optional string to = 3;</code>
+       */
+      public boolean hasTo() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional string to = 3;</code>
        */
       public java.lang.String getTo() {
         java.lang.Object ref = to_;
@@ -860,14 +961,16 @@ public final class Hellomsg {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          to_ = s;
+          if (bs.isValidUtf8()) {
+            to_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string to = 2;</code>
+       * <code>optional string to = 3;</code>
        */
       public com.google.protobuf.ByteString
           getToBytes() {
@@ -883,37 +986,36 @@ public final class Hellomsg {
         }
       }
       /**
-       * <code>string to = 2;</code>
+       * <code>optional string to = 3;</code>
        */
       public Builder setTo(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000004;
         to_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string to = 2;</code>
+       * <code>optional string to = 3;</code>
        */
       public Builder clearTo() {
-        
+        bitField0_ = (bitField0_ & ~0x00000004);
         to_ = getDefaultInstance().getTo();
         onChanged();
         return this;
       }
       /**
-       * <code>string to = 2;</code>
+       * <code>optional string to = 3;</code>
        */
       public Builder setToBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  checkByteStringIsUtf8(value);
-        
+  bitField0_ |= 0x00000004;
         to_ = value;
         onChanged();
         return this;
@@ -921,7 +1023,13 @@ public final class Hellomsg {
 
       private java.lang.Object hellomsg_ = "";
       /**
-       * <code>string hellomsg = 3;</code>
+       * <code>optional string hellomsg = 4;</code>
+       */
+      public boolean hasHellomsg() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional string hellomsg = 4;</code>
        */
       public java.lang.String getHellomsg() {
         java.lang.Object ref = hellomsg_;
@@ -929,14 +1037,16 @@ public final class Hellomsg {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          hellomsg_ = s;
+          if (bs.isValidUtf8()) {
+            hellomsg_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string hellomsg = 3;</code>
+       * <code>optional string hellomsg = 4;</code>
        */
       public com.google.protobuf.ByteString
           getHellomsgBytes() {
@@ -952,37 +1062,36 @@ public final class Hellomsg {
         }
       }
       /**
-       * <code>string hellomsg = 3;</code>
+       * <code>optional string hellomsg = 4;</code>
        */
       public Builder setHellomsg(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000008;
         hellomsg_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string hellomsg = 3;</code>
+       * <code>optional string hellomsg = 4;</code>
        */
       public Builder clearHellomsg() {
-        
+        bitField0_ = (bitField0_ & ~0x00000008);
         hellomsg_ = getDefaultInstance().getHellomsg();
         onChanged();
         return this;
       }
       /**
-       * <code>string hellomsg = 3;</code>
+       * <code>optional string hellomsg = 4;</code>
        */
       public Builder setHellomsgBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  checkByteStringIsUtf8(value);
-        
+  bitField0_ |= 0x00000008;
         hellomsg_ = value;
         onChanged();
         return this;
@@ -996,26 +1105,26 @@ public final class Hellomsg {
          }
       }
       /**
-       * <code>repeated double x = 10;</code>
+       * <code>repeated double x = 5;</code>
        */
       public java.util.List<java.lang.Double>
           getXList() {
         return java.util.Collections.unmodifiableList(x_);
       }
       /**
-       * <code>repeated double x = 10;</code>
+       * <code>repeated double x = 5;</code>
        */
       public int getXCount() {
         return x_.size();
       }
       /**
-       * <code>repeated double x = 10;</code>
+       * <code>repeated double x = 5;</code>
        */
       public double getX(int index) {
         return x_.get(index);
       }
       /**
-       * <code>repeated double x = 10;</code>
+       * <code>repeated double x = 5;</code>
        */
       public Builder setX(
           int index, double value) {
@@ -1025,7 +1134,7 @@ public final class Hellomsg {
         return this;
       }
       /**
-       * <code>repeated double x = 10;</code>
+       * <code>repeated double x = 5;</code>
        */
       public Builder addX(double value) {
         ensureXIsMutable();
@@ -1034,7 +1143,7 @@ public final class Hellomsg {
         return this;
       }
       /**
-       * <code>repeated double x = 10;</code>
+       * <code>repeated double x = 5;</code>
        */
       public Builder addAllX(
           java.lang.Iterable<? extends java.lang.Double> values) {
@@ -1045,7 +1154,7 @@ public final class Hellomsg {
         return this;
       }
       /**
-       * <code>repeated double x = 10;</code>
+       * <code>repeated double x = 5;</code>
        */
       public Builder clearX() {
         x_ = java.util.Collections.emptyList();
@@ -1055,12 +1164,12 @@ public final class Hellomsg {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFields(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -1077,7 +1186,7 @@ public final class Hellomsg {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<HelloMsgContent>
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<HelloMsgContent>
         PARSER = new com.google.protobuf.AbstractParser<HelloMsgContent>() {
       public HelloMsgContent parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
@@ -1102,751 +1211,11 @@ public final class Hellomsg {
 
   }
 
-  public interface HelloMsgOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.eclipse.ecf.examples.protobuf.hello.HelloMsg)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    java.util.List<org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent> 
-        getMsgsList();
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent getMsgs(int index);
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    int getMsgsCount();
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    java.util.List<? extends org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContentOrBuilder> 
-        getMsgsOrBuilderList();
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContentOrBuilder getMsgsOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code org.eclipse.ecf.examples.protobuf.hello.HelloMsg}
-   */
-  public  static final class HelloMsg extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.eclipse.ecf.examples.protobuf.hello.HelloMsg)
-      HelloMsgOrBuilder {
-    // Use HelloMsg.newBuilder() to construct.
-    private HelloMsg(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private HelloMsg() {
-      msgs_ = java.util.Collections.emptyList();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-    }
-    private HelloMsg(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      int mutable_bitField0_ = 0;
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!input.skipField(tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 82: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                msgs_ = new java.util.ArrayList<org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              msgs_.add(
-                  input.readMessage(org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.parser(), extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          msgs_ = java.util.Collections.unmodifiableList(msgs_);
-        }
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return org.eclipse.ecf.examples.protobuf.hello.Hellomsg.internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return org.eclipse.ecf.examples.protobuf.hello.Hellomsg.internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg.class, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg.Builder.class);
-    }
-
-    public static final int MSGS_FIELD_NUMBER = 10;
-    private java.util.List<org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent> msgs_;
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    public java.util.List<org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent> getMsgsList() {
-      return msgs_;
-    }
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    public java.util.List<? extends org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContentOrBuilder> 
-        getMsgsOrBuilderList() {
-      return msgs_;
-    }
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    public int getMsgsCount() {
-      return msgs_.size();
-    }
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent getMsgs(int index) {
-      return msgs_.get(index);
-    }
-    /**
-     * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-     */
-    public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContentOrBuilder getMsgsOrBuilder(
-        int index) {
-      return msgs_.get(index);
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      for (int i = 0; i < msgs_.size(); i++) {
-        output.writeMessage(10, msgs_.get(i));
-      }
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < msgs_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(10, msgs_.get(i));
-      }
-      memoizedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg)) {
-        return super.equals(obj);
-      }
-      org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg other = (org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg) obj;
-
-      boolean result = true;
-      result = result && getMsgsList()
-          .equals(other.getMsgsList());
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (getMsgsCount() > 0) {
-        hash = (37 * hash) + MSGS_FIELD_NUMBER;
-        hash = (53 * hash) + getMsgsList().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code org.eclipse.ecf.examples.protobuf.hello.HelloMsg}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.eclipse.ecf.examples.protobuf.hello.HelloMsg)
-        org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return org.eclipse.ecf.examples.protobuf.hello.Hellomsg.internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return org.eclipse.ecf.examples.protobuf.hello.Hellomsg.internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg.class, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg.Builder.class);
-      }
-
-      // Construct using org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-          getMsgsFieldBuilder();
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        if (msgsBuilder_ == null) {
-          msgs_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          msgsBuilder_.clear();
-        }
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return org.eclipse.ecf.examples.protobuf.hello.Hellomsg.internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_descriptor;
-      }
-
-      public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg getDefaultInstanceForType() {
-        return org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg.getDefaultInstance();
-      }
-
-      public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg build() {
-        org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg buildPartial() {
-        org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg result = new org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg(this);
-        int from_bitField0_ = bitField0_;
-        if (msgsBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            msgs_ = java.util.Collections.unmodifiableList(msgs_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.msgs_ = msgs_;
-        } else {
-          result.msgs_ = msgsBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg) {
-          return mergeFrom((org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg other) {
-        if (other == org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg.getDefaultInstance()) return this;
-        if (msgsBuilder_ == null) {
-          if (!other.msgs_.isEmpty()) {
-            if (msgs_.isEmpty()) {
-              msgs_ = other.msgs_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureMsgsIsMutable();
-              msgs_.addAll(other.msgs_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.msgs_.isEmpty()) {
-            if (msgsBuilder_.isEmpty()) {
-              msgsBuilder_.dispose();
-              msgsBuilder_ = null;
-              msgs_ = other.msgs_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              msgsBuilder_ = 
-                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                   getMsgsFieldBuilder() : null;
-            } else {
-              msgsBuilder_.addAllMessages(other.msgs_);
-            }
-          }
-        }
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private java.util.List<org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent> msgs_ =
-        java.util.Collections.emptyList();
-      private void ensureMsgsIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          msgs_ = new java.util.ArrayList<org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent>(msgs_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilderV3<
-          org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContentOrBuilder> msgsBuilder_;
-
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public java.util.List<org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent> getMsgsList() {
-        if (msgsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(msgs_);
-        } else {
-          return msgsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public int getMsgsCount() {
-        if (msgsBuilder_ == null) {
-          return msgs_.size();
-        } else {
-          return msgsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent getMsgs(int index) {
-        if (msgsBuilder_ == null) {
-          return msgs_.get(index);
-        } else {
-          return msgsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public Builder setMsgs(
-          int index, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent value) {
-        if (msgsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureMsgsIsMutable();
-          msgs_.set(index, value);
-          onChanged();
-        } else {
-          msgsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public Builder setMsgs(
-          int index, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder builderForValue) {
-        if (msgsBuilder_ == null) {
-          ensureMsgsIsMutable();
-          msgs_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          msgsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public Builder addMsgs(org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent value) {
-        if (msgsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureMsgsIsMutable();
-          msgs_.add(value);
-          onChanged();
-        } else {
-          msgsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public Builder addMsgs(
-          int index, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent value) {
-        if (msgsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureMsgsIsMutable();
-          msgs_.add(index, value);
-          onChanged();
-        } else {
-          msgsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public Builder addMsgs(
-          org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder builderForValue) {
-        if (msgsBuilder_ == null) {
-          ensureMsgsIsMutable();
-          msgs_.add(builderForValue.build());
-          onChanged();
-        } else {
-          msgsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public Builder addMsgs(
-          int index, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder builderForValue) {
-        if (msgsBuilder_ == null) {
-          ensureMsgsIsMutable();
-          msgs_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          msgsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public Builder addAllMsgs(
-          java.lang.Iterable<? extends org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent> values) {
-        if (msgsBuilder_ == null) {
-          ensureMsgsIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, msgs_);
-          onChanged();
-        } else {
-          msgsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public Builder clearMsgs() {
-        if (msgsBuilder_ == null) {
-          msgs_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          msgsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public Builder removeMsgs(int index) {
-        if (msgsBuilder_ == null) {
-          ensureMsgsIsMutable();
-          msgs_.remove(index);
-          onChanged();
-        } else {
-          msgsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder getMsgsBuilder(
-          int index) {
-        return getMsgsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContentOrBuilder getMsgsOrBuilder(
-          int index) {
-        if (msgsBuilder_ == null) {
-          return msgs_.get(index);  } else {
-          return msgsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public java.util.List<? extends org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContentOrBuilder> 
-           getMsgsOrBuilderList() {
-        if (msgsBuilder_ != null) {
-          return msgsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(msgs_);
-        }
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder addMsgsBuilder() {
-        return getMsgsFieldBuilder().addBuilder(
-            org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder addMsgsBuilder(
-          int index) {
-        return getMsgsFieldBuilder().addBuilder(
-            index, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .org.eclipse.ecf.examples.protobuf.hello.HelloMsgContent msgs = 10;</code>
-       */
-      public java.util.List<org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder> 
-           getMsgsBuilderList() {
-        return getMsgsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilderV3<
-          org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContentOrBuilder> 
-          getMsgsFieldBuilder() {
-        if (msgsBuilder_ == null) {
-          msgsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent.Builder, org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContentOrBuilder>(
-                  msgs_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          msgs_ = null;
-        }
-        return msgsBuilder_;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:org.eclipse.ecf.examples.protobuf.hello.HelloMsg)
-    }
-
-    // @@protoc_insertion_point(class_scope:org.eclipse.ecf.examples.protobuf.hello.HelloMsg)
-    private static final org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg();
-    }
-
-    public static org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<HelloMsg>
-        PARSER = new com.google.protobuf.AbstractParser<HelloMsg>() {
-      public HelloMsg parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-          return new HelloMsg(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<HelloMsg> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<HelloMsg> getParserForType() {
-      return PARSER;
-    }
-
-    public org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsg getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsgContent_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsgContent_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1857,11 +1226,9 @@ public final class Hellomsg {
   static {
     java.lang.String[] descriptorData = {
       "\n\016hellomsg.proto\022\'org.eclipse.ecf.exampl" +
-      "es.protobuf.hello\"S\n\017HelloMsgContent\022\t\n\001" +
-      "h\030\004 \001(\t\022\014\n\004from\030\001 \001(\t\022\n\n\002to\030\002 \001(\t\022\020\n\010hel" +
-      "lomsg\030\003 \001(\t\022\t\n\001x\030\n \003(\001\"R\n\010HelloMsg\022F\n\004ms" +
-      "gs\030\n \003(\01328.org.eclipse.ecf.examples.prot" +
-      "obuf.hello.HelloMsgContentb\006proto3"
+      "es.protobuf.hello\"P\n\017HelloMsgContent\022\t\n\001" +
+      "h\030\001 \001(\t\022\t\n\001f\030\002 \001(\t\022\n\n\002to\030\003 \001(\t\022\020\n\010hellom" +
+      "sg\030\004 \001(\t\022\t\n\001x\030\005 \003(\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1880,13 +1247,7 @@ public final class Hellomsg {
     internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsgContent_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsgContent_descriptor,
-        new java.lang.String[] { "H", "From", "To", "Hellomsg", "X", });
-    internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_eclipse_ecf_examples_protobuf_hello_HelloMsg_descriptor,
-        new java.lang.String[] { "Msgs", });
+        new java.lang.String[] { "H", "F", "To", "Hellomsg", "X", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

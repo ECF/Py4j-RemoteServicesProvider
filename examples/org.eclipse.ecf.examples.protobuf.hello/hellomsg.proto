@@ -1,15 +1,12 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package org.eclipse.ecf.examples.protobuf.hello;
 
 message HelloMsgContent {
-	string h = 4;
-	string from = 1;
-	string to = 2;
-	string hellomsg = 3;
-	repeated double x = 10;
+	optional string h = 1;
+	optional string f = 2;
+	optional string to = 3;
+	optional string hellomsg = 4;
+	repeated double x = 5;
 }
 
-message HelloMsg {
-	repeated HelloMsgContent msgs = 10;
-}
