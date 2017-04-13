@@ -26,9 +26,6 @@ def pbdecorator(arg_type):
 class PBService(object):
     
     def _raw_bytes_from_java(self,methodName,serializedArgs):
-        lastdot = methodName.rfind('.')
-        if lastdot >= 0:
-            methodName = methodName[lastdot+1:]
         return getattr(self,methodName)(serializedArgs)
     
     class Java:
