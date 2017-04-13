@@ -30,16 +30,8 @@ import com.google.protobuf.Parser;
 
 public class Py4jProtobufClientContainer extends AbstractRSAClientContainer {
 
-	ProtobufCallableEndpoint endpoint;
-	
 	public Py4jProtobufClientContainer(ID containerID) {
 		super(containerID);
-		Activator a = Activator.getDefault();
-		if (a == null)
-			throw new NullPointerException("Cannot create Py4jProtobufClientContainer because bundle not active");
-		this.endpoint = a.getCallableEndpoint();
-		if (this.endpoint == null) 
-			throw new NullPointerException("Cannot create Py4jProtobufClientContainer because no ProtobufCallableEndpoint available");
 	}
 
 	protected IRemoteService createRemoteService(RemoteServiceClientRegistration registration) {
@@ -50,14 +42,27 @@ public class Py4jProtobufClientContainer extends AbstractRSAClientContainer {
 
 		public static final String PROTOBUF_PARSER_STATIC_METHODNAME = "parser";
 		
+		private ProtobufCallableEndpoint endpoint;
 		private Long rsId;
 
 		public ProtoBufDirectRemoteService(AbstractClientContainer container,
 				RemoteServiceClientRegistration registration) {
 			super(container, registration);
 			this.rsId = registration.getID().getContainerRelativeID();
+			Activator a = Activator.getDefault();
+			if (a == null)
+				throw new NullPointerException("Cannot create ProtoBufDirectRemoteService because bundle not active");
+			this.endpoint = a.getCallableEndpoint();
+			if (this.endpoint == null) 
+				throw new NullPointerException("Cannot create ProtoBufDirectRemoteService because no ProtobufCallableEndpoint available");
 		}
-
+		
+		@Override
+		public void dispose() {
+			super.dispose();
+			this.endpoint = null;
+		}
+		
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		protected Object invokeAsync(final RSARemoteCall remoteCall) throws ECFException {
 			final CompletableFuture cf = new CompletableFuture();
