@@ -50,11 +50,4 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 		return (Message) resultParser.parseFrom(resultBytes);
 	}
 	
-	public static ProtobufCallableEndpoint getDefault() {
-		return instance;
-	}
-	
-	public CallableEndpoint getCallableEndpoint() {
-		return cbvService;
-	}
 }

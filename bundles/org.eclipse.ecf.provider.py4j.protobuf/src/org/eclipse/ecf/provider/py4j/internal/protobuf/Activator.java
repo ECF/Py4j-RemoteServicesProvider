@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.eclipse.ecf.core.ContainerTypeDescription;
 import org.eclipse.ecf.core.IContainer;
+import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
 import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.provider.py4j.protobuf.Py4jProtobufConstants;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
@@ -19,11 +20,13 @@ import org.eclipse.ecf.remoteservice.provider.RemoteServiceContainerInstantiator
 import org.eclipse.ecf.remoteservice.provider.RemoteServiceDistributionProvider;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
-
+	private static Activator instance;
+	
 	static BundleContext getContext() {
 		return context;
 	}
@@ -35,6 +38,7 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
+		Activator.instance = this;
 		Activator.context = bundleContext;
 		context.registerService(IRemoteServiceDistributionProvider.class,
 				new RemoteServiceDistributionProvider.Builder().setName(Py4jProtobufConstants.ECF_PY4J_CONSUMER_PB)
@@ -58,6 +62,19 @@ public class Activator implements BundleActivator {
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
 		Activator.context = null;
+		Activator.instance = null;
 	}
 
+	public static Activator getDefault() {
+		return instance;
+	}
+	
+	public ProtobufCallableEndpoint getCallableEndpoint() {
+		if (context == null) return null;
+		ServiceTracker<ProtobufCallableEndpoint,ProtobufCallableEndpoint> st = new ServiceTracker<ProtobufCallableEndpoint,ProtobufCallableEndpoint>(context,ProtobufCallableEndpoint.class,null);
+		st.open();
+		ProtobufCallableEndpoint result = st.getService();
+		st.close();
+		return result;
+	}
 }
