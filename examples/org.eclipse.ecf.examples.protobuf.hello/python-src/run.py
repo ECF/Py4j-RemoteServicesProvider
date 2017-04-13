@@ -7,19 +7,21 @@ from osgiservicebridge.bridge import Py4jServiceBridge
 from hellomsg_pb2 import HelloMsgContent
 from functools import wraps
 
-def pbdecorator(func):
-    @wraps(func)
-    def decorate(*args,**kwargs):
-        argClass = HelloMsgContent
-        if len(args) > 1 and argClass:
-            argInst = argClass()
-            argInst.ParseFromString(args[1])
-        respb = func(args[0],argInst)
-        resBytes = None
-        if respb:
-            resBytes = respb.SerializeToString()
-        return resBytes
-    return decorate
+def pbdecorator(arg_type):
+    def pbwrapper(func):
+        @wraps(func)
+        def wrapper(*args,**kwargs):
+            argClass = arg_type
+            if len(args) > 1 and argClass:
+                argInst = argClass()
+                argInst.ParseFromString(args[1])
+            respb = func(args[0],argInst)
+            resBytes = None
+            if respb:
+                resBytes = respb.SerializeToString()
+            return resBytes
+        return wrapper
+    return pbwrapper
 
 class PBService(object):
     
@@ -35,7 +37,7 @@ class PBService(object):
 
 class MyClass(PBService):
     
-    @pbdecorator
+    @pbdecorator(arg_type=HelloMsgContent)
     def sayHello(self,pbarg):
         print("sayHello called with arg="+str(pbarg))
         resmsg = HelloMsgContent()
@@ -48,7 +50,6 @@ class MyClass(PBService):
         return resmsg
 
 if __name__ == '__main__':
-    inst = MyClass()
     bridge = Py4jServiceBridge()
     print("bridge created")
     bridge.connect()

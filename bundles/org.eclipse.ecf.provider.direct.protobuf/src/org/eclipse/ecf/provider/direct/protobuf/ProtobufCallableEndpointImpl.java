@@ -37,6 +37,9 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 	@Override
 	public <A extends Message> Message call_endpoint(Long rsId, String methodName, A message,
 			Parser<?> resultParser) throws Exception {
+		int dotLastIndex = methodName.lastIndexOf('.');
+		if (dotLastIndex >= 0)
+			methodName = methodName.substring(dotLastIndex+1);
 		byte[] resultBytes = this.cbvService._call_endpoint(rsId, methodName, message.toByteArray());
 		if (resultBytes == null)
 			return null;
