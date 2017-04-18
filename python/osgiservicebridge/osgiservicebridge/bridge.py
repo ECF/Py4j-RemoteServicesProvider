@@ -16,12 +16,39 @@ OSGi service bridge Py4j classes
     limitations under the License.
 '''
 from logging import getLogger as getLibLogger
-from threading import RLock
+from threading import RLock, Condition
 
+_done = False
+__condition = Condition()
+
+def _done_waiting():
+    global _done
+    global __condition
+    __condition.acquire()
+    _done = True
+    __condition.notify_all()
+    __condition.release()
+        
+def _wait_until_done():
+    global _done
+    global __condition
+    __condition.acquire()
+    while not _done:
+        __condition.wait()
+    __condition.release()
+    
+class flushfile(object):
+    def __init__(self, f):
+        self.file = f
+        
+    def write(self, x):
+        self.file.write(x)
+        self.file.flush()
+        
 from py4j.java_collections import ListConverter, MapConverter, JavaArray, JavaList, JavaSet
 from osgiservicebridge import merge_dicts, ENDPOINT_ID, get_edef_props, PY4J_EXPORTED_CONFIGS, PY4J_NAMESPACE,\
- PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH, PY4J_JAVA_ATTRIBUTE, PY4J_JAVA_IMPLEMENTS_ATTRIBUTE,\
- PY4J_JAVA_PACKAGE_VERSION_ATTRIBUTE
+ PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH, PY4J_JAVA_ATTRIBUTE, PY4J_JAVA_IMPLEMENTS_ATTRIBUTE
+ 
 import osgiservicebridge
 from argparse import ArgumentError
 
@@ -29,7 +56,6 @@ from py4j.java_gateway import (
     server_connection_started, server_connection_stopped,
     server_started, server_stopped, pre_server_shutdown, post_server_shutdown,
     JavaGateway, CallbackServerParameters, DEFAULT_ADDRESS, DEFAULT_PORT, DEFAULT_PYTHON_PROXY_PORT)
-
 
 '''
 Py4J constants
@@ -202,6 +228,17 @@ class Py4jServiceBridgeConnectionListener(object):
         '''
         _logger.info("Py4j gateway post_shutdown="+repr(server))
 
+def convert_java_metadata(metadata):
+    java_attr = dir(metadata)
+    java_props = [item for item in java_attr if not item.startswith('__') and not item == PY4J_JAVA_IMPLEMENTS_ATTRIBUTE]
+    # create list of values
+    java_values = [getattr(metadata,item,None) for item in java_props]
+    java_props_c = [item.replace('_','.') for item in java_props]
+    result = {}
+    for ind, key in enumerate(java_props_c):
+        result[key] = java_values[ind]
+    return result
+
 class Py4jServiceBridge(object):
     '''Py4jServiceBridge class
     This class provides and API for consumers to use the Py4jServiceBridge.  This 
@@ -246,13 +283,11 @@ class Py4jServiceBridge(object):
         if export_props is None:
             '''The Java class attribute must be present'''
             java = getattr(svc,PY4J_JAVA_ATTRIBUTE)
-            '''The Java.package_version may be optionally present'''
-            pkgvers = getattr(java,PY4J_JAVA_PACKAGE_VERSION_ATTRIBUTE,None)
             '''The Java.implements must be present'''
             objClass = getattr(java,PY4J_JAVA_IMPLEMENTS_ATTRIBUTE)
-            '''service.exported.configs maybe None'''
-            service_exported_configs = getattr(java,'service_exported_configs',None)
-            export_props = get_edef_props(object_class=objClass, ecf_ep_id=self.get_id(),exported_cfgs=service_exported_configs,pkg_ver = pkgvers)
+            if isinstance(objClass,str):
+                objClass = [objClass]
+            export_props = merge_dicts(get_edef_props(object_class=objClass, ecf_ep_id=self.get_id()), convert_java_metadata(java))
         try:
             endpointid = export_props[ENDPOINT_ID]
         except KeyError:
