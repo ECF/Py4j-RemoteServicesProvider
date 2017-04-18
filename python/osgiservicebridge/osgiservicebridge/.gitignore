@@ -1,2 +1,4 @@
 /__init__.pyc
 /bridge.pyc
+/protobuf.pyc
+/__pycache__/*
