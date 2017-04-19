@@ -37,12 +37,23 @@ def protobufmethod(arg_type):
         def wrapper(*args,**kwargs):
             argClass = arg_type
             if len(args) > 1 and argClass:
-                argInst = argClass()
-                argInst.ParseFromString(args[1])
+                try:
+                    argInst = argClass()
+                except Exception as e:
+                    _logger.error('Could not create instance of class='+str(argClass), e)
+                    raise e
+                try:
+                    argInst.ParseFromString(args[1])
+                except Exception as e:
+                    _logger.error('Could not call ParseFromString on instance='+str(argInst),e)
+                    raise e
             respb = func(args[0],argInst)
             resBytes = None
             if respb:
-                resBytes = respb.SerializeToString()
+                try:
+                    resBytes = respb.SerializeToString()
+                except Exception as e:
+                    _logger.error('Could not call SerializeToString on resp object='+str(respb),e)
             return resBytes
         return wrapper
     return pbwrapper

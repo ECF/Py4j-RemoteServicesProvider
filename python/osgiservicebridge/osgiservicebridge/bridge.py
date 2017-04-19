@@ -287,7 +287,11 @@ class Py4jServiceBridge(object):
             objClass = getattr(java,PY4J_JAVA_IMPLEMENTS_ATTRIBUTE)
             if isinstance(objClass,str):
                 objClass = [objClass]
-            export_props = merge_dicts(get_edef_props(object_class=objClass, ecf_ep_id=self.get_id()), convert_java_metadata(java))
+            
+            props2dict = convert_java_metadata(java)
+            sec = props2dict.pop(osgiservicebridge.SERVICE_EXPORTED_CONFIGS,None)
+            props1 = get_edef_props(object_class=objClass, ecf_ep_id=self.get_id(),exported_cfgs=sec)
+            export_props = merge_dicts(props1, props2dict)
         try:
             endpointid = export_props[ENDPOINT_ID]
         except KeyError:
