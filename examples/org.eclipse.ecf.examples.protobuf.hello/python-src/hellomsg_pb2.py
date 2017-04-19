@@ -18,8 +18,8 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='hellomsg.proto',
   package='org.eclipse.ecf.examples.protobuf.hello',
-  syntax='proto2',
-  serialized_pb=_b('\n\x0ehellomsg.proto\x12\'org.eclipse.ecf.examples.protobuf.hello\"P\n\x0fHelloMsgContent\x12\t\n\x01h\x18\x01 \x01(\t\x12\t\n\x01\x66\x18\x02 \x01(\t\x12\n\n\x02to\x18\x03 \x01(\t\x12\x10\n\x08hellomsg\x18\x04 \x01(\t\x12\t\n\x01x\x18\x05 \x03(\x01')
+  syntax='proto3',
+  serialized_pb=_b('\n\x0ehellomsg.proto\x12\'org.eclipse.ecf.examples.protobuf.hello\"P\n\x0fHelloMsgContent\x12\t\n\x01h\x18\x01 \x01(\t\x12\t\n\x01\x66\x18\x02 \x01(\t\x12\n\n\x02to\x18\x03 \x01(\t\x12\x10\n\x08hellomsg\x18\x04 \x01(\t\x12\t\n\x01x\x18\x05 \x03(\x01\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -76,7 +76,7 @@ _HELLOMSGCONTENT = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
