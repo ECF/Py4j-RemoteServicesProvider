@@ -18,6 +18,8 @@ OSGi service bridge protocol buffers (protobuf) support
 from functools import wraps
 from logging import getLogger as getLibLogger
 
+import sys
+
 # Version
 __version_info__ = (0, 1, 0)
 __version__ = ".".join(str(x) for x in __version_info__)
@@ -31,29 +33,52 @@ _logger = getLibLogger(__name__)
 
 # ------------------------------------------------------------------------------
 
+# Useful for very coarse version differentiation.
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3
+PY34 = sys.version_info[0:2] >= (3, 4)
+
+def arg_deserialize(argClass, serialized):
+    #First create a new instance of the given argClass
+    argInst = None
+    try:
+        argInst = argClass()
+    except Exception as e:
+        _logger.error('Could not create instance of class='+str(argClass), e)
+        raise e
+    # XXX because of problem discovered we check the Python version, 
+    # If Python 2 we convert the serialized to a string (from bytearray)
+    if PY2:
+        serialized = str(serialized)
+    #Then pass to parser and return
+    try:
+        return argInst.ParseFromString(serialized)
+    except Exception as e:
+        _logger.error('Could not call ParseFromString on instance='+str(argInst),e)
+        raise e
+
+def ret_serialize(respb):
+    resBytes = None
+    if respb:
+        try:
+            resBytes = respb.SerializeToString()
+        except Exception as e:
+            _logger.error('Could not call SerializeToString on resp object='+str(respb),e)
+            raise e
+        # If Python 2 we convert the string to bytearray
+        if PY2:
+            resBytes = bytearray(resBytes)
+    return resBytes
+    
 def protobufmethod(arg_type):
     def pbwrapper(func):
         @wraps(func)
         def wrapper(*args,**kwargs):
             argClass = arg_type
             if len(args) > 1 and argClass:
-                try:
-                    argInst = argClass()
-                except Exception as e:
-                    _logger.error('Could not create instance of class='+str(argClass), e)
-                    raise e
-                try:
-                    argInst.ParseFromString(args[1])
-                except Exception as e:
-                    _logger.error('Could not call ParseFromString on instance='+str(argInst),e)
-                    raise e
+                argInst = arg_deserialize(argClass, args[1])
             respb = func(args[0],argInst)
-            resBytes = None
-            if respb:
-                try:
-                    resBytes = respb.SerializeToString()
-                except Exception as e:
-                    _logger.error('Could not call SerializeToString on resp object='+str(respb),e)
+            resBytes = ret_serialize(respb)
             return resBytes
         return wrapper
     return pbwrapper

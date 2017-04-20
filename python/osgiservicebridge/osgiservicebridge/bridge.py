@@ -79,6 +79,7 @@ __docformat__ = "restructuredtext en"
 _logger = getLibLogger(__name__)
 
 # ------------------------------------------------------------------------------
+
 def make_edef_props(*args,**kwargs):
     '''
     Make EDEF-compliant dictionary of properties.
