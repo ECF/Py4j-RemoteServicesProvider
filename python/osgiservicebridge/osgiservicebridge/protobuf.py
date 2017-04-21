@@ -38,10 +38,15 @@ PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 PY34 = sys.version_info[0:2] >= (3, 4)
 
+
 def arg_deserialize(argClass, serialized):
+    #If nothing to serialze, return None
+    if not serialized:
+        return None
     #First create a new instance of the given argClass
     argInst = None
     try:
+        # create instance of argClass
         argInst = argClass()
     except Exception as e:
         _logger.error('Could not create instance of class='+str(argClass), e)
@@ -52,10 +57,12 @@ def arg_deserialize(argClass, serialized):
         serialized = str(serialized)
     #Then pass to parser and return
     try:
-        return argInst.ParseFromString(serialized)
+        # deserialze
+        argInst.ParseFromString(serialized)
     except Exception as e:
         _logger.error('Could not call ParseFromString on instance='+str(argInst),e)
         raise e
+    return argInst
 
 def ret_serialize(respb):
     resBytes = None
