@@ -23,8 +23,10 @@ from osgiservicebridge.protobuf import ProtoBufRemoteService, ProtoBufRemoteServ
 #must also refer to arg_type from protoc-generated protocol buffers file
 from hellomsg_pb2 import HelloMsgContent
 
+
 @ProtoBufRemoteService(objectClass=['org.eclipse.ecf.examples.protobuf.hello.IHello'])
 class HelloServiceImpl:
+    
     @ProtoBufRemoteServiceMethod(arg_type=HelloMsgContent)
     def sayHello(self,pbarg):
         print("sayHello called with arg="+str(pbarg))

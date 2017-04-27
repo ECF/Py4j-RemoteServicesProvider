@@ -89,12 +89,19 @@ def return_serialize(respb):
     
 def ProtoBufRemoteService(**kwargs):
     def decorate(cls):
+        # setup the protocol buffers java-side config
         pb_svc_props = { osgiservicebridge.SERVICE_EXPORTED_CONFIGS: PB_SERVICE_EXPORTED_CONFIGS_DEFAULT }
+        # get the 'service_properties' value from kwargs, if present
         args_props = kwargs.pop(osgiservicebridge.EXPORT_PROPERTIES_NAME,None)
+        # if it is present, then merge/override with the values given
         if args_props:
             pb_svc_props = osgiservicebridge.merge_dicts(pb_svc_props,args_props)
+        # then set/reset the kwargs service_properties value
         kwargs[osgiservicebridge.EXPORT_PROPERTIES_NAME] = pb_svc_props
+        # call _modify_remoteservice_class to modify the class itself (add Java inner 
+        # class and set implements and service_properties values
         cls = osgiservicebridge._modify_remoteservice_class(cls,kwargs)
+        # set pbbuffers callback to _raw_bytes_from_java
         cls._raw_bytes_from_java = _raw_bytes_from_java
         return cls
     return decorate
@@ -103,17 +110,24 @@ def ProtoBufRemoteServiceMethod(arg_type):
     def pbwrapper(func):
         @wraps(func)
         def wrapper(*args):
+            # set argClass to arg_type
             argClass = arg_type
+            # args length should be greater than 1, and argClass must b
+            # non null
             if len(args) > 1 and argClass:
+                # signature should be:  self,arg.  Pass args[1]...the actual argument
+                # ...to deserialize byte[] into pb Message into argInst
                 argInst = argument_deserialize(argClass, args[1])
+            else:
+                raise Exception("args must be == 2 and arg_type must be a class")
             respb = None
             try:
+                # Now actually call function, with self,pbMessage
                 respb = func(args[0],argInst)
             except Exception as e:
                 _logger.error('Could not call function='+str(func)+' on object='+str(args[0]))
                 raise e
-            resBytes = return_serialize(respb)
-            return resBytes
+            return return_serialize(respb)
         return wrapper
     return pbwrapper
 
