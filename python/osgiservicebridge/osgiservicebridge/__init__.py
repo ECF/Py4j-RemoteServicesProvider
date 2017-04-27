@@ -386,25 +386,58 @@ def check_strings_in_list(l):
             raise ValueError('non-string item in args list')
 
 def _modify_remoteservice_class(cls,kwargs):
+    '''
+    Modify a remote service class to have Java metadata (implements and export_properties)
+    
+    :param cls: the class to be modified
+    :param kwargs: a map to contain the objectClass and export_properties attributes
+    :return: the cls instance after being modified
+    '''
+    # first copy the kwargs map
     _kwargs = kwargs.copy()
+    # get the OBJECT_CLASS from kwargs, which must
+    # be present
     objectClass = _kwargs.pop(OBJECT_CLASS, None)
     if not objectClass:
         raise ValueError('kwargs must have objectClass value that is str or list of str')
+    # If objectClass is str then make it into a single element string array
     if isinstance(objectClass,str):
         objectClass = [objectClass]
+    # Verify that objectClass now contains a list
     if not isinstance(objectClass,list):
         raise ValueError('objectClass must be of type list')
+    # verify that only strings are in list
     check_strings_in_list(objectClass)
+    # get export_properties from kwargs
     export_properties = _kwargs.get(EXPORT_PROPERTIES_NAME,None)
-    if export_properties:
-        if not isinstance(export_properties,dict):
-            raise ValueError('service_properties must be of type dict')
+    # if export properties is present and not a dictionary
+    # raise error
+    if export_properties and not isinstance(export_properties,dict):
+        raise ValueError('service_properties must be of type dict')
+    # create a new dictionary that has the 'implements'/objectClass and 'export_properties'/dict
     d = { PY4J_JAVA_IMPLEMENTS_ATTRIBUTE: objectClass, EXPORT_PROPERTIES_NAME: export_properties }
+    # create the required Java class
     javaclass = type(PY4J_JAVA_ATTRIBUTE,(object,),d)
+    # set the 'Java' attribute on cls to the newly-created class
     setattr(cls,PY4J_JAVA_ATTRIBUTE,javaclass)   
     return cls
     
-def RemoteService(**kwargs):
+def remote_service(**kwargs):
+    '''
+    Class decorator for remote services.  This class decorator is intended to be used as follows:
+    
+    @remote_service(objectClass=['fq java interface name'],export_properties={ 'myprop': 'myvalue' })
+    class MyClass:
+        pass
+        
+    e.g.
+    
+    @remote_service(objectClass=['java.util.Map'])
+    class HelloServiceImpl:
+        impl of java.util.Map interface
+
+    :param kwargs: the kwargs dict required to have objectClass and (optional) export_properties
+    '''
     def decorate(cls):
         return _modify_remoteservice_class(cls,kwargs)
     return decorate

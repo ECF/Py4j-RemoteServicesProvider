@@ -1,10 +1,10 @@
 '''
-OSGi service bridge protocol buffers (protobuf) support
+OSGi service bridge Google protocol buffers (protobuf) support
 :author: Scott Lewis
 :copyright: Copyright 2016, Composent, Inc.
 :license: Apache License 2.0
 :version: 0.1.0
-    Copyright 2016 Composent, Inc. and others
+    Copyright 2017 Composent, Inc. and others
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -43,10 +43,6 @@ PY34 = sys.version_info[0:2] >= (3, 4)
 PB_SERVICE_EXPORTED_CONFIG_DEFAULT='ecf.py4j.host.python.pb'
 PB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
 
-'''This function is assigned via the ProtoBufRemoteService decorator
- to the service impl class, so that when called from java it will turn
-around and call getattr(self,methodName,serializedArgs)(serializedArgs)
-his is the entry function for the OSGi service bridge'''
 def _raw_bytes_from_java(self,methodName,serializedArgs):
     try:
         return getattr(self,methodName)(serializedArgs)
@@ -92,7 +88,21 @@ def return_serialize(respb):
             resBytes = bytearray(resBytes)
     return resBytes
     
-def ProtoBufRemoteService(**kwargs):
+def protobuf_remote_service(**kwargs):    
+    '''
+    Class decorator for protobuf-based remote services.  This class decorator is intended to be used as follows:
+    
+    @remote_service(objectClass=['fq java interface name'],export_properties={ 'myprop': 'myvalue' })
+    class MyClass:
+        pass
+        
+    e.g.
+    
+    @protobuf_remote_service(objectClass=['org.eclipse.ecf.examples.protobuf.hello.IHello'])
+    class HelloServiceImpl:
+
+    :param kwargs: the kwargs dict required to have objectClass and (optional) export_properties
+    '''
     def decorate(cls):
         # setup the protocol buffers java-side config
         pb_svc_props = { osgiservicebridge.SERVICE_EXPORTED_CONFIGS: PB_SERVICE_EXPORTED_CONFIGS_DEFAULT }
@@ -111,7 +121,25 @@ def ProtoBufRemoteService(**kwargs):
         return cls
     return decorate
 
-def ProtoBufRemoteServiceMethod(arg_type):
+def protobuf_remote_service_method(arg_type):
+    '''
+    Method decorator for protobuf-based remote services method.  This class decorator is intended to be used as follows:
+    
+    @remote_service(objectClass=['fq java interface name'],export_properties={ 'myprop': 'myvalue' })
+    class MyClass:
+        pass
+        
+    e.g.
+    
+    @protobuf_remote_service_method(arg_type=HelloMsgContent)
+    def sayHello(self,pbarg):
+        return None
+        
+    Where HelloMsgContent is a protoc-generated python class (issubclass(arg_type,google.protobuf.message.Message) 
+    is true).  When called, pbarg is guaranteed to be an instance of HelloMsgContent.
+    
+    :param arg_type: the class of the pbarg type (will be instance of HelloMsgContent)
+    '''
     issubclass(arg_type, Message)
     def pbwrapper(func):
         @wraps(func)
