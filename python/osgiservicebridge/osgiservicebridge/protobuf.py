@@ -20,6 +20,7 @@ from logging import getLogger as getLibLogger
 
 import sys
 import osgiservicebridge
+from google.protobuf.message import Message
 
 # Version
 __version_info__ = (0, 1, 0)
@@ -42,6 +43,10 @@ PY34 = sys.version_info[0:2] >= (3, 4)
 PB_SERVICE_EXPORTED_CONFIG_DEFAULT='ecf.py4j.host.python.pb'
 PB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
 
+'''This function is assigned via the ProtoBufRemoteService decorator
+ to the service impl class, so that when called from java it will turn
+around and call getattr(self,methodName,serializedArgs)(serializedArgs)
+his is the entry function for the OSGi service bridge'''
 def _raw_bytes_from_java(self,methodName,serializedArgs):
     try:
         return getattr(self,methodName)(serializedArgs)
@@ -107,19 +112,15 @@ def ProtoBufRemoteService(**kwargs):
     return decorate
 
 def ProtoBufRemoteServiceMethod(arg_type):
+    issubclass(arg_type, Message)
     def pbwrapper(func):
         @wraps(func)
         def wrapper(*args):
             # set argClass to arg_type
             argClass = arg_type
-            # args length should be greater than 1, and argClass must b
-            # non null
-            if len(args) > 1 and argClass:
-                # signature should be:  self,arg.  Pass args[1]...the actual argument
-                # ...to deserialize byte[] into pb Message into argInst
-                argInst = argument_deserialize(argClass, args[1])
-            else:
-                raise Exception("args must be == 2 and arg_type must be a class")
+            # signature should be:  self,arg.  Pass args[1]...the actual argument
+            # ...to deserialize byte[] into pb Message into argInst
+            argInst = argument_deserialize(argClass, args[1])
             respb = None
             try:
                 # Now actually call function, with self,pbMessage
@@ -127,6 +128,7 @@ def ProtoBufRemoteServiceMethod(arg_type):
             except Exception as e:
                 _logger.error('Could not call function='+str(func)+' on object='+str(args[0]))
                 raise e
+            isinstance(respb,Message)
             return return_serialize(respb)
         return wrapper
     return pbwrapper
