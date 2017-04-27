@@ -47,7 +47,8 @@ class flushfile(object):
         
 from py4j.java_collections import ListConverter, MapConverter, JavaArray, JavaList, JavaSet
 from osgiservicebridge import merge_dicts, ENDPOINT_ID, get_edef_props, PY4J_EXPORTED_CONFIGS, PY4J_NAMESPACE,\
- PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH, PY4J_JAVA_ATTRIBUTE, PY4J_JAVA_IMPLEMENTS_ATTRIBUTE
+ PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH, PY4J_JAVA_ATTRIBUTE, PY4J_JAVA_IMPLEMENTS_ATTRIBUTE,\
+    EXPORT_PROPERTIES_NAME
  
 import osgiservicebridge
 from argparse import ArgumentError
@@ -229,17 +230,6 @@ class Py4jServiceBridgeConnectionListener(object):
         '''
         _logger.info("Py4j gateway post_shutdown="+repr(server))
 
-def convert_java_metadata(metadata):
-    java_attr = dir(metadata)
-    java_props = [item for item in java_attr if not item.startswith('__') and not item == PY4J_JAVA_IMPLEMENTS_ATTRIBUTE]
-    # create list of values
-    java_values = [getattr(metadata,item,None) for item in java_props]
-    java_props_c = [item.replace('_','.') for item in java_props]
-    result = {}
-    for ind, key in enumerate(java_props_c):
-        result[key] = java_values[ind]
-    return result
-
 class Py4jServiceBridge(object):
     '''Py4jServiceBridge class
     This class provides and API for consumers to use the Py4jServiceBridge.  This 
@@ -281,18 +271,22 @@ class Py4jServiceBridge(object):
         '''
         with self._lock:
             self._raise_not_connected()
-        if export_props is None:
             '''The Java class attribute must be present'''
             java = getattr(svc,PY4J_JAVA_ATTRIBUTE)
             '''The Java.implements must be present'''
             objClass = getattr(java,PY4J_JAVA_IMPLEMENTS_ATTRIBUTE)
             if isinstance(objClass,str):
                 objClass = [objClass]
-            
-            props2dict = convert_java_metadata(java)
-            sec = props2dict.pop(osgiservicebridge.SERVICE_EXPORTED_CONFIGS,None)
+            props = {}
+            '''The export_properties attribute does not need to be present'''
+            j_props = getattr(java,EXPORT_PROPERTIES_NAME,None)
+            if j_props:
+                props = osgiservicebridge.merge_dicts(props,j_props)
+            if export_props:
+                props = osgiservicebridge.merge_dicts(props,export_props)
+            sec = props.pop(osgiservicebridge.SERVICE_EXPORTED_CONFIGS,None)
             props1 = get_edef_props(object_class=objClass, ecf_ep_id=self.get_id(),exported_cfgs=sec)
-            export_props = merge_dicts(props1, props2dict)
+            export_props = merge_dicts(props1, props)
         try:
             endpointid = export_props[ENDPOINT_ID]
         except KeyError:

@@ -19,6 +19,7 @@ from functools import wraps
 from logging import getLogger as getLibLogger
 
 import sys
+import osgiservicebridge
 
 # Version
 __version_info__ = (0, 1, 0)
@@ -38,8 +39,17 @@ PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 PY34 = sys.version_info[0:2] >= (3, 4)
 
+PB_SERVICE_EXPORTED_CONFIG_DEFAULT='ecf.py4j.host.python.pb'
+PB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
 
-def arg_deserialize(argClass, serialized):
+def _raw_bytes_from_java(self,methodName,serializedArgs):
+    try:
+        return getattr(self,methodName)(serializedArgs)
+    except Exception as e:
+        _logger.error('Exception calling methodName='+str(methodName)+" on object="+str(self))
+        raise e
+
+def argument_deserialize(argClass, serialized):
     #If nothing to serialze, return None
     if not serialized:
         return None
@@ -64,7 +74,7 @@ def arg_deserialize(argClass, serialized):
         raise e
     return argInst
 
-def ret_serialize(respb):
+def return_serialize(respb):
     resBytes = None
     if respb:
         try:
@@ -77,30 +87,33 @@ def ret_serialize(respb):
             resBytes = bytearray(resBytes)
     return resBytes
     
-def protobufmethod(arg_type):
+def ProtoBufRemoteService(**kwargs):
+    def decorate(cls):
+        pb_svc_props = { osgiservicebridge.SERVICE_EXPORTED_CONFIGS: PB_SERVICE_EXPORTED_CONFIGS_DEFAULT }
+        args_props = kwargs.pop(osgiservicebridge.EXPORT_PROPERTIES_NAME,None)
+        if args_props:
+            pb_svc_props = osgiservicebridge.merge_dicts(pb_svc_props,args_props)
+        kwargs[osgiservicebridge.EXPORT_PROPERTIES_NAME] = pb_svc_props
+        cls = osgiservicebridge._modify_remoteservice_class(cls,kwargs)
+        cls._raw_bytes_from_java = _raw_bytes_from_java
+        return cls
+    return decorate
+
+def ProtoBufRemoteServiceMethod(arg_type):
     def pbwrapper(func):
         @wraps(func)
-        def wrapper(*args,**kwargs):
+        def wrapper(*args):
             argClass = arg_type
             if len(args) > 1 and argClass:
-                argInst = arg_deserialize(argClass, args[1])
-            respb = func(args[0],argInst)
-            resBytes = ret_serialize(respb)
+                argInst = argument_deserialize(argClass, args[1])
+            respb = None
+            try:
+                respb = func(args[0],argInst)
+            except Exception as e:
+                _logger.error('Could not call function='+str(func)+' on object='+str(args[0]))
+                raise e
+            resBytes = return_serialize(respb)
             return resBytes
         return wrapper
     return pbwrapper
 
-PB_SERVICE_EXPORTED_CONFIG_DEFAULT='ecf.py4j.host.python.pb'
-PB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
-
-class ProtobufServiceImpl(object):
-    
-    def _raw_bytes_from_java(self,methodName,serializedArgs):
-        try:
-            return getattr(self,methodName)(serializedArgs)
-        except Exception as e:
-            _logger.error('Exception calling methodName='+str(methodName)+" on object="+str(self))
-            raise e
-        
-    
-        

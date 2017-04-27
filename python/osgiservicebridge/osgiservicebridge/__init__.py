@@ -57,6 +57,8 @@ SERVICE_RANKING = 'service.ranking'
 SERVICE_COMPONENT_NAME = 'component.name'
 SERVICE_COMPONENT_ID = 'component.id'
 
+EXPORT_PROPERTIES_NAME = 'export_properties'
+
 # Global list holding all OSGi RSA constants
 rsaprops = [ENDPOINT_ID,ENDPOINT_SERVICE_ID,ENDPOINT_FRAMEWORK_UUID,SERVICE_EXPORTED_INTERFACES,REMOTE_CONFIGS_SUPPORTED,REMOTE_INTENTS_SUPPORTED,SERVICE_EXPORTED_CONFIGS,SERVICE_EXPORTED_INTENTS,SERVICE_EXPORTED_INTENTS_EXTRA,SERVICE_IMPORTED,SERVICE_IMPORTED_CONFIGS,SERVICE_INTENTS,SERVICE_ID,OBJECT_CLASS,INSTANCE_NAME,SERVICE_RANKING,SERVICE_COMPONENT_ID,SERVICE_COMPONENT_NAME]
 
@@ -378,3 +380,32 @@ def get_edef_props_error(object_class):
     '''              
     return get_edef_props(object_class, ERROR_IMPORTED_CONFIGS, ERROR_NAMESPACE, ERROR_EP_ID, ERROR_ECF_EP_ID, 0, 0, None, None)
 #----------------------------------------------------------------------------------
+def check_strings_in_list(l):
+    for item in l:
+        if not isinstance(item,str):
+            raise ValueError('non-string item in args list')
+
+def _modify_remoteservice_class(cls,kwargs):
+    _kwargs = kwargs.copy()
+    objectClass = _kwargs.pop(OBJECT_CLASS, None)
+    if not objectClass:
+        raise ValueError('kwargs must have objectClass value that is str or list of str')
+    if isinstance(objectClass,str):
+        objectClass = [objectClass]
+    if not isinstance(objectClass,list):
+        raise ValueError('objectClass must be of type list')
+    check_strings_in_list(objectClass)
+    export_properties = _kwargs.get(EXPORT_PROPERTIES_NAME,None)
+    if export_properties:
+        if not isinstance(export_properties,dict):
+            raise ValueError('service_properties must be of type dict')
+    d = { PY4J_JAVA_IMPLEMENTS_ATTRIBUTE: objectClass, EXPORT_PROPERTIES_NAME: export_properties }
+    javaclass = type(PY4J_JAVA_ATTRIBUTE,(object,),d)
+    setattr(cls,PY4J_JAVA_ATTRIBUTE,javaclass)   
+    return cls
+    
+def RemoteService(**kwargs):
+    def decorate(cls):
+        return _modify_remoteservice_class(cls,kwargs)
+    return decorate
+
