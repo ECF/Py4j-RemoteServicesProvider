@@ -15,6 +15,9 @@ logger = logging.getLogger("osgiservicebridge.bridge")
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 #turn on sys.out flush so we see logging output in java
+logger = logging.getLogger("py4j")
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
 import sys
 sys.stdout = flushfile(sys.stdout)
 
