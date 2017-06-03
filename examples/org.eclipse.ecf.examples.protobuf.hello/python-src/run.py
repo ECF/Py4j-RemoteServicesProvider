@@ -22,13 +22,15 @@ import sys
 sys.stdout = flushfile(sys.stdout)
 
 #create HelloServiceImpl class.  Must inherit from ProtobufServiceImpl
-from osgiservicebridge.protobuf import ProtoBufRemoteService, ProtoBufRemoteServiceMethod
+from osgiservicebridge.protobuf import protobuf_remote_service, protobuf_remote_service_method
 #must also refer to arg_type from protoc-generated protocol buffers file
 from hellomsg_pb2 import HelloMsgContent
 
-@ProtoBufRemoteService(objectClass=['org.eclipse.ecf.examples.protobuf.hello.IHello'])
+
+@protobuf_remote_service(objectClass=['org.eclipse.ecf.examples.protobuf.hello.IHello'])
 class HelloServiceImpl:
-    @ProtoBufRemoteServiceMethod(arg_type=HelloMsgContent)
+    
+    @protobuf_remote_service_method(arg_type=HelloMsgContent)
     def sayHello(self,pbarg):
         print("sayHello called with arg="+str(pbarg))
         resmsg = HelloMsgContent()
