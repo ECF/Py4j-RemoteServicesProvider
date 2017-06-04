@@ -19,11 +19,6 @@ import com.google.protobuf.Parser;
 public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 
 	private CallableEndpoint cbvService;
-	private static ProtobufCallableEndpointImpl instance;
-	
-	public ProtobufCallableEndpointImpl() {
-		instance = this;
-	}
 	
 	@Reference
 	void bindCallByValueService(CallableEndpoint cbv) {

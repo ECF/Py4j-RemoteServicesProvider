@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.eclipse.ecf.provider.direct.CallableEndpoint;
 import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
 import org.eclipse.ecf.provider.direct.local.ContainerExporterService;
 import org.eclipse.ecf.provider.direct.local.ProxyMapperService;
-import org.eclipse.ecf.provider.direct.CallableEndpoint;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
@@ -23,11 +24,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 import org.py4j.osgi.GatewayConfiguration;
-import org.py4j.osgi.IGateway;
-import org.py4j.osgi.IGatewayConfiguration;
-
+import org.py4j.osgi.GatewayServer;
 import py4j.GatewayServerListener;
 import py4j.Py4JServerConnection;
 
@@ -44,7 +42,7 @@ public class RSAComponent {
 
 	private ContainerExporterService containerExporterService;
 
-	private IGateway gateway;
+	private GatewayServer gateway;
 	
 	public static RSAComponent getDefault() {
 		return instance;
@@ -77,15 +75,6 @@ public class RSAComponent {
 		this.containerExporterService = null;
 	}
 
-	@Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
-	void bindGateway(IGateway gateway) {
-		this.gateway = gateway;
-	}
-	
-	void unbindGateway(IGateway gateway) {
-		this.gateway = null;
-	}
-	
 	public ContainerExporterService getContainerExporter() {
 		return this.containerExporterService;
 	}
@@ -196,25 +185,16 @@ public class RSAComponent {
 		}
 	}
 
-	private ServiceRegistration<IGatewayConfiguration> gwConfigReg = null;
 	@Activate
 	void activate(BundleContext ctxt) throws Exception {
-		IGatewayConfiguration config = new GatewayConfiguration.Builder(this).addGatewayServerListener(gatewayServerListener).setUseLoadingBundleClassLoadingStrategy(true).build();
-		synchronized (this) {
-			context = ctxt;
-			drspReg = null;
-			gwConfigReg = context.registerService(IGatewayConfiguration.class, config, null);
-		}
+		context = ctxt;
+		this.gateway = new GatewayServer(new GatewayConfiguration.Builder(this).addGatewayServerListener(gatewayServerListener).setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).build());
 	}
 
 	@Deactivate
 	void deactivate() throws Exception {
 		synchronized (this) {
 			hardClose();
-			if (gwConfigReg != null) {
-				gwConfigReg.unregister();
-				gwConfigReg = null;
-			}
 		}
 		context = null;
 	}
