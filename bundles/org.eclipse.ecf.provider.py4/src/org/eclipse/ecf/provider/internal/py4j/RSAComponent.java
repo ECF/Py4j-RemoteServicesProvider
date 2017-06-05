@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.py4j.osgi.GatewayConfiguration;
+import org.py4j.osgi.GatewayServerConfiguration;
 import org.py4j.osgi.GatewayServer;
 import py4j.GatewayServerListener;
 import py4j.Py4JServerConnection;
@@ -188,7 +188,7 @@ public class RSAComponent {
 	@Activate
 	void activate(BundleContext ctxt) throws Exception {
 		context = ctxt;
-		this.gateway = new GatewayServer(new GatewayConfiguration.Builder(this).addGatewayServerListener(gatewayServerListener).setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).build());
+		this.gateway = new GatewayServer(new GatewayServerConfiguration.Builder(this).addGatewayServerListener(gatewayServerListener).setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).build());
 	}
 
 	@Deactivate
