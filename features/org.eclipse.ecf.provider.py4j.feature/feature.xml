@@ -32,13 +32,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.py4j.osgi.gateway"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.google.protobuf"
          download-size="0"
          install-size="0"
@@ -68,6 +61,13 @@
 
    <plugin
          id="org.eclipse.ecf.provider.py4j.protobuf"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.py4j.osgi"
          download-size="0"
          install-size="0"
          version="0.0.0"

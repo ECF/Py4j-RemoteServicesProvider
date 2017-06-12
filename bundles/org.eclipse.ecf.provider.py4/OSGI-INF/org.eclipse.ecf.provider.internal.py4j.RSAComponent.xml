@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" immediate="true" name="org.eclipse.ecf.provider.internal.py4j.RSAComponent">
    <reference bind="bindContainerExporter" cardinality="1..1" interface="org.eclipse.ecf.provider.direct.local.ContainerExporterService" name="ContainerExporter" policy="static" unbind="unbindContainerExporter"/>
-   <reference bind="bindGateway" cardinality="0..1" interface="org.py4j.osgi.IGateway" name="Gateway" policy="dynamic" unbind="unbindGateway"/>
    <reference bind="bindLocalProxyMapper" cardinality="1..1" interface="org.eclipse.ecf.provider.direct.local.ProxyMapperService" name="LocalProxyMapper" policy="static" unbind="unbindLocalProxyMapper"/>
    <implementation class="org.eclipse.ecf.provider.internal.py4j.RSAComponent"/>
 </scr:component>
