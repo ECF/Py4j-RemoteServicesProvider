@@ -28,13 +28,20 @@ def _done_waiting():
     _done = True
     __condition.notify_all()
     __condition.release()
-        
-def _wait_until_done():
+      
+def _wait_for_sec(sec=1):
+    global _done
+    global __condition
+    __condition.acquire()
+    __condition.wait(sec)
+    __condition.release()
+     
+def _wait_until_done(sec=None):
     global _done
     global __condition
     __condition.acquire()
     while not _done:
-        __condition.wait()
+        __condition.wait(sec)
     __condition.release()
     
 class flushfile(object):
