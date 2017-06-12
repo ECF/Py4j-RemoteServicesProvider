@@ -53,3 +53,5 @@ if __name__ == '__main__':
     _wait_for_sec(10)
     bridge.unexport(hsid)
     print("unexported")
+    bridge.disconnect()
+    print("disconnected...exiting")
