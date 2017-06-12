@@ -8,9 +8,7 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.internal.py4j;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 import org.eclipse.ecf.provider.direct.CallableEndpoint;
 import org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider;
@@ -24,8 +22,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.py4j.osgi.GatewayServerConfiguration;
 import org.py4j.osgi.GatewayServer;
+import org.py4j.osgi.GatewayServerConfiguration;
+
 import py4j.GatewayServerListener;
 import py4j.Py4JServerConnection;
 
@@ -37,7 +36,7 @@ public class RSAComponent {
 
 	private static RSAComponent instance;
 
-	private List<Py4JServerConnection> py4jConnections = new ArrayList<Py4JServerConnection>();
+	private Py4JServerConnection connection;
 	private ServiceRegistration<?> drspReg;
 
 	private ContainerExporterService containerExporterService;
@@ -79,24 +78,41 @@ public class RSAComponent {
 		return this.containerExporterService;
 	}
 
+	void logError(String message) {
+		logError(message,null);
+	}
+	private void logError(String message, Throwable exception) {
+		System.err.println(message);
+		if (exception != null)
+			exception.printStackTrace(System.err);
+	}
 	private GatewayServerListener gatewayServerListener = new GatewayServerListener() {
 
 		@Override
 		public void connectionError(Exception arg0) {
+			logError("Connection error",arg0);
 		}
 
 		@Override
 		public void connectionStarted(Py4JServerConnection arg0) {
 			synchronized (RSAComponent.this) {
-				RSAComponent.this.py4jConnections.add(arg0);
+				if (RSAComponent.this.connection != null)
+					logError("connectionStarted error: Already have connection="+RSAComponent.this.connection+".  New connectionStarted="+arg0);
+				RSAComponent.this.connection = arg0;
 			}
 		}
 
 		@Override
 		public void connectionStopped(Py4JServerConnection arg0) {
 			synchronized (RSAComponent.this) {
-				if (RSAComponent.this.py4jConnections.remove(arg0)) 
+				if (RSAComponent.this.connection == null)
+					logError("connectionStopped error: this.connection already null");
+				else if (RSAComponent.this.connection != arg0)
+					logError("connectionStopped error: this.connection="+RSAComponent.this.connection+" not equal to arg0="+arg0);
+				else {
+					RSAComponent.this.connection = null;
 					hardClose();
+				}
 			}
 		}
 
@@ -133,14 +149,13 @@ public class RSAComponent {
 			}
 			if (javaConsumer != null)
 				javaConsumer.clear();
-			py4jConnections.clear();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void setPythonConsumer(DirectRemoteServiceProvider consumer) {
 		synchronized (this) {
-			if (context != null && py4jConnections.size() > 0) {
+			if (context != null && connection != null) {
 				@SuppressWarnings("rawtypes")
 				Hashtable ht = new Hashtable();
 				ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP, "python." + this.gateway.getConfiguration().getPythonPort());
