@@ -3,7 +3,7 @@ Created on Apr 11, 2017
 
 @author: slewis
 '''
-from osgiservicebridge.bridge import Py4jServiceBridge, flushfile, _wait_until_done
+from osgiservicebridge.bridge import Py4jServiceBridge, flushfile, _wait_for_sec
 
 #turn on logging for osgiservicebridge.protobuf
 import logging
@@ -48,7 +48,8 @@ if __name__ == '__main__':
     print("bridge created")
     bridge.connect()
     print("bridge connected")
-    bridge.export(HelloServiceImpl())
+    hsid = bridge.export(HelloServiceImpl())
     print("exported")
-    # waits until the process is terminated
-    _wait_until_done()
+    _wait_for_sec(10)
+    bridge.unexport(hsid)
+    print("unexported")
