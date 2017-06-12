@@ -62,7 +62,7 @@ public class ProxyMapperServiceImpl implements ProxyMapperService {
 	public void clear() {
 		Collection<DirectEndpoint> des = null;
 		synchronized (this.proxyMap) {
-			des = proxyMap.values();
+			des = new ArrayList<DirectEndpoint>(proxyMap.values());
 			proxyMap.clear();
 		}
 		if (des != null)
