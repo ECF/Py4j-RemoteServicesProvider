@@ -3,17 +3,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.eclipse.ecf</groupId>
-    <artifactId>ecf-py4jrs-parent</artifactId>
+  <groupId>org.eclipse.ecf.provider.py4j</groupId>
+  <artifactId>org.eclipse.ecf.provider.py4j.parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
-  <groupId>org.eclipse.ecf</groupId>
   <artifactId>org.eclipse.ecf.provider.py4j.releng.target</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-
-  <name>ECF Py4j RS Target Platform Definitions</name>
 
   <build>
     <plugins>
