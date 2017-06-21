@@ -31,6 +31,9 @@ import py4j.Py4JServerConnection;
 @Component(immediate = true)
 public class RSAComponent {
 
+	private static final boolean DEBUGPY4J = new Boolean(
+			System.getProperty("org.eclipse.ecf.provider.py4j.debug", "false")).booleanValue();
+
 	private BundleContext context;
 	private ProxyMapperService javaConsumer;
 
@@ -42,7 +45,7 @@ public class RSAComponent {
 	private ContainerExporterService containerExporterService;
 
 	private GatewayServer gateway;
-	
+
 	public static RSAComponent getDefault() {
 		return instance;
 	}
@@ -79,25 +82,30 @@ public class RSAComponent {
 	}
 
 	void logError(String message) {
-		logError(message,null);
+		logError(message, null);
 	}
+
 	private void logError(String message, Throwable exception) {
-		System.err.println(message);
-		if (exception != null)
-			exception.printStackTrace(System.err);
+		if (DEBUGPY4J) {
+			System.err.println(message);
+			if (exception != null)
+				exception.printStackTrace(System.err);
+		}
 	}
+
 	private GatewayServerListener gatewayServerListener = new GatewayServerListener() {
 
 		@Override
 		public void connectionError(Exception arg0) {
-			logError("Connection error",arg0);
+			logError("Connection error", arg0);
 		}
 
 		@Override
 		public void connectionStarted(Py4JServerConnection arg0) {
 			synchronized (RSAComponent.this) {
 				if (RSAComponent.this.connection != null)
-					logError("connectionStarted error: Already have connection="+RSAComponent.this.connection+".  New connectionStarted="+arg0);
+					logError("connectionStarted error: Already have connection=" + RSAComponent.this.connection
+							+ ".  New connectionStarted=" + arg0);
 				RSAComponent.this.connection = arg0;
 			}
 		}
@@ -108,7 +116,8 @@ public class RSAComponent {
 				if (RSAComponent.this.connection == null)
 					logError("connectionStopped error: this.connection already null");
 				else if (RSAComponent.this.connection != arg0)
-					logError("connectionStopped error: this.connection="+RSAComponent.this.connection+" not equal to arg0="+arg0);
+					logError("connectionStopped error: this.connection=" + RSAComponent.this.connection
+							+ " not equal to arg0=" + arg0);
 				else {
 					RSAComponent.this.connection = null;
 					hardClose();
@@ -158,8 +167,11 @@ public class RSAComponent {
 			if (context != null && connection != null) {
 				@SuppressWarnings("rawtypes")
 				Hashtable ht = new Hashtable();
-				ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP, "python." + this.gateway.getConfiguration().getPythonPort());
-				drspReg = context.registerService(new String[] { DirectRemoteServiceProvider.class.getName(), CallableEndpoint.class.getName() }, consumer, ht);
+				ht.put(DirectRemoteServiceProvider.EXTERNAL_SERVICE_PROP,
+						"python." + this.gateway.getConfiguration().getPythonPort());
+				drspReg = context.registerService(
+						new String[] { DirectRemoteServiceProvider.class.getName(), CallableEndpoint.class.getName() },
+						consumer, ht);
 			}
 		}
 	}
@@ -203,7 +215,9 @@ public class RSAComponent {
 	@Activate
 	void activate(BundleContext ctxt) throws Exception {
 		context = ctxt;
-		this.gateway = new GatewayServer(new GatewayServerConfiguration.Builder(this).addGatewayServerListener(gatewayServerListener).setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).build());
+		this.gateway = new GatewayServer(new GatewayServerConfiguration.Builder(this)
+				.addGatewayServerListener(gatewayServerListener)
+				.setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).setDebug(DEBUGPY4J).build());
 	}
 
 	@Deactivate
