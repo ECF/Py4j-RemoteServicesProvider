@@ -23,10 +23,10 @@ public class HelloConsumer {
 		HelloMsgContent.Builder b1 = HelloMsgContent.newBuilder();
 		b1.addX(1.1);
 		b1.addX(1.2);
-		b1.setF("me");
-		b1.setTo("you");
-		b1.setHellomsg("Hello 1");
-		b1.setH("hval");
+		b1.setF("java");
+		b1.setTo("python");
+		b1.setHellomsg("Hello from java");
+		b1.setH("some other message");
 		return b1.build();
 	}
 	void activate() {
