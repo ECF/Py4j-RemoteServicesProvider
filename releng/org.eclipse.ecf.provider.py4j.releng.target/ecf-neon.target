@@ -15,7 +15,7 @@
 <repository location="http://download.eclipse.org/releases/neon"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ecf.py4j.feature.feature.group" version="1.0.0.201706202016"/>
+<unit id="org.eclipse.ecf.py4j.feature.feature.group" version="1.1.0.201706292139"/>
 <repository location="https://raw.githubusercontent.com/ECF/Py4j-OSGi/master/features/org.eclipse.ecf.py4j.feature/build/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
