@@ -6,7 +6,7 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct.local;
+package org.eclipse.ecf.provider.direct;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class PropertiesUtil {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Map conditionProperties(Map input) {
+	public static Map conditionProperties(Map input, String proxyId) {
 		if (input == null)
 			throw new NullPointerException("input properties cannot be null");
 		Map result = new TreeMap();
@@ -43,6 +43,7 @@ public class PropertiesUtil {
 		result.put(org.eclipse.ecf.remoteservice.Constants.SERVICE_ID,
 				convertPropToLong(result, org.eclipse.ecf.remoteservice.Constants.SERVICE_ID));
 		result.put("service.ranking", convertPropToLong(result, "service.ranking"));
+		result.put(ExternalServiceProvider.PROXYID_PROP_NAME, proxyId);
 		return result;
 	}
 

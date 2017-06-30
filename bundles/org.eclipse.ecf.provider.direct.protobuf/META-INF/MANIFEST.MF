@@ -9,5 +9,4 @@ Bundle-ActivationPolicy: lazy
 Import-Package: com.google.protobuf,
  org.eclipse.ecf.provider.direct;version="1.0.0",
  org.osgi.service.component.annotations;resolution:=optional
-Service-Component: OSGI-INF/org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpointImpl.xml
 Export-Package: org.eclipse.ecf.provider.direct.protobuf

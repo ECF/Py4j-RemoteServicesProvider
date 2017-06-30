@@ -6,14 +6,18 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct.protobuf;
+package org.eclipse.ecf.provider.direct;
 
-import com.google.protobuf.Message;
-import com.google.protobuf.Parser;
+import java.util.Map;
 
-public interface ProtobufCallableEndpoint {
+public interface InternalDirectDiscovery {
 
-	<A extends Message> Message call_endpoint(Long rsId, String methodName, A message, Parser<?> resultParser)
-			throws Exception;
+	public static final String DIRECT_TARGET_ID_PROP = "directTargetId";
+	public static final String DIRECT_TARGET_PORT_PROP = "directTargetPort";
 
+	void _external_discoverService(Object service, @SuppressWarnings("rawtypes") Map rsaMap);
+
+	void _external_updateDiscoveredService(@SuppressWarnings("rawtypes") Map rsaMap);
+
+	void _external_undiscoverService(@SuppressWarnings("rawtypes") Map rsaMap);
 }

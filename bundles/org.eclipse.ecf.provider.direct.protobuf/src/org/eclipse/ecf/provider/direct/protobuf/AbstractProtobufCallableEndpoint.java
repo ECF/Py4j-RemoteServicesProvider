@@ -8,25 +8,25 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct.protobuf;
 
-import org.eclipse.ecf.provider.direct.CallableEndpoint;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
+import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 
-@Component(immediate = true)
-public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
+public class AbstractProtobufCallableEndpoint implements ProtobufCallableEndpoint {
 
-	private CallableEndpoint cbvService;
+	private ExternalCallableEndpoint eceService;
 
-	@Reference
-	void bindCallByValueService(CallableEndpoint cbv) {
-		this.cbvService = cbv;
+	protected void bindExternalCallableEndpoint(ExternalCallableEndpoint cbv) {
+		this.eceService = cbv;
 	}
 
-	void unbindCallByValueService(CallableEndpoint cbv) {
-		this.cbvService = null;
+	protected void unbindExternalCallableEndpoint(ExternalCallableEndpoint cbv) {
+		this.eceService = null;
+	}
+
+	protected ExternalCallableEndpoint getExternalCallableEndpoint() {
+		return eceService;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 		if (dotLastIndex >= 0)
 			methodName = methodName.substring(dotLastIndex + 1);
 		// Serialized message, and call cbvService
-		byte[] resultBytes = this.cbvService._call_endpoint(rsId, methodName,
+		byte[] resultBytes = this.eceService._call_endpoint(rsId, methodName,
 				(message == null) ? null : message.toByteArray());
 		// If result is null/None then return null
 		if (resultBytes == null || resultParser == null)

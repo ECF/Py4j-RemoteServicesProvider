@@ -1,17 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2016 Composent, Inc. and others. All rights reserved. This
+ * Copyright (c) 2017 Composent, Inc. and others. All rights reserved. This
  * program and the accompanying materials are made available under the terms of
  * the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct.local;
+package org.eclipse.ecf.provider.direct;
 
+import java.io.InvalidObjectException;
 import java.lang.reflect.Method;
 import java.util.concurrent.CompletableFuture;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;
@@ -23,49 +23,39 @@ import org.eclipse.ecf.remoteservice.client.RemoteServiceClientRegistration;
 import org.eclipse.equinox.concurrent.future.IExecutor;
 import org.eclipse.equinox.concurrent.future.IProgressRunnable;
 
-public class RSAClientContainer extends AbstractRSAClientContainer {
+public class DirectClientContainer extends AbstractRSAClientContainer {
 
-	private ProxyMapperService mapper;
-	private Object proxy;
+	private ExternalServiceProvider externalServiceProvider;
 
-	public RSAClientContainer(ID containerID, Object proxy) {
+	public DirectClientContainer(ID containerID, ExternalServiceProvider spp) {
 		super(containerID);
-		Assert.isNotNull(proxy);
-		this.proxy = proxy;
+		this.externalServiceProvider = spp;
 	}
 
-	public RSAClientContainer(ID containerID, ProxyMapperService mapper) {
-		super(containerID);
-		Assert.isNotNull(mapper);
-		this.mapper = mapper;
-	}
-
-	protected Object getProxy() {
-		return this.proxy;
-	}
-
-	protected ProxyMapperService getProxyMapper() {
-		return this.mapper;
+	protected ExternalServiceProvider getServiceProxyProvider() {
+		return externalServiceProvider;
 	}
 
 	@Override
 	protected IRemoteService createRemoteService(RemoteServiceClientRegistration registration) {
-		synchronized (this) {
-			if (this.proxy == null)
-				this.proxy = this.mapper.getProxy(registration.getID().getContainerRelativeID());
-		}
-		return new DirectRSAClientService(this, registration, this.proxy);
+		return new DirectRSAClientService(this, registration);
+	}
+
+	protected Object getProxy(RemoteServiceClientRegistration reg) throws InvalidObjectException {
+		String proxyId = (String) reg.getProperty(ExternalServiceProvider.PROXYID_PROP_NAME);
+		if (proxyId == null)
+			throw new InvalidObjectException("Could not get proxyId for remote service=" + reg.getID());
+		Object proxy = externalServiceProvider.getProxy(proxyId);
+		if (proxy == null)
+			throw new InvalidObjectException(
+					"Could not get proxy for proxyId=" + proxyId + " on remote service=" + reg.getID());
+		return proxy;
 	}
 
 	public class DirectRSAClientService extends AbstractRSAClientService {
 
-		private final Object proxy;
-
-		public DirectRSAClientService(AbstractClientContainer container, RemoteServiceClientRegistration registration,
-				Object proxy) {
+		public DirectRSAClientService(AbstractClientContainer container, RemoteServiceClientRegistration registration) {
 			super(container, registration);
-			Assert.isNotNull(proxy);
-			this.proxy = proxy;
 		}
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -84,8 +74,8 @@ public class RSAClientContainer extends AbstractRSAClientContainer {
 						if (params != null)
 							for (int i = 0; i < params.length; i++)
 								paramTypes[i] = params[i].getClass();
-						cf.complete(
-								invokeMethod(proxy.getClass().getMethod(remoteCall.getMethod(), paramTypes), params));
+						cf.complete(invokeMethod(getProxy().getClass().getMethod(remoteCall.getMethod(), paramTypes),
+								params));
 					} catch (Throwable e) {
 						cf.completeExceptionally(e);
 					}
@@ -97,7 +87,7 @@ public class RSAClientContainer extends AbstractRSAClientContainer {
 
 		private Object invokeMethod(Method m, Object[] parameters) throws ECFException {
 			try {
-				return m.invoke(proxy, parameters);
+				return m.invoke(getProxy(), parameters);
 			} catch (Throwable e) {
 				throw new ECFException("Cannot invoke remoteCall on proxy", e);
 			}

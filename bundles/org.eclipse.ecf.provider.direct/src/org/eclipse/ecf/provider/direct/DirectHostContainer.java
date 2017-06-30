@@ -6,7 +6,7 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct.local;
+package org.eclipse.ecf.provider.direct;
 
 import java.util.Map;
 
@@ -14,30 +14,31 @@ import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.remoteservice.AbstractRSAContainer;
 import org.eclipse.ecf.remoteservice.RSARemoteServiceContainerAdapter.RSARemoteServiceRegistration;
 
-public class RSAHostContainer extends AbstractRSAContainer {
+public class DirectHostContainer extends AbstractRSAContainer {
 
-	private ContainerExporterService exporter;
+	private InternalServiceProvider internalServiceProvider;
 
-	public RSAHostContainer(ID id, ContainerExporterService exporter) {
+	public DirectHostContainer(ID id, InternalServiceProvider isp) {
 		super(id);
-		this.exporter = exporter;
+		this.internalServiceProvider = isp;
 	}
 
 	@Override
 	protected Map<String, Object> exportRemoteService(RSARemoteServiceRegistration registration) {
-		this.exporter.exportFromContainer(registration.getID().getContainerRelativeID(), registration.getService());
+		this.internalServiceProvider.externalExport(registration.getID().getContainerRelativeID(),
+				registration.getService());
 		return null;
-	}
-
-	@Override
-	protected void unexportRemoteService(RSARemoteServiceRegistration registration) {
-		// Do nothing
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		this.exporter = null;
+		this.internalServiceProvider = null;
+	}
+
+	@Override
+	protected void unexportRemoteService(RSARemoteServiceRegistration registration) {
+		this.internalServiceProvider.externalUnexport(registration.getID().getContainerRelativeID());
 	}
 
 }
