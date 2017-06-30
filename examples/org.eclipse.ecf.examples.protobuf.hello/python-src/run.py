@@ -34,9 +34,9 @@ class HelloServiceImpl:
     def sayHello(self,pbarg):
         print("sayHello called with arg="+str(pbarg))
         resmsg = HelloMsgContent()
-        resmsg.h = 'phere'
-        resmsg.f = 'pslewis'
-        resmsg.to = 'jslewis'
+        resmsg.h = 'response'
+        resmsg.f = 'python'
+        resmsg.to = 'java'
         resmsg.hellomsg = 'hi from python'
         for x in range(0,5):
             resmsg.x.append(float(x))
