@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Py4j Provider Neon Target" sequenceNumber="25">
+<?pde version="3.8"?><target name="Py4j Provider Neon Target" sequenceNumber="26">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.license.feature.group" version="1.0.1.v20140414-1359"/>
@@ -24,5 +24,12 @@
 <repository location="http://download.eclipse.org/rt/ecf/3.13.7/site.p2"/>
 </location>
 <location path="${project_loc:org.eclipse.ecf.provider.py4j.releng.target}/bundles" type="Directory"/>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.slf4j.api" version="1.7.10.v20170224-1220"/>
+<unit id="org.slf4j.api.source" version="1.7.10.v20170224-1220"/>
+<unit id="org.slf4j.apis.log4j" version="1.7.10.v20160208-0839"/>
+<unit id="org.slf4j.apis.log4j.source" version="1.7.10.v20160208-0839"/>
+<repository location="http://download.eclipse.org/tools/orbit/R-builds/R20170307180635/repository"/>
+</location>
 </locations>
 </target>
