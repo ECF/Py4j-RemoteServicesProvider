@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Py4j Provider Neon Target" sequenceNumber="29">
+<?pde version="3.8"?><target name="Py4j Provider Neon Target" sequenceNumber="30">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.license.feature.group" version="1.0.1.v20140414-1359"/>
@@ -28,7 +28,7 @@
 <repository location="http://download.eclipse.org/tools/orbit/R-builds/R20170307180635/repository"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ecf.py4j.feature.feature.group" version="1.1.0.201707031417"/>
+<unit id="org.eclipse.ecf.py4j.feature.feature.group" version="1.1.0.201707031624"/>
 <repository location="https://raw.githubusercontent.com/ECF/Py4j-OSGi/master/features/org.eclipse.ecf.py4j.feature/build/"/>
 </location>
 </locations>
