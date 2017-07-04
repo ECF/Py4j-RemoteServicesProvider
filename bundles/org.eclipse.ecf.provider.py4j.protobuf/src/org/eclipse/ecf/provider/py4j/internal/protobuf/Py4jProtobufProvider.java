@@ -17,9 +17,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.remoteserviceadmin.EndpointEventListener;
+import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 
 @Component(immediate = true)
-public class Py4jProtobufProvider extends Py4jDirectProvider {
+public class Py4jProtobufProvider extends Py4jDirectProvider implements RemoteServiceAdminListener {
 
 	@Reference
 	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
