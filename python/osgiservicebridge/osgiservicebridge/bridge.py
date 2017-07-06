@@ -63,7 +63,8 @@ from argparse import ArgumentError
 from py4j.java_gateway import (
     server_connection_started, server_connection_stopped,
     server_started, server_stopped, pre_server_shutdown, post_server_shutdown,
-    JavaGateway, CallbackServerParameters, DEFAULT_ADDRESS, DEFAULT_PORT, DEFAULT_PYTHON_PROXY_PORT)
+    JavaGateway, CallbackServerParameters, DEFAULT_ADDRESS, DEFAULT_PORT, DEFAULT_PYTHON_PROXY_PORT,
+    GatewayParameters)
 
 '''
 Py4J constants
@@ -242,7 +243,7 @@ class Py4jServiceBridge(object):
     This class provides and API for consumers to use the Py4jServiceBridge.  This 
     allows a bridge between Python and the OSGi service registry.
     '''
-    def __init__(self,service_listener=None,connection_listener=None,callback_server_parameters=None):
+    def __init__(self,service_listener=None,connection_listener=None,gateway_parameters=None,callback_server_parameters=None):
         self._gateway = None
         self._lock = RLock()
         self._consumer = None
@@ -255,6 +256,7 @@ class Py4jServiceBridge(object):
         self._service_listener = service_listener
         self._connection_listener = None
         self._connection = None
+        self._gateway_parameters = gateway_parameters
         self._callback_server_parameters = callback_server_parameters
     
     def get_id(self):
@@ -435,22 +437,29 @@ class Py4jServiceBridge(object):
         with self._lock:
             return True if self._gateway is not None else False
 
-    def connect(self,callback_server_parameters=None):
+    def connect(self,gateway_parameters=None,callback_server_parameters=None):
         '''
         Connect gateway to Java side
-        :param callback_server_parameters the CallbackServerParameters instance.
-        If None then a new CallbackServerParameters() instance is used.
+        :param gateway_parameters an overriding GatewayParameters instance.
+        If None then self._gateway_parameters is used.  If that is None, then new GatewayParameters (defaults) is used
+        :param callback_server_parameters an overriding CallbackServerParameters instance.
+        If None then self._callback_server_parameters is used.  If that is None, then new CallbackServerParameters (defaults) is used
         '''
-        if not self._callback_server_parameters:
-            self._callback_server_parameters = callback_server_parameters if callback_server_parameters else CallbackServerParameters()
+        if callback_server_parameters:
+            self._callback_server_parameters = callback_server_parameters
         else:
-            self._callback_server_parameters = callback_server_parameters if callback_server_parameters else self._callback_server_parameters
+            self._callback_server_parameters = self._callback_server_parameters if self._callback_server_parameters else CallbackServerParameters()
         
+        if gateway_parameters:
+            self._gateway_parameters = gateway_parameters
+        else:
+            self._gateway_parameters = self._gateway_parameters if self._gateway_parameters else GatewayParameters()
+            
         with self._lock:
             if not self._gateway is None:
                 raise OSError('already connected to java gateway')
             server_started.connect(self.__started)
-            self._gateway = JavaGateway(callback_server_parameters=self._callback_server_parameters)
+            self._gateway = JavaGateway(gateway_parameters=self._gateway_parameters,callback_server_parameters=self._callback_server_parameters)
             cbserver = self._gateway.get_callback_server()
             server_stopped.connect(
                 self.__stopped, sender=cbserver)
@@ -500,7 +509,7 @@ class Py4jServiceBridge(object):
     def disconnect(self):
         with self._lock:
             if self.isconnected():
-                self._gateway.shutdown()
+                self._gateway.close()
                 self._gateway = None
                 self._consumer = None   
                 self._bridge = None 

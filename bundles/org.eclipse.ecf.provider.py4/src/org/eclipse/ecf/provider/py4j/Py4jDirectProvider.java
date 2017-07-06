@@ -105,7 +105,6 @@ public class Py4jDirectProvider extends AbstractDirectProvider implements Remote
 					logError("connectionStopped error: this.connection=" + Py4jDirectProvider.this.connection
 							+ " not equal to arg0=" + arg0);
 				else {
-					Py4jDirectProvider.this.connection = null;
 					hardClose();
 				}
 			}
@@ -131,6 +130,17 @@ public class Py4jDirectProvider extends AbstractDirectProvider implements Remote
 		public void serverStopped() {
 		}
 	};
+
+	@Override
+	protected void hardClose() {
+		synchronized (getLock()) {
+			super.hardClose();
+			this.connection = null;
+			if (this.osgiGateway != null) {
+				this.osgiGateway.reset();
+			}
+		}
+	}
 
 	public static final String PYTHON_PORT_PROP = "pythonPort";
 	public static final String PORT_PROP = "port";
@@ -159,6 +169,42 @@ public class Py4jDirectProvider extends AbstractDirectProvider implements Remote
 		return def;
 	}
 
+	protected void registerDistributionProviders() {
+		hostReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
+				new DirectRemoteServiceDistributionProvider(Py4jConstants.JAVA_HOST_CONFIG_TYPE,
+						new RemoteServiceContainerInstantiator(Py4jConstants.JAVA_HOST_CONFIG_TYPE,
+								Py4jConstants.JAVA_HOST_CONFIG_TYPE) {
+							public IContainer createInstance(ContainerTypeDescription description,
+									Map<String, ?> parameters) {
+								GatewayServerConfiguration config = gatewayServer.getConfiguration();
+								return new DirectHostContainer(Py4jNamespace
+										.createPy4jID(config.getAddress().getHostAddress(), config.getPort()),
+										getInternalServiceProvider());
+							}
+
+							@Override
+							public String[] getSupportedIntents(ContainerTypeDescription description) {
+								return py4jSupportedIntents;
+							}
+						}, true),
+				null);
+
+		clientReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
+				new DirectRemoteServiceDistributionProvider(Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE,
+						new RemoteServiceContainerInstantiator(Py4jConstants.PYTHON_HOST_CONFIG_TYPE,
+								Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE) {
+							public IContainer createInstance(ContainerTypeDescription description,
+									Map<String, ?> parameters) {
+								return new DirectClientContainer(Py4jNamespace.createUUID(), getServiceProxyProvider());
+							}
+
+							public String[] getSupportedIntents(ContainerTypeDescription description) {
+								return py4jSupportedIntents;
+							}
+						}, false),
+				null);
+	}
+
 	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
 		super.activate(context);
 		Integer pythonPort = getIntProperty(PYTHON_PORT_PROP, properties, py4j.GatewayServer.DEFAULT_PYTHON_PORT);
@@ -170,46 +216,13 @@ public class Py4jDirectProvider extends AbstractDirectProvider implements Remote
 					.setGateway(this.osgiGateway).addGatewayServerListener(gatewayServerListener)
 					.setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).setDebug(debug);
 			this.gatewayServer = new GatewayServer(builder.build());
-			hostReg = context.registerService(IRemoteServiceDistributionProvider.class,
-					new DirectRemoteServiceDistributionProvider(Py4jConstants.JAVA_HOST_CONFIG_TYPE,
-							new RemoteServiceContainerInstantiator(Py4jConstants.JAVA_HOST_CONFIG_TYPE,
-									Py4jConstants.JAVA_HOST_CONFIG_TYPE) {
-								public IContainer createInstance(ContainerTypeDescription description,
-										Map<String, ?> parameters) {
-									GatewayServerConfiguration config = gatewayServer.getConfiguration();
-									return new DirectHostContainer(Py4jNamespace
-											.createPy4jID(config.getAddress().getHostAddress(), config.getPort()),
-											getInternalServiceProvider());
-								}
-
-								@Override
-								public String[] getSupportedIntents(ContainerTypeDescription description) {
-									return py4jSupportedIntents;
-								}
-							}, true),
-					null);
-
-			clientReg = context.registerService(IRemoteServiceDistributionProvider.class,
-					new DirectRemoteServiceDistributionProvider(Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE,
-							new RemoteServiceContainerInstantiator(Py4jConstants.PYTHON_HOST_CONFIG_TYPE,
-									Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE) {
-								public IContainer createInstance(ContainerTypeDescription description,
-										Map<String, ?> parameters) {
-									return new DirectClientContainer(Py4jNamespace.createUUID(),
-											getServiceProxyProvider());
-								}
-
-								public String[] getSupportedIntents(ContainerTypeDescription description) {
-									return py4jSupportedIntents;
-								}
-							}, false),
-					null);
+			registerDistributionProviders();
 		}
 	}
 
 	protected void deactivate() {
 		synchronized (getLock()) {
-			hardClose();
+			super.deactivate(getContext());
 			if (hostReg != null) {
 				hostReg.unregister();
 				hostReg = null;
@@ -218,13 +231,11 @@ public class Py4jDirectProvider extends AbstractDirectProvider implements Remote
 				clientReg.unregister();
 				clientReg = null;
 			}
-			super.deactivate(getContext());
+			this.osgiGateway = null;
 			if (this.gatewayServer != null) {
-				this.gatewayServer.stop();
+				this.gatewayServer.shutdown();
 				this.gatewayServer = null;
 			}
-			this.osgiGateway = null;
-			this.connection = null;
 		}
 	}
 

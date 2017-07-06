@@ -3,7 +3,7 @@ Created on Apr 11, 2017
 
 @author: slewis
 '''
-from osgiservicebridge.bridge import Py4jServiceBridge, flushfile, _wait_for_sec
+from osgiservicebridge.bridge import Py4jServiceBridge, _wait_for_sec
 
 #turn on logging for osgiservicebridge.protobuf
 #import logging

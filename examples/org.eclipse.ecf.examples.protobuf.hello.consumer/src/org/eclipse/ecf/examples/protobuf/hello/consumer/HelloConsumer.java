@@ -2,6 +2,7 @@ package org.eclipse.ecf.examples.protobuf.hello.consumer;
 
 import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent;
 import org.eclipse.ecf.examples.protobuf.hello.IHello;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -29,6 +30,7 @@ public class HelloConsumer {
 		b1.setH("some other message");
 		return b1.build();
 	}
+	@Activate
 	void activate() {
 		try {
 			HelloMsgContent request = createRequest();
@@ -38,4 +40,5 @@ public class HelloConsumer {
 			e.printStackTrace();
 		}
 	}
+
 }
