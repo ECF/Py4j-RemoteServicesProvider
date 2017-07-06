@@ -9,3 +9,4 @@ message HelloMsgContent {
 	string hellomsg = 4;
 	repeated double x = 5;
 }
+

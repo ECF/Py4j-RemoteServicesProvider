@@ -43,6 +43,47 @@ PY34 = sys.version_info[0:2] >= (3, 4)
 PB_SERVICE_EXPORTED_CONFIG_DEFAULT='ecf.py4j.host.python.pb'
 PB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
 
+PB_SERVICE_RETURN_TYPE_ATTR = '_return_type'
+PB_SERVICE_ARG_TYPE_ATTR = '_arg_type'
+
+def instance_func(instance, method_name):
+    return getattr(instance, method_name, None)
+
+def instance_arg_return_type(instance, method_name, func_attr_name):
+    f = instance_func(instance, method_name)
+    if not f:
+        return None
+    return getattr(f, func_attr_name, None)
+
+def instance_return_type(o, method_name):
+    return instance_arg_return_type(o, method_name, PB_SERVICE_RETURN_TYPE_ATTR)
+
+def instance_arg_type(o, method_name):
+    return instance_arg_return_type(o, method_name, PB_SERVICE_ARG_TYPE_ATTR)
+
+def create_return_instance(o, method_name):
+    ret_type = instance_return_type(o, method_name)
+    if ret_type is not None:
+        return ret_type()
+    return None
+    
+def get_name_and_type_dict(m):
+    result = dict()
+    for key in m:
+        val = m[key]
+        if val is None:
+            result[key] = 'None'
+        else:
+            result[key] = fully_qualified_classname(type(val))
+    return result
+
+def fully_qualified_classname(c):
+    module = c.__module__
+    if module is None or module == str.__class__.__module__:
+        return c.__name__
+    return module + '.' + c.__name__
+                
+
 def _raw_bytes_from_java(self,methodName,serializedArgs):
     try:
         return getattr(self,methodName)(serializedArgs)
@@ -121,7 +162,7 @@ def protobuf_remote_service(**kwargs):
         return cls
     return decorate
 
-def protobuf_remote_service_method(arg_type):
+def protobuf_remote_service_method(arg_type,return_type=None):
     '''
     Method decorator for protobuf-based remote services method.  This class decorator is intended to be used as follows:
     
@@ -142,6 +183,8 @@ def protobuf_remote_service_method(arg_type):
     '''
     issubclass(arg_type, Message)
     def pbwrapper(func):
+        func._arg_type = arg_type
+        func._return_type = return_type
         @wraps(func)
         def wrapper(*args):
             # set argClass to arg_type
@@ -156,7 +199,8 @@ def protobuf_remote_service_method(arg_type):
             except Exception as e:
                 _logger.error('Could not call function='+str(func)+' on object='+str(args[0]))
                 raise e
-            isinstance(respb,Message)
+            if not func._return_type is None:
+                isinstance(respb,func._return_type)
             return return_serialize(respb)
         return wrapper
     return pbwrapper

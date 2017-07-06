@@ -86,7 +86,7 @@
     </dependency>
     <dependency>
       <groupId>com.diffplug.osgi</groupId>
-      <artifactId>	com.diffplug.osgi.extension.sun.misc</artifactId>
+      <artifactId>com.diffplug.osgi.extension.sun.misc</artifactId>
       <version>0.0.0</version>
     </dependency>
   </dependencies>
