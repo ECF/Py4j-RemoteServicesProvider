@@ -55,17 +55,26 @@ def instance_arg_return_type(instance, method_name, func_attr_name):
         return None
     return getattr(f, func_attr_name, None)
 
-def instance_return_type(o, method_name):
-    return instance_arg_return_type(o, method_name, PB_SERVICE_RETURN_TYPE_ATTR)
+def instance_return_type(instance, method_name):
+    return instance_arg_return_type(instance, method_name, PB_SERVICE_RETURN_TYPE_ATTR)
 
-def instance_arg_type(o, method_name):
-    return instance_arg_return_type(o, method_name, PB_SERVICE_ARG_TYPE_ATTR)
+def instance_arg_type(instance, method_name):
+    return instance_arg_return_type(instance, method_name, PB_SERVICE_ARG_TYPE_ATTR)
 
-def create_return_instance(o, method_name):
-    ret_type = instance_return_type(o, method_name)
+def create_return_instance(instance, method_name):
+    ret_type = instance_return_type(instance, method_name)
     if ret_type is not None:
         return ret_type()
     return None
+
+def instance_reset_function(instance, method_name, newfunc):
+    oldfunc = getattr(instance, method_name)
+    if oldfunc:
+        oldargtype = getattr(oldfunc, PB_SERVICE_ARG_TYPE_ATTR, None)
+        oldreturntype = getattr(oldfunc, PB_SERVICE_RETURN_TYPE_ATTR, None)
+        setattr(newfunc,PB_SERVICE_ARG_TYPE_ATTR, oldargtype)
+        setattr(newfunc,PB_SERVICE_RETURN_TYPE_ATTR, oldreturntype)
+    setattr(instance,method_name,newfunc)
     
 def get_name_and_type_dict(m):
     result = dict()
