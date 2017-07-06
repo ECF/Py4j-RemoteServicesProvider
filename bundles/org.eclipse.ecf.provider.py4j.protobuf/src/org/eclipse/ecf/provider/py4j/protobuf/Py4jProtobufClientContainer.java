@@ -15,8 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;
-import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
-import org.eclipse.ecf.provider.py4j.internal.protobuf.Activator;
+import org.eclipse.ecf.provider.py4j.internal.protobuf.Py4jProtobufCallableEndpoint;
 import org.eclipse.ecf.remoteservice.IRemoteService;
 import org.eclipse.ecf.remoteservice.client.AbstractClientContainer;
 import org.eclipse.ecf.remoteservice.client.AbstractRSAClientContainer;
@@ -41,28 +40,15 @@ public class Py4jProtobufClientContainer extends AbstractRSAClientContainer {
 	public class ProtoBufDirectRemoteService extends AbstractRSAClientService {
 
 		public static final String PROTOBUF_PARSER_STATIC_METHODNAME = "parser";
-		
-		private ProtobufCallableEndpoint endpoint;
+
 		private Long rsId;
 
 		public ProtoBufDirectRemoteService(AbstractClientContainer container,
 				RemoteServiceClientRegistration registration) {
 			super(container, registration);
 			this.rsId = registration.getID().getContainerRelativeID();
-			Activator a = Activator.getDefault();
-			if (a == null)
-				throw new NullPointerException("Cannot create ProtoBufDirectRemoteService because bundle not active");
-			this.endpoint = a.getCallableEndpoint();
-			if (this.endpoint == null) 
-				throw new NullPointerException("Cannot create ProtoBufDirectRemoteService because no ProtobufCallableEndpoint available");
 		}
-		
-		@Override
-		public void dispose() {
-			super.dispose();
-			this.endpoint = null;
-		}
-		
+
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		protected Object invokeAsync(final RSARemoteCall remoteCall) throws ECFException {
 			final CompletableFuture cf = new CompletableFuture();
@@ -87,31 +73,34 @@ public class Py4jProtobufClientContainer extends AbstractRSAClientContainer {
 		protected Object invokeSync(RSARemoteCall remoteCall) throws ECFException {
 			// Checks on arguments/parameters
 			Object[] args = remoteCall.getParameters();
-			if (args == null || args.length == 0)
-				throw new ECFException("Remote call=" + remoteCall + " does not have any Message parameters");
-			if (args.length > 1)
-				throw new ECFException("Remote call=" + remoteCall + " has more than one Message parameter");
-			Object message = args[0];
-			if (!(message instanceof Message))
-				throw new ECFException("Remote call=" + remoteCall + " does not have one parameter of type Message");
-
+			Object message = null;
+			if (args != null && args.length > 0) {
+				message = args[0];
+				if (message != null && !(message instanceof Message))
+					throw new ECFException(
+							"Remote call=" + remoteCall + " the first parameter must be of type Message");
+			}
 			Method reflectMethod = remoteCall.getReflectMethod();
 			Class<?> returnType = reflectMethod.getReturnType();
-			if (!Message.class.isAssignableFrom(returnType))
+			if (returnType == null || returnType.equals(Void.TYPE)) {
+				returnType = Void.TYPE;
+			} else if (!Message.class.isAssignableFrom(returnType))
 				throw new ECFException("Remote call=" + remoteCall + " return type is not Message");
 
 			@SuppressWarnings("rawtypes")
-			Parser parser;
-			try {
-				Method m = returnType.getMethod(PROTOBUF_PARSER_STATIC_METHODNAME, (Class[]) null);
-				parser = Parser.class.cast(m.invoke(null, (Object[]) null));
-			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e1) {
-				throw new ECFException("Exception getting parser from return type", e1);
+			Parser parser = null;
+			if (!returnType.equals(Void.TYPE)) {
+				try {
+					Method m = returnType.getMethod(PROTOBUF_PARSER_STATIC_METHODNAME, (Class[]) null);
+					parser = Parser.class.cast(m.invoke(null, (Object[]) null));
+				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException e1) {
+					throw new ECFException("Exception getting parser from return type", e1);
+				}
 			}
 			try {
-				// Actually make call via ProtobufCallableEndpointImpl
-				return endpoint.call_endpoint(rsId, remoteCall.getMethod(),
+				// Actually make call via AbstractProtobufCallableEndpoint
+				return Py4jProtobufCallableEndpoint.getInstance().call_endpoint(rsId, remoteCall.getMethod(),
 						(Message) message, parser);
 			} catch (Exception e) {
 				throw new ECFException("Could not execute remote call=" + remoteCall, e);

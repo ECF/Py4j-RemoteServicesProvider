@@ -6,14 +6,14 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct.protobuf;
+package org.eclipse.ecf.provider.direct;
 
-import com.google.protobuf.Message;
-import com.google.protobuf.Parser;
+public interface InternalServiceProvider {
 
-public interface ProtobufCallableEndpoint {
+	void externalExport(long rsId, Object service);
 
-	<A extends Message> Message call_endpoint(Long rsId, String methodName, A message, Parser<?> resultParser)
-			throws Exception;
+	void externalUpdate(long rsId);
+
+	void externalUnexport(long rsId);
 
 }

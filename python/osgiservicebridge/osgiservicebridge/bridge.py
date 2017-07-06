@@ -72,8 +72,8 @@ PY4J_DEFAULT_GATEWAY_PORT = DEFAULT_PORT
 PY4J_DEFAULT_CB_PORT = DEFAULT_PYTHON_PROXY_PORT
 PY4J_DEFAULT_HOSTNAME = DEFAULT_ADDRESS
 
-JAVA_DIRECT_ENDPOINT_CLASS = 'org.eclipse.ecf.provider.direct.DirectRemoteServiceProvider'
-PY4J_CALL_BY_VALUE_CLASS = 'org.eclipse.ecf.provider.direct.CallableEndpoint'
+JAVA_DIRECT_ENDPOINT_CLASS = 'org.eclipse.ecf.provider.direct.InternalDirectDiscovery'
+PY4J_CALL_BY_VALUE_CLASS = 'org.eclipse.ecf.provider.direct.ExternalCallableEndpoint'
 
 # Version
 __version_info__ = (0, 1, 0)
@@ -464,18 +464,17 @@ class Py4jServiceBridge(object):
                 self.__pre_shutdown, sender=cbserver)
             post_server_shutdown.connect(
                 self.__post_shutdown, sender=cbserver)
-            self._consumer = self._gateway.entry_point.getJavaConsumer()
-            class JavaRemoteServiceExporter(object):
+            class JavaRemoteServiceDiscoverer(object):
                 def __init__(self, bridge):
                     self._bridge = bridge
                     
-                def exportService(self,proxy,props):
+                def _external_discoverService(self,proxy,props):
                     self._bridge.__import_service_from_java(proxy,props)
                     
-                def modifyService(self,props):
+                def _external_updateDiscoveredService(self,props):
                     self._bridge.__modify_service_from_java(props)
                     
-                def unexportService(self,props):
+                def _external_undiscoverService(self,props):
                     self._bridge.__unimport_service_from_java(props)
                     
                 def _call_endpoint(self,rsId,methodName,serializedArgs):
@@ -491,8 +490,12 @@ class Py4jServiceBridge(object):
                 class Java:
                     implements = [JAVA_DIRECT_ENDPOINT_CLASS, PY4J_CALL_BY_VALUE_CLASS]
 
-            self._bridge = JavaRemoteServiceExporter(self)
-            self._gateway.entry_point.setPythonConsumer(self._bridge)
+            self._bridge = JavaRemoteServiceDiscoverer(self)
+            '''Call _getExternalDirectDiscovery first, so that we are ready to export'''
+            self._consumer = self._gateway.entry_point._getExternalDirectDiscovery()
+            '''Then call _setInternalDirectDiscovery so that java side can now call us
+            to notify about exported services'''
+            self._gateway.entry_point._setInternalDirectDiscovery(self._bridge, self.get_id())
             
     def disconnect(self):
         with self._lock:
@@ -653,21 +656,21 @@ class Py4jServiceBridge(object):
 
     def __export(self,svc,props):
         try:
-            self._consumer.exportService(svc,self._convert_props_for_java(props))
+            self._consumer._java_discoverService(svc,self._convert_props_for_java(props))
         except Exception as e:
             _logger.error(e)
             raise e
     
     def __update(self,props):
         try:
-            self._consumer.modifyService(self._convert_props_for_java(props))
+            self._consumer._java_updateDiscoveredService(self._convert_props_for_java(props))
         except Exception as e:
             _logger.error(e)
             raise e
            
     def __unexport(self,props):
         try:
-            self._consumer.unexportService(self._convert_props_for_java(props))
+            self._consumer._java_undiscoverService(self._convert_props_for_java(props))
         except Exception as e:
             _logger.error(e)
             raise e

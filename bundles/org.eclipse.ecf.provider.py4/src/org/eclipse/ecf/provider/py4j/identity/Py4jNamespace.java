@@ -13,7 +13,6 @@ import java.util.UUID;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.identity.IDCreateException;
 import org.eclipse.ecf.core.identity.URIID.URIIDNamespace;
-import org.eclipse.ecf.provider.internal.py4j.RSAComponent;
 import org.eclipse.ecf.provider.py4j.Py4jConstants;
 
 public class Py4jNamespace extends URIIDNamespace {
@@ -41,13 +40,6 @@ public class Py4jNamespace extends URIIDNamespace {
 			hostname = "localhost";
 		return INSTANCE.createInstance(new Object[] { Py4jConstants.NAMESPACE_PROTOCOL + "://" + hostname + ":"
 				+ String.valueOf(port) + Py4jConstants.NAMESPACE_JAVA_PATH });
-	}
-
-	public static ID createPy4jID() {
-		RSAComponent c = RSAComponent.getDefault();
-		if (c == null)
-			throw new NullPointerException("Cannot access RSAComponent");
-		return createPy4jID(c.getGatewayHostAddress(), c.getGatewayPort());
 	}
 
 	public static ID createUUID() throws IDCreateException {

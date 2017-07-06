@@ -6,20 +6,20 @@ Created on Apr 11, 2017
 from osgiservicebridge.bridge import Py4jServiceBridge, flushfile, _wait_for_sec
 
 #turn on logging for osgiservicebridge.protobuf
-import logging
-logger = logging.getLogger("osgiservicebridge.protobuf")
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
+#import logging
+#logger = logging.getLogger("osgiservicebridge.protobuf")
+#logger.setLevel(logging.DEBUG)
+#logger.addHandler(logging.StreamHandler())
 #also turn on logging for osgiservicebridge.bridge
-logger = logging.getLogger("osgiservicebridge.bridge")
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
+#logger = logging.getLogger("osgiservicebridge.bridge")
+#logger.setLevel(logging.DEBUG)
+#logger.addHandler(logging.StreamHandler())
 #turn on sys.out flush so we see logging output in java
-logger = logging.getLogger("py4j")
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
-import sys
-sys.stdout = flushfile(sys.stdout)
+#logger = logging.getLogger("py4j")
+#logger.setLevel(logging.DEBUG)
+#logger.addHandler(logging.StreamHandler())
+#import sys
+#sys.stdout = flushfile(sys.stdout)
 
 #create HelloServiceImpl class.  Must inherit from ProtobufServiceImpl
 from osgiservicebridge.protobuf import protobuf_remote_service, protobuf_remote_service_method
@@ -34,9 +34,9 @@ class HelloServiceImpl:
     def sayHello(self,pbarg):
         print("sayHello called with arg="+str(pbarg))
         resmsg = HelloMsgContent()
-        resmsg.h = 'phere'
-        resmsg.f = 'pslewis'
-        resmsg.to = 'jslewis'
+        resmsg.h = 'response'
+        resmsg.f = 'python'
+        resmsg.to = 'java'
         resmsg.hellomsg = 'hi from python'
         for x in range(0,5):
             resmsg.x.append(float(x))

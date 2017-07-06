@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Py4j Protobuf
 Bundle-SymbolicName: org.eclipse.ecf.provider.py4j.protobuf
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-Activator: org.eclipse.ecf.provider.py4j.internal.protobuf.Activator
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -11,15 +11,24 @@ Import-Package: com.google.protobuf;version="3.2.0",
  org.eclipse.ecf.core.identity;version="3.3.0",
  org.eclipse.ecf.core.provider;version="3.1.0",
  org.eclipse.ecf.core.util;version="3.4.0",
+ org.eclipse.ecf.provider.direct;version="2.0.0",
  org.eclipse.ecf.provider.direct.protobuf,
+ org.eclipse.ecf.provider.py4j,
  org.eclipse.ecf.provider.py4j.identity,
  org.eclipse.ecf.remoteservice;version="7.3.0",
  org.eclipse.ecf.remoteservice.client;version="8.1.0",
  org.eclipse.ecf.remoteservice.provider;version="1.0.0",
  org.eclipse.equinox.concurrent.future;version="1.1.0",
  org.osgi.framework;version="1.3.0",
- org.osgi.util.tracker;version="1.5.0"
+ org.osgi.service.component.annotations;resolution:=optional,
+ org.osgi.service.remoteserviceadmin;version="1.1.0",
+ org.osgi.util.tracker;version="1.5.0",
+ py4j
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.equinox.common,
  org.eclipse.ecf.remoteservice.asyncproxy;bundle-version="2.0.100"
 Export-Package: org.eclipse.ecf.provider.py4j.protobuf;version="1.0.0"
+Service-Component: OSGI-INF/org.eclipse.ecf.provider.py4j.internal.protobuf.Py4jProtobufProvider.xml,
+ OSGI-INF/org.eclipse.ecf.provider.py4j.internal.protobuf.Py4jProtobufCallableEndpoint.xml
+DynamicImport-Package: *
+
