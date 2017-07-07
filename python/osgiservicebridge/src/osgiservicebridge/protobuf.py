@@ -3,7 +3,7 @@ OSGi service bridge Google protocol buffers (protobuf) support
 :author: Scott Lewis
 :copyright: Copyright 2016, Composent, Inc.
 :license: Apache License 2.0
-:version: 0.1.0
+:version: 1.0.0
     Copyright 2017 Composent, Inc. and others
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import osgiservicebridge
 from google.protobuf.message import Message
 
 # Version
-__version_info__ = (0, 1, 0)
+__version_info__ = (1, 0, 0)
 __version__ = ".".join(str(x) for x in __version_info__)
 
 # Documentation strings format
@@ -35,7 +35,7 @@ _logger = getLibLogger(__name__)
 
 # ------------------------------------------------------------------------------
 
-# Useful for very coarse version differentiation.
+# PY2/PY3 version differentiation.
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 PY34 = sys.version_info[0:2] >= (3, 4)
@@ -46,27 +46,67 @@ PB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
 PB_SERVICE_RETURN_TYPE_ATTR = '_return_type'
 PB_SERVICE_ARG_TYPE_ATTR = '_arg_type'
 
-def instance_func(instance, method_name):
+def get_instance_method(instance, method_name):
+    '''
+    Return the method_name function for instance.  
+    :param instance: the instance to get the method from.  Must not be None.
+    :param method_name: the method name (str) of the method to return.  Must not be None.
+    :return: method with method_name on instance, None if not present.
+    '''
     return getattr(instance, method_name, None)
 
-def instance_arg_return_type(instance, method_name, func_attr_name):
-    f = instance_func(instance, method_name)
+def get_instance_type(instance, method_name, func_attr_name):
+    '''
+    Return the class of the func_attr_name ('_return_type', or '_arg_type') on the method
+    with method_name on instance.  
+    :param instance:  the instance to query.  Must not be None.
+    :param method_name:  the method_name to access
+    :param func_attr_name:  the function attr name, either '_return_type' or '_arg_type' 
+    that has the class of the function's return type or argument type.
+    :return: the class of the function's return type or argument type based upon the func_attr_name
+    parameter.  May be None if no function with given method_name on instance, or no
+    attribute on function with name func_attr_name.
+    '''
+    f = get_instance_method(instance, method_name)
     if not f:
         return None
     return getattr(f, func_attr_name, None)
 
-def instance_return_type(instance, method_name):
-    return instance_arg_return_type(instance, method_name, PB_SERVICE_RETURN_TYPE_ATTR)
+def get_instance_return_type(instance, method_name):
+    '''
+    Return the class for the return_type for method_name on instance.
+    :param instance:  the instance to query.  Must not be None.
+    :param method_name: the method_name to access
+    :return: the class of the return type.  Will be None if no function with method_name
+    or no return type attribute on function.
+    '''
+    return get_instance_type(instance, method_name, PB_SERVICE_RETURN_TYPE_ATTR)
 
-def instance_arg_type(instance, method_name):
-    return instance_arg_return_type(instance, method_name, PB_SERVICE_ARG_TYPE_ATTR)
+def get_instance_arg_type(instance, method_name):
+    '''
+    Return the class for the arg_type  for method_name on instance.
+    :param instance:  the instance to query.  Must not be None.
+    :param method_name: the method_name to access.  Must not be None.
+    :return: the class of the argument type.  Will be None if no function with method_name
+    or no return type attribute on function.
+    '''
+    return get_instance_type(instance, method_name, PB_SERVICE_ARG_TYPE_ATTR)
 
 def create_return_instance(instance, method_name):
-    ret_type = instance_return_type(instance, method_name)
+    '''
+    Return a new instance of the appropriate return type for the given method
+    on the given instance.
+    :param instance: the instance to query.  Must not be None.
+    :param method_name: the method name to access.  Must not be None.
+    :return: new instance of return type for given method.  Will return None
+    if there is no method_name on instance, or it does not have the 
+    PB_SERVICE_RETURN_TYPE_ATTR on the function.
+    '''
+    ret_type = get_instance_return_type(instance, method_name)
     if ret_type is not None:
         return ret_type()
     return None
-
+'''
 def instance_reset_function(instance, method_name, newfunc):
     oldfunc = getattr(instance, method_name)
     if oldfunc:
@@ -75,7 +115,7 @@ def instance_reset_function(instance, method_name, newfunc):
         setattr(newfunc,PB_SERVICE_ARG_TYPE_ATTR, oldargtype)
         setattr(newfunc,PB_SERVICE_RETURN_TYPE_ATTR, oldreturntype)
     setattr(instance,method_name,newfunc)
-    
+    '''
 def get_name_and_type_dict(m):
     result = dict()
     for key in m:
@@ -142,16 +182,17 @@ def protobuf_remote_service(**kwargs):
     '''
     Class decorator for protobuf-based remote services.  This class decorator is intended to be used as follows:
     
-    @remote_service(objectClass=['fq java interface name'],export_properties={ 'myprop': 'myvalue' })
+    @protobuf_remote_service(objectClass=['fully.qualified.java.interface.package.Classname',...],export_properties={ 'myprop': 'myvalue' })
     class MyClass:
         pass
         
-    e.g.
+    Example:
     
     @protobuf_remote_service(objectClass=['org.eclipse.ecf.examples.protobuf.hello.IHello'])
     class HelloServiceImpl:
 
-    :param kwargs: the kwargs dict required to have objectClass and (optional) export_properties
+    :param kwargs: the kwargs dict required to have 'objectClass' item and
+    and (optional) 'export_properties' item
     '''
     def decorate(cls):
         # setup the protocol buffers java-side config
@@ -175,18 +216,17 @@ def protobuf_remote_service_method(arg_type,return_type=None):
     '''
     Method decorator for protobuf-based remote services method.  This class decorator is intended to be used as follows:
     
-    @remote_service(objectClass=['fq java interface name'],export_properties={ 'myprop': 'myvalue' })
-    class MyClass:
-        pass
+    @protobuf_remote_service_method(arg_type=<arg class>,return_type=<return_class>)
+    def <methodName>(self,<argName>):
         
-    e.g.
+    For example:
     
-    @protobuf_remote_service_method(arg_type=HelloMsgContent)
+    @protobuf_remote_service_method(arg_type=HelloMsgContent,return_type=HelloMsgContent)
     def sayHello(self,pbarg):
-        return None
         
     Where HelloMsgContent is a protoc-generated python class (issubclass(arg_type,google.protobuf.message.Message) 
     is true).  When called, pbarg is guaranteed to be an instance of HelloMsgContent.
+    The sayHello method is also required to return an instance of HelloMsgContent or None.
     
     :param arg_type: the class of the pbarg type (will be instance of HelloMsgContent)
     '''

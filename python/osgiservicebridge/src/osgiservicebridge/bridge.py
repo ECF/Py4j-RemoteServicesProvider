@@ -1,10 +1,10 @@
 '''
-OSGi service bridge 
+OSGi service bridge Py4j classes
 :author: Scott Lewis
 :copyright: Copyright 2016, Composent, Inc.
 :license: Apache License 2.0
-:version: 0.1.0
-    Copyright 2016 Composent, Inc. and others
+:version: 1.0.0
+    Copyright 2017 Composent, Inc. and others
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -15,11 +15,27 @@ OSGi service bridge
     See the License for the specific language governing permissions and
     limitations under the License.
 '''
+
+# Version
+__version_info__ = (1, 0, 0)
+__version__ = ".".join(str(x) for x in __version_info__)
+
+# Documentation strings format
+__docformat__ = "restructuredtext en"
+
+# ------------------------------------------------------------------------------
 from logging import getLogger as getLibLogger
+
+_logger = getLibLogger(__name__)
+
+# ------------------------------------------------------------------------------
+
 from threading import RLock, Condition
 
 _done = False
 __condition = Condition()
+
+# Utility functions for threading
 
 def _done_waiting():
     global _done
@@ -52,6 +68,8 @@ class flushfile(object):
         self.file.write(x)
         self.file.flush()
         
+# end threading utilities      
+  
 from py4j.java_collections import ListConverter, MapConverter, JavaArray, JavaList, JavaSet
 from osgiservicebridge import merge_dicts, ENDPOINT_ID, get_edef_props, PY4J_EXPORTED_CONFIGS, PY4J_NAMESPACE,\
  PY4J_SERVICE_INTENTS,PY4J_PROTOCOL, PY4J_PYTHON_PATH, PY4J_JAVA_ATTRIBUTE, PY4J_JAVA_IMPLEMENTS_ATTRIBUTE,\
@@ -75,19 +93,6 @@ PY4J_DEFAULT_HOSTNAME = DEFAULT_ADDRESS
 
 JAVA_DIRECT_ENDPOINT_CLASS = 'org.eclipse.ecf.provider.direct.InternalDirectDiscovery'
 PY4J_CALL_BY_VALUE_CLASS = 'org.eclipse.ecf.provider.direct.ExternalCallableEndpoint'
-
-# Version
-__version_info__ = (0, 1, 0)
-__version__ = ".".join(str(x) for x in __version_info__)
-
-# Documentation strings format
-__docformat__ = "restructuredtext en"
-
-# ------------------------------------------------------------------------------
-
-_logger = getLibLogger(__name__)
-
-# ------------------------------------------------------------------------------
 
 def make_edef_props(*args,**kwargs):
     '''
