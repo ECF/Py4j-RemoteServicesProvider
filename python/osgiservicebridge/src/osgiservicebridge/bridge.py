@@ -1,5 +1,5 @@
 '''
-OSGi service bridge Py4j classes
+OSGi service bridge 
 :author: Scott Lewis
 :copyright: Copyright 2016, Composent, Inc.
 :license: Apache License 2.0
