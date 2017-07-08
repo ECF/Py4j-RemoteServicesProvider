@@ -6,15 +6,14 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct;
+package org.eclipse.ecf.provider.py4j;
 
-import java.util.Map;
+import org.eclipse.ecf.provider.direct.DirectProvider;
 
-public interface InternalDirectDiscovery {
+public interface IPy4jDirectProvider extends DirectProvider {
 
-	void _external_discoverService(Object service, @SuppressWarnings("rawtypes") Map rsaMap);
+	int getPythonPort();
 
-	void _external_updateDiscoveredService(@SuppressWarnings("rawtypes") Map rsaMap);
+	int getJavaPort();
 
-	void _external_undiscoverService(@SuppressWarnings("rawtypes") Map rsaMap);
 }

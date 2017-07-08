@@ -8,13 +8,7 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct;
 
-import java.util.Map;
+public interface DirectProvider {
 
-public interface InternalDirectDiscovery {
-
-	void _external_discoverService(Object service, @SuppressWarnings("rawtypes") Map rsaMap);
-
-	void _external_updateDiscoveredService(@SuppressWarnings("rawtypes") Map rsaMap);
-
-	void _external_undiscoverService(@SuppressWarnings("rawtypes") Map rsaMap);
+	boolean isConnected();
 }

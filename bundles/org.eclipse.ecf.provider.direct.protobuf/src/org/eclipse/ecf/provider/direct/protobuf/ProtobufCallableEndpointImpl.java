@@ -13,19 +13,19 @@ import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 
-public class AbstractProtobufCallableEndpoint implements ProtobufCallableEndpoint {
+public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 
 	private ExternalCallableEndpoint eceService;
 
-	protected void bindExternalCallableEndpoint(ExternalCallableEndpoint cbv) {
+	public void bindExternalCallableEndpoint(ExternalCallableEndpoint cbv) {
 		this.eceService = cbv;
 	}
 
-	protected void unbindExternalCallableEndpoint(ExternalCallableEndpoint cbv) {
+	public void unbindExternalCallableEndpoint() {
 		this.eceService = null;
 	}
 
-	protected ExternalCallableEndpoint getExternalCallableEndpoint() {
+	public ExternalCallableEndpoint getExternalCallableEndpoint() {
 		return eceService;
 	}
 
@@ -38,7 +38,7 @@ public class AbstractProtobufCallableEndpoint implements ProtobufCallableEndpoin
 		if (dotLastIndex >= 0)
 			methodName = methodName.substring(dotLastIndex + 1);
 		// Serialized message, and call cbvService
-		byte[] resultBytes = this.eceService._call_endpoint(rsId, methodName,
+		byte[] resultBytes = getExternalCallableEndpoint()._call_endpoint(rsId, methodName,
 				(message == null) ? null : message.toByteArray());
 		// If result is null/None then return null
 		if (resultBytes == null || resultParser == null)

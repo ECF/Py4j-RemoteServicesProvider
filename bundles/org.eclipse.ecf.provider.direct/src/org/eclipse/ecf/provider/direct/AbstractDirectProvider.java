@@ -10,7 +10,6 @@ package org.eclipse.ecf.provider.direct;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -201,31 +200,23 @@ public abstract class AbstractDirectProvider
 
 	private Map<String, org.eclipse.ecf.osgi.services.remoteserviceadmin.EndpointDescription> edMap = new HashMap<String, org.eclipse.ecf.osgi.services.remoteserviceadmin.EndpointDescription>();
 	private InternalDirectDiscovery idd;
-	private String iddid;
+	private ExternalCallableEndpoint ece;
 	private ServiceRegistration<?> iddReg;
 
 	private Map<Long, Object> preexported = new HashMap<Long, Object>();
 	private Map<Long, ExternalEndpoint> exportedEndpoints = new HashMap<Long, ExternalEndpoint>();
 	private Object lock = new Object();
 
-	protected String getInternalDirectDiscoveryId() {
-		synchronized (lock) {
-			return iddid;
-		}
-	}
-
-	protected abstract int getDirectTargetPort();
-
 	public void _setInternalDirectDiscovery(InternalDirectDiscovery directDiscovery, String externalId) {
 		// Set internal variable here and export to external any services before
 		// returning
-		bindInternalDirectDiscovery(directDiscovery, externalId);
-		Hashtable<String, String> ht = new Hashtable<String, String>();
-		ht.put(InternalDirectDiscovery.DIRECT_TARGET_ID_PROP, externalId);
-		ht.put(InternalDirectDiscovery.DIRECT_TARGET_PORT_PROP, String.valueOf(getDirectTargetPort()));
+		synchronized (getLock()) {
+			bindInternalDirectDiscovery(directDiscovery);
+			bindExternalCallableEndpoint((ExternalCallableEndpoint) directDiscovery);
+		}
 		iddReg = getContext().registerService(
 				new String[] { InternalDirectDiscovery.class.getName(), ExternalCallableEndpoint.class.getName() },
-				directDiscovery, ht);
+				directDiscovery, null);
 	}
 
 	protected void hardClose() {
@@ -236,6 +227,8 @@ public abstract class AbstractDirectProvider
 			}
 			hardCloseExported();
 			hardCloseImported();
+			unbindExternalCallableEndpoint();
+			unbindInternalDirectDiscovery();
 		}
 	}
 
@@ -260,10 +253,9 @@ public abstract class AbstractDirectProvider
 				fireEndpointEvent(EndpointEvent.REMOVED, ee.getEndpointDescription());
 	}
 
-	protected void bindInternalDirectDiscovery(InternalDirectDiscovery idd, String iddid) {
+	protected void bindInternalDirectDiscovery(InternalDirectDiscovery idd) {
 		synchronized (getLock()) {
 			this.idd = idd;
-			this.iddid = new String(iddid);
 			for (Long key : exportedEndpoints.keySet()) {
 				ExternalEndpoint de = exportedEndpoints.get(key);
 				if (de != null)
@@ -275,10 +267,33 @@ public abstract class AbstractDirectProvider
 	protected void unbindInternalDirectDiscovery() {
 		synchronized (getLock()) {
 			this.idd = null;
-			this.iddid = null;
 		}
 	}
 
+	protected InternalDirectDiscovery getInternalDirectDiscovery() {
+		synchronized (getLock()) {
+			return this.idd;
+		}
+	}
+	
+	protected void bindExternalCallableEndpoint(ExternalCallableEndpoint ep) {
+		synchronized (getLock()) {
+			this.ece = ep;
+		}
+	}
+
+	protected void unbindExternalCallableEndpoint() {
+		synchronized (getLock()) {
+			this.ece = null;
+		}
+	}
+
+	protected ExternalCallableEndpoint getExternalCallableEndpoint() {
+		synchronized (getLock()) {
+			return this.ece;
+		}
+	}
+	
 	protected void activate(BundleContext ctxt) throws Exception {
 		this.context = ctxt;
 	}

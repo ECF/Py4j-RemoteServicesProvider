@@ -34,9 +34,10 @@ import py4j.GatewayServerListener;
 import py4j.Py4JPythonClient;
 import py4j.Py4JServerConnection;
 
-public class Py4jDirectProvider extends AbstractDirectProvider implements RemoteServiceAdminListener {
+public class Py4jDirectProvider extends AbstractDirectProvider
+		implements RemoteServiceAdminListener, IPy4jDirectProvider {
 
-	private static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered" };
+	protected static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered" };
 
 	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
 		super.bindEndpointEventListener(eel, props);
@@ -50,8 +51,8 @@ public class Py4jDirectProvider extends AbstractDirectProvider implements Remote
 	private GatewayServer gatewayServer;
 	private Py4JServerConnection connection;
 
-	private ServiceRegistration<IRemoteServiceDistributionProvider> hostReg;
-	private ServiceRegistration<IRemoteServiceDistributionProvider> clientReg;
+	protected ServiceRegistration<IRemoteServiceDistributionProvider> hostReg;
+	protected ServiceRegistration<IRemoteServiceDistributionProvider> clientReg;
 
 	protected ExternalServiceProvider getServiceProxyProvider() {
 		synchronized (getLock()) {
@@ -240,9 +241,23 @@ public class Py4jDirectProvider extends AbstractDirectProvider implements Remote
 	}
 
 	@Override
-	protected int getDirectTargetPort() {
+	public boolean isConnected() {
 		synchronized (getLock()) {
-			return (this.gatewayServer == null) ? 0 : this.gatewayServer.getConfiguration().getPythonPort();
+			return (this.connection != null) ? true : false;
+		}
+	}
+
+	@Override
+	public int getPythonPort() {
+		synchronized (getLock()) {
+			return (this.gatewayServer == null) ? -1 : this.gatewayServer.getConfiguration().getPythonPort();
+		}
+	}
+
+	@Override
+	public int getJavaPort() {
+		synchronized (getLock()) {
+			return (this.gatewayServer == null) ? -1 : this.gatewayServer.getConfiguration().getPort();
 		}
 	}
 

@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;
-import org.eclipse.ecf.provider.py4j.internal.protobuf.Py4jProtobufCallableEndpoint;
+import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
 import org.eclipse.ecf.remoteservice.IRemoteService;
 import org.eclipse.ecf.remoteservice.client.AbstractClientContainer;
 import org.eclipse.ecf.remoteservice.client.AbstractRSAClientContainer;
@@ -29,8 +29,11 @@ import com.google.protobuf.Parser;
 
 public class Py4jProtobufClientContainer extends AbstractRSAClientContainer {
 
-	public Py4jProtobufClientContainer(ID containerID) {
+	private final ProtobufCallableEndpoint endpoint;
+
+	public Py4jProtobufClientContainer(ID containerID, ProtobufCallableEndpoint endpoint) {
 		super(containerID);
+		this.endpoint = endpoint;
 	}
 
 	protected IRemoteService createRemoteService(RemoteServiceClientRegistration registration) {
@@ -100,8 +103,7 @@ public class Py4jProtobufClientContainer extends AbstractRSAClientContainer {
 			}
 			try {
 				// Actually make call via AbstractProtobufCallableEndpoint
-				return Py4jProtobufCallableEndpoint.getInstance().call_endpoint(rsId, remoteCall.getMethod(),
-						(Message) message, parser);
+				return endpoint.call_endpoint(rsId, remoteCall.getMethod(), (Message) message, parser);
 			} catch (Exception e) {
 				throw new ECFException("Could not execute remote call=" + remoteCall, e);
 			}

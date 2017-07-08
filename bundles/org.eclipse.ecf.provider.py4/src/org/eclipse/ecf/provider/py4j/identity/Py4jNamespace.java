@@ -15,6 +15,8 @@ import org.eclipse.ecf.core.identity.IDCreateException;
 import org.eclipse.ecf.core.identity.URIID.URIIDNamespace;
 import org.eclipse.ecf.provider.py4j.Py4jConstants;
 
+import py4j.GatewayServer;
+
 public class Py4jNamespace extends URIIDNamespace {
 
 	private static final long serialVersionUID = 7911328070175061027L;
@@ -37,9 +39,13 @@ public class Py4jNamespace extends URIIDNamespace {
 		if (port < 1)
 			throw new NullPointerException("port must be > 0");
 		if (hostname == null)
-			hostname = "localhost";
+			hostname = GatewayServer.DEFAULT_ADDRESS;
 		return INSTANCE.createInstance(new Object[] { Py4jConstants.NAMESPACE_PROTOCOL + "://" + hostname + ":"
 				+ String.valueOf(port) + Py4jConstants.NAMESPACE_JAVA_PATH });
+	}
+
+	public static ID createPy4jID(int port) {
+		return createPy4jID(null,port);
 	}
 
 	public static ID createUUID() throws IDCreateException {
