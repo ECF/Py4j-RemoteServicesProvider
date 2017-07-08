@@ -6,7 +6,7 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.py4j.protobuf;
+package org.eclipse.ecf.provider.direct.protobuf;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +15,6 @@ import java.util.concurrent.CompletableFuture;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;
-import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
 import org.eclipse.ecf.remoteservice.IRemoteService;
 import org.eclipse.ecf.remoteservice.client.AbstractClientContainer;
 import org.eclipse.ecf.remoteservice.client.AbstractRSAClientContainer;
@@ -27,11 +26,11 @@ import org.eclipse.equinox.concurrent.future.IProgressRunnable;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 
-public class ProtobufPy4jClientContainer extends AbstractRSAClientContainer {
+public class ProtobufClientContainer extends AbstractRSAClientContainer {
 
 	private final ProtobufCallableEndpoint endpoint;
 
-	public ProtobufPy4jClientContainer(ID containerID, ProtobufCallableEndpoint endpoint) {
+	public ProtobufClientContainer(ID containerID, ProtobufCallableEndpoint endpoint) {
 		super(containerID);
 		this.endpoint = endpoint;
 	}

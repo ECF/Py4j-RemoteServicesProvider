@@ -57,19 +57,17 @@ public class ProtobufPy4jDirectProviderImpl extends Py4jDirectProviderImpl
 						ProtobufPy4jConstants.ECF_PY4J_HOST_PYTHON_PB, new IDirectContainerInstantiator() {
 							@Override
 							public IContainer createContainer() throws ContainerCreateException {
-								return new org.eclipse.ecf.provider.py4j.protobuf.ProtobufPy4jClientContainer(
-										Py4jNamespace.createUUID(), new ProviderProtobufCallableEndpoint());
+								return new org.eclipse.ecf.provider.direct.protobuf.ProtobufClientContainer(
+										Py4jNamespace.createUUID(), new ProtobufCallableEndpoint() {
+											@Override
+											public <A extends Message> Message call_endpoint(Long rsId,
+													String methodName, A message, Parser<?> resultParser)
+													throws Exception {
+												return getProtobufCallableEndpoint().call_endpoint(rsId, methodName, message, resultParser);
+											}});
 							}
 						}, py4jProtobufSupportedIntents),
 				null);
-	}
-
-	protected class ProviderProtobufCallableEndpoint implements ProtobufCallableEndpoint {
-		@Override
-		public <A extends Message> Message call_endpoint(Long rsId, String methodName, A message,
-				Parser<?> resultParser) throws Exception {
-			return getProtobufCallableEndpoint().call_endpoint(rsId, methodName, message, resultParser);
-		}
 	}
 
 	@Activate
