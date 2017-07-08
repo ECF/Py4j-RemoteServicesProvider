@@ -27,11 +27,11 @@ import org.eclipse.equinox.concurrent.future.IProgressRunnable;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 
-public class Py4jProtobufClientContainer extends AbstractRSAClientContainer {
+public class ProtobufPy4jClientContainer extends AbstractRSAClientContainer {
 
 	private final ProtobufCallableEndpoint endpoint;
 
-	public Py4jProtobufClientContainer(ID containerID, ProtobufCallableEndpoint endpoint) {
+	public ProtobufPy4jClientContainer(ID containerID, ProtobufCallableEndpoint endpoint) {
 		super(containerID);
 		this.endpoint = endpoint;
 	}

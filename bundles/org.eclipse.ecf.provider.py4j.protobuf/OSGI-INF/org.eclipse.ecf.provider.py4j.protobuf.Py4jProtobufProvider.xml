@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" immediate="true" name="org.eclipse.ecf.provider.py4j.protobuf.Py4jProtobufProvider">
-   <service>
-      <provide interface="org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener"/>
-      <provide interface="org.eclipse.ecf.provider.py4j.IPy4jDirectProvider"/>
-   </service>
-   <reference bind="bindEndpointEventListener" interface="org.osgi.service.remoteserviceadmin.EndpointEventListener" name="EndpointEventListener" unbind="unbindEndpointEventListener"/>
-   <implementation class="org.eclipse.ecf.provider.py4j.protobuf.Py4jProtobufProvider"/>
-</scr:component>

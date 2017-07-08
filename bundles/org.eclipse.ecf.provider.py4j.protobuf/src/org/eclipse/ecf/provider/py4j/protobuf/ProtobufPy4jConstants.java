@@ -8,7 +8,7 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.py4j.protobuf;
 
-public interface Py4jProtobufConstants {
+public interface ProtobufPy4jConstants {
 
 	String ECF_PY4J_HOST_PYTHON_PB = "ecf.py4j.host.python.pb";
 	String ECF_PY4J_CONSUMER_PB = "ecf.py4j.consumer.pb";

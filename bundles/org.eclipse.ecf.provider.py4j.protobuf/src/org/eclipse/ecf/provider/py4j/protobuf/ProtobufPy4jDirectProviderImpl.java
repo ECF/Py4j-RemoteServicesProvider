@@ -12,11 +12,12 @@ import java.util.Map;
 
 import org.eclipse.ecf.core.ContainerTypeDescription;
 import org.eclipse.ecf.core.IContainer;
+import org.eclipse.ecf.provider.direct.DirectProvider;
 import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpointImpl;
-import org.eclipse.ecf.provider.py4j.IPy4jDirectProvider;
 import org.eclipse.ecf.provider.py4j.Py4jDirectProvider;
+import org.eclipse.ecf.provider.py4j.Py4jDirectProviderImpl;
 import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
 import org.eclipse.ecf.remoteservice.provider.RemoteServiceContainerInstantiator;
@@ -34,8 +35,8 @@ import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 
 @Component(immediate = true)
-public class Py4jProtobufProvider extends Py4jDirectProvider
-		implements RemoteServiceAdminListener, IPy4jDirectProvider {
+public class ProtobufPy4jDirectProviderImpl extends Py4jDirectProviderImpl
+		implements RemoteServiceAdminListener, Py4jDirectProvider, DirectProvider {
 
 	protected static final String[] py4jProtobufSupportedIntents = { "passByValue", "exactlyOnce", "ordered" };
 
@@ -54,13 +55,13 @@ public class Py4jProtobufProvider extends Py4jDirectProvider
 		protobufClientReg = getContext()
 				.registerService(IRemoteServiceDistributionProvider.class,
 						new RemoteServiceDistributionProvider.Builder()
-								.setName(Py4jProtobufConstants.ECF_PY4J_CONSUMER_PB)
+								.setName(ProtobufPy4jConstants.ECF_PY4J_CONSUMER_PB)
 								.setInstantiator(new RemoteServiceContainerInstantiator(
-										Py4jProtobufConstants.ECF_PY4J_HOST_PYTHON_PB,
-										Py4jProtobufConstants.ECF_PY4J_CONSUMER_PB) {
+										ProtobufPy4jConstants.ECF_PY4J_HOST_PYTHON_PB,
+										ProtobufPy4jConstants.ECF_PY4J_CONSUMER_PB) {
 									public IContainer createInstance(ContainerTypeDescription description,
 											Map<String, ?> parameters) {
-										return new org.eclipse.ecf.provider.py4j.protobuf.Py4jProtobufClientContainer(
+										return new org.eclipse.ecf.provider.py4j.protobuf.ProtobufPy4jClientContainer(
 												Py4jNamespace.createUUID(), new ProviderProtobufCallableEndpoint());
 									}
 									public String[] getSupportedIntents(ContainerTypeDescription description) {

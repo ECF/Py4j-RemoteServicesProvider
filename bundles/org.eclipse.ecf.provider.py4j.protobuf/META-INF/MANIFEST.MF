@@ -27,6 +27,6 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.equinox.common,
  org.eclipse.ecf.remoteservice.asyncproxy;bundle-version="2.0.100"
 Export-Package: org.eclipse.ecf.provider.py4j.protobuf;version="1.0.0"
-Service-Component: OSGI-INF/org.eclipse.ecf.provider.py4j.protobuf.Py4jProtobufProvider.xml
+Service-Component: OSGI-INF/org.eclipse.ecf.provider.py4j.protobuf.ProtobufPy4jDirectProviderImpl.xml
 DynamicImport-Package: *
 
