@@ -507,7 +507,7 @@ class Py4jServiceBridge(object):
             self._bridge = JavaRemoteServiceDiscoverer(self)
             '''Call _getExternalDirectDiscovery first, so that we are ready to export'''
             self._consumer = self._gateway.entry_point._getExternalDirectDiscovery()
-            '''Then call _setInternalDirectDiscovery so that java side can now call us
+            '''Then call _setDirectBridge so that java side can now call us
             to notify about exported services'''
             self._gateway.entry_point._setDirectBridge(self._bridge, self._bridge, self.get_id())
             
