@@ -6,11 +6,12 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct;
+package org.eclipse.ecf.provider.direct.util;
 
 import java.util.Map;
 
 import org.eclipse.ecf.core.identity.ID;
+import org.eclipse.ecf.provider.direct.InternalServiceProvider;
 import org.eclipse.ecf.remoteservice.AbstractRSAContainer;
 import org.eclipse.ecf.remoteservice.RSARemoteServiceContainerAdapter.RSARemoteServiceRegistration;
 

@@ -6,13 +6,14 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct;
+package org.eclipse.ecf.provider.direct.util;
 
 import java.util.Map;
 
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.ContainerTypeDescription;
 import org.eclipse.ecf.core.IContainer;
+import org.eclipse.ecf.provider.direct.IDirectContainerInstantiator;
 import org.eclipse.ecf.remoteservice.provider.RemoteServiceContainerInstantiator;
 
 public class DirectRemoteServiceClientDistributionProvider extends DirectRemoteServiceDistributionProvider {

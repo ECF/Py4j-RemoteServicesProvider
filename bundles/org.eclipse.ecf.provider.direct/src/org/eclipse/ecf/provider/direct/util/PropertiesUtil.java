@@ -6,11 +6,13 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct;
+package org.eclipse.ecf.provider.direct.util;
 
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.eclipse.ecf.provider.direct.ExternalServiceProvider;
 
 public class PropertiesUtil {
 
