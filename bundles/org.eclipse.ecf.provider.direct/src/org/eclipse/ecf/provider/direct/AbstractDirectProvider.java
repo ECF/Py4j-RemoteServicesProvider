@@ -207,16 +207,51 @@ public abstract class AbstractDirectProvider
 	private Map<Long, ExternalEndpoint> exportedEndpoints = new HashMap<Long, ExternalEndpoint>();
 	private Object lock = new Object();
 
-	public void _setInternalDirectDiscovery(InternalDirectDiscovery directDiscovery, String externalId) {
+	protected class DirectBridge implements InternalDirectDiscovery, ExternalCallableEndpoint {
+
+		private final InternalDirectDiscovery idd;
+		private final ExternalCallableEndpoint ece;
+
+		public DirectBridge(InternalDirectDiscovery d, ExternalCallableEndpoint ce) {
+			this.idd = d;
+			this.ece = ce;
+		}
+
+		@Override
+		public byte[] _call_endpoint(Long rsId, String methodName, byte[] serializedArgs) throws Exception {
+			return ece._call_endpoint(rsId, methodName, serializedArgs);
+		}
+
+		@Override
+		public void _external_discoverService(Object service, @SuppressWarnings("rawtypes") Map rsaMap) {
+			this.idd._external_discoverService(service, rsaMap);
+		}
+
+		@Override
+		public void _external_updateDiscoveredService(@SuppressWarnings("rawtypes") Map rsaMap) {
+			this.idd._external_undiscoverService(rsaMap);
+		}
+
+		@Override
+		public void _external_undiscoverService(@SuppressWarnings("rawtypes") Map rsaMap) {
+			this.idd._external_updateDiscoveredService(rsaMap);
+		}
+
+	}
+
+	public void _setDirectBridge(InternalDirectDiscovery directDiscovery, ExternalCallableEndpoint endpoint,
+			String externalId) {
 		// Set internal variable here and export to external any services before
 		// returning
+		DirectBridge external = null;
 		synchronized (getLock()) {
 			bindInternalDirectDiscovery(directDiscovery);
 			bindExternalCallableEndpoint((ExternalCallableEndpoint) directDiscovery);
+			external = new DirectBridge(directDiscovery, endpoint);
 		}
 		iddReg = getContext().registerService(
 				new String[] { InternalDirectDiscovery.class.getName(), ExternalCallableEndpoint.class.getName() },
-				directDiscovery, null);
+				external, null);
 	}
 
 	protected void hardClose() {
@@ -275,7 +310,7 @@ public abstract class AbstractDirectProvider
 			return this.idd;
 		}
 	}
-	
+
 	protected void bindExternalCallableEndpoint(ExternalCallableEndpoint ep) {
 		synchronized (getLock()) {
 			this.ece = ep;
@@ -293,7 +328,7 @@ public abstract class AbstractDirectProvider
 			return this.ece;
 		}
 	}
-	
+
 	protected void activate(BundleContext ctxt) throws Exception {
 		this.context = ctxt;
 	}

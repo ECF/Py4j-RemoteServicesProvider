@@ -45,7 +45,7 @@ public class Py4jNamespace extends URIIDNamespace {
 	}
 
 	public static ID createPy4jID(int port) {
-		return createPy4jID(null,port);
+		return createPy4jID(null, port);
 	}
 
 	public static ID createUUID() throws IDCreateException {

@@ -91,8 +91,8 @@ public class Py4jDirectProviderImpl extends AbstractDirectProvider
 		public void connectionStarted(Py4JServerConnection arg0) {
 			synchronized (getLock()) {
 				if (Py4jDirectProviderImpl.this.connection != null)
-					logError("connectionStarted error: Already have connection=" + Py4jDirectProviderImpl.this.connection
-							+ ".  New connectionStarted=" + arg0);
+					logError("connectionStarted error: Already have connection="
+							+ Py4jDirectProviderImpl.this.connection + ".  New connectionStarted=" + arg0);
 				Py4jDirectProviderImpl.this.connection = arg0;
 			}
 		}

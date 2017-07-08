@@ -509,7 +509,7 @@ class Py4jServiceBridge(object):
             self._consumer = self._gateway.entry_point._getExternalDirectDiscovery()
             '''Then call _setInternalDirectDiscovery so that java side can now call us
             to notify about exported services'''
-            self._gateway.entry_point._setInternalDirectDiscovery(self._bridge, self.get_id())
+            self._gateway.entry_point._setDirectBridge(self._bridge, self._bridge, self.get_id())
             
     def disconnect(self):
         with self._lock:
