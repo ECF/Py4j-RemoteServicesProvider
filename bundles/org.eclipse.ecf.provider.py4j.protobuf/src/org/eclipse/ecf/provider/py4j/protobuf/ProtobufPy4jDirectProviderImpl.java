@@ -10,18 +10,18 @@ package org.eclipse.ecf.provider.py4j.protobuf;
 
 import java.util.Map;
 
-import org.eclipse.ecf.core.ContainerTypeDescription;
+import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.provider.direct.DirectProvider;
+import org.eclipse.ecf.provider.direct.DirectRemoteServiceClientDistributionProvider;
 import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
+import org.eclipse.ecf.provider.direct.IDirectContainerInstantiator;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpointImpl;
 import org.eclipse.ecf.provider.py4j.Py4jDirectProvider;
 import org.eclipse.ecf.provider.py4j.Py4jDirectProviderImpl;
 import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
-import org.eclipse.ecf.remoteservice.provider.RemoteServiceContainerInstantiator;
-import org.eclipse.ecf.remoteservice.provider.RemoteServiceDistributionProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
@@ -52,23 +52,16 @@ public class ProtobufPy4jDirectProviderImpl extends Py4jDirectProviderImpl
 	protected ServiceRegistration<?> protobufClientReg = null;
 
 	protected void registerProtobufClientDistributionProvider() {
-		protobufClientReg = getContext()
-				.registerService(IRemoteServiceDistributionProvider.class,
-						new RemoteServiceDistributionProvider.Builder()
-								.setName(ProtobufPy4jConstants.ECF_PY4J_CONSUMER_PB)
-								.setInstantiator(new RemoteServiceContainerInstantiator(
-										ProtobufPy4jConstants.ECF_PY4J_HOST_PYTHON_PB,
-										ProtobufPy4jConstants.ECF_PY4J_CONSUMER_PB) {
-									public IContainer createInstance(ContainerTypeDescription description,
-											Map<String, ?> parameters) {
-										return new org.eclipse.ecf.provider.py4j.protobuf.ProtobufPy4jClientContainer(
-												Py4jNamespace.createUUID(), new ProviderProtobufCallableEndpoint());
-									}
-									public String[] getSupportedIntents(ContainerTypeDescription description) {
-										return py4jProtobufSupportedIntents;
-									}
-								}).setServer(false).setHidden(false).build(),
-						null);
+		protobufClientReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
+				new DirectRemoteServiceClientDistributionProvider(ProtobufPy4jConstants.ECF_PY4J_CONSUMER_PB,
+						ProtobufPy4jConstants.ECF_PY4J_HOST_PYTHON_PB, new IDirectContainerInstantiator() {
+							@Override
+							public IContainer createContainer() throws ContainerCreateException {
+								return new org.eclipse.ecf.provider.py4j.protobuf.ProtobufPy4jClientContainer(
+										Py4jNamespace.createUUID(), new ProviderProtobufCallableEndpoint());
+							}
+						}, py4jProtobufSupportedIntents),
+				null);
 	}
 
 	protected class ProviderProtobufCallableEndpoint implements ProtobufCallableEndpoint {

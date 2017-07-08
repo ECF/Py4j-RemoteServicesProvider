@@ -10,16 +10,17 @@ package org.eclipse.ecf.provider.py4j;
 
 import java.util.Map;
 
-import org.eclipse.ecf.core.ContainerTypeDescription;
+import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.provider.direct.AbstractDirectProvider;
 import org.eclipse.ecf.provider.direct.DirectClientContainer;
 import org.eclipse.ecf.provider.direct.DirectHostContainer;
-import org.eclipse.ecf.provider.direct.DirectRemoteServiceDistributionProvider;
+import org.eclipse.ecf.provider.direct.DirectRemoteServiceClientDistributionProvider;
+import org.eclipse.ecf.provider.direct.DirectRemoteServiceHostDistributionProvider;
 import org.eclipse.ecf.provider.direct.ExternalServiceProvider;
+import org.eclipse.ecf.provider.direct.IDirectContainerInstantiator;
 import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
-import org.eclipse.ecf.remoteservice.provider.RemoteServiceContainerInstantiator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -170,39 +171,29 @@ public class Py4jDirectProviderImpl extends AbstractDirectProvider
 		return def;
 	}
 
-	protected void registerDistributionProviders() {
+	protected void registerHostDistributionProvider() {
 		hostReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
-				new DirectRemoteServiceDistributionProvider(Py4jConstants.JAVA_HOST_CONFIG_TYPE,
-						new RemoteServiceContainerInstantiator(Py4jConstants.JAVA_HOST_CONFIG_TYPE,
-								Py4jConstants.JAVA_HOST_CONFIG_TYPE) {
-							public IContainer createInstance(ContainerTypeDescription description,
-									Map<String, ?> parameters) {
-								GatewayServerConfiguration config = gatewayServer.getConfiguration();
-								return new DirectHostContainer(Py4jNamespace
-										.createPy4jID(config.getAddress().getHostAddress(), config.getPort()),
+				new DirectRemoteServiceHostDistributionProvider(Py4jConstants.JAVA_HOST_CONFIG_TYPE,
+						Py4jConstants.PYTHON_CONSUMER_CONFIG_TYPE, new IDirectContainerInstantiator() {
+							@Override
+							public IContainer createContainer() throws ContainerCreateException {
+								return new DirectHostContainer(
+										Py4jNamespace.createPy4jID(getJavaAddress(), getJavaPort()),
 										getInternalServiceProvider());
 							}
-
-							@Override
-							public String[] getSupportedIntents(ContainerTypeDescription description) {
-								return py4jSupportedIntents;
-							}
-						}, true),
+						}, py4jSupportedIntents),
 				null);
+	}
 
+	protected void registerClientDistributionProvider() {
 		clientReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
-				new DirectRemoteServiceDistributionProvider(Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE,
-						new RemoteServiceContainerInstantiator(Py4jConstants.PYTHON_HOST_CONFIG_TYPE,
-								Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE) {
-							public IContainer createInstance(ContainerTypeDescription description,
-									Map<String, ?> parameters) {
+				new DirectRemoteServiceClientDistributionProvider(Py4jConstants.JAVA_CONSUMER_CONFIG_TYPE,
+						Py4jConstants.PYTHON_HOST_CONFIG_TYPE, new IDirectContainerInstantiator() {
+							@Override
+							public IContainer createContainer() throws ContainerCreateException {
 								return new DirectClientContainer(Py4jNamespace.createUUID(), getServiceProxyProvider());
 							}
-
-							public String[] getSupportedIntents(ContainerTypeDescription description) {
-								return py4jSupportedIntents;
-							}
-						}, false),
+						}, py4jSupportedIntents),
 				null);
 	}
 
@@ -217,7 +208,8 @@ public class Py4jDirectProviderImpl extends AbstractDirectProvider
 					.setGateway(this.osgiGateway).addGatewayServerListener(gatewayServerListener)
 					.setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).setDebug(debug);
 			this.gatewayServer = new GatewayServer(builder.build());
-			registerDistributionProviders();
+			registerHostDistributionProvider();
+			registerClientDistributionProvider();
 		}
 	}
 
@@ -258,6 +250,20 @@ public class Py4jDirectProviderImpl extends AbstractDirectProvider
 	public int getJavaPort() {
 		synchronized (getLock()) {
 			return (this.gatewayServer == null) ? -1 : this.gatewayServer.getConfiguration().getPort();
+		}
+	}
+
+	public String getPythonAddress() {
+		synchronized (getLock()) {
+			return (this.gatewayServer == null) ? null
+					: this.gatewayServer.getConfiguration().getPythonAddress().getHostAddress();
+		}
+	}
+
+	public String getJavaAddress() {
+		synchronized (getLock()) {
+			return (this.gatewayServer == null) ? null
+					: this.gatewayServer.getConfiguration().getAddress().getHostAddress();
 		}
 	}
 
