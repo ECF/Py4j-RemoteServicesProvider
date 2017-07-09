@@ -63,17 +63,19 @@ public class ProtobufPy4jDirectProviderImpl extends Py4jDirectProviderImpl
 											public <A extends Message> Message call_endpoint(Long rsId,
 													String methodName, A message, Parser<?> resultParser)
 													throws Exception {
-												return getProtobufCallableEndpoint().call_endpoint(rsId, methodName, message, resultParser);
-											}});
+												return getProtobufCallableEndpoint().call_endpoint(rsId, methodName,
+														message, resultParser);
+											}
+										});
 							}
 						}, py4jProtobufSupportedIntents),
 				null);
 	}
 
 	@Activate
-	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
+	protected void activate(BundleContext context, Py4jDirectProviderImpl.Config config) throws Exception {
 		synchronized (getLock()) {
-			super.activate(context, properties);
+			super.activate(context, config);
 			registerProtobufClientDistributionProvider();
 		}
 	}

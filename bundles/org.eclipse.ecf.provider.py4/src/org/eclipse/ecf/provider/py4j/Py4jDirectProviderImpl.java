@@ -8,6 +8,7 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.py4j;
 
+import java.net.InetAddress;
 import java.util.Map;
 
 import org.eclipse.ecf.core.ContainerCreateException;
@@ -144,33 +145,6 @@ public class Py4jDirectProviderImpl extends AbstractDirectProvider
 		}
 	}
 
-	public static final String PYTHON_PORT_PROP = "pythonPort";
-	public static final String PORT_PROP = "port";
-	public static final String DEBUG_PROP = "debug";
-
-	private Integer getIntProperty(String name, Map<String, ?> properties, Integer def) {
-		Object o = properties.get(name);
-		if (o instanceof Integer)
-			return (Integer) o;
-		else if (o instanceof String) {
-			try {
-				return Integer.valueOf((String) o);
-			} catch (NumberFormatException e) {
-				return def;
-			}
-		}
-		return def;
-	}
-
-	protected boolean getBooleanProperty(String name, Map<String, ?> properties, Boolean def) {
-		Object o = properties.get(name);
-		if (o instanceof Boolean)
-			return (Boolean) o;
-		else if (o instanceof String)
-			return Boolean.valueOf((String) o);
-		return def;
-	}
-
 	protected void registerHostDistributionProvider() {
 		hostReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
 				new DirectRemoteServiceHostDistributionProvider(Py4jConstants.JAVA_HOST_CONFIG_TYPE,
@@ -197,16 +171,29 @@ public class Py4jDirectProviderImpl extends AbstractDirectProvider
 				null);
 	}
 
-	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
+	public @interface Config {
+		int pythonPort() default py4j.GatewayServer.DEFAULT_PYTHON_PORT;
+
+		int port() default py4j.GatewayServer.DEFAULT_PORT;
+
+		String address() default py4j.GatewayServer.DEFAULT_ADDRESS;
+
+		boolean debug() default false;
+
+		int readTimeout() default py4j.GatewayServer.DEFAULT_READ_TIMEOUT;
+
+		int connectTimeout() default py4j.GatewayServer.DEFAULT_CONNECT_TIMEOUT;
+	}
+
+	protected void activate(BundleContext context, Config config) throws Exception {
 		super.activate(context);
-		Integer pythonPort = getIntProperty(PYTHON_PORT_PROP, properties, py4j.GatewayServer.DEFAULT_PYTHON_PORT);
-		Integer port = getIntProperty(PORT_PROP, properties, py4j.GatewayServer.DEFAULT_PORT);
-		boolean debug = getBooleanProperty(DEBUG_PROP, properties, true);
 		synchronized (getLock()) {
-			this.osgiGateway = new DirectProviderGateway(this, new CallbackClient(pythonPort));
-			GatewayServerConfiguration.Builder builder = new GatewayServerConfiguration.Builder(this).setPort(port)
-					.setGateway(this.osgiGateway).addGatewayServerListener(gatewayServerListener)
-					.setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).setDebug(debug);
+			this.osgiGateway = new DirectProviderGateway(this, new CallbackClient(config.pythonPort()));
+			GatewayServerConfiguration.Builder builder = new GatewayServerConfiguration.Builder(this)
+					.setPort(config.port()).setGateway(this.osgiGateway).setConnectTimeout(config.connectTimeout())
+					.setReadTimeout(config.readTimeout()).setAddress(InetAddress.getByName(config.address()))
+					.addGatewayServerListener(gatewayServerListener)
+					.setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).setDebug(config.debug());
 			this.gatewayServer = new GatewayServer(builder.build());
 			registerHostDistributionProvider();
 			registerClientDistributionProvider();

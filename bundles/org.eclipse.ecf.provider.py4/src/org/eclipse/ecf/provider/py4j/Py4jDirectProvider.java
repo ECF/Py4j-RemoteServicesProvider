@@ -13,8 +13,11 @@ import org.eclipse.ecf.provider.direct.DirectProvider;
 public interface Py4jDirectProvider extends DirectProvider {
 
 	int getPythonPort();
+
 	String getPythonAddress();
+
 	int getJavaPort();
+
 	String getJavaAddress();
 
 }
