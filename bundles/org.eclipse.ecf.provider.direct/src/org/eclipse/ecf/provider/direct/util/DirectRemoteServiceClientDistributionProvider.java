@@ -13,12 +13,18 @@ import java.util.Map;
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.ContainerTypeDescription;
 import org.eclipse.ecf.core.IContainer;
-import org.eclipse.ecf.provider.direct.IDirectContainerInstantiator;
 import org.eclipse.ecf.remoteservice.provider.RemoteServiceContainerInstantiator;
 
+/**
+ * Distribution provider implmentation for direct remote service clients.
+ * 
+ * @author slewis
+ *
+ */
 public class DirectRemoteServiceClientDistributionProvider extends DirectRemoteServiceDistributionProvider {
 
-	public DirectRemoteServiceClientDistributionProvider(String clientProvider, String hostProvider, final IDirectContainerInstantiator inst, String[] supportedIntents) {
+	public DirectRemoteServiceClientDistributionProvider(String clientProvider, String hostProvider,
+			final IDirectContainerInstantiator inst, String[] supportedIntents) {
 		super(clientProvider, new RemoteServiceContainerInstantiator(hostProvider, clientProvider) {
 
 			@Override
@@ -26,6 +32,7 @@ public class DirectRemoteServiceClientDistributionProvider extends DirectRemoteS
 					throws ContainerCreateException {
 				return inst.createContainer();
 			}
+
 			@Override
 			public String[] getSupportedIntents(ContainerTypeDescription description) {
 				return supportedIntents;

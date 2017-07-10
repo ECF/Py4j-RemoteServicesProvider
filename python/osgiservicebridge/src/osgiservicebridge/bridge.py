@@ -125,7 +125,9 @@ def prepare_java_prim(val):
     :param val: the java object to convert
     :return: the converted object(s)
     '''
-    if isinstance(val,type('')) or isinstance(val,type(int(0))):
+    if isinstance(val,str):
+        return str(val)
+    elif isinstance(val,type('')) or isinstance(val,type(int(0))):
         return val
     elif isinstance(val, JavaArray) or isinstance(val, JavaSet) or isinstance(val, JavaList):
         newarray = []
@@ -135,7 +137,7 @@ def prepare_java_prim(val):
                 newarray.append(newval)
         return newarray
     else:
-        val = str(val)
+        return str(val)
 
 def prepare_java_props(java_props):
     '''
@@ -145,16 +147,8 @@ def prepare_java_props(java_props):
     :return: dictionary of properties with same (string) keys and values converted via prepare_java_prim
     '''
     result = {}
-    size = len(java_props)
-    i = 0
-    keySet = java_props.keySet()
-    for key in keySet:
-        newkey = prepare_java_prim(key)
-        newvalue = java_props.get(newkey)
-        result[newkey] = prepare_java_prim(newvalue)
-        i += 1
-        if i == size:
-            break
+    for entry in java_props.entrySet():
+        result[entry.getKey()] = prepare_java_prim(entry.getValue())
     return result
 
 class Py4jServiceBridgeEventListener(object):
@@ -165,35 +159,39 @@ class Py4jServiceBridgeEventListener(object):
     these methods, and then providing their listener instance to the Py4jServiceBridge instance
     creation'''
     
-    def service_imported(self, servicebridge, endpointid, endpoint):
+    def service_imported(self, servicebridge, endpointid, proxy, endpoint_props):
         '''
         Service imported notification.
-        :param servicebridge: The Py4jServiceBridge instance that received the notification
-        :param endpointid:  The endpointid from given set of properties.  Will not be None.
-        :param endpoint:  The endpoint instance as a tuple where first item is the proxy, and
-        the second item is the entire dictionary of properties.
+        :param servicebridge: The Py4jServiceBridge instance that received the 
+        notification. Will not be None.
+        :param endpointid:  The endpointid from given set of properties.  
+        Will not be None.
+        :param proxy:  The endpoint instance proxy.  Will not be None.
+        :param endpoint_props:  The endpoint properties.  Will not be None.
         '''
-        _logger.info('_service_imported endpointid='+endpointid)
+        _logger.info('_service_imported endpointid='+endpointid+";proxy="+str(proxy)+";endpoint_props="+str(endpoint_props))
     
-    def service_modified(self, servicebridge, endpointid, endpoint):
+    def service_modified(self, servicebridge, endpointid, proxy, endpoint_props):
         '''
         Service modified notification.
         :param servicebridge: The Py4jServiceBridge instance that received the notification
-        :param endpointid:  The endpointid from given set of properties.  Will not be None.
-        :param endpoint:  The endpoint instance as a tuple where first item is the proxy, and
-        the second item is the dictionary of properties.
+        :param endpointid:  The endpointid from given set of properties.  
+        Will not be None.
+        :param proxy:  The endpoint instance proxy.  Will not be None.
+        :param endpoint_props:  The endpoint properties.  Will not be None.
         '''
-        _logger.info('_service_modified endpointid='+endpointid)
+        _logger.info('_service_modified endpointid='+endpointid+";proxy="+str(proxy)+";endpoint_props="+str(endpoint_props))
     
-    def service_unimported(self, servicebridge, endpointid, endpoint):
+    def service_unimported(self, servicebridge, endpointid, proxy, endpoint_props):
         '''
         Service modified notification.
         :param servicebridge: The Py4jServiceBridge instance that received the notification
-        :param endpointid:  The endpointid from given set of properties.  Will not be None.
-        :param endpoint:  The endpoint instance as a tuple where first item is the proxy, and
-        the second item is the dictionary of properties.
+        :param endpointid:  The endpointid from given set of properties.  
+        Will not be None.
+        :param proxy:  The endpoint instance proxy.  Will not be None.
+        :param endpoint_props:  The endpoint properties.  Will not be None.
         '''
-        _logger.info('_service_unimported endpointid='+endpointid)
+        _logger.info('_service_unimported endpointid='+endpointid+";proxy="+str(proxy)+";endpoint_props="+str(endpoint_props))
  
 class Py4jServiceBridgeConnectionListener(object):
     '''
@@ -463,33 +461,33 @@ class Py4jServiceBridge(object):
         with self._lock:
             if not self._gateway is None:
                 raise OSError('already connected to java gateway')
-            server_started.connect(self.__started)
+            server_started.connect(self._started)
             self._gateway = JavaGateway(gateway_parameters=self._gateway_parameters,callback_server_parameters=self._callback_server_parameters)
             cbserver = self._gateway.get_callback_server()
             server_stopped.connect(
-                self.__stopped, sender=cbserver)
+                self._stopped, sender=cbserver)
             server_connection_started.connect(
-                self.__connection_started,
+                self._connection_started,
                 sender=cbserver)
             server_connection_stopped.connect(
-                self.__connection_stopped,
+                self._connection_stopped,
                 sender=cbserver)
             pre_server_shutdown.connect(
-                self.__pre_shutdown, sender=cbserver)
+                self._pre_shutdown, sender=cbserver)
             post_server_shutdown.connect(
-                self.__post_shutdown, sender=cbserver)
+                self._post_shutdown, sender=cbserver)
             class JavaRemoteServiceDiscoverer(object):
                 def __init__(self, bridge):
                     self._bridge = bridge
                     
                 def _external_discoverService(self,proxy,props):
-                    self._bridge.__import_service_from_java(proxy,props)
+                    self._bridge._import_service_from_java(proxy,props)
                     
                 def _external_updateDiscoveredService(self,props):
-                    self._bridge.__modify_service_from_java(props)
+                    self._bridge._modify_service_from_java(props)
                     
                 def _external_undiscoverService(self,props):
-                    self._bridge.__unimport_service_from_java(props)
+                    self._bridge._unimport_service_from_java(props)
                     
                 def _call_endpoint(self,rsId,methodName,serializedArgs):
                     try:
@@ -546,32 +544,32 @@ class Py4jServiceBridge(object):
             return osgiservicebridge.merge_dicts(osgiprops,ecfprops)
 
 
-    def __started(self, sender, **kwargs):
+    def _started(self, sender, **kwargs):
         if self._connection_listener:
             self._connection_listener.started(kwargs["server"])
     
-    def __stopped(self, sender, **kwargs):
+    def _stopped(self, sender, **kwargs):
         if self._connection_listener:
             self._connection_listener.stopped(kwargs["server"])
     
-    def __connection_started(self, sender, **kwargs):
+    def _connection_started(self, sender, **kwargs):
         with self._lock:
             self._connection = kwargs["connection"]
         if self._connection_listener:
             self._connection_listener.connection_started(self._connection)
     
-    def __connection_stopped(self, sender, **kwargs):
+    def _connection_stopped(self, sender, **kwargs):
         with self._lock:
             self._connection = None
         if self._connection_listener:
             self._connection_listener.connection_stopped(kwargs['connection'],kwargs.pop('exception',None))
     
-    def __pre_shutdown(self, sender, **kwargs):
+    def _pre_shutdown(self, sender, **kwargs):
         if self._connection_listener:
             self._connection_listener.pre_shutdown(kwargs["server"])
 
     
-    def __post_shutdown(self, sender, **kwargs):
+    def _post_shutdown(self, sender, **kwargs):
         with self._imported_endpoints_lock:
             for endpointid in self._imported_endpoints.keys():
                 endpoint = None
@@ -581,15 +579,15 @@ class Py4jServiceBridge(object):
                     pass
                 if self._service_listener and endpoint:
                     try:
-                        self._service_listener.service_unimported(self, endpointid, endpoint)
+                        self._service_listener.service_unimported(self, endpointid, endpoint[0], endpoint[1])
                     except Exception as e:
-                        _logger.error('__unimport_service_from_java listener threw exception endpointid='+endpointid, e)
+                        _logger.error('_unimport_service_from_java listener threw exception endpointid='+endpointid, e)
         self.disconnect();
         if self._connection_listener:
             self._connection_listener.post_shutdown(kwargs["server"])
     
     # Methods called by java  
-    def __import_service_from_java(self,proxy,props):
+    def _import_service_from_java(self,proxy,props):
         try:
             endpointid = None
             local_props = prepare_java_props(props)
@@ -603,14 +601,14 @@ class Py4jServiceBridge(object):
                     self._imported_endpoints[endpointid] = endpoint
             if self._service_listener and endpointid:
                 try:
-                    self._service_listener.service_imported(self, endpointid, endpoint)
+                    self._service_listener.service_imported(self, endpointid, endpoint[0], endpoint[1])
                 except Exception as e:
                     _logger.error('__import_service_from_java listener threw exception endpointid='+endpointid, e)
         except Exception as e:
             _logger.error(e)
             raise e
 
-    def __modify_service_from_java(self,newprops):
+    def _modify_service_from_java(self,newprops):
         newendpoint = None
         python_newprops = self._prepare_props(newprops)
         try:
@@ -622,11 +620,11 @@ class Py4jServiceBridge(object):
             pass
         if self._service_listener and newendpoint:
             try:
-                self._service_listener.service_modified(self, endpointid, newendpoint)
+                self._service_listener.service_modified(self, endpointid, newendpoint[0], newendpoint[1])
             except Exception as e:
                 _logger.error('__modify_service_from_java listener threw exception endpointid='+endpointid, e)
    
-    def __unimport_service_from_java(self,props):
+    def _unimport_service_from_java(self,props):
         endpoint = None
         endpointid = None
         local_props = prepare_java_props(props)
@@ -638,7 +636,7 @@ class Py4jServiceBridge(object):
             pass
         if self._service_listener and endpoint:
             try:
-                self._service_listener.service_unimported(self, endpointid, endpoint)
+                self._service_listener.service_unimported(self, endpointid, endpoint[0], endpoint[1])
             except Exception as e:
                 _logger.error('__unimport_service_from_java listener threw exception endpointid='+endpointid, e)
                 

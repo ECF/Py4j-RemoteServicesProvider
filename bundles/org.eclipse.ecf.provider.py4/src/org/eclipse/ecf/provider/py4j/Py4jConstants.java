@@ -8,6 +8,12 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.py4j;
 
+/**
+ * Py4j-specific provider constants.
+ * 
+ * @author slewis
+ *
+ */
 public interface Py4jConstants {
 
 	public static final String NAMESPACE_NAME = "ecf.namespace.py4j";

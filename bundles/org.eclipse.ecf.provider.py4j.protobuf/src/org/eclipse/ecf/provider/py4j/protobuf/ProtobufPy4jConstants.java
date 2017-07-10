@@ -8,6 +8,12 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.py4j.protobuf;
 
+/**
+ * Constants (remote service distribution provider ids)
+ * 
+ * @author slewis
+ *
+ */
 public interface ProtobufPy4jConstants {
 
 	String ECF_PY4J_HOST_PYTHON_PB = "ecf.py4j.host.python.pb";

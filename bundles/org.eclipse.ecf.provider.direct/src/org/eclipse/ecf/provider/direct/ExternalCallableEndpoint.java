@@ -8,6 +8,14 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct;
 
+/**
+ * An external endpoint that is callable via a long remote service id (rsId), a
+ * String methodName, and a byte[] representing serialized arguments
+ * (serializedArgs) This interface may be used by provider that serialize their
+ * args in a custom way (e.g. protocol buffers).
+ * 
+ * @author slewis
+ */
 public interface ExternalCallableEndpoint {
 
 	byte[] _call_endpoint(Long rsId, String methodName, byte[] serializedArgs) throws Exception;

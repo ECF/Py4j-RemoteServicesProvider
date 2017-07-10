@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Py4j Protobuf
 Bundle-SymbolicName: org.eclipse.ecf.provider.py4j.protobuf
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.google.protobuf;version="3.2.0",
@@ -28,6 +28,5 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.equinox.common,
  org.eclipse.ecf.remoteservice.asyncproxy;bundle-version="2.0.100"
 Export-Package: org.eclipse.ecf.provider.py4j.protobuf;version="1.0.0"
-Service-Component: OSGI-INF/org.eclipse.ecf.provider.py4j.protobuf.ProtobufPy4jDirectProviderImpl.xml
 DynamicImport-Package: *
 

@@ -14,6 +14,12 @@ import java.util.TreeMap;
 
 import org.eclipse.ecf.provider.direct.ExternalServiceProvider;
 
+/**
+ * Properties utils support class.
+ * 
+ * @author slewis
+ *
+ */
 public class PropertiesUtil {
 
 	public static Long convertPropToLong(@SuppressWarnings("rawtypes") Map input, String key) {

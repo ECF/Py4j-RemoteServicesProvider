@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Hello Example Provider
+Bundle-SymbolicName: org.eclipse.ecf.examples.hello.provider
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Eclipse.org - ECF
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.ecf.provider.direct;version="2.0.0",
+ org.eclipse.ecf.provider.py4j;version="2.0.0",
+ org.osgi.framework;version="1.8.0",
+ org.osgi.service.component.annotations;resolution:=optional,
+ org.osgi.service.remoteserviceadmin;version="1.1.0"
+Service-Component: OSGI-INF/org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider.xml
+DynamicImport-Package: *

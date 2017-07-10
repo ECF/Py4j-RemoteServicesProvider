@@ -6,13 +6,9 @@
  * 
  * Contributors: Composent, Inc. - initial API and implementation
  ******************************************************************************/
-package org.eclipse.ecf.provider.direct;
+package org.eclipse.ecf.examples.hello;
 
-import org.eclipse.ecf.core.ContainerCreateException;
-import org.eclipse.ecf.core.IContainer;
+public interface IHello {
 
-public interface IDirectContainerInstantiator {
-
-	IContainer createContainer() throws ContainerCreateException;
-	
+	String sayHello(String from, String message);
 }

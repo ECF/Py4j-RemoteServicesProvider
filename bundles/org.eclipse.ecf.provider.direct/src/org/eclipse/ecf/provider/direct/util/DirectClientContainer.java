@@ -24,6 +24,12 @@ import org.eclipse.ecf.remoteservice.client.RemoteServiceClientRegistration;
 import org.eclipse.equinox.concurrent.future.IExecutor;
 import org.eclipse.equinox.concurrent.future.IProgressRunnable;
 
+/**
+ * Implementation of ECF client container for direct distribution providers.
+ * 
+ * @author slewis
+ *
+ */
 public class DirectClientContainer extends AbstractRSAClientContainer {
 
 	private ExternalServiceProvider externalServiceProvider;

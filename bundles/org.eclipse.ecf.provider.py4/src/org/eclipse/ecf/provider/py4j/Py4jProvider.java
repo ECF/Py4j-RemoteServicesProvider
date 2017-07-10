@@ -10,7 +10,13 @@ package org.eclipse.ecf.provider.py4j;
 
 import org.eclipse.ecf.provider.direct.DirectProvider;
 
-public interface Py4jDirectProvider extends DirectProvider {
+/**
+ * Service interface implemented by Py4jProviderImpl.
+ * 
+ * @author slewis
+ *
+ */
+public interface Py4jProvider extends DirectProvider {
 
 	int getPythonPort();
 

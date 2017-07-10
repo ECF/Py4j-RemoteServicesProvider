@@ -26,6 +26,12 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Abstract direct provider. This class provides support for creating remote
+ * service distribution providers that have direct connections. Py4j provider is
+ * such a distribution provider and is based on this class.
+ *
+ */
 public abstract class AbstractDirectProvider
 		implements RemoteServiceAdminListener, ExternalDirectDiscovery, InternalServiceProvider {
 
@@ -161,21 +167,22 @@ public abstract class AbstractDirectProvider
 			synchronized (getLock()) {
 				switch (event.getType()) {
 				case RemoteServiceAdminEvent.EXPORT_REGISTRATION:
-					svc = preexported.get(rsvcid);
+					svc = preExportedServices.get(rsvcid);
 					if (svc != null) {
 						fireServiceChange(EndpointEvent.ADDED, ed, svc);
-						preexported.remove(rsvcid);
-						exportedEndpoints.put(rsvcid, new ExternalEndpoint(ed, svc));
+						preExportedServices.remove(rsvcid);
+						exportedExternalEndpoints.put(rsvcid, new ExternalEndpoint(ed, svc));
 					}
 					break;
 				case RemoteServiceAdminEvent.EXPORT_UNREGISTRATION:
-					svc = exportedEndpoints.get(rsvcid);
-					if (svc != null)
-						fireServiceChange(EndpointEvent.REMOVED, ed, svc);
-					exportedEndpoints.remove(rsvcid);
+					ExternalEndpoint ee = exportedExternalEndpoints.remove(rsvcid);
+					if (ee != null)
+						fireServiceChange(EndpointEvent.REMOVED, ee.ed, ee.proxy);
+					exportedExternalEndpoints.remove(rsvcid);
+					this.preExportedServices.remove(rsvcid);
 					break;
 				case RemoteServiceAdminEvent.EXPORT_UPDATE:
-					svc = exportedEndpoints.get(rsvcid);
+					svc = exportedExternalEndpoints.get(rsvcid);
 					if (svc != null)
 						fireServiceChange(EndpointEvent.MODIFIED, ed, svc);
 					break;
@@ -200,12 +207,12 @@ public abstract class AbstractDirectProvider
 	}
 
 	private Map<String, org.eclipse.ecf.osgi.services.remoteserviceadmin.EndpointDescription> edMap = new HashMap<String, org.eclipse.ecf.osgi.services.remoteserviceadmin.EndpointDescription>();
-	private InternalDirectDiscovery idd;
-	private ExternalCallableEndpoint ece;
-	private ServiceRegistration<?> iddReg;
+	protected InternalDirectDiscovery internalDirectDiscovery;
+	protected ServiceRegistration<?> internalDirectDiscoverReg;
+	protected ExternalCallableEndpoint externalCallbackEndpoint;
 
-	private Map<Long, Object> preexported = new HashMap<Long, Object>();
-	private Map<Long, ExternalEndpoint> exportedEndpoints = new HashMap<Long, ExternalEndpoint>();
+	protected Map<Long, Object> preExportedServices = new HashMap<Long, Object>();
+	private Map<Long, ExternalEndpoint> exportedExternalEndpoints = new HashMap<Long, ExternalEndpoint>();
 	private Object lock = new Object();
 
 	protected class DirectBridge implements InternalDirectDiscovery, ExternalCallableEndpoint {
@@ -250,16 +257,16 @@ public abstract class AbstractDirectProvider
 			bindExternalCallableEndpoint((ExternalCallableEndpoint) directDiscovery);
 			external = new DirectBridge(directDiscovery, endpoint);
 		}
-		iddReg = getContext().registerService(
+		internalDirectDiscoverReg = getContext().registerService(
 				new String[] { InternalDirectDiscovery.class.getName(), ExternalCallableEndpoint.class.getName() },
 				external, null);
 	}
 
 	protected void hardClose() {
 		synchronized (getLock()) {
-			if (iddReg != null) {
-				iddReg.unregister();
-				iddReg = null;
+			if (internalDirectDiscoverReg != null) {
+				internalDirectDiscoverReg.unregister();
+				internalDirectDiscoverReg = null;
 			}
 			hardCloseExported();
 			hardCloseImported();
@@ -279,21 +286,16 @@ public abstract class AbstractDirectProvider
 	}
 
 	protected void hardCloseExported() {
-		List<ExternalEndpoint> endpoints;
 		synchronized (getLock()) {
 			unbindInternalDirectDiscovery();
-			endpoints = new ArrayList<ExternalEndpoint>(this.exportedEndpoints.values());
 		}
-		if (endpoints != null)
-			for (ExternalEndpoint ee : endpoints)
-				fireEndpointEvent(EndpointEvent.REMOVED, ee.getEndpointDescription());
 	}
 
 	protected void bindInternalDirectDiscovery(InternalDirectDiscovery idd) {
 		synchronized (getLock()) {
-			this.idd = idd;
-			for (Long key : exportedEndpoints.keySet()) {
-				ExternalEndpoint de = exportedEndpoints.get(key);
+			this.internalDirectDiscovery = idd;
+			for (Long key : exportedExternalEndpoints.keySet()) {
+				ExternalEndpoint de = exportedExternalEndpoints.get(key);
 				if (de != null)
 					fireServiceChange(EndpointEvent.ADDED, de.getEndpointDescription(), de.getProxy());
 			}
@@ -302,31 +304,31 @@ public abstract class AbstractDirectProvider
 
 	protected void unbindInternalDirectDiscovery() {
 		synchronized (getLock()) {
-			this.idd = null;
+			this.internalDirectDiscovery = null;
 		}
 	}
 
 	protected InternalDirectDiscovery getInternalDirectDiscovery() {
 		synchronized (getLock()) {
-			return this.idd;
+			return this.internalDirectDiscovery;
 		}
 	}
 
 	protected void bindExternalCallableEndpoint(ExternalCallableEndpoint ep) {
 		synchronized (getLock()) {
-			this.ece = ep;
+			this.externalCallbackEndpoint = ep;
 		}
 	}
 
 	protected void unbindExternalCallableEndpoint() {
 		synchronized (getLock()) {
-			this.ece = null;
+			this.externalCallbackEndpoint = null;
 		}
 	}
 
 	protected ExternalCallableEndpoint getExternalCallableEndpoint() {
 		synchronized (getLock()) {
-			return this.ece;
+			return this.externalCallbackEndpoint;
 		}
 	}
 
@@ -345,19 +347,20 @@ public abstract class AbstractDirectProvider
 
 	private void fireServiceChange(int type, EndpointDescription ed, Object svc) {
 		InternalDirectDiscovery intdd;
-		synchronized (lock) {
-			intdd = this.idd;
+		synchronized (getLock()) {
+			intdd = this.internalDirectDiscovery;
 		}
 		if (intdd != null) {
+			Map<String, Object> edmap = ed.getProperties();
 			switch (type) {
 			case EndpointEvent.ADDED:
-				intdd._external_discoverService(svc, ed.getProperties());
+				intdd._external_discoverService(svc, edmap);
 				break;
 			case EndpointEvent.REMOVED:
-				intdd._external_undiscoverService(ed.getProperties());
+				intdd._external_undiscoverService(edmap);
 				break;
 			case EndpointEvent.MODIFIED:
-				intdd._external_updateDiscoveredService(ed.getProperties());
+				intdd._external_updateDiscoveredService(edmap);
 				break;
 			}
 		}
@@ -398,17 +401,9 @@ public abstract class AbstractDirectProvider
 	 */
 	@Override
 	public void externalExport(long rsId, Object service) {
-		synchronized (this) {
-			this.preexported.put(rsId, service);
+		synchronized (getLock()) {
+			this.preExportedServices.put(rsId, service);
 		}
-	}
-
-	public void externalUpdate(long rsId) {
-		// No impl now
-	}
-
-	public void externalUnexport(long rsId) {
-		// No impl now
 	}
 
 }

@@ -17,6 +17,12 @@ import org.eclipse.ecf.provider.py4j.Py4jConstants;
 
 import py4j.GatewayServer;
 
+/**
+ * Py4j ECF namespace implementation class.
+ * 
+ * @author slewis
+ *
+ */
 public class Py4jNamespace extends URIIDNamespace {
 
 	private static final long serialVersionUID = 7911328070175061027L;

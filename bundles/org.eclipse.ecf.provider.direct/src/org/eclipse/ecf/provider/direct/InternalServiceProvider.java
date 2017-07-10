@@ -8,12 +8,15 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct;
 
+/**
+ * Java-side internal service provider. This allows RSA remote service host
+ * containers (e.g. DirectHostContainer to export remote services.
+ * 
+ * @author slewis
+ *
+ */
 public interface InternalServiceProvider {
 
 	void externalExport(long rsId, Object service);
-
-	void externalUpdate(long rsId);
-
-	void externalUnexport(long rsId);
 
 }

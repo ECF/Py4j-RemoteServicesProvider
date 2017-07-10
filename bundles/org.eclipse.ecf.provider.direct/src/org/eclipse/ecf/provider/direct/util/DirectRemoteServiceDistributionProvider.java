@@ -17,6 +17,13 @@ import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider
 import org.eclipse.ecf.remoteservice.provider.RemoteServiceContainerInstantiator;
 import org.eclipse.ecf.remoteservice.provider.RemoteServiceDistributionProvider;
 
+/**
+ * Support superclass for DirectRemoteServiceClientDistributionPovider, and
+ * DirectRemoteServiceClientDistributionPovider
+ * 
+ * @author slewis
+ *
+ */
 public class DirectRemoteServiceDistributionProvider implements IRemoteServiceDistributionProvider {
 
 	@Override

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" deactivate="deactivate" immediate="true" name="org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider">
+   <property name="address" type="String" value="127.0.0.1"/>
+   <property name="connectTimeout" type="Integer" value="0"/>
+   <property name="port" type="Integer" value="25333"/>
+   <property name="pythonPort" type="Integer" value="25334"/>
+   <property name="readTimeout" type="Integer" value="0"/>
+   <property name="debug" value="true"/>
+   <service>
+      <provide interface="org.eclipse.ecf.provider.py4j.Py4jProvider"/>
+      <provide interface="org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener"/>
+   </service>
+   <reference bind="bindEndpointEventListener" interface="org.osgi.service.remoteserviceadmin.EndpointEventListener" name="EndpointEventListener" unbind="unbindEndpointEventListener"/>
+   <implementation class="org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider"/>
+</scr:component>

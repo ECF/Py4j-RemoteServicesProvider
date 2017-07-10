@@ -15,11 +15,11 @@ import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.provider.direct.AbstractDirectProvider;
 import org.eclipse.ecf.provider.direct.ExternalServiceProvider;
-import org.eclipse.ecf.provider.direct.IDirectContainerInstantiator;
 import org.eclipse.ecf.provider.direct.util.DirectClientContainer;
 import org.eclipse.ecf.provider.direct.util.DirectHostContainer;
 import org.eclipse.ecf.provider.direct.util.DirectRemoteServiceClientDistributionProvider;
 import org.eclipse.ecf.provider.direct.util.DirectRemoteServiceHostDistributionProvider;
+import org.eclipse.ecf.provider.direct.util.IDirectContainerInstantiator;
 import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
 import org.osgi.framework.Bundle;
@@ -36,8 +36,13 @@ import py4j.GatewayServerListener;
 import py4j.Py4JPythonClient;
 import py4j.Py4JServerConnection;
 
-public class Py4jDirectProviderImpl extends AbstractDirectProvider
-		implements RemoteServiceAdminListener, Py4jDirectProvider {
+/**
+ * Py4j-based remote service distribution provider.
+ * 
+ * @author slewis
+ *
+ */
+public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteServiceAdminListener, Py4jProvider {
 
 	protected static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered" };
 
@@ -92,20 +97,20 @@ public class Py4jDirectProviderImpl extends AbstractDirectProvider
 		@Override
 		public void connectionStarted(Py4JServerConnection arg0) {
 			synchronized (getLock()) {
-				if (Py4jDirectProviderImpl.this.connection != null)
-					logError("connectionStarted error: Already have connection="
-							+ Py4jDirectProviderImpl.this.connection + ".  New connectionStarted=" + arg0);
-				Py4jDirectProviderImpl.this.connection = arg0;
+				if (Py4jProviderImpl.this.connection != null)
+					logError("connectionStarted error: Already have connection=" + Py4jProviderImpl.this.connection
+							+ ".  New connectionStarted=" + arg0);
+				Py4jProviderImpl.this.connection = arg0;
 			}
 		}
 
 		@Override
 		public void connectionStopped(Py4JServerConnection arg0) {
 			synchronized (getLock()) {
-				if (Py4jDirectProviderImpl.this.connection == null)
+				if (Py4jProviderImpl.this.connection == null)
 					logError("connectionStopped error: this.connection already null");
-				else if (Py4jDirectProviderImpl.this.connection != arg0)
-					logError("connectionStopped error: this.connection=" + Py4jDirectProviderImpl.this.connection
+				else if (Py4jProviderImpl.this.connection != arg0)
+					logError("connectionStopped error: this.connection=" + Py4jProviderImpl.this.connection
 							+ " not equal to arg0=" + arg0);
 				else {
 					hardClose();
@@ -172,17 +177,17 @@ public class Py4jDirectProviderImpl extends AbstractDirectProvider
 	}
 
 	public @interface Config {
-		int pythonPort() default py4j.GatewayServer.DEFAULT_PYTHON_PORT;
+		int pythonPort() default 25334;
 
-		int port() default py4j.GatewayServer.DEFAULT_PORT;
+		int port() default 25333;
 
-		String address() default py4j.GatewayServer.DEFAULT_ADDRESS;
+		String address() default "127.0.0.1";
 
 		boolean debug() default false;
 
-		int readTimeout() default py4j.GatewayServer.DEFAULT_READ_TIMEOUT;
+		int readTimeout() default 0;
 
-		int connectTimeout() default py4j.GatewayServer.DEFAULT_CONNECT_TIMEOUT;
+		int connectTimeout() default 0;
 	}
 
 	protected void activate(BundleContext context, Config config) throws Exception {
@@ -236,7 +241,7 @@ public class Py4jDirectProviderImpl extends AbstractDirectProvider
 	@Override
 	public int getJavaPort() {
 		synchronized (getLock()) {
-			return (this.gatewayServer == null) ? -1 : this.gatewayServer.getConfiguration().getPort();
+			return (this.gatewayServer == null) ? -1 : this.gatewayServer.getConfiguration().getListeningPort();
 		}
 	}
 

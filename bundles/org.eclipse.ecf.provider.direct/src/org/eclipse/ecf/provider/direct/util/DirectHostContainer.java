@@ -15,6 +15,13 @@ import org.eclipse.ecf.provider.direct.InternalServiceProvider;
 import org.eclipse.ecf.remoteservice.AbstractRSAContainer;
 import org.eclipse.ecf.remoteservice.RSARemoteServiceContainerAdapter.RSARemoteServiceRegistration;
 
+/**
+ * Implementation of DirectHostContainer for ECF remote service distribution
+ * providers.
+ * 
+ * @author slewis
+ *
+ */
 public class DirectHostContainer extends AbstractRSAContainer {
 
 	private InternalServiceProvider internalServiceProvider;
@@ -39,7 +46,6 @@ public class DirectHostContainer extends AbstractRSAContainer {
 
 	@Override
 	protected void unexportRemoteService(RSARemoteServiceRegistration registration) {
-		this.internalServiceProvider.externalUnexport(registration.getID().getContainerRelativeID());
 	}
 
 }

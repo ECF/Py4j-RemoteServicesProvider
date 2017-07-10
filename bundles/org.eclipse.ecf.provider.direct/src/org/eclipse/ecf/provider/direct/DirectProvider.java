@@ -8,7 +8,16 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct;
 
+/**
+ * Super interfacw for indicating that a direct provider is active.
+ * 
+ * @author slewis
+ *
+ */
 public interface DirectProvider {
-
+	/**
+	 * 
+	 * @return true if this direct provider is connected, false otherwised.
+	 */
 	boolean isConnected();
 }

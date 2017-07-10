@@ -14,33 +14,33 @@ import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.provider.direct.DirectProvider;
 import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
-import org.eclipse.ecf.provider.direct.IDirectContainerInstantiator;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpointImpl;
 import org.eclipse.ecf.provider.direct.util.DirectRemoteServiceClientDistributionProvider;
-import org.eclipse.ecf.provider.py4j.Py4jDirectProvider;
-import org.eclipse.ecf.provider.py4j.Py4jDirectProviderImpl;
+import org.eclipse.ecf.provider.direct.util.IDirectContainerInstantiator;
+import org.eclipse.ecf.provider.py4j.Py4jProvider;
+import org.eclipse.ecf.provider.py4j.Py4jProviderImpl;
 import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 
-@Component(immediate = true)
-public class ProtobufPy4jDirectProviderImpl extends Py4jDirectProviderImpl
-		implements RemoteServiceAdminListener, Py4jDirectProvider, DirectProvider {
+/**
+ * Implementation of Protobuf-py4j remote service distribution provider.
+ * 
+ * @author slewis
+ *
+ */
+public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
+		implements RemoteServiceAdminListener, Py4jProvider, DirectProvider {
 
 	protected static final String[] py4jProtobufSupportedIntents = { "passByValue", "exactlyOnce", "ordered" };
 
-	@Reference
 	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
 		super.bindEndpointEventListener(eel, props);
 	}
@@ -72,8 +72,7 @@ public class ProtobufPy4jDirectProviderImpl extends Py4jDirectProviderImpl
 				null);
 	}
 
-	@Activate
-	protected void activate(BundleContext context, Py4jDirectProviderImpl.Config config) throws Exception {
+	protected void activate(BundleContext context, Py4jProviderImpl.Config config) throws Exception {
 		synchronized (getLock()) {
 			super.activate(context, config);
 			registerProtobufClientDistributionProvider();
@@ -112,7 +111,6 @@ public class ProtobufPy4jDirectProviderImpl extends Py4jDirectProviderImpl
 		}
 	}
 
-	@Deactivate
 	protected void deactivate() {
 		synchronized (getLock()) {
 			super.deactivate();

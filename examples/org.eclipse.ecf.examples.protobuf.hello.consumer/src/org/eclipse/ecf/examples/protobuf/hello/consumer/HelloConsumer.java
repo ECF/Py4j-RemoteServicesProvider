@@ -33,7 +33,14 @@ public class HelloConsumer {
 	@Activate
 	void activate() {
 		try {
-			HelloMsgContent request = createRequest();
+			HelloMsgContent.Builder b1 = HelloMsgContent.newBuilder();
+			b1.addX(1.1);
+			b1.addX(1.2);
+			b1.setF("fromjava");
+			b1.setTo("topython");
+			b1.setHellomsg("Hello message from java!");
+			b1.setH("An additional message from java");
+			HelloMsgContent request = b1.build();
 			HelloMsgContent result = this.helloService.sayHello(request);
 			System.out.println("Received result="+result);
 		} catch (Exception e) {
