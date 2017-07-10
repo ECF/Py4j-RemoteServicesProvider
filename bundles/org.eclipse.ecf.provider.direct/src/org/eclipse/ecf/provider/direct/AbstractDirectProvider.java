@@ -74,13 +74,13 @@ public abstract class AbstractDirectProvider
 
 	protected void bindEndpointEventListener(EndpointEventListener l, @SuppressWarnings("rawtypes") Map props) {
 		ecfEndpointListenerScope = ((String[]) props.get("endpoint.listener.scope"))[0];
-		synchronized (this.eels) {
+		synchronized (getLock()) {
 			this.eels.add(l);
 		}
 	}
 
 	protected void unbindEndpointEventListener(EndpointEventListener l) {
-		synchronized (this.eels) {
+		synchronized (getLock()) {
 			this.eels.remove(l);
 		}
 	}
@@ -95,7 +95,7 @@ public abstract class AbstractDirectProvider
 
 	private void fireEndpointEvent(int type, EndpointDescription ed) {
 		List<EndpointEventListener> notifyEels;
-		synchronized (this.eels) {
+		synchronized (getLock()) {
 			notifyEels = new ArrayList<EndpointEventListener>(this.eels);
 		}
 		for (EndpointEventListener l : notifyEels)
