@@ -10,10 +10,12 @@ package org.eclipse.ecf.examples.protobuf.hello.provider;
 
 import java.util.Map;
 
+import org.eclipse.ecf.osgi.services.remoteserviceadmin.DebugRemoteServiceAdminListener;
 import org.eclipse.ecf.provider.direct.DirectProvider;
 import org.eclipse.ecf.provider.py4j.Py4jProvider;
 import org.eclipse.ecf.provider.py4j.protobuf.ProtobufPy4jProviderImpl;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -34,15 +36,28 @@ public class ExampleProtobufPy4jProvider extends ProtobufPy4jProviderImpl
 		super.unbindEndpointEventListener(eel);
 	}
 
-	@Activate
 	@Override
 	protected void activate(BundleContext context, Config config) throws Exception {
 		super.activate(context, config);
 	}
 
+	private ServiceRegistration<?> debugRSAReg;
+	
+	@Activate
+	protected void activate(BundleContext context, Map<String,?> properties) throws Exception {
+		super.activate(context, properties);
+		boolean debugRSA = Boolean.parseBoolean(System.getProperty("debugRSA","true"));
+		if (debugRSA)
+			debugRSAReg = getContext().registerService(RemoteServiceAdminListener.class, new DebugRemoteServiceAdminListener(), null);
+	}
+	
 	@Deactivate
 	@Override
 	protected void deactivate() {
 		super.deactivate();
+		if (debugRSAReg != null) {
+			debugRSAReg.unregister();
+			debugRSAReg = null;
+		}
 	}
 }

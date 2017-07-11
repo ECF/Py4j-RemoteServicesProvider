@@ -79,6 +79,13 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 		}
 	}
 
+	protected void activate(BundleContext context, Map<String,?> properties) throws Exception {
+		synchronized (getLock()) {
+			super.activate(context, properties);
+			registerProtobufClientDistributionProvider();
+		}
+	}
+	
 	private ProtobufCallableEndpointImpl pcei;
 
 	protected ProtobufCallableEndpoint getProtobufCallableEndpoint() {

@@ -14,10 +14,12 @@ public class HelloConsumer {
 	@Reference
 	void bindHello(IHello hello) {
 		this.helloService = hello;
+		System.out.println("IHello service bound="+hello);
 	}
 	
 	void unbindHello(IHello hello) {
 		this.helloService = null;
+		System.out.println("IHello service unbound"+hello);
 	}
 	
 	HelloMsgContent createRequest() {
