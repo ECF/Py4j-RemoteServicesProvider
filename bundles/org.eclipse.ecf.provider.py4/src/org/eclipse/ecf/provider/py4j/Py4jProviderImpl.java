@@ -10,6 +10,7 @@ package org.eclipse.ecf.provider.py4j;
 
 import java.net.InetAddress;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
@@ -190,7 +191,9 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 	public static final String READ_TIMEOUT_SYSPROP = PP + READ_TIMEOUT_PROP;
 	public static final String CONNECT_TIMEOUT_PROP = "connectTimeout";
 	public static final String CONNECT_TIMEOUT_SYSPROP = PP + CONNECT_TIMEOUT_PROP;
-
+	public static final String MINCONNECTION_TIME_PROP = "minConnectionTime";
+	public static final String MINCONNECTION_TIME_SYSPROP = PP + MINCONNECTION_TIME_PROP;
+	
 	public @interface Config {
 		int pythonPort() default 25334;
 
@@ -203,6 +206,8 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		int readTimeout() default 0;
 
 		int connectTimeout() default 0;
+		
+		int minConnectionTime() default 0;
 	}
 
 	protected GatewayServerConfiguration.Builder createGatewayServerConfigurationBuilder(int javaPort, String address,
@@ -215,25 +220,19 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 
 	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
 		super.activate(context);
-		System.getProperties();
 		Integer pythonPort = PropertiesUtil.getIntValue(PYTHON_PORT_SYSPROP, properties, PYTHON_PORT_PROP,
 				py4j.GatewayServer.DEFAULT_PYTHON_PORT);
 		Integer port = PropertiesUtil.getIntValue(JAVA_PORT_SYSPROP, properties, JAVA_PORT_PROP,
 				py4j.GatewayServer.DEFAULT_PORT);
 		Boolean debug = PropertiesUtil.getBooleanValue(DEBUG_SYSPROP, properties, DEBUG_PROP, false);
-		String address = System.getProperty(ADDRESS_SYSPROP);
-		if (address == null) {
-			address = py4j.GatewayServer.DEFAULT_ADDRESS;
-			Object addr = properties.get(ADDRESS_PROP);
-			if (addr != null && (addr instanceof String))
-				address = (String) addr;
-		}
+		String address = PropertiesUtil.getStringValue(ADDRESS_SYSPROP, properties, ADDRESS_PROP, py4j.GatewayServer.DEFAULT_ADDRESS);
 		Integer readTimeout = PropertiesUtil.getIntValue(READ_TIMEOUT_SYSPROP, properties, READ_TIMEOUT_PROP,
 				py4j.GatewayServer.DEFAULT_READ_TIMEOUT);
 		Integer connectTimeout = PropertiesUtil.getIntValue(CONNECT_TIMEOUT_SYSPROP, properties, CONNECT_TIMEOUT_PROP,
 				py4j.GatewayServer.DEFAULT_CONNECT_TIMEOUT);
+		Integer minConnectionTime = PropertiesUtil.getIntValue(MINCONNECTION_TIME_SYSPROP, properties, MINCONNECTION_TIME_PROP, 0);
 		synchronized (getLock()) {
-			createOSGiGateway(pythonPort);
+			createOSGiGateway(pythonPort,address,minConnectionTime);
 			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(port, address, debug,
 					readTimeout, connectTimeout);
 			createAndStartGatewayServer(builder.build());
@@ -246,8 +245,8 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		this.gatewayServer = new GatewayServer(serverConfiguration);
 	}
 
-	protected void createOSGiGateway(int pythonPort) {
-		this.osgiGateway = new DirectProviderGateway(this, new CallbackClient(pythonPort));
+	protected void createOSGiGateway(int pythonPort, String address, int minConnectionTime) throws Exception {
+		this.osgiGateway = new DirectProviderGateway(this, new CallbackClient(pythonPort,InetAddress.getByName(address),minConnectionTime,TimeUnit.SECONDS));
 	}
 
 	protected void activate(BundleContext context, Config config) throws Exception {
@@ -258,8 +257,9 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		Boolean debug = config.debug();
 		Integer readTimeout = config.readTimeout();
 		Integer connectTimeout = config.connectTimeout();
+		Integer minConnectionTime = config.minConnectionTime();
 		synchronized (getLock()) {
-			createOSGiGateway(pythonPort);
+			createOSGiGateway(pythonPort,address,minConnectionTime);
 			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(javaPort, address,
 					debug, readTimeout, connectTimeout);
 			createAndStartGatewayServer(builder.build());
