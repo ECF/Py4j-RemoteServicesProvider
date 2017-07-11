@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+<provider id="org.eclipse.egit.core.GitProvider">
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,."/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,examples/org.eclipse.ecf.examples.hello"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,examples/org.eclipse.ecf.examples.hello.javahost"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,examples/org.eclipse.ecf.examples.hello.provider"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,examples/org.eclipse.ecf.examples.hello.pythonclient"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,examples/org.eclipse.ecf.examples.protobuf.hello"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,examples/org.eclipse.ecf.examples.protobuf.hello.consumer"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,examples/org.eclipse.ecf.examples.protobuf.hello.provider"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,bundles/org.eclipse.ecf.provider.direct"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,bundles/org.eclipse.ecf.provider.direct.protobuf"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,bundles/org.eclipse.ecf.provider.py4"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,features/org.eclipse.ecf.provider.py4j.feature"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,bundles/org.eclipse.ecf.provider.py4j.protobuf"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,releng/org.eclipse.ecf.provider.py4j.releng.target"/>
+<project reference="1.0,https://github.com/ECF/Py4j-RemoteServicesProvider.git,master,python/osgiservicebridge"/>
+</provider>
+</psf>
