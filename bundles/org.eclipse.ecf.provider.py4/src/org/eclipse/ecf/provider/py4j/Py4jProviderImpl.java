@@ -20,6 +20,7 @@ import org.eclipse.ecf.provider.direct.util.DirectHostContainer;
 import org.eclipse.ecf.provider.direct.util.DirectRemoteServiceClientDistributionProvider;
 import org.eclipse.ecf.provider.direct.util.DirectRemoteServiceHostDistributionProvider;
 import org.eclipse.ecf.provider.direct.util.IDirectContainerInstantiator;
+import org.eclipse.ecf.provider.direct.util.PropertiesUtil;
 import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
 import org.osgi.framework.Bundle;
@@ -176,6 +177,20 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 				null);
 	}
 
+	private static final String PP = Py4jProvider.class.getName() + ".";
+	public static final String PYTHON_PORT_PROP = "pythonPort";
+	public static final String PYTHON_PORT_SYSPROP = PP + PYTHON_PORT_PROP;
+	public static final String JAVA_PORT_PROP = "port";
+	public static final String JAVA_PORT_SYSPROP = PP + JAVA_PORT_PROP;
+	public static final String ADDRESS_PROP = "address";
+	public static final String ADDRESS_SYSPROP = PP + ADDRESS_PROP;
+	public static final String DEBUG_PROP = "debug";
+	public static final String DEBUG_SYSPROP = PP + DEBUG_PROP;
+	public static final String READ_TIMEOUT_PROP = "readTimeout";
+	public static final String READ_TIMEOUT_SYSPROP = PP + READ_TIMEOUT_PROP;
+	public static final String CONNECT_TIMEOUT_PROP = "connectTimeout";
+	public static final String CONNECT_TIMEOUT_SYSPROP = PP + CONNECT_TIMEOUT_PROP;
+
 	public @interface Config {
 		int pythonPort() default 25334;
 
@@ -190,16 +205,64 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		int connectTimeout() default 0;
 	}
 
+	protected GatewayServerConfiguration.Builder createGatewayServerConfigurationBuilder(int javaPort, String address,
+			boolean debug, int readTimeout, int connectTimeout) throws Exception {
+		return new GatewayServerConfiguration.Builder(this).setPort(javaPort).setGateway(this.osgiGateway)
+				.setConnectTimeout(connectTimeout).setReadTimeout(readTimeout)
+				.setAddress(InetAddress.getByName(address)).addGatewayServerListener(gatewayServerListener)
+				.setClassLoadingStrategyBundles(new Bundle[] { getContext().getBundle() }).setDebug(debug);
+	}
+
+	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
+		super.activate(context);
+		System.getProperties();
+		Integer pythonPort = PropertiesUtil.getIntValue(PYTHON_PORT_SYSPROP, properties, PYTHON_PORT_PROP,
+				py4j.GatewayServer.DEFAULT_PYTHON_PORT);
+		Integer port = PropertiesUtil.getIntValue(JAVA_PORT_SYSPROP, properties, JAVA_PORT_PROP,
+				py4j.GatewayServer.DEFAULT_PORT);
+		Boolean debug = PropertiesUtil.getBooleanValue(DEBUG_SYSPROP, properties, DEBUG_PROP, false);
+		String address = System.getProperty(ADDRESS_SYSPROP);
+		if (address == null) {
+			address = py4j.GatewayServer.DEFAULT_ADDRESS;
+			Object addr = properties.get(ADDRESS_PROP);
+			if (addr != null && (addr instanceof String))
+				address = (String) addr;
+		}
+		Integer readTimeout = PropertiesUtil.getIntValue(READ_TIMEOUT_SYSPROP, properties, READ_TIMEOUT_PROP,
+				py4j.GatewayServer.DEFAULT_READ_TIMEOUT);
+		Integer connectTimeout = PropertiesUtil.getIntValue(CONNECT_TIMEOUT_SYSPROP, properties, CONNECT_TIMEOUT_PROP,
+				py4j.GatewayServer.DEFAULT_CONNECT_TIMEOUT);
+		synchronized (getLock()) {
+			createOSGiGateway(pythonPort);
+			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(port, address, debug,
+					readTimeout, connectTimeout);
+			createAndStartGatewayServer(builder.build());
+			registerHostDistributionProvider();
+			registerClientDistributionProvider();
+		}
+	}
+
+	protected void createAndStartGatewayServer(GatewayServerConfiguration serverConfiguration) throws Exception {
+		this.gatewayServer = new GatewayServer(serverConfiguration);
+	}
+
+	protected void createOSGiGateway(int pythonPort) {
+		this.osgiGateway = new DirectProviderGateway(this, new CallbackClient(pythonPort));
+	}
+
 	protected void activate(BundleContext context, Config config) throws Exception {
 		super.activate(context);
+		Integer pythonPort = config.pythonPort();
+		Integer javaPort = config.port();
+		String address = config.address();
+		Boolean debug = config.debug();
+		Integer readTimeout = config.readTimeout();
+		Integer connectTimeout = config.connectTimeout();
 		synchronized (getLock()) {
-			this.osgiGateway = new DirectProviderGateway(this, new CallbackClient(config.pythonPort()));
-			GatewayServerConfiguration.Builder builder = new GatewayServerConfiguration.Builder(this)
-					.setPort(config.port()).setGateway(this.osgiGateway).setConnectTimeout(config.connectTimeout())
-					.setReadTimeout(config.readTimeout()).setAddress(InetAddress.getByName(config.address()))
-					.addGatewayServerListener(gatewayServerListener)
-					.setClassLoadingStrategyBundles(new Bundle[] { context.getBundle() }).setDebug(config.debug());
-			this.gatewayServer = new GatewayServer(builder.build());
+			createOSGiGateway(pythonPort);
+			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(javaPort, address,
+					debug, readTimeout, connectTimeout);
+			createAndStartGatewayServer(builder.build());
 			registerHostDistributionProvider();
 			registerClientDistributionProvider();
 		}

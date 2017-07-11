@@ -22,6 +22,60 @@ import org.eclipse.ecf.provider.direct.ExternalServiceProvider;
  */
 public class PropertiesUtil {
 
+	public static Integer getIntValue(String sysprop, Map<String,?> props, String key, Integer def) {
+		if (props == null) 
+			return def;
+		// get system prop first
+		Object res = null;
+		res = System.getProperty(sysprop);
+		// If no system prop value then 
+		// check for in properties
+		if (res == null) 
+			res = props.get(key);
+		// Now check for either Integer or convertable string
+		if (res instanceof Integer)
+			return (Integer) res;
+		else if (res instanceof String)
+			return (Integer) Integer.valueOf((String) res);
+		else
+			return def;
+	}
+	
+	public static String getStringValue(String sysprop, Map<String,?> props, String key, String def) {
+		if (props == null) 
+			return def;
+		// get system prop first
+		Object res = null;
+		res = System.getProperty(sysprop);
+		// If no system prop value then 
+		// check for in properties
+		if (res == null) 
+			res = props.get(key);
+		// Now check for either Integer or convertable string
+		if (res instanceof String)
+			return (String) res;
+		else
+			return def;
+	}
+	
+
+	public static Boolean getBooleanValue(String sysprop, Map<String, ?> props, String key, Boolean def) {
+		if (props == null) 
+			return def;
+		// get system prop first
+		Object res = null;
+		res = System.getProperty(sysprop);
+		// If no system prop value then 
+		// check for in properties
+		if (res == null) 
+			res = props.get(key);
+		if (res instanceof Boolean)
+			return (Boolean) res;
+		else if (res instanceof String)
+			return (Boolean) Boolean.valueOf((String) res);
+		else
+			return def;
+	}
 	public static Long convertPropToLong(@SuppressWarnings("rawtypes") Map input, String key) {
 		Object val = input.get(key);
 		if (val instanceof Long)

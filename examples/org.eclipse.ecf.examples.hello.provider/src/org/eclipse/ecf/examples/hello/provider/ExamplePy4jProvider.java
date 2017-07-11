@@ -26,9 +26,13 @@ public class ExamplePy4jProvider extends Py4jProviderImpl implements Py4jProvide
 		super.unbindEndpointEventListener(eel);
 	}
 
-	@Activate
 	protected void activate(BundleContext context, Py4jProviderImpl.Config config) throws Exception {
 		super.activate(context,config);
+	}
+	
+	@Activate
+	protected void activate(BundleContext context, Map<String,?> properties) throws Exception {
+		super.activate(context, properties);
 	}
 	
 	@Deactivate
