@@ -22,12 +22,12 @@ import sys
 import osgiservicebridge
 from google.protobuf.message import Message
 
-# Version
-__version_info__ = (1, 0, 0)
-__version__ = ".".join(str(x) for x in __version_info__)
-
 # Documentation strings format
 __docformat__ = "restructuredtext en"
+
+from osgiservicebridge.version import __version__ as __v__
+# Version
+__version__ = __v__
 
 # ------------------------------------------------------------------------------
 
