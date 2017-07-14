@@ -1,11 +1,11 @@
 # Py4j-RemoteServicesProvider
 An ECF Remote Services/RSA Provider that uses Py4j as the transport.   This allows easy and dynamic rpc between Java and Python objects.  Python-Implementations can be exposed to Java consumers as OSGi services, and Java-based OSGi services can be exposed to Python consumers.
 
-##Python-Implemented OSGi Services
+# Python-Implemented OSGi Services
 
-See [here](https://wiki.eclipse.org/Tutorial:_Python_for_OSGi_Services) for a tutorial describing this use case.
+See [here](https://wiki.eclipse.org/Tutorial:_Python_for_OSGi_Services) for a tutorial based on this use case.
 
-##Java-Implemented OSGi Services accessed from python
+# Java-Implemented OSGi Services accessed from Python
 For example, to make an OSGi service available for access in Python it's only necessary to add an OSGi-standard service property.
 
 <pre>
@@ -18,5 +18,5 @@ public class EvalImpl implements Eval {
 }
 </pre>
 
-Using [ECF's RSA](https://wiki.eclipse.org/Eclipse_Communication_Framework_Project#OSGi_Remote_Services) implementation, this eval service will be dynamically injected into a Python application.
+Using [ECF's RSA](https://wiki.eclipse.org/Eclipse_Communication_Framework_Project#OSGi_Remote_Services) implementation, this eval service will be injected into a Python application.
 
