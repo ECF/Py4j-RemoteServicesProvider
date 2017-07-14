@@ -5,7 +5,7 @@ An ECF Remote Services/RSA Provider that uses Py4j as the transport.   This allo
 
 See [here](https://wiki.eclipse.org/Tutorial:_Python_for_OSGi_Services) for a tutorial based on this use case.
 
-# Java-Implemented OSGi Services accessed from Python
+## Java-Implemented OSGi Services accessed from Python
 For example, to make an OSGi service available for access in Python it's only necessary to add an OSGi-standard service property.
 
 <pre>
