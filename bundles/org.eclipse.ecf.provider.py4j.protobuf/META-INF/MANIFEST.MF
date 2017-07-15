@@ -29,4 +29,5 @@ Require-Bundle: org.eclipse.equinox.common,
  org.eclipse.ecf.remoteservice.asyncproxy;bundle-version="2.0.100"
 Export-Package: org.eclipse.ecf.provider.py4j.protobuf;version="1.0.0"
 DynamicImport-Package: *
+Provide-Capability: osgi.remoteserviceadmin.distribution; configs:List<String>="ecf.py4j.consumer.pb"; version:Version=1.1
 
