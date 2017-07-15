@@ -17,4 +17,18 @@
         <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/features/org.eclipse.ecf.provider.py4j.feature/build/plugins/org.py4j.osgi_1.1.1.201707052305.jar</bundle>
     </feature>
     
+    <feature name="ecf-rs-examples-py4j-hello" version="1.0.0"  description="ECF Py4j Hello Example">
+        <feature version="1.0.0">ecf-rs-distribution-py4j</feature>
+        <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/features/org.eclipse.ecf.provider.py4j.feature/build/plugins/org.eclipse.ecf.examples.hello_1.0.0.201707102318.jar</bundle>
+        <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/features/org.eclipse.ecf.provider.py4j.feature/build/plugins/org.eclipse.ecf.examples.hello.javahost_1.0.1.201707102318.jar</bundle>
+        <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/features/org.eclipse.ecf.provider.py4j.feature/build/plugins/org.eclipse.ecf.examples.hello.provider_1.0.1.201707102318.jar</bundle>
+    </feature>
+    
+    <feature name="ecf-rs-examples-protobuf-hello" version="1.0.0"  description="ECF Protobuf Hello Example">
+        <feature version="1.0.0">ecf-rs-distribution-py4j</feature>
+        <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/features/org.eclipse.ecf.provider.py4j.feature/build/plugins/org.eclipse.ecf.examples.protobuf.hello_1.0.1.201707102318.jar</bundle>
+        <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/features/org.eclipse.ecf.provider.py4j.feature/build/plugins/org.eclipse.ecf.examples.protobuf.hello.consumer_1.0.1.201707102318.jar</bundle>
+        <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/features/org.eclipse.ecf.provider.py4j.feature/build/plugins/org.eclipse.ecf.examples.protobuf.hello.provider_1.0.1.201707102318.jar</bundle>
+    </feature>
+    
 </features>
