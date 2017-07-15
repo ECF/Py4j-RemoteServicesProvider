@@ -20,3 +20,12 @@ public class EvalImpl implements Eval {
 
 Using [ECF's RSA](https://wiki.eclipse.org/Eclipse_Communication_Framework_Project#OSGi_Remote_Services) implementation, a proxy for this eval service instance will be injected into a Python application, allowing it to call eval on this OSGi service instance.
 
+## Download and Use
+### Java Components
+
+A recent build of the Java components (OSGi bundles) exist in binary form in the plugins subdirectory underneath [this directory](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/features/org.eclipse.ecf.provider.py4j.feature/build):https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/features/org.eclipse.ecf.provider.py4j.feature/build
+
+A P2 Repository is also available in that same directory...i.e:  https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/features/org.eclipse.ecf.provider.py4j.feature/build.  Add this URL with name (e.g.):  ECF Py4j Provider.
+
+Also present is a [Karaf](http://karaf.apache.org/) Features repository:  https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/features/org.eclipse.ecf.provider.py4j.feature/build/karaf-features.xml
+
