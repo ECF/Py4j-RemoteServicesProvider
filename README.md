@@ -33,6 +33,25 @@ Of course you may also build the components from source via Maven.   After impor
 
 For support please file an issue on this repo, or contact [scottslewis@gmail.com](mailto:scottslewis@gmail.com)
 
-###Python Components
+### Python Components
 
-The OSGi Service Bridge source code 
+The Python OSGi Service Bridge depends upon both [Py4j](https://www.py4j.org/) 0.10.6+ and [Google Protocol Buffers version 3.3.1](https://developers.google.com/protocol-buffers/).   Both of these may be installed via [PyPi](https://pypi.python.org/pypi):
+
+<pre>
+pip install protobuf==3.3.1
+</pre>
+and
+<pre>
+pip install py4j==0.10.6
+</pre>
+
+Soon the OSGi service bridge (package: osgiservicebridge) will be made available vi PyPi as well, and then Py4j and Protobuf will both be installed as dependencies when the OSGi service bridge is installed.
+
+
+
+
+
+
+This must be installed 
+The OSGi Service Bridge source code is in [the python/osgiservicebridge](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/python/osgiservicebridge) project.   This package should be installed into Python 2.7 or Python 3.3+ prior to running the example (in, e.g. the run.py in examples/org.eclipse.ecf.examples.protobuf.hello/python-src directory).
+
