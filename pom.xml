@@ -244,46 +244,6 @@
           <artifactId>maven-clean-plugin</artifactId>
 	  <version>3.0.0</version>
         </plugin>
-	<plugin>
-	  <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-	  <version>2.10.4</version>
-          <configuration>
-            <additionalDependencies>
-              <additionalDependency>
-                <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.annotation</artifactId>
-                <version>6.0.0</version>
-              </additionalDependency>
-            </additionalDependencies>
-            <additionalparam>-Xdoclint:none</additionalparam>
-            <author>false</author>
-            <doctitle>${project.name} 3.13.7 API</doctitle>
-            <excludePackageNames>*.ui*:*.smack.*:*.incubation.*:*.internal.*:ch.*:*.jmdns.*:*.tests.*:*.sdo.*:*.twitter.*:*.jivesoftware.*:*.collab.*:*.osgi.services.discovery.*:com.mycorp.*:org.eclipse.ecf.core.start:org.eclipse.ecf.core.user:org.eclipse.ecf.docshare.*:org.eclipse.ecf.datashare.*:org.eclipse.ecf.example.*:org.eclipse.ecf.presence.*:org.eclipse.ecf.protocol.bittorrent:org.eclipse.ecf.protocol.msn:org.eclipse.ecf.provider.irc:org.eclipse.ecf.provider.datashare.*:org.eclipse.ecf.provider.discovery.*:org.eclipse.ecf.provider.xmpp:org.eclipse.ecf.remoteservice.rpc:org.eclipse.ecf.remoteservice.soap:org.eclipse.ecf.server:org.eclipse.ecf.storage:org.eclipse.ecf.sync:org.eclipse.ecf.telephony:org.eclipse.ecf.remoteservice.asyncproxy.j8:org.eclipse.ecf.remoteservices.tooling.pde:org.eclipse.ecf.tests.*:org.eclipse.ecf.remoteservices.rest.rss:org.eclipse.ecf.examples.*</excludePackageNames>
-            <links>
-              <link>https://osgi.org/javadoc/r6/core/</link>
-            </links>
-            <splitindex>true</splitindex>
-            <tags>
-              <tag>
-                <name>noimplement</name><placement>a</placement><head>Restriction:</head>
-              </tag>
-              <tag>
-                <name>noextend</name><placement>a</placement><head>Restriction:</head>
-              </tag>
-              <tag>
-                <name>noreference</name><placement>a</placement><head>Restriction:</head>
-              </tag>
-              <tag>
-                <name>noinstantiate</name><placement>a</placement><head>Restriction:</head>
-              </tag>
-              <tag>
-                <name>nooverride</name><placement>a</placement><head>Restriction:</head>
-              </tag>
-            </tags>
-            <windowtitle>${project.name} 3.13.7 API</windowtitle>
-          </configuration>
-        </plugin>
       </plugins>
     </pluginManagement>
   </build>
