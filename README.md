@@ -29,3 +29,10 @@ A P2 Repository is also available in that same directory...i.e:  https://github.
 
 Also present is a [Karaf](http://karaf.apache.org/) Features repository:  https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/features/org.eclipse.ecf.provider.py4j.feature/build/karaf-features.xml
 
+Of course you may also build the components from source via Maven.   After importing projects, the target platform should be set to the contents of this file:  https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/releng/org.eclipse.ecf.provider.py4j.releng.target/ecf-oxygen.target.   This assumes the use of Java8 and Eclipse Oxygen or newer. 
+
+For support please file an issue on this repo, or contact [scottslewis@gmail.com](mailto:scottslewis@gmail.com)
+
+###Python Components
+
+The OSGi Service Bridge source code 
