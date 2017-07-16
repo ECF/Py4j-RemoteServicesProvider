@@ -20,8 +20,12 @@ public class EvalImpl implements Eval {
 
 Using [ECF's RSA](https://wiki.eclipse.org/Eclipse_Communication_Framework_Project#OSGi_Remote_Services) implementation, a proxy for this eval service instance will be injected into a Python application, allowing it to call eval on this OSGi service instance.
 
-## Download and Use
+## Download and Install
 ### Java Components
+
+#### Dependencies
+
+The Py4j Remote Services Provider depends upon the ECF implementation of the OSGi Remote Service Admin (RSA).   The latest version is available at [Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.eclipse.ecf%22) and as an Eclipse p2 repository or zip as described by [this download page](https://www.eclipse.org/ecf/downloads.php).
 
 A recent build of the Java components (OSGi bundles) exist in binary form in the plugins subdirectory underneath [this directory](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/features/org.eclipse.ecf.provider.py4j.feature/build):https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/features/org.eclipse.ecf.provider.py4j.feature/build
 
@@ -47,11 +51,5 @@ pip install py4j==0.10.6
 
 Soon the OSGi service bridge (package: osgiservicebridge) will be made available vi PyPi as well, and then Py4j and Protobuf will both be installed as dependencies when the OSGi service bridge is installed.
 
-
-
-
-
-
-This must be installed 
-The OSGi Service Bridge source code is in [the python/osgiservicebridge](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/python/osgiservicebridge) project.   This package should be installed into Python 2.7 or Python 3.3+ prior to running the example (in, e.g. the run.py in examples/org.eclipse.ecf.examples.protobuf.hello/python-src directory).
+The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/python/osgiservicebridge) project.   This package should be installed into Python 2.7 or Python 3.3+ prior to running the example (in, e.g. the run.py in examples/org.eclipse.ecf.examples.protobuf.hello/python-src directory).
 
