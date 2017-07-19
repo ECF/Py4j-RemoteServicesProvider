@@ -45,6 +45,7 @@ PB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
 
 PB_SERVICE_RETURN_TYPE_ATTR = '_return_type'
 PB_SERVICE_ARG_TYPE_ATTR = '_arg_type'
+PB_SERVICE_SOURCE_ATTR = '_source'
 
 def get_instance_method(instance, method_name):
     '''
@@ -106,6 +107,19 @@ def create_return_instance(instance, method_name):
     if ret_type is not None:
         return ret_type()
     return None
+
+def get_method_source(method):
+    return getattr(method,PB_SERVICE_SOURCE_ATTR, None)
+
+def set_method_source(method, sourcecode):
+    setattr(method, PB_SERVICE_ARG_TYPE_ATTR, sourcecode)
+    
+def update_method(method,oldfunc,new_source):
+    if method:
+        setattr(method, PB_SERVICE_ARG_TYPE_ATTR, getattr(oldfunc, PB_SERVICE_ARG_TYPE_ATTR, None))
+        setattr(method, PB_SERVICE_RETURN_TYPE_ATTR, getattr(oldfunc, PB_SERVICE_RETURN_TYPE_ATTR, None))
+        setattr(method, PB_SERVICE_SOURCE_ATTR, new_source)
+
 '''
 def instance_reset_function(instance, method_name, newfunc):
     oldfunc = getattr(instance, method_name)
@@ -234,6 +248,12 @@ def protobuf_remote_service_method(arg_type,return_type=None):
     def pbwrapper(func):
         func._arg_type = arg_type
         func._return_type = return_type
+        func._source = None
+        try:
+            from inspect import getsource
+            setattr(func, PB_SERVICE_SOURCE_ATTR, getsource(func))
+        except:
+            pass
         @wraps(func)
         def wrapper(*args):
             # set argClass to arg_type

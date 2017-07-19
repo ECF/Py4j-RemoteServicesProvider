@@ -22,7 +22,7 @@ exec(compile(open(VERSION_PATH).read(),
      VERSION_PATH, "exec"))
 VERSION = __version__  # noqa
 
-JAVA_FILE='java/osgiservicebridge-java-bundles-'+VERSION+'.zip'
+JAVA_FILE='java/osgiservicebridge-java-bundles-1.0.3.zip'
 
 setup(
     name='osgiservicebridge',
@@ -32,7 +32,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.2',
+    version=VERSION,
 
     description='OSGi services implemented in Python',
     long_description=long_description,
