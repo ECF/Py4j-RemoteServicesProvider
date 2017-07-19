@@ -22,6 +22,8 @@ exec(compile(open(VERSION_PATH).read(),
      VERSION_PATH, "exec"))
 VERSION = __version__  # noqa
 
+JAVA_FILE='java/osgiservicebridge-java-bundles-'+VERSION+'.zip'
+
 setup(
     name='osgiservicebridge',
     packages=find_packages(where='src'),
@@ -30,9 +32,9 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.0',
+    version='1.0.2',
 
-    description='Allows OSGi services to be implemented in Python',
+    description='OSGi services implemented in Python',
     long_description=long_description,
 
     # The project's main homepage.
@@ -43,7 +45,7 @@ setup(
     author_email='scottslewis@gmail.com',
 
     # Choose your license
-    license='Apache 2',
+    license='Apache Software License',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -58,7 +60,7 @@ setup(
         'Topic :: Software Development :: Build Tools',
 
         # Pick your license as you wish (should match "license" above)
-        'License :: OSI Approved :: Apache 2 License',
+        'License :: OSI Approved :: Apache Software License',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
@@ -68,6 +70,9 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        "Programming Language :: Java",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: Software Development :: Object Brokering",
     ],
 
     # What does your project relate to?
@@ -85,7 +90,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['py4j>=0.10.6','protobuf>=3.2.0,<3.3.0'],
+    install_requires=['py4j>=0.10.6','protobuf>=3.3.0'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
@@ -107,7 +112,7 @@ setup(
     # need to place data files outside of your packages. See:
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    data_files=[('java/site.p2', ['../../features/org.eclipse.ecf.provider.py4j.feature/build'])],
+    data_files=[('java', [JAVA_FILE])],
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
