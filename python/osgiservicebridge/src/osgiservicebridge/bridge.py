@@ -3,7 +3,7 @@ OSGi service bridge Py4j classes
 :author: Scott Lewis
 :copyright: Copyright 2016, Composent, Inc.
 :license: Apache License 2.0
-:version: 1.0.0
+:version: 1.0.4
     Copyright 2017 Composent, Inc. and others
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -490,14 +490,13 @@ class Py4jServiceBridge(object):
                     self._bridge._unimport_service_from_java(props)
                     
                 def _call_endpoint(self,rsId,methodName,serializedArgs):
-                    try:
-                        endpoint = self._bridge.get_export_endpoint_for_rsid(rsId)
-                        if endpoint:
-                            return endpoint._raw_bytes_from_java(methodName,serializedArgs)
-                        raise Exception('exception executing _raw_bytes_from_java')
-                    except Exception as e:
-                        _logger.error("Exception in _call_endpoint",e)
-                        raise e
+                    endpoint = self._bridge.get_export_endpoint_for_rsid(rsId)
+                    if endpoint:
+                        return endpoint._raw_bytes_from_java(methodName,serializedArgs)
+                    else:
+                        msg = 'No endpoint for rsId=%s methodName=%s serializedArgs=%s' % (rsId,methodName,serializedArgs)
+                        _logger.error(msg)
+                        raise Exception(msg)
                
                 class Java:
                     implements = [JAVA_DIRECT_ENDPOINT_CLASS, PY4J_CALL_BY_VALUE_CLASS]

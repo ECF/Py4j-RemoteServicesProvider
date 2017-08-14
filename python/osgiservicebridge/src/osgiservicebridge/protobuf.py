@@ -20,7 +20,9 @@ from logging import getLogger as getLibLogger
 
 import sys
 import osgiservicebridge
+
 from google.protobuf.message import Message
+
 
 # Documentation strings format
 __docformat__ = "restructuredtext en"
@@ -148,14 +150,10 @@ def fully_qualified_classname(c):
                 
 
 def _raw_bytes_from_java(self,methodName,serializedArgs):
-    try:
-        return getattr(self,methodName)(serializedArgs)
-    except Exception as e:
-        _logger.error('Exception calling methodName='+str(methodName)+" on object="+str(self))
-        raise e
+    return getattr(self,methodName)(serializedArgs)
 
 def argument_deserialize(argClass, serialized):
-    #If nothing to serialze, return None
+    #If nothing to serialize, return None
     if not serialized:
         return None
     #First create a new instance of the given argClass
@@ -164,7 +162,7 @@ def argument_deserialize(argClass, serialized):
         # create instance of argClass
         argInst = argClass()
     except Exception as e:
-        _logger.error('Could not create instance of class='+str(argClass), e)
+        _logger.exception('Could not create argInst. argClass=%s' % (argClass))
         raise e
     # XXX because of problem discovered we check the Python version, 
     # If Python 2 we convert the serialized to a string (from bytearray)
@@ -175,7 +173,7 @@ def argument_deserialize(argClass, serialized):
         # deserialze
         argInst.ParseFromString(serialized)
     except Exception as e:
-        _logger.error('Could not call ParseFromString on instance='+str(argInst),e)
+        _logger.exception('Message.ParseFromString failed. argInst=%' % (argInst))
         raise e
     return argInst
 
@@ -185,7 +183,7 @@ def return_serialize(respb):
         try:
             resBytes = respb.SerializeToString()
         except Exception as e:
-            _logger.error('Could not call SerializeToString on resp object='+str(respb),e)
+            _logger.exception('Message.SerializeToString failed. respb=%s' % (respb))
             raise e
         # If Python 2 we convert the string to bytearray
         if PY2:
@@ -246,6 +244,13 @@ def protobuf_remote_service_method(arg_type,return_type=None):
     '''
     issubclass(arg_type, Message)
     def pbwrapper(func):
+        def logged_wrapped_exception(msg):
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            from traceback import format_exception
+            lines = format_exception(exc_type, exc_value, exc_traceback)
+            lines[1:2] = []
+            _logger.error(msg + ('\n%s' % (''.join(lines))))
+
         func._arg_type = arg_type
         func._return_type = return_type
         func._source = None
@@ -266,7 +271,7 @@ def protobuf_remote_service_method(arg_type,return_type=None):
                 # Now actually call function, with self,pbMessage
                 respb = func(args[0],argInst)
             except Exception as e:
-                _logger.error('Could not call function='+str(func)+' on object='+str(args[0]))
+                logged_wrapped_exception('Remote method invoke failed')
                 raise e
             if not func._return_type is None:
                 isinstance(respb,func._return_type)
