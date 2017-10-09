@@ -9,11 +9,16 @@
 package org.eclipse.ecf.provider.direct.protobuf;
 
 import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 
 public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
+
+	private Logger timingLogger = LoggerFactory.getLogger("timing.org.eclipse.ecf.provider.direct.protobuf");
 
 	private ExternalCallableEndpoint eceService;
 
@@ -29,6 +34,57 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 		return eceService;
 	}
 
+	protected byte[] serializeMessage(Message message) {
+		long startTime = 0;
+		byte[] messageBytes = null;
+		if (message != null) {
+			if (timingLogger != null && timingLogger.isDebugEnabled())
+				startTime = System.currentTimeMillis();
+			messageBytes = message.toByteArray();
+			if (timingLogger != null && timingLogger.isDebugEnabled()) {
+				long endTime = System.currentTimeMillis();
+				timingLogger.debug("protobuf.request.serialize;class=" + message.getClass().getName() + ";d="
+						+ (endTime - startTime));
+			}
+		}
+		return messageBytes;
+	}
+
+	protected Message deserializeMessage(byte[] resultBytes, Parser<?> resultParser)
+			throws InvalidProtocolBufferException {
+		long startTime = 0;
+		// Now deserialize result
+		if (timingLogger != null && timingLogger.isDebugEnabled())
+			startTime = System.currentTimeMillis();
+
+		// If result is null/None then return null
+		if (resultBytes == null || resultParser == null) {
+			if (timingLogger != null && timingLogger.isDebugEnabled())
+				timingLogger.debug("protobuf.response.deserialize;null response");
+			return null;
+		}
+		// Else parse and return Message
+		Message result = (Message) resultParser.parseFrom(resultBytes);
+		if (timingLogger != null && timingLogger.isDebugEnabled()) {
+			long endTime = System.currentTimeMillis();
+			timingLogger.debug(
+					"protobuf.response.parse;class=" + result.getClass().getName() + ";d=" + (endTime - startTime));
+		}
+		return result;
+	}
+
+	protected byte[] call_endpoint(Long rsId, String methodName, byte[] messageBytes) throws Exception {
+		long start = 0;
+		if (timingLogger != null && timingLogger.isDebugEnabled())
+			start = System.currentTimeMillis();
+		byte[] resultBytes = getExternalCallableEndpoint()._call_endpoint(rsId, methodName, messageBytes);
+		if (timingLogger != null && timingLogger.isDebugEnabled()) {
+			long end = System.currentTimeMillis();
+			timingLogger.debug("protobuf.pythonrpc;rsId=" + rsId + ";method=" + methodName + ";time=" + (end - start));
+		}
+		return resultBytes;
+	}
+
 	@Override
 	public <A extends Message> Message call_endpoint(Long rsId, String methodName, A message, Parser<?> resultParser)
 			throws Exception {
@@ -37,14 +93,7 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 		int dotLastIndex = methodName.lastIndexOf('.');
 		if (dotLastIndex >= 0)
 			methodName = methodName.substring(dotLastIndex + 1);
-		// Serialized message, and call cbvService
-		byte[] resultBytes = getExternalCallableEndpoint()._call_endpoint(rsId, methodName,
-				(message == null) ? null : message.toByteArray());
-		// If result is null/None then return null
-		if (resultBytes == null || resultParser == null)
-			return null;
-		// Else parse and return Message
-		return (Message) resultParser.parseFrom(resultBytes);
+		return deserializeMessage(call_endpoint(rsId, methodName, serializeMessage(message)), resultParser);
 	}
 
 }
