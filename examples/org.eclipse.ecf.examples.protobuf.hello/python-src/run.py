@@ -9,6 +9,16 @@ from osgiservicebridge import ECF_SERVICE_EXPORTED_ASYNC_INTERFACES
 from osgiservicebridge.protobuf import protobuf_remote_service, protobuf_remote_service_method
 from hellomsg_pb2 import HelloMsgContent
 
+import logging
+import sys
+timing = logging.getLogger("timing.osgiservicebridge.protobuf")
+
+timing.setLevel(logging.DEBUG)
+ch = logging.StreamHandler(stream = sys.stdout)
+ch.setLevel(logging.DEBUG)
+
+timing.addHandler(ch)
+
 @protobuf_remote_service(objectClass=['org.eclipse.ecf.examples.protobuf.hello.IHello'],export_properties = { ECF_SERVICE_EXPORTED_ASYNC_INTERFACES: 'org.eclipse.ecf.examples.protobuf.hello.IHello' })
 class HelloServiceImpl:
     

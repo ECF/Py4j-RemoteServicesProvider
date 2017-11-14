@@ -17,12 +17,11 @@ OSGi service bridge Google protocol buffers (protobuf) support
 '''
 from functools import wraps
 from logging import getLogger as getLibLogger
-
 import sys
 import osgiservicebridge
+import time
 
 from google.protobuf.message import Message
-
 
 # Documentation strings format
 __docformat__ = "restructuredtext en"
@@ -32,9 +31,8 @@ from osgiservicebridge.version import __version__ as __v__
 __version__ = __v__
 
 # ------------------------------------------------------------------------------
-
 _logger = getLibLogger(__name__)
-
+_timing = getLibLogger("timing."+__name__)
 # ------------------------------------------------------------------------------
 
 # PY2/PY3 version differentiation.
@@ -169,16 +167,20 @@ def argument_deserialize(argClass, serialized):
     if PY2:
         serialized = str(serialized)
     #Then pass to parser and return
+    t0 = time.time()
     try:
         # deserialze
         argInst.ParseFromString(serialized)
     except Exception as e:
         _logger.exception('Message.ParseFromString failed. argInst=%' % (argInst))
         raise e
+    t1 = time.time()
+    _timing.debug("protobuf.request.deserialize;d="+str(1000*(t1-t0))+"ms")
     return argInst
 
 def return_serialize(respb):
     resBytes = None
+    t0 = time.time()
     if respb:
         try:
             resBytes = respb.SerializeToString()
@@ -188,6 +190,8 @@ def return_serialize(respb):
         # If Python 2 we convert the string to bytearray
         if PY2:
             resBytes = bytearray(resBytes)
+    t1 = time.time()
+    _timing.debug("protobuf.response.serialize;d="+str(1000*(t1-t0))+"ms")
     return resBytes
     
 def protobuf_remote_service(**kwargs):    
@@ -267,12 +271,15 @@ def protobuf_remote_service_method(arg_type,return_type=None):
             # ...to deserialize byte[] into pb Message into argInst
             argInst = argument_deserialize(argClass, args[1])
             respb = None
+            t0 = time.time()
             try:
                 # Now actually call function, with self,pbMessage
                 respb = func(args[0],argInst)
             except Exception as e:
                 logged_wrapped_exception('Remote method invoke failed')
                 raise e
+            t1 = time.time()
+            _timing.debug("protobuf.exec;time="+str(1000*(t1-t0))+"ms")
             if not func._return_type is None:
                 isinstance(respb,func._return_type)
             return return_serialize(respb)
