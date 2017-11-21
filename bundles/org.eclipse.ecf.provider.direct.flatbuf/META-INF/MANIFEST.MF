@@ -17,3 +17,4 @@ Import-Package: com.google.flatbuffers;version="1.0.0",
  org.osgi.framework,
  org.slf4j;version="1.7.2"
 Require-Bundle: org.eclipse.equinox.common;bundle-version="3.9.0"
+Export-Package: org.eclipse.ecf.provider.direct.flatbuf;version="1.0.0"
