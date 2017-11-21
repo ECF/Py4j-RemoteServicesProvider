@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Google Flatbuffers
+Bundle-SymbolicName: com.google.flatbuffers
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Google
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: com.google.flatbuffers;version="1.0.0"
