@@ -1,1 +1,3 @@
 /osgiservicebridge.egg-info/
+/osgiservicebridge/__pycache__
+/osgiservicebridge/*.pyc
