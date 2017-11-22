@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Consumer
+Bundle-SymbolicName: org.eclipse.ecf.examples.flatbuf.monster.consumer
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Eclipse.org - ECF
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.ecf.examples.flatbuf.monster,
+ org.osgi.service.component.annotations
+Service-Component: OSGI-INF/org.eclipse.ecf.examples.flatbuf.monster.consumer.MonsterConsumer.xml
+Require-Bundle: com.google.flatbuffers;bundle-version="1.0.0"

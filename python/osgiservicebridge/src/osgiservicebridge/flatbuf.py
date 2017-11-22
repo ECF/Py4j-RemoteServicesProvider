@@ -144,17 +144,15 @@ def argument_deserialize(argClass, serialized):
     #If nothing to serialize, return None
     if not serialized:
         return None
-    # XXX because of problem discovered we check the Python version, 
-    # If Python 2 we convert the serialized to a string (from bytearray)
-    if PY2:
-        serialized = str(serialized)
     argInst = None
     #Then pass to parser and return
     t0 = time.time()
     try:
+        clname = argClass.__name__
         # Create fb staticmethod name
-        methodName = 'GetRootAs' + argClass.__name__
-        argInst = getattr(argClass,methodName)(bytearray(serialized),0)
+        methodName = 'GetRootAs' + clname
+        method = getattr(argClass,methodName)
+        argInst = method(bytearray(serialized),0)
     except Exception as e:
         _logger.exception('Class.'+methodName+' failed. argClass=%' % (argClass))
         raise e
