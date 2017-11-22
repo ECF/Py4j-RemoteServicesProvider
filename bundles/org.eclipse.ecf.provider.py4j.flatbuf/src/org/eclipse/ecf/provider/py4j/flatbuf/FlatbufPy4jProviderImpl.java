@@ -59,9 +59,8 @@ public class FlatbufPy4jProviderImpl extends Py4jProviderImpl
 								return new org.eclipse.ecf.provider.direct.flatbuf.FlatbufClientContainer(
 										Py4jNamespace.createUUID(), new FlatbufCallableEndpoint() {
 											@Override
-											public Table call_endpoint(Long rsId,
-													String methodName, Table table, Class<?> resultType)
-													throws Exception {
+											public Table call_endpoint(Long rsId, String methodName, Table table,
+													Class<?> resultType) throws Exception {
 												return getFlatbufCallableEndpoint().call_endpoint(rsId, methodName,
 														table, resultType);
 											}
@@ -78,13 +77,13 @@ public class FlatbufPy4jProviderImpl extends Py4jProviderImpl
 		}
 	}
 
-	protected void activate(BundleContext context, Map<String,?> properties) throws Exception {
+	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
 		synchronized (getLock()) {
 			super.activate(context, properties);
 			registerProtobufClientDistributionProvider();
 		}
 	}
-	
+
 	private FlatbufCallableEndpointImpl pcei;
 
 	protected FlatbufCallableEndpoint getFlatbufCallableEndpoint() {

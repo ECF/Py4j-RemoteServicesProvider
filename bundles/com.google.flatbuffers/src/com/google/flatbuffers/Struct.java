@@ -21,13 +21,14 @@ import java.nio.ByteBuffer;
 /// @cond FLATBUFFERS_INTERNAL
 
 /**
- * All structs in the generated code derive from this class, and add their own accessors.
+ * All structs in the generated code derive from this class, and add their own
+ * accessors.
  */
 public class Struct {
-  /** Used to hold the position of the `bb` buffer. */
-  protected int bb_pos;
-  /** The underlying ByteBuffer to hold the data of the Struct. */
-  protected ByteBuffer bb;
+	/** Used to hold the position of the `bb` buffer. */
+	protected int bb_pos;
+	/** The underlying ByteBuffer to hold the data of the Struct. */
+	protected ByteBuffer bb;
 }
 
 /// @endcond

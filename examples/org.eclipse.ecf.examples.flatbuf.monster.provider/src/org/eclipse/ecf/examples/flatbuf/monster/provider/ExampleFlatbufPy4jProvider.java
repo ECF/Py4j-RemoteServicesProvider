@@ -42,15 +42,16 @@ public class ExampleFlatbufPy4jProvider extends FlatbufPy4jProviderImpl
 	}
 
 	private ServiceRegistration<?> debugRSAReg;
-	
+
 	@Activate
-	protected void activate(BundleContext context, Map<String,?> properties) throws Exception {
+	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
 		super.activate(context, properties);
-		boolean debugRSA = Boolean.parseBoolean(System.getProperty("debugRSA","true"));
+		boolean debugRSA = Boolean.parseBoolean(System.getProperty("debugRSA", "true"));
 		if (debugRSA)
-			debugRSAReg = getContext().registerService(RemoteServiceAdminListener.class, new DebugRemoteServiceAdminListener(), null);
+			debugRSAReg = getContext().registerService(RemoteServiceAdminListener.class,
+					new DebugRemoteServiceAdminListener(), null);
 	}
-	
+
 	@Deactivate
 	@Override
 	protected void deactivate() {

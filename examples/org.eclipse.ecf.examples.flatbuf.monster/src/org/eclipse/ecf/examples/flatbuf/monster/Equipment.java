@@ -3,12 +3,15 @@
 package org.eclipse.ecf.examples.flatbuf.monster;
 
 public final class Equipment {
-  private Equipment() { }
-  public static final byte NONE = 0;
-  public static final byte Weapon = 1;
+	private Equipment() {
+	}
 
-  public static final String[] names = { "NONE", "Weapon", };
+	public static final byte NONE = 0;
+	public static final byte Weapon = 1;
 
-  public static String name(int e) { return names[e]; }
+	public static final String[] names = { "NONE", "Weapon", };
+
+	public static String name(int e) {
+		return names[e];
+	}
 }
-
