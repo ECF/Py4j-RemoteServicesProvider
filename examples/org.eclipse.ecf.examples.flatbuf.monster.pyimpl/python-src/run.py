@@ -91,7 +91,7 @@ if __name__ == '__main__':
     print("bridge connected")
     hsid = bridge.export(MonsterServiceImpl())
     print("exported")
-    _wait_for_sec(5)
+    _wait_for_sec(20)
     bridge.unexport(hsid)
     print("unexported")
     bridge.disconnect()
