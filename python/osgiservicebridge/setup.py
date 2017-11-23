@@ -22,7 +22,7 @@ exec(compile(open(VERSION_PATH).read(),
      VERSION_PATH, "exec"))
 VERSION = __version__  # noqa
 
-JAVA_FILE='java/osgiservicebridge-java-bundles-1.0.3.zip'
+JAVA_FILE='java/osgiservicebridge-java-bundles-1.1.0.zip'
 
 setup(
     name='osgiservicebridge',
