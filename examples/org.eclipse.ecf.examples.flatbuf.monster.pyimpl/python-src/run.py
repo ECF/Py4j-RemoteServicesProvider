@@ -46,7 +46,7 @@ class MonsterServiceImpl:
         axe = Weapon.WeaponEnd(builder)
     
         # Serialize the FlatBuffer data.
-        name = builder.CreateString('Orc')
+        name = builder.CreateString('PythonOrc')
     
         Monster.MonsterStartInventoryVector(builder, 10)
         # Note: Since we prepend the bytes, this loop iterates in reverse order.
@@ -81,7 +81,7 @@ class MonsterServiceImpl:
         
     @flatbuf_remote_service_method(arg_type=Monster.Monster,return_type=Monster.Monster)
     def scareWith(self,monster):
-        print("scareWidth called with arg="+str(monster))
+        print("scareWidth called with monster name="+monster.Name())
         return self.createMonster()
     
 if __name__ == '__main__':

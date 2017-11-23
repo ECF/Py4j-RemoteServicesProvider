@@ -8,10 +8,11 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct.flatbuf;
 
+import com.google.flatbuffers.FlatBufferBuilder;
 import com.google.flatbuffers.Table;
 
 public interface FlatbufCallableEndpoint {
 
-	Table call_endpoint(Long rsId, String methodName, Table table, Class<?> returnType) throws Exception;
+	Table call_endpoint(Long rsId, String methodName, FlatBufferBuilder builder, Class<?> returnType) throws Exception;
 
 }

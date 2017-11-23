@@ -15,6 +15,7 @@ import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.flatbuffers.FlatBufferBuilder;
 import com.google.flatbuffers.Table;
 
 public class FlatbufCallableEndpointImpl implements FlatbufCallableEndpoint {
@@ -35,16 +36,16 @@ public class FlatbufCallableEndpointImpl implements FlatbufCallableEndpoint {
 		return eceService;
 	}
 
-	protected byte[] serializeTable(Table table) {
+	protected byte[] serializeBuilder(FlatBufferBuilder builder) {
 		long startTime = 0;
 		byte[] messageBytes = null;
-		if (table != null) {
+		if (builder != null) {
 			if (timingLogger != null && timingLogger.isDebugEnabled())
 				startTime = System.currentTimeMillis();
-			messageBytes = table.getByteBuffer().array();
+			messageBytes = builder.sizedByteArray();
 			if (timingLogger != null && timingLogger.isDebugEnabled()) {
 				long endTime = System.currentTimeMillis();
-				timingLogger.debug("protobuf.request.serialize;class=" + table.getClass().getName() + ";d="
+				timingLogger.debug("protobuf.request.serialize;builder=" + builder + ";d="
 						+ (endTime - startTime));
 			}
 		}
@@ -89,13 +90,13 @@ public class FlatbufCallableEndpointImpl implements FlatbufCallableEndpoint {
 	}
 
 	@Override
-	public Table call_endpoint(Long rsId, String methodName, Table table, Class<?> returnType) throws Exception {
+	public Table call_endpoint(Long rsId, String methodName, FlatBufferBuilder builder, Class<?> returnType) throws Exception {
 		// we only send the method name, not the fully qualified name (with class and
 		// method name)
 		int dotLastIndex = methodName.lastIndexOf('.');
 		if (dotLastIndex >= 0)
 			methodName = methodName.substring(dotLastIndex + 1);
-		return deserializeTable(call_endpoint(rsId, methodName, serializeTable(table)), returnType);
+		return deserializeTable(call_endpoint(rsId, methodName, serializeBuilder(builder)), returnType);
 	}
 
 }

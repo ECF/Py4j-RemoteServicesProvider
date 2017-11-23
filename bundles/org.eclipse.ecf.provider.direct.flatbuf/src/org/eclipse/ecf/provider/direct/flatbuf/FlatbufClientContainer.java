@@ -25,6 +25,7 @@ import org.eclipse.equinox.concurrent.future.IExecutor;
 import org.eclipse.equinox.concurrent.future.IFuture;
 import org.eclipse.equinox.concurrent.future.IProgressRunnable;
 
+import com.google.flatbuffers.FlatBufferBuilder;
 import com.google.flatbuffers.Table;
 
 public class FlatbufClientContainer extends AbstractRSAClientContainer {
@@ -106,14 +107,14 @@ public class FlatbufClientContainer extends AbstractRSAClientContainer {
 		protected Object invokeSync(RSARemoteCall remoteCall) throws ECFException {
 			// Checks on arguments/parameters
 			Object[] args = remoteCall.getParameters();
-			Object message = null;
+			Object builder = null;
 			if (args != null && args.length > 0) {
-				message = args[0];
-				if (message != null && !(message instanceof Table))
+				builder = args[0];
+				if (builder != null && !(builder instanceof FlatBufferBuilder))
 					throw new ECFException("Remote call=" + remoteCall + " the first parameter must be of type Table");
 			}
 			Method reflectMethod = remoteCall.getReflectMethod();
-			Class<?> returnType = reflectMethod.getReturnType();
+			Class<?> returnType = (Class<?>) reflectMethod.getReturnType();
 			// If it's a CompletableFuture then replace return type with return type of sync
 			// method
 			if (returnType.equals(CompletableFuture.class) || returnType.equals(IFuture.class)
@@ -123,11 +124,11 @@ public class FlatbufClientContainer extends AbstractRSAClientContainer {
 			if (returnType == null || returnType.equals(Void.TYPE)) {
 				returnType = Void.TYPE;
 			} else if (!Table.class.isAssignableFrom(returnType))
-				throw new ECFException("Remote call=" + remoteCall + " return type is not Message");
+				throw new ECFException("Remote call=" + remoteCall + " return type is not Table");
 
 			try {
-				// Actually make call via AbstractProtobufCallableEndpoint
-				return endpoint.call_endpoint(rsId, remoteCall.getMethod(), (Table) message, returnType);
+				// Actually make call via AbstractFlatbufCallableEndpoint
+				return endpoint.call_endpoint(rsId, remoteCall.getMethod(), (FlatBufferBuilder) builder, returnType);
 			} catch (Exception e) {
 				throw new ECFException("Could not execute remote call=" + remoteCall, e);
 			}

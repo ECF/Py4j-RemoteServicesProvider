@@ -46,6 +46,7 @@ FB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[FB_SERVICE_EXPORTED_CONFIG_DEFAULT]
 FB_SERVICE_RETURN_TYPE_ATTR = '_return_type'
 FB_SERVICE_ARG_TYPE_ATTR = '_arg_type'
 FB_SERVICE_SOURCE_ATTR = '_source'
+FB_FACTORY_METHOD_PREFIX = 'GetRootAs'
 
 def get_instance_method(instance, method_name):
     '''
@@ -148,11 +149,10 @@ def argument_deserialize(argClass, serialized):
     #Then pass to parser and return
     t0 = time.time()
     try:
-        clname = argClass.__name__
         # Create fb staticmethod name
-        methodName = 'GetRootAs' + clname
+        methodName = FB_FACTORY_METHOD_PREFIX+argClass.__name__
         method = getattr(argClass,methodName)
-        argInst = method(bytearray(serialized),0)
+        argInst = method(serialized,0)
     except Exception as e:
         _logger.exception('Class.'+methodName+' failed. argClass=%' % (argClass))
         raise e

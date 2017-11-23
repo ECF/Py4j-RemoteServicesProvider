@@ -43,7 +43,7 @@ public class MonsterConsumer {
 		weaps[1] = Weapon.createWeapon(builder, weaponTwoName, weaponTwoDamage);
 
 		// Serialize the FlatBuffer data.
-		int name = builder.createString("Orc");
+		int name = builder.createString("JavaOrc");
 		byte[] treasure = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		int inv = Monster.createInventoryVector(builder, treasure);
 		int weapons = Monster.createWeaponsVector(builder, weaps);
@@ -62,8 +62,8 @@ public class MonsterConsumer {
 
 		builder.finish(orc);
 
-		Monster retMonster = this.scarer.scareWith(Monster.getRootAsMonster(builder.dataBuffer()));
-
-		System.out.println("retMonster=" + retMonster);
+		System.out.println("calling scarer with argMonster name="+ Monster.getRootAsMonster(builder.dataBuffer()).name());
+		Monster retMonster = this.scarer.scareWith(builder);
+		System.out.println("returned Monster name="+ retMonster.name());
 	}
 }

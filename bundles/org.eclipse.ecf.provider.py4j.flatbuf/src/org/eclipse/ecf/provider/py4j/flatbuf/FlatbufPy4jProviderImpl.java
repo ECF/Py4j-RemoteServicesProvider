@@ -24,9 +24,11 @@ import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 
+import com.google.flatbuffers.FlatBufferBuilder;
 import com.google.flatbuffers.Table;
 
 /**
@@ -38,8 +40,9 @@ import com.google.flatbuffers.Table;
 public class FlatbufPy4jProviderImpl extends Py4jProviderImpl
 		implements RemoteServiceAdminListener, Py4jProvider, DirectProvider {
 
-	protected static final String[] py4jProtobufSupportedIntents = { "passByValue", "exactlyOnce", "ordered" };
+	protected static final String[] py4jFlatbufSupportedIntents = { "passByValue", "exactlyOnce", "ordered" };
 
+	@Reference
 	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
 		super.bindEndpointEventListener(eel, props);
 	}
@@ -48,10 +51,10 @@ public class FlatbufPy4jProviderImpl extends Py4jProviderImpl
 		super.unbindEndpointEventListener(eel);
 	}
 
-	protected ServiceRegistration<?> protobufClientReg = null;
+	protected ServiceRegistration<?> flatbufClientReg = null;
 
 	protected void registerProtobufClientDistributionProvider() {
-		protobufClientReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
+		flatbufClientReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
 				new DirectRemoteServiceClientDistributionProvider(FlatbufPy4jConstants.ECF_PY4J_CONSUMER_FB,
 						FlatbufPy4jConstants.ECF_PY4J_HOST_PYTHON_FB, new IDirectContainerInstantiator() {
 							@Override
@@ -59,14 +62,14 @@ public class FlatbufPy4jProviderImpl extends Py4jProviderImpl
 								return new org.eclipse.ecf.provider.direct.flatbuf.FlatbufClientContainer(
 										Py4jNamespace.createUUID(), new FlatbufCallableEndpoint() {
 											@Override
-											public Table call_endpoint(Long rsId, String methodName, Table table,
+											public Table call_endpoint(Long rsId, String methodName, FlatBufferBuilder builder,
 													Class<?> resultType) throws Exception {
 												return getFlatbufCallableEndpoint().call_endpoint(rsId, methodName,
-														table, resultType);
+														builder, resultType);
 											}
 										});
 							}
-						}, py4jProtobufSupportedIntents),
+						}, py4jFlatbufSupportedIntents),
 				null);
 	}
 
@@ -119,9 +122,9 @@ public class FlatbufPy4jProviderImpl extends Py4jProviderImpl
 	protected void deactivate() {
 		synchronized (getLock()) {
 			super.deactivate();
-			if (protobufClientReg != null) {
-				protobufClientReg.unregister();
-				protobufClientReg = null;
+			if (flatbufClientReg != null) {
+				flatbufClientReg.unregister();
+				flatbufClientReg = null;
 			}
 		}
 	}
