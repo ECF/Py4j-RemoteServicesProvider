@@ -107,6 +107,10 @@
     <module>examples/org.eclipse.ecf.examples.protobuf.hello</module>
     <module>examples/org.eclipse.ecf.examples.protobuf.hello.consumer</module>
     <module>examples/org.eclipse.ecf.examples.protobuf.hello.provider</module>
+    <module>examples/org.eclipse.ecf.examples.flatbuf.monster</module>
+    <module>examples/org.eclipse.ecf.examples.flatbuf.monster.impl</module>
+    <module>examples/org.eclipse.ecf.examples.flatbuf.monster.consumer</module>
+    <module>examples/org.eclipse.ecf.examples.flatbuf.monster.provider</module>
   </modules>
 
   <build>
