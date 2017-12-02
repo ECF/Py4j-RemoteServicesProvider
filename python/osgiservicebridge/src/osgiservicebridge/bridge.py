@@ -257,7 +257,7 @@ class Py4jServiceBridge(object):
         self._map_converter = MapConverter()
         self._list_converter = ListConverter()
         self._service_listener = service_listener
-        self._connection_listener = None
+        self._connection_listener = connection_listener
         self._connection = None
         self._gateway_parameters = gateway_parameters
         self._callback_server_parameters = callback_server_parameters
