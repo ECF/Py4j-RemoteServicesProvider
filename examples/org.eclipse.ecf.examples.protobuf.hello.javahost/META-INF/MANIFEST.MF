@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ECF Hello Example Javahost
+Bundle-SymbolicName: org.eclipse.ecf.examples.protobuf.hello.javahost
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Eclipse.org - ECF
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl.xml
+Import-Package: com.google.protobuf;version="3.3.1",
+ org.eclipse.ecf.examples.protobuf.hello,
+ org.eclipse.ecf.provider.py4j,
+ org.eclipse.ecf.python.protobuf;version="1.0.0"

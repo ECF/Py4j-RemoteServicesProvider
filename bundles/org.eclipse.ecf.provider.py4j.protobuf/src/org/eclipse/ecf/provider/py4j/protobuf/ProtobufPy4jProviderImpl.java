@@ -16,7 +16,9 @@ import org.eclipse.ecf.provider.direct.DirectProvider;
 import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpointImpl;
+import org.eclipse.ecf.provider.direct.util.DirectHostContainer;
 import org.eclipse.ecf.provider.direct.util.DirectRemoteServiceClientDistributionProvider;
+import org.eclipse.ecf.provider.direct.util.DirectRemoteServiceHostDistributionProvider;
 import org.eclipse.ecf.provider.direct.util.IDirectContainerInstantiator;
 import org.eclipse.ecf.provider.py4j.Py4jProvider;
 import org.eclipse.ecf.provider.py4j.Py4jProviderImpl;
@@ -49,12 +51,28 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 		super.unbindEndpointEventListener(eel);
 	}
 
+	protected ServiceRegistration<?> protobufHostReg = null;
 	protected ServiceRegistration<?> protobufClientReg = null;
+
+	protected void registerProtobufHostDistributionProvider() {
+		protobufHostReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
+				new DirectRemoteServiceHostDistributionProvider(ProtobufPy4jConstants.JAVA_HOST_CONFIG_TYPE,
+						ProtobufPy4jConstants.PYTHON_CONSUMER_CONFIG_TYPE, new IDirectContainerInstantiator() {
+							@Override
+							public IContainer createContainer() throws ContainerCreateException {
+								return new DirectHostContainer(
+										Py4jNamespace.createPy4jID(getJavaAddress(), getJavaPort()),
+										getInternalServiceProvider());
+							}
+						}, py4jProtobufSupportedIntents),
+				null);
+	}
+
 
 	protected void registerProtobufClientDistributionProvider() {
 		protobufClientReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
-				new DirectRemoteServiceClientDistributionProvider(ProtobufPy4jConstants.ECF_PY4J_CONSUMER_PB,
-						ProtobufPy4jConstants.ECF_PY4J_HOST_PYTHON_PB, new IDirectContainerInstantiator() {
+				new DirectRemoteServiceClientDistributionProvider(ProtobufPy4jConstants.JAVA_CONSUMER_CONFIG_TYPE,
+						ProtobufPy4jConstants.PYTHON_HOST_CONFIG_TYPE, new IDirectContainerInstantiator() {
 							@Override
 							public IContainer createContainer() throws ContainerCreateException {
 								return new org.eclipse.ecf.provider.direct.protobuf.ProtobufClientContainer(
@@ -75,6 +93,7 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 	protected void activate(BundleContext context, Py4jProviderImpl.Config config) throws Exception {
 		synchronized (getLock()) {
 			super.activate(context, config);
+			registerProtobufHostDistributionProvider();
 			registerProtobufClientDistributionProvider();
 		}
 	}
@@ -82,6 +101,7 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 	protected void activate(BundleContext context, Map<String,?> properties) throws Exception {
 		synchronized (getLock()) {
 			super.activate(context, properties);
+			registerProtobufHostDistributionProvider();
 			registerProtobufClientDistributionProvider();
 		}
 	}
@@ -124,6 +144,10 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 			if (protobufClientReg != null) {
 				protobufClientReg.unregister();
 				protobufClientReg = null;
+			}
+			if (protobufHostReg != null) {
+				protobufHostReg.unregister();
+				protobufHostReg = null;
 			}
 		}
 	}

@@ -108,16 +108,7 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 
 		@Override
 		public void connectionStopped(Py4JServerConnection arg0) {
-			synchronized (getLock()) {
-				if (Py4jProviderImpl.this.connection == null)
-					logError("connectionStopped error: this.connection already null");
-				else if (Py4jProviderImpl.this.connection != arg0)
-					logError("connectionStopped error: this.connection=" + Py4jProviderImpl.this.connection
-							+ " not equal to arg0=" + arg0);
-				else {
-					hardClose();
-				}
-			}
+			hardClose();
 		}
 
 		@Override

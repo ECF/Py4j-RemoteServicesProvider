@@ -159,6 +159,9 @@ class Py4jServiceBridgeEventListener(object):
     these methods, and then providing their listener instance to the Py4jServiceBridge instance
     creation'''
     
+    def __init__(self):
+        super(Py4jServiceBridgeEventListener,self).__init__()
+
     def service_imported(self, servicebridge, endpointid, proxy, endpoint_props):
         '''
         Service imported notification.
@@ -376,8 +379,6 @@ class Py4jServiceBridge(object):
         Get the Py4JService Gateway's JVM
         :return: The Gateway's jvm
         '''
-        with self._lock:
-            self._raise_not_connected();
         return self._gateway.jvm
     
     def get_gateway(self):
@@ -385,8 +386,6 @@ class Py4jServiceBridge(object):
         Get the Py4JService JavaGateway 
         :return: The Gateway
         '''
-        with self._lock:
-            self._raise_not_connected()
         return self._gateway
     
     def get_callback_server_parameters(self):
@@ -685,3 +684,56 @@ class Py4jServiceBridge(object):
         except Exception as e:
             _logger.error(e)
             raise e
+
+class JavaRemoteService(object):
+    
+    def __init__(self,endpoint_props,proxy):
+        self._endpoint_props = endpoint_props
+        self._proxy = proxy
+        
+    def get_endpoint_props(self):
+        return self._endpoint_props
+    
+    def get_proxy(self):
+        return self._proxy
+    
+    def get_objectclass(self):
+        return self._endpoint_props[osgiservicebridge.OBJECT_CLASS]
+    
+    def has_service(self,interface):
+        return (interface in self.get_objectclass())
+    
+    def get_endpointid(self):
+        return self._endpoint_props(osgiservicebridge.ENDPOINT_ID)   
+    
+class JavaRemoteServiceRegistry(object):
+    
+    def __init__(self):
+        super(JavaRemoteServiceRegistry,self).__init__()
+        self._lock = RLock()
+        self._remote_services = {}
+        
+    def _add_remoteservice(self,endpoint_props,proxy):
+        with self._lock:
+            self._remote_services[endpoint_props[osgiservicebridge.ENDPOINT_ID]] = JavaRemoteService(endpoint_props,proxy)
+            
+    def _remove_remoteservice(self,endpointid):
+        with self._lock:
+            return self._remote_services.pop(endpointid)
+        
+    def _modify_remoteservice(self,endpointid,endpoint_props):
+        with self._lock:
+            rs = self._remote_services[endpointid]
+            if rs:
+                self._remote_services[endpointid] = JavaRemoteService(endpoint_props,rs.get_proxy())
+                return rs
+            return None
+    
+    def _dispose(self):
+        with self._lock:
+            self._remote_services.clear()
+            
+    def lookup_services(self,interface):
+        with self._lock:
+            return [rs for rs in self._remote_services.values() if rs.has_service(interface)]
+        

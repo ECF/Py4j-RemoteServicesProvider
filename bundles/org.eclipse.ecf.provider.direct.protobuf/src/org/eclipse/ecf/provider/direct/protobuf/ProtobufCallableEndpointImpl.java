@@ -43,8 +43,8 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 			messageBytes = message.toByteArray();
 			if (timingLogger != null && timingLogger.isDebugEnabled()) {
 				long endTime = System.currentTimeMillis();
-				timingLogger.debug("protobuf.request.serialize;class=" + message.getClass().getName() + ";d="
-						+ (endTime - startTime));
+				timingLogger.debug("protobuf.request.serialize;class=" + message.getClass().getName() + ";dif="
+						+ (endTime - startTime)+"ms");
 			}
 		}
 		return messageBytes;
@@ -53,22 +53,18 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 	protected Message deserializeMessage(byte[] resultBytes, Parser<?> resultParser)
 			throws InvalidProtocolBufferException {
 		long startTime = 0;
+		// If result is null/None then return null
+		if (resultBytes == null || resultParser == null) 
+			return null;
 		// Now deserialize result
 		if (timingLogger != null && timingLogger.isDebugEnabled())
 			startTime = System.currentTimeMillis();
-
-		// If result is null/None then return null
-		if (resultBytes == null || resultParser == null) {
-			if (timingLogger != null && timingLogger.isDebugEnabled())
-				timingLogger.debug("protobuf.response.deserialize;null response");
-			return null;
-		}
 		// Else parse and return Message
 		Message result = (Message) resultParser.parseFrom(resultBytes);
 		if (timingLogger != null && timingLogger.isDebugEnabled()) {
 			long endTime = System.currentTimeMillis();
 			timingLogger.debug(
-					"protobuf.response.parse;class=" + result.getClass().getName() + ";d=" + (endTime - startTime));
+					"protobuf.response.parse;class=" + result.getClass().getName() + ";diff=" + (endTime - startTime)+"ms");
 		}
 		return result;
 	}
@@ -80,7 +76,7 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 		byte[] resultBytes = getExternalCallableEndpoint()._call_endpoint(rsId, methodName, messageBytes);
 		if (timingLogger != null && timingLogger.isDebugEnabled()) {
 			long end = System.currentTimeMillis();
-			timingLogger.debug("protobuf.pythonrpc;rsId=" + rsId + ";method=" + methodName + ";time=" + (end - start));
+			timingLogger.debug("protobuf.pythonrpc;rsId=" + rsId + ";method=" + methodName + ";time=" + (end - start)+"ms");
 		}
 		return resultBytes;
 	}

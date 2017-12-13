@@ -106,11 +106,13 @@
     <module>examples/org.eclipse.ecf.examples.hello.pythonclient</module>
     <module>examples/org.eclipse.ecf.examples.protobuf.hello</module>
     <module>examples/org.eclipse.ecf.examples.protobuf.hello.consumer</module>
+    <module>examples/org.eclipse.ecf.examples.protobuf.hello.javahost</module>
     <module>examples/org.eclipse.ecf.examples.protobuf.hello.provider</module>
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster</module>
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.pyimpl</module>
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.consumer</module>
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.provider</module>
+    <module>examples/org.eclipse.ecf.python.protobuf</module>
   </modules>
 
   <build>

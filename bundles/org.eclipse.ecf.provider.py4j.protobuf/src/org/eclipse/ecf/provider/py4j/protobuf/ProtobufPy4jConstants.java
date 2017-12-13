@@ -16,7 +16,9 @@ package org.eclipse.ecf.provider.py4j.protobuf;
  */
 public interface ProtobufPy4jConstants {
 
-	String ECF_PY4J_HOST_PYTHON_PB = "ecf.py4j.host.python.pb";
-	String ECF_PY4J_CONSUMER_PB = "ecf.py4j.consumer.pb";
+	public static final String JAVA_HOST_CONFIG_TYPE = "ecf.py4j.host.pb";
+	public static final String PYTHON_HOST_CONFIG_TYPE = "ecf.py4j.host.python.pb";
+	public static final String JAVA_CONSUMER_CONFIG_TYPE = "ecf.py4j.consumer.pb";
+	public static final String PYTHON_CONSUMER_CONFIG_TYPE = "ecf.py4j.consumer.python.pb";
 
 }
