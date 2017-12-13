@@ -10,4 +10,5 @@ Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.javahost.Hel
 Import-Package: com.google.protobuf;version="3.3.1",
  org.eclipse.ecf.examples.protobuf.hello,
  org.eclipse.ecf.provider.py4j,
- org.eclipse.ecf.python.protobuf;version="1.0.0"
+ org.eclipse.ecf.python.protobuf;version="1.0.0",
+ org.osgi.service.component.annotations;resolution:=optional
