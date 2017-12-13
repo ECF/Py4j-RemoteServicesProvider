@@ -100,6 +100,8 @@
     <module>bundles/org.eclipse.ecf.provider.py4</module>
     <module>bundles/org.eclipse.ecf.provider.py4j.protobuf</module>
     <module>bundles/org.eclipse.ecf.provider.py4j.flatbuf</module>
+    <module>bundles/org.eclipse.ecf.python.protobuf</module>
+    
     <module>examples/org.eclipse.ecf.examples.hello</module>    
     <module>examples/org.eclipse.ecf.examples.hello.javahost</module>    
     <module>examples/org.eclipse.ecf.examples.hello.provider</module>    
@@ -112,7 +114,6 @@
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.pyimpl</module>
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.consumer</module>
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.provider</module>
-    <module>examples/org.eclipse.ecf.python.protobuf</module>
   </modules>
 
   <build>
