@@ -22,7 +22,7 @@ exec(compile(open(VERSION_PATH).read(),
      VERSION_PATH, "exec"))
 VERSION = __version__  # noqa
 
-JAVA_FILE='java/osgiservicebridge-java-bundles-2.4.0.zip'
+JAVA_FILE='java/osgiservicebridge-java-bundles-2.5.0.zip'
 
 setup(
     name='osgiservicebridge',
@@ -53,7 +53,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',

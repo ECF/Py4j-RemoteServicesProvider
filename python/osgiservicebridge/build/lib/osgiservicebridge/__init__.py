@@ -1,9 +1,10 @@
 '''
-OSGi service bridge 
+OSGi service bridge Google protocol buffers (protobuf) support
 :author: Scott Lewis
 :copyright: Copyright 2016, Composent, Inc.
 :license: Apache License 2.0
-    Copyright 2016 Composent, Inc. and others
+:version: 1.2.0
+    Copyright 2017 Composent, Inc. and others
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
