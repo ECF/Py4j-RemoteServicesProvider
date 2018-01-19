@@ -11,15 +11,19 @@ package org.eclipse.ecf.examples.protobuf.hello.provider;
 import java.util.Map;
 
 import org.eclipse.ecf.osgi.services.remoteserviceadmin.DebugRemoteServiceAdminListener;
+import org.eclipse.ecf.provider.direct.BundleModuleResolver;
 import org.eclipse.ecf.provider.direct.DirectProvider;
 import org.eclipse.ecf.provider.py4j.Py4jProvider;
 import org.eclipse.ecf.provider.py4j.protobuf.ProtobufPy4jProviderImpl;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 
@@ -27,8 +31,17 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 public class ExampleProtobufPy4jProvider extends ProtobufPy4jProviderImpl
 		implements RemoteServiceAdminListener, Py4jProvider, DirectProvider {
 
+	@Reference(policy=ReferencePolicy.DYNAMIC,cardinality=ReferenceCardinality.MULTIPLE)
+	protected void bindBundleModuleResolver(ServiceReference<BundleModuleResolver> ref) {
+		super.bindBundleModuleResolver(ref);
+	}
+	
+	protected void unbindBundleModuleResolver(ServiceReference<BundleModuleResolver> ref) {
+		super.unbindBundleModuleResolver(ref);
+	}
+	
 	@Reference
-	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
+	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings({ "rawtypes" }) Map props) {
 		super.bindEndpointEventListener(eel, props);
 	}
 
