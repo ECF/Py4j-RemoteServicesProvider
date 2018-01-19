@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
+import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.provider.direct.AbstractDirectProvider;
 import org.eclipse.ecf.provider.direct.ExternalServiceProvider;
 import org.eclipse.ecf.provider.direct.util.DirectClientContainer;
@@ -48,6 +49,20 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 
 	protected static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered" };
 
+	protected ID localId;
+	
+	protected ID getLocalID() {
+		synchronized (getLock()) {
+			return localId;
+		}
+	}
+	
+	protected void setLocalId(String address, int port) {
+		synchronized (getLock()) {
+			localId = Py4jNamespace.createPy4jID(address,port);
+		}
+	}
+	
 	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
 		super.bindEndpointEventListener(eel, props);
 	}
@@ -149,8 +164,11 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 						Py4jConstants.PYTHON_CONSUMER_CONFIG_TYPE, new IDirectContainerInstantiator() {
 							@Override
 							public IContainer createContainer() throws ContainerCreateException {
+								ID lId = Py4jProviderImpl.this.localId;
+								if (lId == null) 
+									throw new ContainerCreateException("Cannot create container with null localId");
 								return new DirectHostContainer(
-										Py4jNamespace.createPy4jID(getJavaAddress(), getJavaPort()),
+										lId,
 										getInternalServiceProvider());
 							}
 						}, py4jSupportedIntents),
@@ -226,6 +244,7 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 			createOSGiGateway(pythonPort,address,minConnectionTime);
 			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(port, address, debug,
 					readTimeout, connectTimeout);
+			setLocalId(address,port);
 			createAndStartGatewayServer(builder.build());
 			registerHostDistributionProvider();
 			registerClientDistributionProvider();
@@ -254,6 +273,7 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(javaPort, address,
 					debug, readTimeout, connectTimeout);
 			createAndStartGatewayServer(builder.build());
+			setLocalId(address, javaPort);
 			registerHostDistributionProvider();
 			registerClientDistributionProvider();
 		}

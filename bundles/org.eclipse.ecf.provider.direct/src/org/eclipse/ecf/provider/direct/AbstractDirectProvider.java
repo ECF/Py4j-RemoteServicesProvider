@@ -8,16 +8,26 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.osgi.services.remoteserviceadmin.EndpointDescription;
 import org.eclipse.ecf.osgi.services.remoteserviceadmin.RemoteServiceAdmin;
 import org.eclipse.ecf.provider.direct.util.PropertiesUtil;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
 import org.osgi.service.remoteserviceadmin.EndpointEvent;
 import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
@@ -27,13 +37,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Abstract direct provider. This class provides support for creating remote
- * service distribution providers that have direct connections. Py4j provider is
- * such a distribution provider and is based on this class.
+ * Abstract direct provider. This class provides support for creating remote service distribution providers that have
+ * direct connections. Py4j provider is such a distribution provider and is based on this class.
  *
  */
 public abstract class AbstractDirectProvider
-		implements RemoteServiceAdminListener, ExternalDirectDiscovery, InternalServiceProvider {
+		implements RemoteServiceAdminListener, ExternalDirectDiscovery, InternalServiceProvider, ModuleResolver {
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractDirectProvider.class);
 
@@ -88,6 +97,8 @@ public abstract class AbstractDirectProvider
 	protected Object getLock() {
 		return lock;
 	}
+
+	protected abstract ID getLocalID();
 
 	protected abstract String getIdForProxy(Object proxy);
 
@@ -210,17 +221,20 @@ public abstract class AbstractDirectProvider
 	protected InternalDirectDiscovery internalDirectDiscovery;
 	protected ServiceRegistration<?> internalDirectDiscoverReg;
 	protected ExternalCallableEndpoint externalCallbackEndpoint;
-
+	protected ExternalPathProvider externalPathProvider;
+	
 	protected Map<Long, Object> preExportedServices = new HashMap<Long, Object>();
 	private Map<Long, ExternalEndpoint> exportedExternalEndpoints = new HashMap<Long, ExternalEndpoint>();
 	private Object lock = new Object();
 
-	protected class DirectBridge implements InternalDirectDiscovery, ExternalCallableEndpoint {
+	protected class DirectBridge implements ExternalPathProvider, InternalDirectDiscovery, ExternalCallableEndpoint {
 
+		private final ExternalPathProvider epp;
 		private final InternalDirectDiscovery idd;
 		private final ExternalCallableEndpoint ece;
 
-		public DirectBridge(InternalDirectDiscovery d, ExternalCallableEndpoint ce) {
+		public DirectBridge(ExternalPathProvider epp, InternalDirectDiscovery d, ExternalCallableEndpoint ce) {
+			this.epp = epp;
 			this.idd = d;
 			this.ece = ce;
 		}
@@ -228,6 +242,16 @@ public abstract class AbstractDirectProvider
 		@Override
 		public byte[] _call_endpoint(Long rsId, String methodName, byte[] serializedArgs) throws Exception {
 			return ece._call_endpoint(rsId, methodName, serializedArgs);
+		}
+
+		@Override
+		public void _add_code_path(String path) {
+			epp._add_code_path(path);
+		}
+
+		@Override
+		public void _remove_code_path(String path) {
+			epp._remove_code_path(path);
 		}
 
 		@Override
@@ -247,19 +271,23 @@ public abstract class AbstractDirectProvider
 
 	}
 
-	public void _setDirectBridge(InternalDirectDiscovery directDiscovery, ExternalCallableEndpoint endpoint,
+	public List<String> _setDirectBridge(ExternalPathProvider pathProvider, InternalDirectDiscovery directDiscovery, ExternalCallableEndpoint endpoint,
 			String externalId) {
 		// Set internal variable here and export to external any services before
 		// returning
 		DirectBridge external = null;
+		List<String> resolverPaths;
 		synchronized (getLock()) {
 			bindInternalDirectDiscovery(directDiscovery);
-			bindExternalCallableEndpoint((ExternalCallableEndpoint) directDiscovery);
-			external = new DirectBridge(directDiscovery, endpoint);
+			bindExternalCallableEndpoint(endpoint);
+			bindExternalPathProvider(pathProvider);
+			external = new DirectBridge(pathProvider, directDiscovery, endpoint);
+			resolverPaths = getBundleResolverPaths();
 		}
 		internalDirectDiscoverReg = getContext().registerService(
 				new String[] { InternalDirectDiscovery.class.getName(), ExternalCallableEndpoint.class.getName() },
 				external, null);
+		return resolverPaths;
 	}
 
 	protected void hardClose() {
@@ -270,6 +298,7 @@ public abstract class AbstractDirectProvider
 			}
 			hardCloseExported();
 			hardCloseImported();
+			unbindExternalPathProvider();
 			unbindExternalCallableEndpoint();
 			unbindInternalDirectDiscovery();
 		}
@@ -326,9 +355,27 @@ public abstract class AbstractDirectProvider
 		}
 	}
 
+	protected void bindExternalPathProvider(ExternalPathProvider epp) {
+		synchronized (getLock()) {
+			this.externalPathProvider = epp;
+		}
+	}
+
+	protected void unbindExternalPathProvider() {
+		synchronized (getLock()) {
+			this.externalPathProvider = null;
+		}
+	}
+
 	protected ExternalCallableEndpoint getExternalCallableEndpoint() {
 		synchronized (getLock()) {
 			return this.externalCallbackEndpoint;
+		}
+	}
+
+	protected ExternalPathProvider getExternalPathProvider() {
+		synchronized (getLock()) {
+			return this.externalPathProvider;
 		}
 	}
 
@@ -367,26 +414,21 @@ public abstract class AbstractDirectProvider
 	}
 
 	/**
-	 * Method should be called by external process first thing upon connection. This
-	 * will return and impl of ExternalDirectDiscovery interface to allow external
-	 * process to export, update, unexport remote services to this Java process for
-	 * remote service import,update,unimport. It should not be called by Java code
-	 * directly.
+	 * Method should be called by external process first thing upon connection. This will return and impl of
+	 * ExternalDirectDiscovery interface to allow external process to export, update, unexport remote services to this
+	 * Java process for remote service import,update,unimport. It should not be called by Java code directly.
 	 * 
-	 * @return implementation of ExternalDirectDiscovery. Must not return
-	 *         <code>null</code>.
+	 * @return implementation of ExternalDirectDiscovery. Must not return <code>null</code>.
 	 */
 	public ExternalDirectDiscovery _getExternalDirectDiscovery() {
 		return this;
 	}
 
 	/**
-	 * Method to be called by Java code to get access to export,update, unexport
-	 * semantics for exported remote services.
+	 * Method to be called by Java code to get access to export,update, unexport semantics for exported remote services.
 	 * 
-	 * @return InternalServiceProvider allowing remote serice containers (e.g.
-	 *         DirectHostContainer) to communicate to external processes that new
-	 *         Java/OSGi remote services are available for use.
+	 * @return InternalServiceProvider allowing remote serice containers (e.g. DirectHostContainer) to communicate to
+	 *         external processes that new Java/OSGi remote services are available for use.
 	 */
 	public InternalServiceProvider getInternalServiceProvider() {
 		return this;
@@ -406,4 +448,179 @@ public abstract class AbstractDirectProvider
 		}
 	}
 
+	protected Map<Bundle, List<ServiceReference<BundleModuleResolver>>> bundleModuleResolvers = Collections
+			.synchronizedMap(new HashMap<Bundle, List<ServiceReference<BundleModuleResolver>>>());
+
+	protected String convertResolverToPath(Bundle b, ServiceReference<BundleModuleResolver> ref) {
+		return new StringBuffer(getLocalID().getName()).append("/").append(b.getSymbolicName()).append("/")
+				.append(b.getVersion().toString()).append("/").append(ref.getProperty(Constants.SERVICE_ID)).append("/")
+				.toString();
+	}
+
+	protected class ResolverInfo {
+		String bundleId;
+		String version;
+		Long serviceId;
+		String remain;
+	}
+
+	protected ResolverInfo convertPathToResolverInfo(String path) {
+		URI uri = null;
+		try {
+			uri = new URI(path);
+		} catch (URISyntaxException e1) {
+			return null;
+		}
+		String uriPath = uri.getPath();
+		while (uriPath.startsWith("/"))
+			uriPath = uriPath.substring(1);
+		
+		String[] parts = uriPath.split("/");
+		if (parts.length < 2)
+			return null;
+		
+		ResolverInfo result = new ResolverInfo();
+		result.bundleId = parts[1];
+		if (parts.length > 2)
+			result.version = parts[2];
+		if (parts.length > 3)
+			try {
+				result.serviceId = Long.valueOf(parts[3]);
+			} catch (NumberFormatException e) {
+				// ignore
+			}
+		if (parts.length > 4) {
+			String[] remainParts = new String[parts.length - 4];
+			System.arraycopy(parts, 4, remainParts, 0, remainParts.length);
+			StringBuffer buf = new StringBuffer();
+			List<String> rps = Arrays.asList(remainParts);
+			for (Iterator<String> it=rps.iterator(); it.hasNext(); ) {
+				buf.append(it.next());
+				if (it.hasNext())
+					buf.append("/");
+			}
+			result.remain = buf.toString();
+		}
+		return result;
+	}
+
+	protected List<String> getBundleResolverPaths() {
+		List<String> results = new ArrayList<String>();
+		synchronized (bundleModuleResolvers) {
+			for (Bundle b : bundleModuleResolvers.keySet()) {
+				List<ServiceReference<BundleModuleResolver>> existingList = bundleModuleResolvers.get(b);
+				if (existingList != null)
+					for (ServiceReference<BundleModuleResolver> ref : existingList)
+						results.add(convertResolverToPath(b, ref));
+			}
+		}
+		return results;
+	}
+
+	protected void fireBundleModuleResolver(ServiceReference<BundleModuleResolver> ref, boolean add) {
+		synchronized (getLock()) {
+			ExternalPathProvider epp = getExternalPathProvider();
+			if (epp != null) {
+				String path = convertResolverToPath(ref.getBundle(), ref);
+				if (add)
+					epp._add_code_path(path);
+				else
+					epp._remove_code_path(path);
+			}
+		}
+	}
+
+	protected void bindBundleModuleResolver(ServiceReference<BundleModuleResolver> ref) {
+		Bundle b = ref.getBundle();
+		synchronized (bundleModuleResolvers) {
+			List<ServiceReference<BundleModuleResolver>> existingList = bundleModuleResolvers.get(b);
+			if (existingList == null)
+				existingList = new ArrayList<ServiceReference<BundleModuleResolver>>();
+			existingList.add(ref);
+			bundleModuleResolvers.put(b, existingList);
+		}
+		fireBundleModuleResolver(ref, true);
+	}
+
+	protected void unbindBundleModuleResolver(ServiceReference<BundleModuleResolver> ref) {
+		Bundle b = ref.getBundle();
+		synchronized (bundleModuleResolvers) {
+			List<ServiceReference<BundleModuleResolver>> existingList = bundleModuleResolvers.get(b);
+			if (existingList != null)
+				existingList.remove(ref);
+			if (existingList.size() == 0)
+				bundleModuleResolvers.remove(b);
+		}
+		fireBundleModuleResolver(ref, false);
+	}
+
+	protected ServiceReference<BundleModuleResolver> findBundleModuleResolverRef(ResolverInfo info) {
+		BundleContext ctx = this.context;
+		if (info == null || ctx == null)
+			return null;
+		Bundle bundle = null;
+		String bundleVersion = info.version;
+		for (Bundle b : ctx.getBundles())
+			if (b.getSymbolicName().equals(info.bundleId) && (bundleVersion == null
+					|| b.getVersion().toString().equals(bundleVersion) || Version.emptyVersion.equals(bundleVersion))) {
+				bundle = b;
+				break;
+			}
+		if (bundle != null)
+			synchronized (this.bundleModuleResolvers) {
+				List<ServiceReference<BundleModuleResolver>> existingList = bundleModuleResolvers.get(bundle);
+				if (existingList != null) {
+					for (ServiceReference<BundleModuleResolver> ref : existingList) {
+						Long infoServiceId = info.serviceId;
+						if (infoServiceId != null && infoServiceId.equals(ref.getProperty(Constants.SERVICE_ID)))
+							return ref;
+					}
+				}
+			}
+		return null;
+	}
+
+	@Override
+	public int getModuleType(String moduleUri) {
+		if (moduleUri != null) {
+			ResolverInfo resolverInfo = convertPathToResolverInfo(moduleUri);
+			if (resolverInfo != null) {
+				ServiceReference<BundleModuleResolver> ref = findBundleModuleResolverRef(resolverInfo);
+				if (ref != null) {
+					BundleContext bc = this.context;
+					if (bc != null) {
+						BundleModuleResolver bmr = bc.getService(ref);
+						if (bmr != null) {
+							int result = bmr.getModuleType(resolverInfo.remain);
+							bc.ungetService(ref);
+							return result;
+						}
+					}
+				}
+			}
+		}
+		return ModuleResolver.NONE;
+	}
+
+	@Override
+	public String getModuleCode(String moduleUri, boolean ispackage) throws Exception {
+		if (moduleUri != null) {
+			ResolverInfo resolverInfo = convertPathToResolverInfo(moduleUri);
+			if (resolverInfo != null) {
+				ServiceReference<BundleModuleResolver> ref = findBundleModuleResolverRef(resolverInfo);
+				if (ref != null) {
+					BundleContext bc = this.context;
+					if (bc != null) {
+						BundleModuleResolver bmr = bc.getService(ref);
+						if (bmr != null) {
+							String result = bmr.getModuleCode(resolverInfo.remain,ispackage);
+							bc.ungetService(ref);
+							return result;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
 }

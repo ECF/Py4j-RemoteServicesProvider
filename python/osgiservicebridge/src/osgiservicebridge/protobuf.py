@@ -31,7 +31,7 @@ from osgiservicebridge.bridge import JavaRemoteServiceRegistry, Py4jServiceBridg
 
 from osgiservicebridge import ECF_SERVICE_EXPORTED_ASYNC_INTERFACES
 
-from exporter_pb2 import ExportRequest,ExportResponse,UnexportRequest,UnexportResponse
+from osgiservicebridge.exporter_pb2 import ExportRequest,ExportResponse,UnexportRequest,UnexportResponse
 
 # Documentation strings format
 __docformat__ = "restructuredtext en"

@@ -8,16 +8,14 @@
  ******************************************************************************/
 package org.eclipse.ecf.provider.direct;
 
-/**
- * Super interface for indicating that a direct provider is active.
- * 
- * @author slewis
- *
- */
-public interface DirectProvider {
-	/**
-	 * 
-	 * @return true if this direct provider is connected, false otherwise.
-	 */
-	boolean isConnected();
+public interface BundleModuleResolver {
+
+	public static final String PATH_PREFIX_PROP = "pathPrefix";
+	public static final String PACKAGE_SUFFIX = "/";
+	public static final String PACKAGE_INIT_NAME = "__init__";
+	public static final String MODULE_SUFFIX = ".py";
+	public static final String PACKAGE_INIT_FILE = PACKAGE_SUFFIX + PACKAGE_INIT_NAME + MODULE_SUFFIX;
+	int getModuleType(String modulename);
+	String getModuleCode(String modulename, boolean ispackage) throws Exception;
+	
 }

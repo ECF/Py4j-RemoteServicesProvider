@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
+import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.provider.direct.DirectProvider;
 import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
@@ -60,14 +61,14 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 						ProtobufPy4jConstants.PYTHON_CONSUMER_CONFIG_TYPE, new IDirectContainerInstantiator() {
 							@Override
 							public IContainer createContainer() throws ContainerCreateException {
-								return new DirectHostContainer(
-										Py4jNamespace.createPy4jID(getJavaAddress(), getJavaPort()),
-										getInternalServiceProvider());
+								ID lId = ProtobufPy4jProviderImpl.this.localId;
+								if (lId == null)
+									throw new ContainerCreateException("Cannot create container with null localId");
+								return new DirectHostContainer(lId, getInternalServiceProvider());
 							}
 						}, py4jProtobufSupportedIntents),
 				null);
 	}
-
 
 	protected void registerProtobufClientDistributionProvider() {
 		protobufClientReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
@@ -98,14 +99,14 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 		}
 	}
 
-	protected void activate(BundleContext context, Map<String,?> properties) throws Exception {
+	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
 		synchronized (getLock()) {
 			super.activate(context, properties);
 			registerProtobufHostDistributionProvider();
 			registerProtobufClientDistributionProvider();
 		}
 	}
-	
+
 	private ProtobufCallableEndpointImpl pcei;
 
 	protected ProtobufCallableEndpoint getProtobufCallableEndpoint() {

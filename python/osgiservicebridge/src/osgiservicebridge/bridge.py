@@ -30,6 +30,8 @@ _logger = getLibLogger(__name__)
 # ------------------------------------------------------------------------------
 
 from threading import RLock, Condition
+import sys
+import importlib
 
 _done = False
 __condition = Condition()
@@ -90,6 +92,7 @@ PY4J_DEFAULT_GATEWAY_PORT = DEFAULT_PORT
 PY4J_DEFAULT_CB_PORT = DEFAULT_PYTHON_PROXY_PORT
 PY4J_DEFAULT_HOSTNAME = DEFAULT_ADDRESS
 
+JAVA_PATH_PROVIDER = 'org.eclipse.ecf.provider.direct.ExternalPathProvider'
 JAVA_DIRECT_ENDPOINT_CLASS = 'org.eclipse.ecf.provider.direct.InternalDirectDiscovery'
 PY4J_CALL_BY_VALUE_CLASS = 'org.eclipse.ecf.provider.direct.ExternalCallableEndpoint'
 
@@ -243,6 +246,32 @@ class Py4jServiceBridgeConnectionListener(object):
         '''
         _logger.info("Py4j gateway post_shutdown="+repr(server))
 
+class JavaPathHook(object):
+    def __init__(self, bridge):
+        self._bridge = bridge
+        
+    def initialize_path(self,path_list):
+        '''
+        Initialize this path provider with a path_list (list of Strings)
+        that is to be added to the sys.path
+        '''
+        print('initialize_path path_list='+str(path_list))
+        
+    def _add_code_path(self,path):
+        '''
+        Add a single path (string) to the sys.path 
+        '''
+        print('add_code_path='+str(path))
+        
+    def _remove_code_path(self,path):
+        '''
+        Remove a single path (string) from the sys.path
+        '''
+        print('remove_code_path='+str(path))
+        
+    class Java:
+        implements = [JAVA_PATH_PROVIDER]
+                
 class Py4jServiceBridge(object):
     '''Py4jServiceBridge class
     This class provides and API for consumers to use the Py4jServiceBridge.  This 
@@ -438,7 +467,7 @@ class Py4jServiceBridge(object):
         with self._lock:
             return True if self._gateway is not None else False
 
-    def connect(self,gateway_parameters=None,callback_server_parameters=None):
+    def connect(self,gateway_parameters=None,callback_server_parameters=None,path_hook=None):
         '''
         Connect gateway to Java side
         :param gateway_parameters an overriding GatewayParameters instance.
@@ -474,6 +503,7 @@ class Py4jServiceBridge(object):
                 self._pre_shutdown, sender=cbserver)
             post_server_shutdown.connect(
                 self._post_shutdown, sender=cbserver)
+            
             class JavaRemoteServiceDiscoverer(object):
                 def __init__(self, bridge):
                     self._bridge = bridge
@@ -495,17 +525,32 @@ class Py4jServiceBridge(object):
                         msg = 'No endpoint for rsId=%s methodName=%s serializedArgs=%s' % (rsId,methodName,serializedArgs)
                         _logger.error(msg)
                         raise Exception(msg)
-               
+                    
                 class Java:
                     implements = [JAVA_DIRECT_ENDPOINT_CLASS, PY4J_CALL_BY_VALUE_CLASS]
 
+            if not path_hook:
+                path_hook = JavaPathHook(self)
             self._bridge = JavaRemoteServiceDiscoverer(self)
             '''Call _getExternalDirectDiscovery first, so that we are ready to export'''
             self._consumer = self._gateway.entry_point._getExternalDirectDiscovery()
             '''Then call _setDirectBridge so that java side can now call us
             to notify about exported services'''
-            self._gateway.entry_point._setDirectBridge(self._bridge, self._bridge, self.get_id())
-            
+            path_list = self._gateway.entry_point._setDirectBridge(path_hook,self._bridge, self._bridge, self.get_id())
+            path_hook.initialize_path(path_list)
+    
+    def get_module_type(self,modname):
+        with self._lock:
+            if not self.isconnected():
+                raise ImportError()
+        return self._gateway.entry_point.getModuleType(modname)
+    
+    def get_module_code(self,modname,ispackage):
+        with self._lock:
+            if not self.isconnected():
+                raise ImportError()
+        return self._gateway.entry_point.getModuleCode(modname,ispackage)
+    
     def disconnect(self):
         with self._lock:
             if self.isconnected():
@@ -735,4 +780,82 @@ class JavaRemoteServiceRegistry(object):
     def lookup_services(self,interface):
         with self._lock:
             return [rs for rs in self._remote_services.values() if rs.has_service(interface)]
+
         
+class OSGIPythonModulePathHook(object):
+    def __init__(self,bridge):
+        self._bridge = bridge
+        
+    def __call__(self,*args):
+        uri = args[0]
+        if not uri.startswith('py4j:'):
+            raise ImportError()
+        return OSGIPythonModuleFinder(self._bridge,uri)
+
+    def initialize_path(self,path_list):
+        sys.path_hooks.append(self)
+        sys.path.extend(path_list)
+        sys.path_importer_cache.clear()
+        
+    def _add_code_path(self,path):
+        sys.path.append(path)
+        sys.path_importer_cache.clear()
+        
+    def _remove_code_path(self,path):
+        sys.path.remove(path)
+        sys.path_importer_cache.clear()
+        
+    class Java:
+        implements = [JAVA_PATH_PROVIDER]
+
+class OSGIPythonModuleFinder(object):
+    
+    def __init__(self, bridge, path_entry):
+        self._bridge = bridge
+        self._path_entry = path_entry
+        
+    def find_spec(self, modname, target=None):
+        python_type = 0
+        pckg = False
+        try:
+            python_type = self._bridge.get_module_type(self._path_entry + modname)
+        except Exception as e:
+            _logger.error('error in Py4jFinder.find_spec._bridge.get_module_type uri='+self._path_entry + modname,e)
+            return None
+        if python_type == 0:
+            return None
+        modnames = modname.split('.')
+        origin = self._path_entry + '/'.join(modnames)
+        if python_type == 1:
+            pckg = True
+            origin += '/'
+        elif python_type == 2:
+            origin += '.py'
+        else:
+            return None
+        spec = importlib.util.spec_from_loader(modname,OSGIPythonModuleLoader(self._bridge, self._path_entry, pckg),origin=origin,is_package=pckg)
+        spec.submodule_search_locations = [self._path_entry]
+        return spec
+
+class OSGIPythonModuleLoader(object):
+    
+    def __init__(self, bridge, path_entry, ispackage):
+        self._bridge = bridge
+        self._path_entry = path_entry
+        self._ispackage = ispackage
+        
+    def create_module(self, target):
+        return None
+
+    def exec_module(self, module):
+        modname = module.__name__
+        code = None
+        try:
+            code = self._bridge.get_module_code(self._path_entry + modname, self._ispackage)
+        except Exception as e:
+            _logger.error('error in Py4jOSGILoader.exec_module._bridge.get_module_code uri='+self._path_entry + modname,e)
+            raise e
+        if not code:
+            code = ''
+        exec(compile(code+'\n', module.__spec__.origin, 'exec'), globals(), module.__dict__)
+
