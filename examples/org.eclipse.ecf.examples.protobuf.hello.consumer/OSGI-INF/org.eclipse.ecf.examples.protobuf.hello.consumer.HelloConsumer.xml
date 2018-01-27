@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" immediate="true" name="org.eclipse.ecf.examples.protobuf.hello.consumer.HelloConsumer">
    <reference bind="bindHello" cardinality="0..1" interface="org.eclipse.ecf.examples.protobuf.hello.IHello" name="Hello" policy="dynamic" target="(service.imported=*)" unbind="unbindHello"/>
-   <reference bind="bindPythonServiceExporter" interface="org.eclipse.ecf.python.protobuf.IPythonServiceExporterAsync" name="PythonServiceExporter" policy="dynamic" target="(service.imported=*)" unbind="unbindPythonServiceExporter"/>
+   <reference bind="bindPythonServiceExporter" interface="org.eclipse.ecf.python.protobuf.PythonServiceExporterAsync" name="PythonServiceExporter" policy="dynamic" target="(service.imported=*)" unbind="unbindPythonServiceExporter"/>
    <implementation class="org.eclipse.ecf.examples.protobuf.hello.consumer.HelloConsumer"/>
 </scr:component>

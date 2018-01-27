@@ -458,7 +458,7 @@ JAVA_OBJECT_METHODS = [ 'equals', 'hashCode', 'wait', 'notify', 'notifyAll', 'ge
 
 PYTHON_SERVICE_EXPORTER_PACKAGE='org.eclipse.ecf.python.protobuf'
 PYTHON_SERVICE_EXPORTER_PACKAGE_VERSION='1.0.0'
-PYTHON_SERVICE_EXPORTER=PYTHON_SERVICE_EXPORTER_PACKAGE + '.IPythonServiceExporter'
+PYTHON_SERVICE_EXPORTER=PYTHON_SERVICE_EXPORTER_PACKAGE + '.PythonServiceExporter'
 
 @protobuf_remote_service(
     objectClass=[PYTHON_SERVICE_EXPORTER],export_properties = { ECF_SERVICE_EXPORTED_ASYNC_INTERFACES: '*',

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent;
 import org.eclipse.ecf.python.protobuf.Exporter.ExportRequest;
-import org.eclipse.ecf.python.protobuf.IPythonServiceExporterAsync;
+import org.eclipse.ecf.python.protobuf.PythonServiceExporterAsync;
 import org.eclipse.ecf.examples.protobuf.hello.IHello;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -16,14 +16,14 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 @Component(immediate = true)
 public class HelloConsumer {
 
-	private IPythonServiceExporterAsync exporter;
+	private PythonServiceExporterAsync exporter;
 	
 	@Reference(policy=ReferencePolicy.DYNAMIC,target="(service.imported=*)")
-	void bindPythonServiceExporter(IPythonServiceExporterAsync exporter) {
+	void bindPythonServiceExporter(PythonServiceExporterAsync exporter) {
 		this.exporter = exporter;
 	}
 	
-	void unbindPythonServiceExporter(IPythonServiceExporterAsync exporter) {
+	void unbindPythonServiceExporter(PythonServiceExporterAsync exporter) {
 		this.exporter = null;
 	}
 	

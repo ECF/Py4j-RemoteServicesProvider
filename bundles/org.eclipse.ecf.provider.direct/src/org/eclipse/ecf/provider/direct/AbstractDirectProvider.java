@@ -448,10 +448,10 @@ public abstract class AbstractDirectProvider
 		}
 	}
 
-	protected Map<Bundle, List<ServiceReference<BundleModuleResolver>>> bundleModuleResolvers = Collections
-			.synchronizedMap(new HashMap<Bundle, List<ServiceReference<BundleModuleResolver>>>());
+	protected Map<Bundle, List<ServiceReference<ModuleResolver>>> ModuleResolvers = Collections
+			.synchronizedMap(new HashMap<Bundle, List<ServiceReference<ModuleResolver>>>());
 
-	protected String convertResolverToPath(Bundle b, ServiceReference<BundleModuleResolver> ref) {
+	protected String convertResolverToPath(Bundle b, ServiceReference<ModuleResolver> ref) {
 		return new StringBuffer(getLocalID().getName()).append("/").append(b.getSymbolicName()).append("/")
 				.append(b.getVersion().toString()).append("/").append(ref.getProperty(Constants.SERVICE_ID)).append("/")
 				.toString();
@@ -506,18 +506,18 @@ public abstract class AbstractDirectProvider
 
 	protected List<String> getBundleResolverPaths() {
 		List<String> results = new ArrayList<String>();
-		synchronized (bundleModuleResolvers) {
-			for (Bundle b : bundleModuleResolvers.keySet()) {
-				List<ServiceReference<BundleModuleResolver>> existingList = bundleModuleResolvers.get(b);
+		synchronized (ModuleResolvers) {
+			for (Bundle b : ModuleResolvers.keySet()) {
+				List<ServiceReference<ModuleResolver>> existingList = ModuleResolvers.get(b);
 				if (existingList != null)
-					for (ServiceReference<BundleModuleResolver> ref : existingList)
+					for (ServiceReference<ModuleResolver> ref : existingList)
 						results.add(convertResolverToPath(b, ref));
 			}
 		}
 		return results;
 	}
 
-	protected void fireBundleModuleResolver(ServiceReference<BundleModuleResolver> ref, boolean add) {
+	protected void fireModuleResolver(ServiceReference<ModuleResolver> ref, boolean add) {
 		synchronized (getLock()) {
 			ExternalPathProvider epp = getExternalPathProvider();
 			if (epp != null) {
@@ -530,31 +530,31 @@ public abstract class AbstractDirectProvider
 		}
 	}
 
-	protected void bindBundleModuleResolver(ServiceReference<BundleModuleResolver> ref) {
+	protected void bindModuleResolver(ServiceReference<ModuleResolver> ref) {
 		Bundle b = ref.getBundle();
-		synchronized (bundleModuleResolvers) {
-			List<ServiceReference<BundleModuleResolver>> existingList = bundleModuleResolvers.get(b);
+		synchronized (ModuleResolvers) {
+			List<ServiceReference<ModuleResolver>> existingList = ModuleResolvers.get(b);
 			if (existingList == null)
-				existingList = new ArrayList<ServiceReference<BundleModuleResolver>>();
+				existingList = new ArrayList<ServiceReference<ModuleResolver>>();
 			existingList.add(ref);
-			bundleModuleResolvers.put(b, existingList);
+			ModuleResolvers.put(b, existingList);
 		}
-		fireBundleModuleResolver(ref, true);
+		fireModuleResolver(ref, true);
 	}
 
-	protected void unbindBundleModuleResolver(ServiceReference<BundleModuleResolver> ref) {
+	protected void unbindModuleResolver(ServiceReference<ModuleResolver> ref) {
 		Bundle b = ref.getBundle();
-		synchronized (bundleModuleResolvers) {
-			List<ServiceReference<BundleModuleResolver>> existingList = bundleModuleResolvers.get(b);
+		synchronized (ModuleResolvers) {
+			List<ServiceReference<ModuleResolver>> existingList = ModuleResolvers.get(b);
 			if (existingList != null)
 				existingList.remove(ref);
 			if (existingList.size() == 0)
-				bundleModuleResolvers.remove(b);
+				ModuleResolvers.remove(b);
 		}
-		fireBundleModuleResolver(ref, false);
+		fireModuleResolver(ref, false);
 	}
 
-	protected ServiceReference<BundleModuleResolver> findBundleModuleResolverRef(ResolverInfo info) {
+	protected ServiceReference<ModuleResolver> findModuleResolverRef(ResolverInfo info) {
 		BundleContext ctx = this.context;
 		if (info == null || ctx == null)
 			return null;
@@ -567,10 +567,10 @@ public abstract class AbstractDirectProvider
 				break;
 			}
 		if (bundle != null)
-			synchronized (this.bundleModuleResolvers) {
-				List<ServiceReference<BundleModuleResolver>> existingList = bundleModuleResolvers.get(bundle);
+			synchronized (this.ModuleResolvers) {
+				List<ServiceReference<ModuleResolver>> existingList = ModuleResolvers.get(bundle);
 				if (existingList != null) {
-					for (ServiceReference<BundleModuleResolver> ref : existingList) {
+					for (ServiceReference<ModuleResolver> ref : existingList) {
 						Long infoServiceId = info.serviceId;
 						if (infoServiceId != null && infoServiceId.equals(ref.getProperty(Constants.SERVICE_ID)))
 							return ref;
@@ -585,11 +585,11 @@ public abstract class AbstractDirectProvider
 		if (moduleUri != null) {
 			ResolverInfo resolverInfo = convertPathToResolverInfo(moduleUri);
 			if (resolverInfo != null) {
-				ServiceReference<BundleModuleResolver> ref = findBundleModuleResolverRef(resolverInfo);
+				ServiceReference<ModuleResolver> ref = findModuleResolverRef(resolverInfo);
 				if (ref != null) {
 					BundleContext bc = this.context;
 					if (bc != null) {
-						BundleModuleResolver bmr = bc.getService(ref);
+						ModuleResolver bmr = bc.getService(ref);
 						if (bmr != null) {
 							int result = bmr.getModuleType(resolverInfo.remain);
 							bc.ungetService(ref);
@@ -607,11 +607,11 @@ public abstract class AbstractDirectProvider
 		if (moduleUri != null) {
 			ResolverInfo resolverInfo = convertPathToResolverInfo(moduleUri);
 			if (resolverInfo != null) {
-				ServiceReference<BundleModuleResolver> ref = findBundleModuleResolverRef(resolverInfo);
+				ServiceReference<ModuleResolver> ref = findModuleResolverRef(resolverInfo);
 				if (ref != null) {
 					BundleContext bc = this.context;
 					if (bc != null) {
-						BundleModuleResolver bmr = bc.getService(ref);
+						ModuleResolver bmr = bc.getService(ref);
 						if (bmr != null) {
 							String result = bmr.getModuleCode(resolverInfo.remain,ispackage);
 							bc.ungetService(ref);

@@ -13,7 +13,7 @@ import org.eclipse.ecf.python.protobuf.Exporter.ExportResponse;
 import org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest;
 import org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse;
 
-public interface IPythonServiceExporter {
+public interface PythonServiceExporter {
 
 	ExportResponse createAndExport(ExportRequest request);
 	UnexportResponse unexport(UnexportRequest request);

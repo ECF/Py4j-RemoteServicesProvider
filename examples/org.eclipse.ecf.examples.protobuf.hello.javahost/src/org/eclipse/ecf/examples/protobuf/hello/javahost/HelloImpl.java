@@ -1,7 +1,7 @@
 package org.eclipse.ecf.examples.protobuf.hello.javahost;
 
 import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent;
-import org.eclipse.ecf.python.protobuf.IPythonServiceExporter;
+import org.eclipse.ecf.python.protobuf.PythonServiceExporter;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferencePolicy;
@@ -11,9 +11,9 @@ import org.eclipse.ecf.examples.protobuf.hello.IHello;
 public class HelloImpl implements IHello {
 
 	@Reference(policy=ReferencePolicy.DYNAMIC)
-	void bindPythonServiceExporter(IPythonServiceExporter exporter) {
+	void bindPythonServiceExporter(PythonServiceExporter exporter) {
 	}
-	void unbindPythonServiceExporter(IPythonServiceExporter exporter) {
+	void unbindPythonServiceExporter(PythonServiceExporter exporter) {
 	}
 	
 	HelloMsgContent createResponse() {

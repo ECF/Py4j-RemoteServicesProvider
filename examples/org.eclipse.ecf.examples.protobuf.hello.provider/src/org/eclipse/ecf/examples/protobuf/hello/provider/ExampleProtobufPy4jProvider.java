@@ -11,7 +11,7 @@ package org.eclipse.ecf.examples.protobuf.hello.provider;
 import java.util.Map;
 
 import org.eclipse.ecf.osgi.services.remoteserviceadmin.DebugRemoteServiceAdminListener;
-import org.eclipse.ecf.provider.direct.BundleModuleResolver;
+import org.eclipse.ecf.provider.direct.ModuleResolver;
 import org.eclipse.ecf.provider.direct.DirectProvider;
 import org.eclipse.ecf.provider.py4j.Py4jProvider;
 import org.eclipse.ecf.provider.py4j.protobuf.ProtobufPy4jProviderImpl;
@@ -32,12 +32,12 @@ public class ExampleProtobufPy4jProvider extends ProtobufPy4jProviderImpl
 		implements RemoteServiceAdminListener, Py4jProvider, DirectProvider {
 
 	@Reference(policy=ReferencePolicy.DYNAMIC,cardinality=ReferenceCardinality.MULTIPLE)
-	protected void bindBundleModuleResolver(ServiceReference<BundleModuleResolver> ref) {
-		super.bindBundleModuleResolver(ref);
+	protected void bindModuleResolver(ServiceReference<ModuleResolver> ref) {
+		super.bindModuleResolver(ref);
 	}
 	
-	protected void unbindBundleModuleResolver(ServiceReference<BundleModuleResolver> ref) {
-		super.unbindBundleModuleResolver(ref);
+	protected void unbindModuleResolver(ServiceReference<ModuleResolver> ref) {
+		super.unbindModuleResolver(ref);
 	}
 	
 	@Reference

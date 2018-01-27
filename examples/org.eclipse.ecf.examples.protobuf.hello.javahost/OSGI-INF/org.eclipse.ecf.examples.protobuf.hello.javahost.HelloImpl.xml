@@ -5,6 +5,6 @@
    <service>
       <provide interface="org.eclipse.ecf.examples.protobuf.hello.IHello"/>
    </service>
-   <reference bind="bindPythonServiceExporter" interface="org.eclipse.ecf.python.protobuf.IPythonServiceExporter" name="PythonServiceExporter" policy="dynamic" unbind="unbindPythonServiceExporter"/>
+   <reference bind="bindPythonServiceExporter" interface="org.eclipse.ecf.python.protobuf.PythonServiceExporter" name="PythonServiceExporter" policy="dynamic" unbind="unbindPythonServiceExporter"/>
    <implementation class="org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl"/>
 </scr:component>
