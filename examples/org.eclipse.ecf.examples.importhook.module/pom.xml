@@ -8,6 +8,6 @@
    <version>1.0.0-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
-  <artifactId>org.eclipse.ecf.examples.importhook.main</artifactId>
+  <artifactId>org.eclipse.ecf.examples.importhook.module</artifactId>
   <packaging>eclipse-plugin</packaging>
   </project>

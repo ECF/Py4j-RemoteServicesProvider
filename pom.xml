@@ -114,6 +114,8 @@
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.pyimpl</module>
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.consumer</module>
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.provider</module>
+    <module>examples/org.eclipse.ecf.examples.importhook.main</module>
+    <module>examples/org.eclipse.ecf.examples.importhook.module</module>
   </modules>
 
   <build>

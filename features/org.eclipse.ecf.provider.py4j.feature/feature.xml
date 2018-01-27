@@ -171,4 +171,25 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.eclipse.ecf.examples.importhook.main"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.ecf.examples.importhook.module"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.ecf.examples.protobuf.hello.javahost"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
