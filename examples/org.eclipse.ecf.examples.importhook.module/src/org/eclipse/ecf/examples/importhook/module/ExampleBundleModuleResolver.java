@@ -29,4 +29,15 @@ public class ExampleBundleModuleResolver extends BundleModuleResolver implements
 	protected void deactivate() {
 		super.deactivate();
 	}
+	
+	@Override
+	public int getModuleType(String moduleName) {
+		return super.getModuleType(moduleName);
+	}
+
+	@Override
+	public String getModuleCode(String moduleName, boolean ispackage) throws Exception {
+		return super.getModuleCode(moduleName, ispackage);
+	}
+	
 }

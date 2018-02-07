@@ -6,7 +6,9 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-@Component(immediate = true)
+import py4j.PythonThrowable;
+
+//@Component(immediate = true)
 public class HelloConsumerAsync {
 
 	private IHelloAsync helloService;
@@ -24,9 +26,13 @@ public class HelloConsumerAsync {
 	void activate() {
 		try {
 			this.helloService.sayHelloAsync(HelloConsumer.createRequest()).whenComplete((r,e) -> {
-				if (e != null)
+				if (e != null) {
+					PythonThrowable pt = (PythonThrowable) e.getCause().getCause().getCause();
+					pt.printStackTrace();
+					
 					e.printStackTrace();
-				else
+					e.printStackTrace();
+				} else
 					System.out.println("Received sayHelloAsync result="+r);
 			});
 		} catch (Exception e) {

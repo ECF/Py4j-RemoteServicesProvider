@@ -222,7 +222,7 @@ public abstract class AbstractDirectProvider
 	protected ServiceRegistration<?> internalDirectDiscoverReg;
 	protected ExternalCallableEndpoint externalCallbackEndpoint;
 	protected ExternalPathProvider externalPathProvider;
-	
+
 	protected Map<Long, Object> preExportedServices = new HashMap<Long, Object>();
 	private Map<Long, ExternalEndpoint> exportedExternalEndpoints = new HashMap<Long, ExternalEndpoint>();
 	private Object lock = new Object();
@@ -271,8 +271,8 @@ public abstract class AbstractDirectProvider
 
 	}
 
-	public List<String> _setDirectBridge(ExternalPathProvider pathProvider, InternalDirectDiscovery directDiscovery, ExternalCallableEndpoint endpoint,
-			String externalId) {
+	public List<String> _setDirectBridge(ExternalPathProvider pathProvider, InternalDirectDiscovery directDiscovery,
+			ExternalCallableEndpoint endpoint, String externalId) {
 		// Set internal variable here and export to external any services before
 		// returning
 		DirectBridge external = null;
@@ -474,11 +474,11 @@ public abstract class AbstractDirectProvider
 		String uriPath = uri.getPath();
 		while (uriPath.startsWith("/"))
 			uriPath = uriPath.substring(1);
-		
+
 		String[] parts = uriPath.split("/");
 		if (parts.length < 2)
 			return null;
-		
+
 		ResolverInfo result = new ResolverInfo();
 		result.bundleId = parts[1];
 		if (parts.length > 2)
@@ -494,7 +494,7 @@ public abstract class AbstractDirectProvider
 			System.arraycopy(parts, 4, remainParts, 0, remainParts.length);
 			StringBuffer buf = new StringBuffer();
 			List<String> rps = Arrays.asList(remainParts);
-			for (Iterator<String> it=rps.iterator(); it.hasNext(); ) {
+			for (Iterator<String> it = rps.iterator(); it.hasNext();) {
 				buf.append(it.next());
 				if (it.hasNext())
 					buf.append("/");
@@ -613,7 +613,7 @@ public abstract class AbstractDirectProvider
 					if (bc != null) {
 						ModuleResolver bmr = bc.getService(ref);
 						if (bmr != null) {
-							String result = bmr.getModuleCode(resolverInfo.remain,ispackage);
+							String result = bmr.getModuleCode(resolverInfo.remain, ispackage);
 							bc.ungetService(ref);
 							return result;
 						}

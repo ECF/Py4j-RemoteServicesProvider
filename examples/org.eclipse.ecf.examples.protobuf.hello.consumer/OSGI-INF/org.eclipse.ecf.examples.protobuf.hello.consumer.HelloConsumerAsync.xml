@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" immediate="true" name="org.eclipse.ecf.examples.protobuf.hello.consumer.HelloConsumerAsync">
-   <reference bind="bindHello" interface="org.eclipse.ecf.examples.protobuf.hello.IHelloAsync" name="Hello"/>
-   <implementation class="org.eclipse.ecf.examples.protobuf.hello.consumer.HelloConsumerAsync"/>
-</scr:component>

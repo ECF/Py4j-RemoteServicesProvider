@@ -18,5 +18,6 @@ import org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse;
 public interface PythonServiceExporterAsync {
 
 	CompletableFuture<ExportResponse> createAndExportAsync(ExportRequest request);
+
 	CompletableFuture<UnexportResponse> unexportAsync(UnexportRequest request);
 }

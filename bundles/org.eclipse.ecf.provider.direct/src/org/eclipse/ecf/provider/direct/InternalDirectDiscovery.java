@@ -11,11 +11,9 @@ package org.eclipse.ecf.provider.direct;
 import java.util.Map;
 
 /**
- * A direct discovery service that allows Java-exported services to call out to
- * allow the external process to discover Java-implemented services. For
- * example, when these methods are called as part of the RSA export, the
- * connected Python process will be notified, allowing it to discover
- * java-exported services.
+ * A direct discovery service that allows Java-exported services to call out to allow the external process to discover
+ * Java-implemented services. For example, when these methods are called as part of the RSA export, the connected Python
+ * process will be notified, allowing it to discover java-exported services.
  * 
  * @author slewis
  *

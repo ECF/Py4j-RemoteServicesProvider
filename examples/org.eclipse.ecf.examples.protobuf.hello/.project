@@ -4,6 +4,8 @@
 	<comment></comment>
 	<projects>
 		<project>osgiservicebridge</project>
+		<project>py4j-java</project>
+		<project>py4j-python</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

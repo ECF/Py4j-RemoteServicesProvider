@@ -12,8 +12,9 @@ public interface ModuleResolver {
 	public static final int NONE = 0;
 	public static final int PACKAGE = 1;
 	public static final int MODULE = 2;
-	
+
 	int getModuleType(String moduleName);
+
 	String getModuleCode(String moduleName, boolean ispackage) throws Exception;
-	
+
 }

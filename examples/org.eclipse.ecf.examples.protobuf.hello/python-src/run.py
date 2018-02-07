@@ -40,6 +40,9 @@ class HelloServiceImpl:
         
     @protobuf_remote_service_method(arg_type=HelloMsgContent,return_type=HelloMsgContent)
     def sayHello(self,pbarg):
+        from a import A 
+        aa = A()
+        aa.run()
         print("sayHello called with arg="+str(pbarg))
         return create_hellomsgcontent('responding back to java hello ')
 

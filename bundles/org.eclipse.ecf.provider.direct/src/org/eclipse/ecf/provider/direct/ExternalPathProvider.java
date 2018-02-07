@@ -11,6 +11,7 @@ package org.eclipse.ecf.provider.direct;
 public interface ExternalPathProvider {
 
 	void _add_code_path(String path);
+
 	void _remove_code_path(String path);
-	
+
 }

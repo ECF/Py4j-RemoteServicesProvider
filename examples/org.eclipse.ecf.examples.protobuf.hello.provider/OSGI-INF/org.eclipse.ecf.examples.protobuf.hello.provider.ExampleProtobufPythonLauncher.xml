@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" deactivate="deactivate" immediate="true" name="org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPythonLauncher">
+   <service>
+      <provide interface="org.eclipse.ecf.python.PythonLauncher"/>
+   </service>
+   <reference bind="bindLaunchCommandProvider" cardinality="0..n" interface="org.eclipse.ecf.python.PythonLaunchCommandProvider" name="LaunchCommandProvider" policy-option="greedy"/>
+   <reference bind="bindPy4jProvider" interface="org.eclipse.ecf.provider.py4j.Py4jProvider" name="Py4jProvider" unbind="unbindPy4jProvider"/>
+   <implementation class="org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPythonLauncher"/>
+</scr:component>

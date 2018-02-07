@@ -14,14 +14,19 @@ if __name__ == '__main__':
     java_service_registry = ProtobufServiceRegistry()
     # pass service registry to service bridge
     bridge = Py4jServiceBridge(java_service_registry)
-    # connect
+    # connect and setup the OSGIPythonModulePathHook as the path
+    # hook.  The path hook allows subsequent imports
+    # to be resolved by java ModuleResolver services.  See
+    # the class org.eclipse.ecf.examples.importhook.module.ExampleBundleModuleResolver
+    # which resolves the foo/bar 
     bridge.connect(path_hook=OSGIPythonModulePathHook(bridge))
-    # import package from java
+    
+    # this import is resolved via the org.eclipse.ecf.examples.importhook.module
+    # bundle
     from foo.bar.baz import Bar
-    # create instance
-    bar = Bar()
+    
+    b = Bar()
     
     _wait_for_sec(20)
-    
     bridge.disconnect()
     

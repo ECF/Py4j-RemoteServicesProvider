@@ -16,5 +16,6 @@ import org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse;
 public interface PythonServiceExporter {
 
 	ExportResponse createAndExport(ExportRequest request);
+
 	UnexportResponse unexport(UnexportRequest request);
 }

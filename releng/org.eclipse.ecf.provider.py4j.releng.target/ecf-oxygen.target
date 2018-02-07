@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Py4j Provider Oxygen Target" sequenceNumber="39">
+<?pde version="3.8"?><target name="Py4j Provider Oxygen Target" sequenceNumber="40">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ecf.py4j.feature.feature.group" version="1.1.1.201712171212"/>
@@ -9,7 +9,6 @@
 <unit id="org.eclipse.license.feature.group" version="1.0.1.v20140414-1359"/>
 <repository location="http://download.eclipse.org/cbi/updates/license/1.0.1.v20140414-1359"/>
 </location>
-<location path="${project_loc:org.eclipse.ecf.provider.py4j.releng.target}/bundles" type="Directory"/>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.pde.feature.group" version="3.13.0.v20170612-0950"/>
 <unit id="org.eclipse.pde.source.feature.group" version="3.13.0.v20170612-0950"/>
@@ -32,5 +31,6 @@
 <unit id="org.eclipse.ecf.remoteservice.sdk.feature.source.feature.group" version="3.13.8.v20170816-0246"/>
 <repository location="http://download.eclipse.org/rt/ecf/3.13.8/site.p2"/>
 </location>
+<location path="${project_loc:org.eclipse.ecf.provider.py4j.releng.target}/bundles" type="Directory"/>
 </locations>
 </target>

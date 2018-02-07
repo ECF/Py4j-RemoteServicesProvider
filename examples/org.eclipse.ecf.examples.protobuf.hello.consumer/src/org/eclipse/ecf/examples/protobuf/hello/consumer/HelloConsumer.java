@@ -13,6 +13,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import py4j.PythonThrowable;
+
 @Component(immediate = true)
 public class HelloConsumer {
 
@@ -32,12 +34,19 @@ public class HelloConsumer {
 	@Reference(policy=ReferencePolicy.DYNAMIC,cardinality=ReferenceCardinality.OPTIONAL,target="(service.imported=*)")
 	void bindHello(IHello hello) {
 		this.helloService = hello;
-		try {
-			HelloMsgContent result = this.helloService.sayHello(createRequest());
-			System.out.println("Java received sayHello result="+result);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					HelloMsgContent result = helloService.sayHello(createRequest());
+					System.out.println("Java received sayHello result="+result);
+				} catch (Exception e) {
+					PythonThrowable pt = (PythonThrowable) e.getCause().getCause().getCause();
+					pt.printStackTrace();
+					e.printStackTrace();
+				}
+			}}).start();
 	}
 	
 	void unbindHello(IHello hello) {
@@ -59,6 +68,7 @@ public class HelloConsumer {
 	void activate() {
 		// Using the exporter, ask the python side to create an export an instance of python HelloServiceImpl
 		ExportRequest.Builder b = ExportRequest.newBuilder();
+		b.setModuleName("hello");
 		b.setClassName("HelloServiceImpl");
 		Map<String,String> creationArgs = new HashMap<String,String>();
 		creationArgs.put("one", "1");

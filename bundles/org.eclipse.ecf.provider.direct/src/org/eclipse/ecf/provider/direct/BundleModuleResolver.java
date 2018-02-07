@@ -10,6 +10,7 @@ package org.eclipse.ecf.provider.direct;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
@@ -43,7 +44,7 @@ public class BundleModuleResolver implements ModuleResolver {
 	protected String getPathPrefix() {
 		return this.pathPrefix;
 	}
-	
+
 	protected void deactivate() {
 		this.pathPrefix = null;
 		this.context = null;
@@ -52,7 +53,7 @@ public class BundleModuleResolver implements ModuleResolver {
 	protected Enumeration<String> getEntryPaths(String path) {
 		return this.context.getBundle().getEntryPaths(path);
 	}
-	
+
 	protected int getModuleType(String prefix, String pathSegment) {
 		Enumeration<String> paths = getEntryPaths(prefix);
 		if (paths != null)
@@ -90,27 +91,28 @@ public class BundleModuleResolver implements ModuleResolver {
 		return getModuleType(prefix, pathSegments[pathSegments.length - 1]);
 	}
 
-	protected String readFileAsString(URL url) throws Exception {
+	public static String readFileAsUTF8(URL url) throws IOException {
 		InputStream ins = url.openStream();
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		int length;
 		while ((length = ins.read(buffer)) != -1)
 			result.write(buffer, 0, length);
+		ins.close();
 		return result.toString("UTF-8");
 	}
 
 	protected URL getEntry(String entryPath) {
 		return this.context.getBundle().getEntry(entryPath);
 	}
-	
+
 	@Override
 	public String getModuleCode(String moduleName, boolean ispackage) throws Exception {
 		String modulePath = getPathPrefix() + moduleName.replace('.', '/')
 				+ (ispackage ? PACKAGE_SUFFIX + PACKAGE_INIT_NAME + MODULE_SUFFIX : MODULE_SUFFIX);
 		URL url = getEntry(modulePath);
 		if (url != null)
-			return readFileAsString(url);
+			return readFileAsUTF8(url);
 		else if (ispackage)
 			return ""; // python 3 packages can have no __init__.py
 		else

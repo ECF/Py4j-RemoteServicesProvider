@@ -3,6 +3,7 @@
 	<name>org.eclipse.ecf.examples.importhook.main</name>
 	<comment></comment>
 	<projects>
+		<project>org.eclipse.ecf.examples.importhook.module</project>
 		<project>osgiservicebridge</project>
 	</projects>
 	<buildSpec>

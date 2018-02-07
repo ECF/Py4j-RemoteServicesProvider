@@ -749,6 +749,14 @@ class JavaRemoteService(object):
     
     def get_endpointid(self):
         return self._endpoint_props(osgiservicebridge.ENDPOINT_ID)   
+
+class RemoteServiceRegistryListener(object):
+    
+    def add_remote_service(self,remote_service):
+        pass
+    
+    def remove_remote_service(self,remote_service):
+        pass
     
 class JavaRemoteServiceRegistry(object):
     
@@ -756,14 +764,41 @@ class JavaRemoteServiceRegistry(object):
         super(JavaRemoteServiceRegistry,self).__init__()
         self._lock = RLock()
         self._remote_services = {}
-        
-    def _add_remoteservice(self,endpoint_props,proxy):
+        self._listeners = []
+    
+    def register_listener(self, listener):
         with self._lock:
-            self._remote_services[endpoint_props[osgiservicebridge.ENDPOINT_ID]] = JavaRemoteService(endpoint_props,proxy)
+            self._listeners.append(listener)
+            
+    def unregister_listener(self, listener):
+        with self._lock:
+            self._listeners.remove(listener)
+    
+    def _fire_remote_service_event(self,listeners,eventtype,remote_service):     
+        for listener in listeners:
+            func = None
+            if eventtype == 0:
+                func = getattr(listener,'add_remote_service')
+            else:
+                func = getattr(listener,'remove_remote_service')
+            try:
+                func(remote_service)
+            except Exception as e:
+                _logger.error(e)
+                
+    def _add_remoteservice(self,endpoint_props,proxy):
+        remote_service = JavaRemoteService(endpoint_props,proxy)
+        with self._lock:
+            listeners = list(self._listeners)
+            self._remote_services[endpoint_props[osgiservicebridge.ENDPOINT_ID]] = remote_service
+        self._fire_remote_service_event(listeners, 0, remote_service)
             
     def _remove_remoteservice(self,endpointid):
         with self._lock:
-            return self._remote_services.pop(endpointid)
+            listeners = list(self._listeners)
+            removed_service = self._remote_services.pop(endpointid)
+        if removed_service:
+            self._fire_remote_service_event(listeners, 1, removed_service)
         
     def _modify_remoteservice(self,endpointid,endpoint_props):
         with self._lock:
@@ -857,5 +892,8 @@ class OSGIPythonModuleLoader(object):
             raise e
         if not code:
             code = ''
-        exec(compile(code+'\n', module.__spec__.origin, 'exec'), globals(), module.__dict__)
-
+        try:
+            exec(compile(code+'\n', module.__spec__.origin, 'exec'), module.__dict__, module.__dict__)
+        except Exception as e:
+            _logger.error('error in Py4jOSGILoader.exec_module.exec code='+str(code))
+            raise e

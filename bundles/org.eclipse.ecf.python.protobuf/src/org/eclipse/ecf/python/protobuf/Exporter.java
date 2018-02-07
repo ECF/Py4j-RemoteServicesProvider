@@ -4,3541 +4,3482 @@
 package org.eclipse.ecf.python.protobuf;
 
 public final class Exporter {
-  private Exporter() {}
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
-  }
-
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
-  }
-  public interface ExportRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.eclipse.ecf.python.protobuf.ExportRequest)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>optional string module_name = 1;</code>
-     */
-    boolean hasModuleName();
-    /**
-     * <code>optional string module_name = 1;</code>
-     */
-    java.lang.String getModuleName();
-    /**
-     * <code>optional string module_name = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getModuleNameBytes();
-
-    /**
-     * <code>required string class_name = 2;</code>
-     */
-    boolean hasClassName();
-    /**
-     * <code>required string class_name = 2;</code>
-     */
-    java.lang.String getClassName();
-    /**
-     * <code>required string class_name = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getClassNameBytes();
-
-    /**
-     * <code>map&lt;string, string&gt; creation_args = 3;</code>
-     */
-    int getCreationArgsCount();
-    /**
-     * <code>map&lt;string, string&gt; creation_args = 3;</code>
-     */
-    boolean containsCreationArgs(
-        java.lang.String key);
-    /**
-     * Use {@link #getCreationArgsMap()} instead.
-     */
-    @java.lang.Deprecated
-    java.util.Map<java.lang.String, java.lang.String>
-    getCreationArgs();
-    /**
-     * <code>map&lt;string, string&gt; creation_args = 3;</code>
-     */
-    java.util.Map<java.lang.String, java.lang.String>
-    getCreationArgsMap();
-    /**
-     * <code>map&lt;string, string&gt; creation_args = 3;</code>
-     */
-
-    java.lang.String getCreationArgsOrDefault(
-        java.lang.String key,
-        java.lang.String defaultValue);
-    /**
-     * <code>map&lt;string, string&gt; creation_args = 3;</code>
-     */
-
-    java.lang.String getCreationArgsOrThrow(
-        java.lang.String key);
-
-    /**
-     * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-     */
-    int getOverridingExportPropsCount();
-    /**
-     * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-     */
-    boolean containsOverridingExportProps(
-        java.lang.String key);
-    /**
-     * Use {@link #getOverridingExportPropsMap()} instead.
-     */
-    @java.lang.Deprecated
-    java.util.Map<java.lang.String, java.lang.String>
-    getOverridingExportProps();
-    /**
-     * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-     */
-    java.util.Map<java.lang.String, java.lang.String>
-    getOverridingExportPropsMap();
-    /**
-     * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-     */
-
-    java.lang.String getOverridingExportPropsOrDefault(
-        java.lang.String key,
-        java.lang.String defaultValue);
-    /**
-     * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-     */
-
-    java.lang.String getOverridingExportPropsOrThrow(
-        java.lang.String key);
-  }
-  /**
-   * Protobuf type {@code org.eclipse.ecf.python.protobuf.ExportRequest}
-   */
-  public  static final class ExportRequest extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.eclipse.ecf.python.protobuf.ExportRequest)
-      ExportRequestOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use ExportRequest.newBuilder() to construct.
-    private ExportRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private ExportRequest() {
-      moduleName_ = "";
-      className_ = "";
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private ExportRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              moduleName_ = bs;
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              className_ = bs;
-              break;
-            }
-            case 26: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                creationArgs_ = com.google.protobuf.MapField.newMapField(
-                    CreationArgsDefaultEntryHolder.defaultEntry);
-                mutable_bitField0_ |= 0x00000004;
-              }
-              com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-              creationArgs__ = input.readMessage(
-                  CreationArgsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
-              creationArgs_.getMutableMap().put(
-                  creationArgs__.getKey(), creationArgs__.getValue());
-              break;
-            }
-            case 34: {
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                overridingExportProps_ = com.google.protobuf.MapField.newMapField(
-                    OverridingExportPropsDefaultEntryHolder.defaultEntry);
-                mutable_bitField0_ |= 0x00000008;
-              }
-              com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-              overridingExportProps__ = input.readMessage(
-                  OverridingExportPropsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
-              overridingExportProps_.getMutableMap().put(
-                  overridingExportProps__.getKey(), overridingExportProps__.getValue());
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor;
-    }
-
-    @SuppressWarnings({"rawtypes"})
-    protected com.google.protobuf.MapField internalGetMapField(
-        int number) {
-      switch (number) {
-        case 3:
-          return internalGetCreationArgs();
-        case 4:
-          return internalGetOverridingExportProps();
-        default:
-          throw new RuntimeException(
-              "Invalid map field number: " + number);
-      }
-    }
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.class, org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.Builder.class);
-    }
-
-    private int bitField0_;
-    public static final int MODULE_NAME_FIELD_NUMBER = 1;
-    private volatile java.lang.Object moduleName_;
-    /**
-     * <code>optional string module_name = 1;</code>
-     */
-    public boolean hasModuleName() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional string module_name = 1;</code>
-     */
-    public java.lang.String getModuleName() {
-      java.lang.Object ref = moduleName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          moduleName_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string module_name = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getModuleNameBytes() {
-      java.lang.Object ref = moduleName_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        moduleName_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int CLASS_NAME_FIELD_NUMBER = 2;
-    private volatile java.lang.Object className_;
-    /**
-     * <code>required string class_name = 2;</code>
-     */
-    public boolean hasClassName() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required string class_name = 2;</code>
-     */
-    public java.lang.String getClassName() {
-      java.lang.Object ref = className_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          className_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string class_name = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getClassNameBytes() {
-      java.lang.Object ref = className_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        className_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int CREATION_ARGS_FIELD_NUMBER = 3;
-    private static final class CreationArgsDefaultEntryHolder {
-      static final com.google.protobuf.MapEntry<
-          java.lang.String, java.lang.String> defaultEntry =
-              com.google.protobuf.MapEntry
-              .<java.lang.String, java.lang.String>newDefaultInstance(
-                  org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_descriptor, 
-                  com.google.protobuf.WireFormat.FieldType.STRING,
-                  "",
-                  com.google.protobuf.WireFormat.FieldType.STRING,
-                  "");
-    }
-    private com.google.protobuf.MapField<
-        java.lang.String, java.lang.String> creationArgs_;
-    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-    internalGetCreationArgs() {
-      if (creationArgs_ == null) {
-        return com.google.protobuf.MapField.emptyMapField(
-            CreationArgsDefaultEntryHolder.defaultEntry);
-      }
-      return creationArgs_;
-    }
-
-    public int getCreationArgsCount() {
-      return internalGetCreationArgs().getMap().size();
-    }
-    /**
-     * <code>map&lt;string, string&gt; creation_args = 3;</code>
-     */
-
-    public boolean containsCreationArgs(
-        java.lang.String key) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      return internalGetCreationArgs().getMap().containsKey(key);
-    }
-    /**
-     * Use {@link #getCreationArgsMap()} instead.
-     */
-    @java.lang.Deprecated
-    public java.util.Map<java.lang.String, java.lang.String> getCreationArgs() {
-      return getCreationArgsMap();
-    }
-    /**
-     * <code>map&lt;string, string&gt; creation_args = 3;</code>
-     */
-
-    public java.util.Map<java.lang.String, java.lang.String> getCreationArgsMap() {
-      return internalGetCreationArgs().getMap();
-    }
-    /**
-     * <code>map&lt;string, string&gt; creation_args = 3;</code>
-     */
-
-    public java.lang.String getCreationArgsOrDefault(
-        java.lang.String key,
-        java.lang.String defaultValue) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      java.util.Map<java.lang.String, java.lang.String> map =
-          internalGetCreationArgs().getMap();
-      return map.containsKey(key) ? map.get(key) : defaultValue;
-    }
-    /**
-     * <code>map&lt;string, string&gt; creation_args = 3;</code>
-     */
-
-    public java.lang.String getCreationArgsOrThrow(
-        java.lang.String key) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      java.util.Map<java.lang.String, java.lang.String> map =
-          internalGetCreationArgs().getMap();
-      if (!map.containsKey(key)) {
-        throw new java.lang.IllegalArgumentException();
-      }
-      return map.get(key);
-    }
-
-    public static final int OVERRIDING_EXPORT_PROPS_FIELD_NUMBER = 4;
-    private static final class OverridingExportPropsDefaultEntryHolder {
-      static final com.google.protobuf.MapEntry<
-          java.lang.String, java.lang.String> defaultEntry =
-              com.google.protobuf.MapEntry
-              .<java.lang.String, java.lang.String>newDefaultInstance(
-                  org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_descriptor, 
-                  com.google.protobuf.WireFormat.FieldType.STRING,
-                  "",
-                  com.google.protobuf.WireFormat.FieldType.STRING,
-                  "");
-    }
-    private com.google.protobuf.MapField<
-        java.lang.String, java.lang.String> overridingExportProps_;
-    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-    internalGetOverridingExportProps() {
-      if (overridingExportProps_ == null) {
-        return com.google.protobuf.MapField.emptyMapField(
-            OverridingExportPropsDefaultEntryHolder.defaultEntry);
-      }
-      return overridingExportProps_;
-    }
-
-    public int getOverridingExportPropsCount() {
-      return internalGetOverridingExportProps().getMap().size();
-    }
-    /**
-     * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-     */
-
-    public boolean containsOverridingExportProps(
-        java.lang.String key) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      return internalGetOverridingExportProps().getMap().containsKey(key);
-    }
-    /**
-     * Use {@link #getOverridingExportPropsMap()} instead.
-     */
-    @java.lang.Deprecated
-    public java.util.Map<java.lang.String, java.lang.String> getOverridingExportProps() {
-      return getOverridingExportPropsMap();
-    }
-    /**
-     * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-     */
-
-    public java.util.Map<java.lang.String, java.lang.String> getOverridingExportPropsMap() {
-      return internalGetOverridingExportProps().getMap();
-    }
-    /**
-     * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-     */
-
-    public java.lang.String getOverridingExportPropsOrDefault(
-        java.lang.String key,
-        java.lang.String defaultValue) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      java.util.Map<java.lang.String, java.lang.String> map =
-          internalGetOverridingExportProps().getMap();
-      return map.containsKey(key) ? map.get(key) : defaultValue;
-    }
-    /**
-     * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-     */
-
-    public java.lang.String getOverridingExportPropsOrThrow(
-        java.lang.String key) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      java.util.Map<java.lang.String, java.lang.String> map =
-          internalGetOverridingExportProps().getMap();
-      if (!map.containsKey(key)) {
-        throw new java.lang.IllegalArgumentException();
-      }
-      return map.get(key);
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      if (!hasClassName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, moduleName_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, className_);
-      }
-      com.google.protobuf.GeneratedMessageV3
-        .serializeStringMapTo(
-          output,
-          internalGetCreationArgs(),
-          CreationArgsDefaultEntryHolder.defaultEntry,
-          3);
-      com.google.protobuf.GeneratedMessageV3
-        .serializeStringMapTo(
-          output,
-          internalGetOverridingExportProps(),
-          OverridingExportPropsDefaultEntryHolder.defaultEntry,
-          4);
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, moduleName_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, className_);
-      }
-      for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
-           : internalGetCreationArgs().getMap().entrySet()) {
-        com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-        creationArgs__ = CreationArgsDefaultEntryHolder.defaultEntry.newBuilderForType()
-            .setKey(entry.getKey())
-            .setValue(entry.getValue())
-            .build();
-        size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(3, creationArgs__);
-      }
-      for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
-           : internalGetOverridingExportProps().getMap().entrySet()) {
-        com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-        overridingExportProps__ = OverridingExportPropsDefaultEntryHolder.defaultEntry.newBuilderForType()
-            .setKey(entry.getKey())
-            .setValue(entry.getValue())
-            .build();
-        size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(4, overridingExportProps__);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof org.eclipse.ecf.python.protobuf.Exporter.ExportRequest)) {
-        return super.equals(obj);
-      }
-      org.eclipse.ecf.python.protobuf.Exporter.ExportRequest other = (org.eclipse.ecf.python.protobuf.Exporter.ExportRequest) obj;
-
-      boolean result = true;
-      result = result && (hasModuleName() == other.hasModuleName());
-      if (hasModuleName()) {
-        result = result && getModuleName()
-            .equals(other.getModuleName());
-      }
-      result = result && (hasClassName() == other.hasClassName());
-      if (hasClassName()) {
-        result = result && getClassName()
-            .equals(other.getClassName());
-      }
-      result = result && internalGetCreationArgs().equals(
-          other.internalGetCreationArgs());
-      result = result && internalGetOverridingExportProps().equals(
-          other.internalGetOverridingExportProps());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasModuleName()) {
-        hash = (37 * hash) + MODULE_NAME_FIELD_NUMBER;
-        hash = (53 * hash) + getModuleName().hashCode();
-      }
-      if (hasClassName()) {
-        hash = (37 * hash) + CLASS_NAME_FIELD_NUMBER;
-        hash = (53 * hash) + getClassName().hashCode();
-      }
-      if (!internalGetCreationArgs().getMap().isEmpty()) {
-        hash = (37 * hash) + CREATION_ARGS_FIELD_NUMBER;
-        hash = (53 * hash) + internalGetCreationArgs().hashCode();
-      }
-      if (!internalGetOverridingExportProps().getMap().isEmpty()) {
-        hash = (37 * hash) + OVERRIDING_EXPORT_PROPS_FIELD_NUMBER;
-        hash = (53 * hash) + internalGetOverridingExportProps().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(org.eclipse.ecf.python.protobuf.Exporter.ExportRequest prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code org.eclipse.ecf.python.protobuf.ExportRequest}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.eclipse.ecf.python.protobuf.ExportRequest)
-        org.eclipse.ecf.python.protobuf.Exporter.ExportRequestOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor;
-      }
-
-      @SuppressWarnings({"rawtypes"})
-      protected com.google.protobuf.MapField internalGetMapField(
-          int number) {
-        switch (number) {
-          case 3:
-            return internalGetCreationArgs();
-          case 4:
-            return internalGetOverridingExportProps();
-          default:
-            throw new RuntimeException(
-                "Invalid map field number: " + number);
-        }
-      }
-      @SuppressWarnings({"rawtypes"})
-      protected com.google.protobuf.MapField internalGetMutableMapField(
-          int number) {
-        switch (number) {
-          case 3:
-            return internalGetMutableCreationArgs();
-          case 4:
-            return internalGetMutableOverridingExportProps();
-          default:
-            throw new RuntimeException(
-                "Invalid map field number: " + number);
-        }
-      }
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.class, org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.Builder.class);
-      }
-
-      // Construct using org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        moduleName_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        className_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        internalGetMutableCreationArgs().clear();
-        internalGetMutableOverridingExportProps().clear();
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor;
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.ExportRequest getDefaultInstanceForType() {
-        return org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.getDefaultInstance();
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.ExportRequest build() {
-        org.eclipse.ecf.python.protobuf.Exporter.ExportRequest result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.ExportRequest buildPartial() {
-        org.eclipse.ecf.python.protobuf.Exporter.ExportRequest result = new org.eclipse.ecf.python.protobuf.Exporter.ExportRequest(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.moduleName_ = moduleName_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.className_ = className_;
-        result.creationArgs_ = internalGetCreationArgs();
-        result.creationArgs_.makeImmutable();
-        result.overridingExportProps_ = internalGetOverridingExportProps();
-        result.overridingExportProps_.makeImmutable();
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.eclipse.ecf.python.protobuf.Exporter.ExportRequest) {
-          return mergeFrom((org.eclipse.ecf.python.protobuf.Exporter.ExportRequest)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(org.eclipse.ecf.python.protobuf.Exporter.ExportRequest other) {
-        if (other == org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.getDefaultInstance()) return this;
-        if (other.hasModuleName()) {
-          bitField0_ |= 0x00000001;
-          moduleName_ = other.moduleName_;
-          onChanged();
-        }
-        if (other.hasClassName()) {
-          bitField0_ |= 0x00000002;
-          className_ = other.className_;
-          onChanged();
-        }
-        internalGetMutableCreationArgs().mergeFrom(
-            other.internalGetCreationArgs());
-        internalGetMutableOverridingExportProps().mergeFrom(
-            other.internalGetOverridingExportProps());
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasClassName()) {
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.eclipse.ecf.python.protobuf.Exporter.ExportRequest) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private java.lang.Object moduleName_ = "";
-      /**
-       * <code>optional string module_name = 1;</code>
-       */
-      public boolean hasModuleName() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional string module_name = 1;</code>
-       */
-      public java.lang.String getModuleName() {
-        java.lang.Object ref = moduleName_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            moduleName_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string module_name = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getModuleNameBytes() {
-        java.lang.Object ref = moduleName_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          moduleName_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string module_name = 1;</code>
-       */
-      public Builder setModuleName(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        moduleName_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string module_name = 1;</code>
-       */
-      public Builder clearModuleName() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        moduleName_ = getDefaultInstance().getModuleName();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string module_name = 1;</code>
-       */
-      public Builder setModuleNameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        moduleName_ = value;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object className_ = "";
-      /**
-       * <code>required string class_name = 2;</code>
-       */
-      public boolean hasClassName() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required string class_name = 2;</code>
-       */
-      public java.lang.String getClassName() {
-        java.lang.Object ref = className_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            className_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string class_name = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getClassNameBytes() {
-        java.lang.Object ref = className_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          className_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string class_name = 2;</code>
-       */
-      public Builder setClassName(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        className_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string class_name = 2;</code>
-       */
-      public Builder clearClassName() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        className_ = getDefaultInstance().getClassName();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string class_name = 2;</code>
-       */
-      public Builder setClassNameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        className_ = value;
-        onChanged();
-        return this;
-      }
-
-      private com.google.protobuf.MapField<
-          java.lang.String, java.lang.String> creationArgs_;
-      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-      internalGetCreationArgs() {
-        if (creationArgs_ == null) {
-          return com.google.protobuf.MapField.emptyMapField(
-              CreationArgsDefaultEntryHolder.defaultEntry);
-        }
-        return creationArgs_;
-      }
-      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-      internalGetMutableCreationArgs() {
-        onChanged();;
-        if (creationArgs_ == null) {
-          creationArgs_ = com.google.protobuf.MapField.newMapField(
-              CreationArgsDefaultEntryHolder.defaultEntry);
-        }
-        if (!creationArgs_.isMutable()) {
-          creationArgs_ = creationArgs_.copy();
-        }
-        return creationArgs_;
-      }
-
-      public int getCreationArgsCount() {
-        return internalGetCreationArgs().getMap().size();
-      }
-      /**
-       * <code>map&lt;string, string&gt; creation_args = 3;</code>
-       */
-
-      public boolean containsCreationArgs(
-          java.lang.String key) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        return internalGetCreationArgs().getMap().containsKey(key);
-      }
-      /**
-       * Use {@link #getCreationArgsMap()} instead.
-       */
-      @java.lang.Deprecated
-      public java.util.Map<java.lang.String, java.lang.String> getCreationArgs() {
-        return getCreationArgsMap();
-      }
-      /**
-       * <code>map&lt;string, string&gt; creation_args = 3;</code>
-       */
-
-      public java.util.Map<java.lang.String, java.lang.String> getCreationArgsMap() {
-        return internalGetCreationArgs().getMap();
-      }
-      /**
-       * <code>map&lt;string, string&gt; creation_args = 3;</code>
-       */
-
-      public java.lang.String getCreationArgsOrDefault(
-          java.lang.String key,
-          java.lang.String defaultValue) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        java.util.Map<java.lang.String, java.lang.String> map =
-            internalGetCreationArgs().getMap();
-        return map.containsKey(key) ? map.get(key) : defaultValue;
-      }
-      /**
-       * <code>map&lt;string, string&gt; creation_args = 3;</code>
-       */
-
-      public java.lang.String getCreationArgsOrThrow(
-          java.lang.String key) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        java.util.Map<java.lang.String, java.lang.String> map =
-            internalGetCreationArgs().getMap();
-        if (!map.containsKey(key)) {
-          throw new java.lang.IllegalArgumentException();
-        }
-        return map.get(key);
-      }
-
-      public Builder clearCreationArgs() {
-        internalGetMutableCreationArgs().getMutableMap()
-            .clear();
-        return this;
-      }
-      /**
-       * <code>map&lt;string, string&gt; creation_args = 3;</code>
-       */
-
-      public Builder removeCreationArgs(
-          java.lang.String key) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        internalGetMutableCreationArgs().getMutableMap()
-            .remove(key);
-        return this;
-      }
-      /**
-       * Use alternate mutation accessors instead.
-       */
-      @java.lang.Deprecated
-      public java.util.Map<java.lang.String, java.lang.String>
-      getMutableCreationArgs() {
-        return internalGetMutableCreationArgs().getMutableMap();
-      }
-      /**
-       * <code>map&lt;string, string&gt; creation_args = 3;</code>
-       */
-      public Builder putCreationArgs(
-          java.lang.String key,
-          java.lang.String value) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        if (value == null) { throw new java.lang.NullPointerException(); }
-        internalGetMutableCreationArgs().getMutableMap()
-            .put(key, value);
-        return this;
-      }
-      /**
-       * <code>map&lt;string, string&gt; creation_args = 3;</code>
-       */
-
-      public Builder putAllCreationArgs(
-          java.util.Map<java.lang.String, java.lang.String> values) {
-        internalGetMutableCreationArgs().getMutableMap()
-            .putAll(values);
-        return this;
-      }
-
-      private com.google.protobuf.MapField<
-          java.lang.String, java.lang.String> overridingExportProps_;
-      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-      internalGetOverridingExportProps() {
-        if (overridingExportProps_ == null) {
-          return com.google.protobuf.MapField.emptyMapField(
-              OverridingExportPropsDefaultEntryHolder.defaultEntry);
-        }
-        return overridingExportProps_;
-      }
-      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-      internalGetMutableOverridingExportProps() {
-        onChanged();;
-        if (overridingExportProps_ == null) {
-          overridingExportProps_ = com.google.protobuf.MapField.newMapField(
-              OverridingExportPropsDefaultEntryHolder.defaultEntry);
-        }
-        if (!overridingExportProps_.isMutable()) {
-          overridingExportProps_ = overridingExportProps_.copy();
-        }
-        return overridingExportProps_;
-      }
-
-      public int getOverridingExportPropsCount() {
-        return internalGetOverridingExportProps().getMap().size();
-      }
-      /**
-       * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-       */
-
-      public boolean containsOverridingExportProps(
-          java.lang.String key) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        return internalGetOverridingExportProps().getMap().containsKey(key);
-      }
-      /**
-       * Use {@link #getOverridingExportPropsMap()} instead.
-       */
-      @java.lang.Deprecated
-      public java.util.Map<java.lang.String, java.lang.String> getOverridingExportProps() {
-        return getOverridingExportPropsMap();
-      }
-      /**
-       * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-       */
-
-      public java.util.Map<java.lang.String, java.lang.String> getOverridingExportPropsMap() {
-        return internalGetOverridingExportProps().getMap();
-      }
-      /**
-       * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-       */
-
-      public java.lang.String getOverridingExportPropsOrDefault(
-          java.lang.String key,
-          java.lang.String defaultValue) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        java.util.Map<java.lang.String, java.lang.String> map =
-            internalGetOverridingExportProps().getMap();
-        return map.containsKey(key) ? map.get(key) : defaultValue;
-      }
-      /**
-       * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-       */
-
-      public java.lang.String getOverridingExportPropsOrThrow(
-          java.lang.String key) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        java.util.Map<java.lang.String, java.lang.String> map =
-            internalGetOverridingExportProps().getMap();
-        if (!map.containsKey(key)) {
-          throw new java.lang.IllegalArgumentException();
-        }
-        return map.get(key);
-      }
-
-      public Builder clearOverridingExportProps() {
-        internalGetMutableOverridingExportProps().getMutableMap()
-            .clear();
-        return this;
-      }
-      /**
-       * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-       */
-
-      public Builder removeOverridingExportProps(
-          java.lang.String key) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        internalGetMutableOverridingExportProps().getMutableMap()
-            .remove(key);
-        return this;
-      }
-      /**
-       * Use alternate mutation accessors instead.
-       */
-      @java.lang.Deprecated
-      public java.util.Map<java.lang.String, java.lang.String>
-      getMutableOverridingExportProps() {
-        return internalGetMutableOverridingExportProps().getMutableMap();
-      }
-      /**
-       * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-       */
-      public Builder putOverridingExportProps(
-          java.lang.String key,
-          java.lang.String value) {
-        if (key == null) { throw new java.lang.NullPointerException(); }
-        if (value == null) { throw new java.lang.NullPointerException(); }
-        internalGetMutableOverridingExportProps().getMutableMap()
-            .put(key, value);
-        return this;
-      }
-      /**
-       * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
-       */
-
-      public Builder putAllOverridingExportProps(
-          java.util.Map<java.lang.String, java.lang.String> values) {
-        internalGetMutableOverridingExportProps().getMutableMap()
-            .putAll(values);
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:org.eclipse.ecf.python.protobuf.ExportRequest)
-    }
-
-    // @@protoc_insertion_point(class_scope:org.eclipse.ecf.python.protobuf.ExportRequest)
-    private static final org.eclipse.ecf.python.protobuf.Exporter.ExportRequest DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new org.eclipse.ecf.python.protobuf.Exporter.ExportRequest();
-    }
-
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<ExportRequest>
-        PARSER = new com.google.protobuf.AbstractParser<ExportRequest>() {
-      public ExportRequest parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ExportRequest(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<ExportRequest> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<ExportRequest> getParserForType() {
-      return PARSER;
-    }
-
-    public org.eclipse.ecf.python.protobuf.Exporter.ExportRequest getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface ExportResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.eclipse.ecf.python.protobuf.ExportResponse)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    boolean hasEndpointId();
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    java.lang.String getEndpointId();
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getEndpointIdBytes();
-
-    /**
-     * <code>optional string error_message = 2;</code>
-     */
-    boolean hasErrorMessage();
-    /**
-     * <code>optional string error_message = 2;</code>
-     */
-    java.lang.String getErrorMessage();
-    /**
-     * <code>optional string error_message = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getErrorMessageBytes();
-  }
-  /**
-   * Protobuf type {@code org.eclipse.ecf.python.protobuf.ExportResponse}
-   */
-  public  static final class ExportResponse extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.eclipse.ecf.python.protobuf.ExportResponse)
-      ExportResponseOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use ExportResponse.newBuilder() to construct.
-    private ExportResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private ExportResponse() {
-      endpointId_ = "";
-      errorMessage_ = "";
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private ExportResponse(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              endpointId_ = bs;
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              errorMessage_ = bs;
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.class, org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.Builder.class);
-    }
-
-    private int bitField0_;
-    public static final int ENDPOINT_ID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object endpointId_;
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    public boolean hasEndpointId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    public java.lang.String getEndpointId() {
-      java.lang.Object ref = endpointId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          endpointId_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getEndpointIdBytes() {
-      java.lang.Object ref = endpointId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        endpointId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int ERROR_MESSAGE_FIELD_NUMBER = 2;
-    private volatile java.lang.Object errorMessage_;
-    /**
-     * <code>optional string error_message = 2;</code>
-     */
-    public boolean hasErrorMessage() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional string error_message = 2;</code>
-     */
-    public java.lang.String getErrorMessage() {
-      java.lang.Object ref = errorMessage_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          errorMessage_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string error_message = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getErrorMessageBytes() {
-      java.lang.Object ref = errorMessage_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        errorMessage_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, endpointId_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, errorMessage_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, endpointId_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, errorMessage_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof org.eclipse.ecf.python.protobuf.Exporter.ExportResponse)) {
-        return super.equals(obj);
-      }
-      org.eclipse.ecf.python.protobuf.Exporter.ExportResponse other = (org.eclipse.ecf.python.protobuf.Exporter.ExportResponse) obj;
-
-      boolean result = true;
-      result = result && (hasEndpointId() == other.hasEndpointId());
-      if (hasEndpointId()) {
-        result = result && getEndpointId()
-            .equals(other.getEndpointId());
-      }
-      result = result && (hasErrorMessage() == other.hasErrorMessage());
-      if (hasErrorMessage()) {
-        result = result && getErrorMessage()
-            .equals(other.getErrorMessage());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasEndpointId()) {
-        hash = (37 * hash) + ENDPOINT_ID_FIELD_NUMBER;
-        hash = (53 * hash) + getEndpointId().hashCode();
-      }
-      if (hasErrorMessage()) {
-        hash = (37 * hash) + ERROR_MESSAGE_FIELD_NUMBER;
-        hash = (53 * hash) + getErrorMessage().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(org.eclipse.ecf.python.protobuf.Exporter.ExportResponse prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code org.eclipse.ecf.python.protobuf.ExportResponse}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.eclipse.ecf.python.protobuf.ExportResponse)
-        org.eclipse.ecf.python.protobuf.Exporter.ExportResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.class, org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.Builder.class);
-      }
-
-      // Construct using org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        endpointId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        errorMessage_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor;
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.ExportResponse getDefaultInstanceForType() {
-        return org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.getDefaultInstance();
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.ExportResponse build() {
-        org.eclipse.ecf.python.protobuf.Exporter.ExportResponse result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.ExportResponse buildPartial() {
-        org.eclipse.ecf.python.protobuf.Exporter.ExportResponse result = new org.eclipse.ecf.python.protobuf.Exporter.ExportResponse(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.endpointId_ = endpointId_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.errorMessage_ = errorMessage_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.eclipse.ecf.python.protobuf.Exporter.ExportResponse) {
-          return mergeFrom((org.eclipse.ecf.python.protobuf.Exporter.ExportResponse)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(org.eclipse.ecf.python.protobuf.Exporter.ExportResponse other) {
-        if (other == org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.getDefaultInstance()) return this;
-        if (other.hasEndpointId()) {
-          bitField0_ |= 0x00000001;
-          endpointId_ = other.endpointId_;
-          onChanged();
-        }
-        if (other.hasErrorMessage()) {
-          bitField0_ |= 0x00000002;
-          errorMessage_ = other.errorMessage_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.eclipse.ecf.python.protobuf.Exporter.ExportResponse) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private java.lang.Object endpointId_ = "";
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public boolean hasEndpointId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public java.lang.String getEndpointId() {
-        java.lang.Object ref = endpointId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            endpointId_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getEndpointIdBytes() {
-        java.lang.Object ref = endpointId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          endpointId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public Builder setEndpointId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        endpointId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public Builder clearEndpointId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        endpointId_ = getDefaultInstance().getEndpointId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public Builder setEndpointIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        endpointId_ = value;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object errorMessage_ = "";
-      /**
-       * <code>optional string error_message = 2;</code>
-       */
-      public boolean hasErrorMessage() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional string error_message = 2;</code>
-       */
-      public java.lang.String getErrorMessage() {
-        java.lang.Object ref = errorMessage_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            errorMessage_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string error_message = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getErrorMessageBytes() {
-        java.lang.Object ref = errorMessage_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          errorMessage_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string error_message = 2;</code>
-       */
-      public Builder setErrorMessage(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        errorMessage_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string error_message = 2;</code>
-       */
-      public Builder clearErrorMessage() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        errorMessage_ = getDefaultInstance().getErrorMessage();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string error_message = 2;</code>
-       */
-      public Builder setErrorMessageBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        errorMessage_ = value;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:org.eclipse.ecf.python.protobuf.ExportResponse)
-    }
-
-    // @@protoc_insertion_point(class_scope:org.eclipse.ecf.python.protobuf.ExportResponse)
-    private static final org.eclipse.ecf.python.protobuf.Exporter.ExportResponse DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new org.eclipse.ecf.python.protobuf.Exporter.ExportResponse();
-    }
-
-    public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<ExportResponse>
-        PARSER = new com.google.protobuf.AbstractParser<ExportResponse>() {
-      public ExportResponse parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ExportResponse(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<ExportResponse> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<ExportResponse> getParserForType() {
-      return PARSER;
-    }
-
-    public org.eclipse.ecf.python.protobuf.Exporter.ExportResponse getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface UnexportRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.eclipse.ecf.python.protobuf.UnexportRequest)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>required string endpoint_id = 1;</code>
-     */
-    boolean hasEndpointId();
-    /**
-     * <code>required string endpoint_id = 1;</code>
-     */
-    java.lang.String getEndpointId();
-    /**
-     * <code>required string endpoint_id = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getEndpointIdBytes();
-  }
-  /**
-   * Protobuf type {@code org.eclipse.ecf.python.protobuf.UnexportRequest}
-   */
-  public  static final class UnexportRequest extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.eclipse.ecf.python.protobuf.UnexportRequest)
-      UnexportRequestOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use UnexportRequest.newBuilder() to construct.
-    private UnexportRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private UnexportRequest() {
-      endpointId_ = "";
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private UnexportRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              endpointId_ = bs;
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.class, org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.Builder.class);
-    }
-
-    private int bitField0_;
-    public static final int ENDPOINT_ID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object endpointId_;
-    /**
-     * <code>required string endpoint_id = 1;</code>
-     */
-    public boolean hasEndpointId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string endpoint_id = 1;</code>
-     */
-    public java.lang.String getEndpointId() {
-      java.lang.Object ref = endpointId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          endpointId_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string endpoint_id = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getEndpointIdBytes() {
-      java.lang.Object ref = endpointId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        endpointId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      if (!hasEndpointId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, endpointId_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, endpointId_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest)) {
-        return super.equals(obj);
-      }
-      org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest other = (org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest) obj;
-
-      boolean result = true;
-      result = result && (hasEndpointId() == other.hasEndpointId());
-      if (hasEndpointId()) {
-        result = result && getEndpointId()
-            .equals(other.getEndpointId());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasEndpointId()) {
-        hash = (37 * hash) + ENDPOINT_ID_FIELD_NUMBER;
-        hash = (53 * hash) + getEndpointId().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code org.eclipse.ecf.python.protobuf.UnexportRequest}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.eclipse.ecf.python.protobuf.UnexportRequest)
-        org.eclipse.ecf.python.protobuf.Exporter.UnexportRequestOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.class, org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.Builder.class);
-      }
-
-      // Construct using org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        endpointId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor;
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest getDefaultInstanceForType() {
-        return org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.getDefaultInstance();
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest build() {
-        org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest buildPartial() {
-        org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest result = new org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.endpointId_ = endpointId_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest) {
-          return mergeFrom((org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest other) {
-        if (other == org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.getDefaultInstance()) return this;
-        if (other.hasEndpointId()) {
-          bitField0_ |= 0x00000001;
-          endpointId_ = other.endpointId_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasEndpointId()) {
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private java.lang.Object endpointId_ = "";
-      /**
-       * <code>required string endpoint_id = 1;</code>
-       */
-      public boolean hasEndpointId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string endpoint_id = 1;</code>
-       */
-      public java.lang.String getEndpointId() {
-        java.lang.Object ref = endpointId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            endpointId_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string endpoint_id = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getEndpointIdBytes() {
-        java.lang.Object ref = endpointId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          endpointId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string endpoint_id = 1;</code>
-       */
-      public Builder setEndpointId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        endpointId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string endpoint_id = 1;</code>
-       */
-      public Builder clearEndpointId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        endpointId_ = getDefaultInstance().getEndpointId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string endpoint_id = 1;</code>
-       */
-      public Builder setEndpointIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        endpointId_ = value;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:org.eclipse.ecf.python.protobuf.UnexportRequest)
-    }
-
-    // @@protoc_insertion_point(class_scope:org.eclipse.ecf.python.protobuf.UnexportRequest)
-    private static final org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest();
-    }
-
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<UnexportRequest>
-        PARSER = new com.google.protobuf.AbstractParser<UnexportRequest>() {
-      public UnexportRequest parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new UnexportRequest(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<UnexportRequest> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<UnexportRequest> getParserForType() {
-      return PARSER;
-    }
-
-    public org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface UnexportResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.eclipse.ecf.python.protobuf.UnexportResponse)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    boolean hasEndpointId();
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    java.lang.String getEndpointId();
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getEndpointIdBytes();
-
-    /**
-     * <code>required bool success = 2;</code>
-     */
-    boolean hasSuccess();
-    /**
-     * <code>required bool success = 2;</code>
-     */
-    boolean getSuccess();
-
-    /**
-     * <code>optional string message = 3;</code>
-     */
-    boolean hasMessage();
-    /**
-     * <code>optional string message = 3;</code>
-     */
-    java.lang.String getMessage();
-    /**
-     * <code>optional string message = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getMessageBytes();
-  }
-  /**
-   * Protobuf type {@code org.eclipse.ecf.python.protobuf.UnexportResponse}
-   */
-  public  static final class UnexportResponse extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.eclipse.ecf.python.protobuf.UnexportResponse)
-      UnexportResponseOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use UnexportResponse.newBuilder() to construct.
-    private UnexportResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private UnexportResponse() {
-      endpointId_ = "";
-      success_ = false;
-      message_ = "";
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private UnexportResponse(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              endpointId_ = bs;
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              success_ = input.readBool();
-              break;
-            }
-            case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000004;
-              message_ = bs;
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.class, org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.Builder.class);
-    }
-
-    private int bitField0_;
-    public static final int ENDPOINT_ID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object endpointId_;
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    public boolean hasEndpointId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    public java.lang.String getEndpointId() {
-      java.lang.Object ref = endpointId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          endpointId_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string endpoint_id = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getEndpointIdBytes() {
-      java.lang.Object ref = endpointId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        endpointId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int SUCCESS_FIELD_NUMBER = 2;
-    private boolean success_;
-    /**
-     * <code>required bool success = 2;</code>
-     */
-    public boolean hasSuccess() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required bool success = 2;</code>
-     */
-    public boolean getSuccess() {
-      return success_;
-    }
-
-    public static final int MESSAGE_FIELD_NUMBER = 3;
-    private volatile java.lang.Object message_;
-    /**
-     * <code>optional string message = 3;</code>
-     */
-    public boolean hasMessage() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string message = 3;</code>
-     */
-    public java.lang.String getMessage() {
-      java.lang.Object ref = message_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          message_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string message = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getMessageBytes() {
-      java.lang.Object ref = message_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        message_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      if (!hasSuccess()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, endpointId_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBool(2, success_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, message_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, endpointId_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, success_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, message_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse)) {
-        return super.equals(obj);
-      }
-      org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse other = (org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse) obj;
-
-      boolean result = true;
-      result = result && (hasEndpointId() == other.hasEndpointId());
-      if (hasEndpointId()) {
-        result = result && getEndpointId()
-            .equals(other.getEndpointId());
-      }
-      result = result && (hasSuccess() == other.hasSuccess());
-      if (hasSuccess()) {
-        result = result && (getSuccess()
-            == other.getSuccess());
-      }
-      result = result && (hasMessage() == other.hasMessage());
-      if (hasMessage()) {
-        result = result && getMessage()
-            .equals(other.getMessage());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasEndpointId()) {
-        hash = (37 * hash) + ENDPOINT_ID_FIELD_NUMBER;
-        hash = (53 * hash) + getEndpointId().hashCode();
-      }
-      if (hasSuccess()) {
-        hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-            getSuccess());
-      }
-      if (hasMessage()) {
-        hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
-        hash = (53 * hash) + getMessage().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code org.eclipse.ecf.python.protobuf.UnexportResponse}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.eclipse.ecf.python.protobuf.UnexportResponse)
-        org.eclipse.ecf.python.protobuf.Exporter.UnexportResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.class, org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.Builder.class);
-      }
-
-      // Construct using org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        endpointId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        success_ = false;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        message_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor;
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse getDefaultInstanceForType() {
-        return org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.getDefaultInstance();
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse build() {
-        org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse buildPartial() {
-        org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse result = new org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.endpointId_ = endpointId_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.success_ = success_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.message_ = message_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse) {
-          return mergeFrom((org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse other) {
-        if (other == org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.getDefaultInstance()) return this;
-        if (other.hasEndpointId()) {
-          bitField0_ |= 0x00000001;
-          endpointId_ = other.endpointId_;
-          onChanged();
-        }
-        if (other.hasSuccess()) {
-          setSuccess(other.getSuccess());
-        }
-        if (other.hasMessage()) {
-          bitField0_ |= 0x00000004;
-          message_ = other.message_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasSuccess()) {
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private java.lang.Object endpointId_ = "";
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public boolean hasEndpointId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public java.lang.String getEndpointId() {
-        java.lang.Object ref = endpointId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            endpointId_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getEndpointIdBytes() {
-        java.lang.Object ref = endpointId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          endpointId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public Builder setEndpointId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        endpointId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public Builder clearEndpointId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        endpointId_ = getDefaultInstance().getEndpointId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string endpoint_id = 1;</code>
-       */
-      public Builder setEndpointIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        endpointId_ = value;
-        onChanged();
-        return this;
-      }
-
-      private boolean success_ ;
-      /**
-       * <code>required bool success = 2;</code>
-       */
-      public boolean hasSuccess() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required bool success = 2;</code>
-       */
-      public boolean getSuccess() {
-        return success_;
-      }
-      /**
-       * <code>required bool success = 2;</code>
-       */
-      public Builder setSuccess(boolean value) {
-        bitField0_ |= 0x00000002;
-        success_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required bool success = 2;</code>
-       */
-      public Builder clearSuccess() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        success_ = false;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object message_ = "";
-      /**
-       * <code>optional string message = 3;</code>
-       */
-      public boolean hasMessage() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string message = 3;</code>
-       */
-      public java.lang.String getMessage() {
-        java.lang.Object ref = message_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            message_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string message = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getMessageBytes() {
-        java.lang.Object ref = message_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          message_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string message = 3;</code>
-       */
-      public Builder setMessage(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        message_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string message = 3;</code>
-       */
-      public Builder clearMessage() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        message_ = getDefaultInstance().getMessage();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string message = 3;</code>
-       */
-      public Builder setMessageBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        message_ = value;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:org.eclipse.ecf.python.protobuf.UnexportResponse)
-    }
-
-    // @@protoc_insertion_point(class_scope:org.eclipse.ecf.python.protobuf.UnexportResponse)
-    private static final org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse();
-    }
-
-    public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<UnexportResponse>
-        PARSER = new com.google.protobuf.AbstractParser<UnexportResponse>() {
-      public UnexportResponse parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new UnexportResponse(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<UnexportResponse> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<UnexportResponse> getParserForType() {
-      return PARSER;
-    }
-
-    public org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_fieldAccessorTable;
-
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
-    return descriptor;
-  }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
-  static {
-    java.lang.String[] descriptorData = {
-      "\n\016exporter.proto\022\037org.eclipse.ecf.python" +
-      ".protobuf\"\360\002\n\rExportRequest\022\023\n\013module_na" +
-      "me\030\001 \001(\t\022\022\n\nclass_name\030\002 \002(\t\022W\n\rcreation" +
-      "_args\030\003 \003(\0132@.org.eclipse.ecf.python.pro" +
-      "tobuf.ExportRequest.CreationArgsEntry\022j\n" +
-      "\027overriding_export_props\030\004 \003(\0132I.org.ecl" +
-      "ipse.ecf.python.protobuf.ExportRequest.O" +
-      "verridingExportPropsEntry\0323\n\021CreationArg" +
-      "sEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032<" +
-      "\n\032OverridingExportPropsEntry\022\013\n\003key\030\001 \001(" +
-      "\t\022\r\n\005value\030\002 \001(\t:\0028\001\"<\n\016ExportResponse\022\023" +
-      "\n\013endpoint_id\030\001 \001(\t\022\025\n\rerror_message\030\002 \001" +
-      "(\t\"&\n\017UnexportRequest\022\023\n\013endpoint_id\030\001 \002" +
-      "(\t\"I\n\020UnexportResponse\022\023\n\013endpoint_id\030\001 " +
-      "\001(\t\022\017\n\007success\030\002 \002(\010\022\017\n\007message\030\003 \001(\t"
-    };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
-    internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor,
-        new java.lang.String[] { "ModuleName", "ClassName", "CreationArgs", "OverridingExportProps", });
-    internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_descriptor =
-      internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor.getNestedTypes().get(0);
-    internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_descriptor,
-        new java.lang.String[] { "Key", "Value", });
-    internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_descriptor =
-      internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor.getNestedTypes().get(1);
-    internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_descriptor,
-        new java.lang.String[] { "Key", "Value", });
-    internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor,
-        new java.lang.String[] { "EndpointId", "ErrorMessage", });
-    internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor,
-        new java.lang.String[] { "EndpointId", });
-    internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor =
-      getDescriptor().getMessageTypes().get(3);
-    internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor,
-        new java.lang.String[] { "EndpointId", "Success", "Message", });
-  }
-
-  // @@protoc_insertion_point(outer_class_scope)
+	private Exporter() {
+	}
+
+	public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
+	}
+
+	public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
+		registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
+	}
+
+	public interface ExportRequestOrBuilder extends
+			// @@protoc_insertion_point(interface_extends:org.eclipse.ecf.python.protobuf.ExportRequest)
+			com.google.protobuf.MessageOrBuilder {
+
+		/**
+		 * <code>optional string module_name = 1;</code>
+		 */
+		boolean hasModuleName();
+
+		/**
+		 * <code>optional string module_name = 1;</code>
+		 */
+		java.lang.String getModuleName();
+
+		/**
+		 * <code>optional string module_name = 1;</code>
+		 */
+		com.google.protobuf.ByteString getModuleNameBytes();
+
+		/**
+		 * <code>required string class_name = 2;</code>
+		 */
+		boolean hasClassName();
+
+		/**
+		 * <code>required string class_name = 2;</code>
+		 */
+		java.lang.String getClassName();
+
+		/**
+		 * <code>required string class_name = 2;</code>
+		 */
+		com.google.protobuf.ByteString getClassNameBytes();
+
+		/**
+		 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+		 */
+		int getCreationArgsCount();
+
+		/**
+		 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+		 */
+		boolean containsCreationArgs(java.lang.String key);
+
+		/**
+		 * Use {@link #getCreationArgsMap()} instead.
+		 */
+		@java.lang.Deprecated
+		java.util.Map<java.lang.String, java.lang.String> getCreationArgs();
+
+		/**
+		 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+		 */
+		java.util.Map<java.lang.String, java.lang.String> getCreationArgsMap();
+
+		/**
+		 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+		 */
+
+		java.lang.String getCreationArgsOrDefault(java.lang.String key, java.lang.String defaultValue);
+
+		/**
+		 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+		 */
+
+		java.lang.String getCreationArgsOrThrow(java.lang.String key);
+
+		/**
+		 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+		 */
+		int getOverridingExportPropsCount();
+
+		/**
+		 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+		 */
+		boolean containsOverridingExportProps(java.lang.String key);
+
+		/**
+		 * Use {@link #getOverridingExportPropsMap()} instead.
+		 */
+		@java.lang.Deprecated
+		java.util.Map<java.lang.String, java.lang.String> getOverridingExportProps();
+
+		/**
+		 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+		 */
+		java.util.Map<java.lang.String, java.lang.String> getOverridingExportPropsMap();
+
+		/**
+		 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+		 */
+
+		java.lang.String getOverridingExportPropsOrDefault(java.lang.String key, java.lang.String defaultValue);
+
+		/**
+		 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+		 */
+
+		java.lang.String getOverridingExportPropsOrThrow(java.lang.String key);
+	}
+
+	/**
+	 * Protobuf type {@code org.eclipse.ecf.python.protobuf.ExportRequest}
+	 */
+	public static final class ExportRequest extends com.google.protobuf.GeneratedMessageV3 implements
+			// @@protoc_insertion_point(message_implements:org.eclipse.ecf.python.protobuf.ExportRequest)
+			ExportRequestOrBuilder {
+		private static final long serialVersionUID = 0L;
+
+		// Use ExportRequest.newBuilder() to construct.
+		private ExportRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+			super(builder);
+		}
+
+		private ExportRequest() {
+			moduleName_ = "";
+			className_ = "";
+		}
+
+		@java.lang.Override
+		public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
+			return this.unknownFields;
+		}
+
+		private ExportRequest(com.google.protobuf.CodedInputStream input,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			this();
+			if (extensionRegistry == null) {
+				throw new java.lang.NullPointerException();
+			}
+			int mutable_bitField0_ = 0;
+			com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet
+					.newBuilder();
+			try {
+				boolean done = false;
+				while (!done) {
+					int tag = input.readTag();
+					switch (tag) {
+					case 0:
+						done = true;
+						break;
+					default: {
+						if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+							done = true;
+						}
+						break;
+					}
+					case 10: {
+						com.google.protobuf.ByteString bs = input.readBytes();
+						bitField0_ |= 0x00000001;
+						moduleName_ = bs;
+						break;
+					}
+					case 18: {
+						com.google.protobuf.ByteString bs = input.readBytes();
+						bitField0_ |= 0x00000002;
+						className_ = bs;
+						break;
+					}
+					case 26: {
+						if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+							creationArgs_ = com.google.protobuf.MapField
+									.newMapField(CreationArgsDefaultEntryHolder.defaultEntry);
+							mutable_bitField0_ |= 0x00000004;
+						}
+						com.google.protobuf.MapEntry<java.lang.String, java.lang.String> creationArgs__ = input
+								.readMessage(CreationArgsDefaultEntryHolder.defaultEntry.getParserForType(),
+										extensionRegistry);
+						creationArgs_.getMutableMap().put(creationArgs__.getKey(), creationArgs__.getValue());
+						break;
+					}
+					case 34: {
+						if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+							overridingExportProps_ = com.google.protobuf.MapField
+									.newMapField(OverridingExportPropsDefaultEntryHolder.defaultEntry);
+							mutable_bitField0_ |= 0x00000008;
+						}
+						com.google.protobuf.MapEntry<java.lang.String, java.lang.String> overridingExportProps__ = input
+								.readMessage(OverridingExportPropsDefaultEntryHolder.defaultEntry.getParserForType(),
+										extensionRegistry);
+						overridingExportProps_.getMutableMap().put(overridingExportProps__.getKey(),
+								overridingExportProps__.getValue());
+						break;
+					}
+					}
+				}
+			} catch (com.google.protobuf.InvalidProtocolBufferException e) {
+				throw e.setUnfinishedMessage(this);
+			} catch (java.io.IOException e) {
+				throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
+			} finally {
+				this.unknownFields = unknownFields.build();
+				makeExtensionsImmutable();
+			}
+		}
+
+		public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+			return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor;
+		}
+
+		@SuppressWarnings({ "rawtypes" })
+		protected com.google.protobuf.MapField internalGetMapField(int number) {
+			switch (number) {
+			case 3:
+				return internalGetCreationArgs();
+			case 4:
+				return internalGetOverridingExportProps();
+			default:
+				throw new RuntimeException("Invalid map field number: " + number);
+			}
+		}
+
+		protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+			return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_fieldAccessorTable
+					.ensureFieldAccessorsInitialized(org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.class,
+							org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.Builder.class);
+		}
+
+		private int bitField0_;
+		public static final int MODULE_NAME_FIELD_NUMBER = 1;
+		private volatile java.lang.Object moduleName_;
+
+		/**
+		 * <code>optional string module_name = 1;</code>
+		 */
+		public boolean hasModuleName() {
+			return ((bitField0_ & 0x00000001) == 0x00000001);
+		}
+
+		/**
+		 * <code>optional string module_name = 1;</code>
+		 */
+		public java.lang.String getModuleName() {
+			java.lang.Object ref = moduleName_;
+			if (ref instanceof java.lang.String) {
+				return (java.lang.String) ref;
+			} else {
+				com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+				java.lang.String s = bs.toStringUtf8();
+				if (bs.isValidUtf8()) {
+					moduleName_ = s;
+				}
+				return s;
+			}
+		}
+
+		/**
+		 * <code>optional string module_name = 1;</code>
+		 */
+		public com.google.protobuf.ByteString getModuleNameBytes() {
+			java.lang.Object ref = moduleName_;
+			if (ref instanceof java.lang.String) {
+				com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+				moduleName_ = b;
+				return b;
+			} else {
+				return (com.google.protobuf.ByteString) ref;
+			}
+		}
+
+		public static final int CLASS_NAME_FIELD_NUMBER = 2;
+		private volatile java.lang.Object className_;
+
+		/**
+		 * <code>required string class_name = 2;</code>
+		 */
+		public boolean hasClassName() {
+			return ((bitField0_ & 0x00000002) == 0x00000002);
+		}
+
+		/**
+		 * <code>required string class_name = 2;</code>
+		 */
+		public java.lang.String getClassName() {
+			java.lang.Object ref = className_;
+			if (ref instanceof java.lang.String) {
+				return (java.lang.String) ref;
+			} else {
+				com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+				java.lang.String s = bs.toStringUtf8();
+				if (bs.isValidUtf8()) {
+					className_ = s;
+				}
+				return s;
+			}
+		}
+
+		/**
+		 * <code>required string class_name = 2;</code>
+		 */
+		public com.google.protobuf.ByteString getClassNameBytes() {
+			java.lang.Object ref = className_;
+			if (ref instanceof java.lang.String) {
+				com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+				className_ = b;
+				return b;
+			} else {
+				return (com.google.protobuf.ByteString) ref;
+			}
+		}
+
+		public static final int CREATION_ARGS_FIELD_NUMBER = 3;
+
+		private static final class CreationArgsDefaultEntryHolder {
+			static final com.google.protobuf.MapEntry<java.lang.String, java.lang.String> defaultEntry = com.google.protobuf.MapEntry.<java.lang.String, java.lang.String> newDefaultInstance(
+					org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_descriptor,
+					com.google.protobuf.WireFormat.FieldType.STRING, "",
+					com.google.protobuf.WireFormat.FieldType.STRING, "");
+		}
+
+		private com.google.protobuf.MapField<java.lang.String, java.lang.String> creationArgs_;
+
+		private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetCreationArgs() {
+			if (creationArgs_ == null) {
+				return com.google.protobuf.MapField.emptyMapField(CreationArgsDefaultEntryHolder.defaultEntry);
+			}
+			return creationArgs_;
+		}
+
+		public int getCreationArgsCount() {
+			return internalGetCreationArgs().getMap().size();
+		}
+
+		/**
+		 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+		 */
+
+		public boolean containsCreationArgs(java.lang.String key) {
+			if (key == null) {
+				throw new java.lang.NullPointerException();
+			}
+			return internalGetCreationArgs().getMap().containsKey(key);
+		}
+
+		/**
+		 * Use {@link #getCreationArgsMap()} instead.
+		 */
+		@java.lang.Deprecated
+		public java.util.Map<java.lang.String, java.lang.String> getCreationArgs() {
+			return getCreationArgsMap();
+		}
+
+		/**
+		 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+		 */
+
+		public java.util.Map<java.lang.String, java.lang.String> getCreationArgsMap() {
+			return internalGetCreationArgs().getMap();
+		}
+
+		/**
+		 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+		 */
+
+		public java.lang.String getCreationArgsOrDefault(java.lang.String key, java.lang.String defaultValue) {
+			if (key == null) {
+				throw new java.lang.NullPointerException();
+			}
+			java.util.Map<java.lang.String, java.lang.String> map = internalGetCreationArgs().getMap();
+			return map.containsKey(key) ? map.get(key) : defaultValue;
+		}
+
+		/**
+		 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+		 */
+
+		public java.lang.String getCreationArgsOrThrow(java.lang.String key) {
+			if (key == null) {
+				throw new java.lang.NullPointerException();
+			}
+			java.util.Map<java.lang.String, java.lang.String> map = internalGetCreationArgs().getMap();
+			if (!map.containsKey(key)) {
+				throw new java.lang.IllegalArgumentException();
+			}
+			return map.get(key);
+		}
+
+		public static final int OVERRIDING_EXPORT_PROPS_FIELD_NUMBER = 4;
+
+		private static final class OverridingExportPropsDefaultEntryHolder {
+			static final com.google.protobuf.MapEntry<java.lang.String, java.lang.String> defaultEntry = com.google.protobuf.MapEntry.<java.lang.String, java.lang.String> newDefaultInstance(
+					org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_descriptor,
+					com.google.protobuf.WireFormat.FieldType.STRING, "",
+					com.google.protobuf.WireFormat.FieldType.STRING, "");
+		}
+
+		private com.google.protobuf.MapField<java.lang.String, java.lang.String> overridingExportProps_;
+
+		private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetOverridingExportProps() {
+			if (overridingExportProps_ == null) {
+				return com.google.protobuf.MapField.emptyMapField(OverridingExportPropsDefaultEntryHolder.defaultEntry);
+			}
+			return overridingExportProps_;
+		}
+
+		public int getOverridingExportPropsCount() {
+			return internalGetOverridingExportProps().getMap().size();
+		}
+
+		/**
+		 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+		 */
+
+		public boolean containsOverridingExportProps(java.lang.String key) {
+			if (key == null) {
+				throw new java.lang.NullPointerException();
+			}
+			return internalGetOverridingExportProps().getMap().containsKey(key);
+		}
+
+		/**
+		 * Use {@link #getOverridingExportPropsMap()} instead.
+		 */
+		@java.lang.Deprecated
+		public java.util.Map<java.lang.String, java.lang.String> getOverridingExportProps() {
+			return getOverridingExportPropsMap();
+		}
+
+		/**
+		 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+		 */
+
+		public java.util.Map<java.lang.String, java.lang.String> getOverridingExportPropsMap() {
+			return internalGetOverridingExportProps().getMap();
+		}
+
+		/**
+		 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+		 */
+
+		public java.lang.String getOverridingExportPropsOrDefault(java.lang.String key, java.lang.String defaultValue) {
+			if (key == null) {
+				throw new java.lang.NullPointerException();
+			}
+			java.util.Map<java.lang.String, java.lang.String> map = internalGetOverridingExportProps().getMap();
+			return map.containsKey(key) ? map.get(key) : defaultValue;
+		}
+
+		/**
+		 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+		 */
+
+		public java.lang.String getOverridingExportPropsOrThrow(java.lang.String key) {
+			if (key == null) {
+				throw new java.lang.NullPointerException();
+			}
+			java.util.Map<java.lang.String, java.lang.String> map = internalGetOverridingExportProps().getMap();
+			if (!map.containsKey(key)) {
+				throw new java.lang.IllegalArgumentException();
+			}
+			return map.get(key);
+		}
+
+		private byte memoizedIsInitialized = -1;
+
+		public final boolean isInitialized() {
+			byte isInitialized = memoizedIsInitialized;
+			if (isInitialized == 1)
+				return true;
+			if (isInitialized == 0)
+				return false;
+
+			if (!hasClassName()) {
+				memoizedIsInitialized = 0;
+				return false;
+			}
+			memoizedIsInitialized = 1;
+			return true;
+		}
+
+		public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+			if (((bitField0_ & 0x00000001) == 0x00000001)) {
+				com.google.protobuf.GeneratedMessageV3.writeString(output, 1, moduleName_);
+			}
+			if (((bitField0_ & 0x00000002) == 0x00000002)) {
+				com.google.protobuf.GeneratedMessageV3.writeString(output, 2, className_);
+			}
+			com.google.protobuf.GeneratedMessageV3.serializeStringMapTo(output, internalGetCreationArgs(),
+					CreationArgsDefaultEntryHolder.defaultEntry, 3);
+			com.google.protobuf.GeneratedMessageV3.serializeStringMapTo(output, internalGetOverridingExportProps(),
+					OverridingExportPropsDefaultEntryHolder.defaultEntry, 4);
+			unknownFields.writeTo(output);
+		}
+
+		public int getSerializedSize() {
+			int size = memoizedSize;
+			if (size != -1)
+				return size;
+
+			size = 0;
+			if (((bitField0_ & 0x00000001) == 0x00000001)) {
+				size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, moduleName_);
+			}
+			if (((bitField0_ & 0x00000002) == 0x00000002)) {
+				size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, className_);
+			}
+			for (java.util.Map.Entry<java.lang.String, java.lang.String> entry : internalGetCreationArgs().getMap()
+					.entrySet()) {
+				com.google.protobuf.MapEntry<java.lang.String, java.lang.String> creationArgs__ = CreationArgsDefaultEntryHolder.defaultEntry
+						.newBuilderForType().setKey(entry.getKey()).setValue(entry.getValue()).build();
+				size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, creationArgs__);
+			}
+			for (java.util.Map.Entry<java.lang.String, java.lang.String> entry : internalGetOverridingExportProps()
+					.getMap().entrySet()) {
+				com.google.protobuf.MapEntry<java.lang.String, java.lang.String> overridingExportProps__ = OverridingExportPropsDefaultEntryHolder.defaultEntry
+						.newBuilderForType().setKey(entry.getKey()).setValue(entry.getValue()).build();
+				size += com.google.protobuf.CodedOutputStream.computeMessageSize(4, overridingExportProps__);
+			}
+			size += unknownFields.getSerializedSize();
+			memoizedSize = size;
+			return size;
+		}
+
+		@java.lang.Override
+		public boolean equals(final java.lang.Object obj) {
+			if (obj == this) {
+				return true;
+			}
+			if (!(obj instanceof org.eclipse.ecf.python.protobuf.Exporter.ExportRequest)) {
+				return super.equals(obj);
+			}
+			org.eclipse.ecf.python.protobuf.Exporter.ExportRequest other = (org.eclipse.ecf.python.protobuf.Exporter.ExportRequest) obj;
+
+			boolean result = true;
+			result = result && (hasModuleName() == other.hasModuleName());
+			if (hasModuleName()) {
+				result = result && getModuleName().equals(other.getModuleName());
+			}
+			result = result && (hasClassName() == other.hasClassName());
+			if (hasClassName()) {
+				result = result && getClassName().equals(other.getClassName());
+			}
+			result = result && internalGetCreationArgs().equals(other.internalGetCreationArgs());
+			result = result && internalGetOverridingExportProps().equals(other.internalGetOverridingExportProps());
+			result = result && unknownFields.equals(other.unknownFields);
+			return result;
+		}
+
+		@java.lang.Override
+		public int hashCode() {
+			if (memoizedHashCode != 0) {
+				return memoizedHashCode;
+			}
+			int hash = 41;
+			hash = (19 * hash) + getDescriptor().hashCode();
+			if (hasModuleName()) {
+				hash = (37 * hash) + MODULE_NAME_FIELD_NUMBER;
+				hash = (53 * hash) + getModuleName().hashCode();
+			}
+			if (hasClassName()) {
+				hash = (37 * hash) + CLASS_NAME_FIELD_NUMBER;
+				hash = (53 * hash) + getClassName().hashCode();
+			}
+			if (!internalGetCreationArgs().getMap().isEmpty()) {
+				hash = (37 * hash) + CREATION_ARGS_FIELD_NUMBER;
+				hash = (53 * hash) + internalGetCreationArgs().hashCode();
+			}
+			if (!internalGetOverridingExportProps().getMap().isEmpty()) {
+				hash = (37 * hash) + OVERRIDING_EXPORT_PROPS_FIELD_NUMBER;
+				hash = (53 * hash) + internalGetOverridingExportProps().hashCode();
+			}
+			hash = (29 * hash) + unknownFields.hashCode();
+			memoizedHashCode = hash;
+			return hash;
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(java.nio.ByteBuffer data)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(java.nio.ByteBuffer data,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
+				com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
+				com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(byte[] data)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(byte[] data,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(java.io.InputStream input)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(java.io.InputStream input,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseDelimitedFrom(
+				java.io.InputStream input) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseDelimitedFrom(
+				java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input,
+					extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
+				com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parseFrom(
+				com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+		}
+
+		public Builder newBuilderForType() {
+			return newBuilder();
+		}
+
+		public static Builder newBuilder() {
+			return DEFAULT_INSTANCE.toBuilder();
+		}
+
+		public static Builder newBuilder(org.eclipse.ecf.python.protobuf.Exporter.ExportRequest prototype) {
+			return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+		}
+
+		public Builder toBuilder() {
+			return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+		}
+
+		@java.lang.Override
+		protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+			Builder builder = new Builder(parent);
+			return builder;
+		}
+
+		/**
+		 * Protobuf type {@code org.eclipse.ecf.python.protobuf.ExportRequest}
+		 */
+		public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+				// @@protoc_insertion_point(builder_implements:org.eclipse.ecf.python.protobuf.ExportRequest)
+				org.eclipse.ecf.python.protobuf.Exporter.ExportRequestOrBuilder {
+			public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor;
+			}
+
+			@SuppressWarnings({ "rawtypes" })
+			protected com.google.protobuf.MapField internalGetMapField(int number) {
+				switch (number) {
+				case 3:
+					return internalGetCreationArgs();
+				case 4:
+					return internalGetOverridingExportProps();
+				default:
+					throw new RuntimeException("Invalid map field number: " + number);
+				}
+			}
+
+			@SuppressWarnings({ "rawtypes" })
+			protected com.google.protobuf.MapField internalGetMutableMapField(int number) {
+				switch (number) {
+				case 3:
+					return internalGetMutableCreationArgs();
+				case 4:
+					return internalGetMutableOverridingExportProps();
+				default:
+					throw new RuntimeException("Invalid map field number: " + number);
+				}
+			}
+
+			protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_fieldAccessorTable
+						.ensureFieldAccessorsInitialized(org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.class,
+								org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.Builder.class);
+			}
+
+			// Construct using org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.newBuilder()
+			private Builder() {
+				maybeForceBuilderInitialization();
+			}
+
+			private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+				super(parent);
+				maybeForceBuilderInitialization();
+			}
+
+			private void maybeForceBuilderInitialization() {
+				if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
+				}
+			}
+
+			public Builder clear() {
+				super.clear();
+				moduleName_ = "";
+				bitField0_ = (bitField0_ & ~0x00000001);
+				className_ = "";
+				bitField0_ = (bitField0_ & ~0x00000002);
+				internalGetMutableCreationArgs().clear();
+				internalGetMutableOverridingExportProps().clear();
+				return this;
+			}
+
+			public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor;
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.ExportRequest getDefaultInstanceForType() {
+				return org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.getDefaultInstance();
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.ExportRequest build() {
+				org.eclipse.ecf.python.protobuf.Exporter.ExportRequest result = buildPartial();
+				if (!result.isInitialized()) {
+					throw newUninitializedMessageException(result);
+				}
+				return result;
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.ExportRequest buildPartial() {
+				org.eclipse.ecf.python.protobuf.Exporter.ExportRequest result = new org.eclipse.ecf.python.protobuf.Exporter.ExportRequest(
+						this);
+				int from_bitField0_ = bitField0_;
+				int to_bitField0_ = 0;
+				if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+					to_bitField0_ |= 0x00000001;
+				}
+				result.moduleName_ = moduleName_;
+				if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+					to_bitField0_ |= 0x00000002;
+				}
+				result.className_ = className_;
+				result.creationArgs_ = internalGetCreationArgs();
+				result.creationArgs_.makeImmutable();
+				result.overridingExportProps_ = internalGetOverridingExportProps();
+				result.overridingExportProps_.makeImmutable();
+				result.bitField0_ = to_bitField0_;
+				onBuilt();
+				return result;
+			}
+
+			public Builder clone() {
+				return (Builder) super.clone();
+			}
+
+			public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+				return (Builder) super.setField(field, value);
+			}
+
+			public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+				return (Builder) super.clearField(field);
+			}
+
+			public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+				return (Builder) super.clearOneof(oneof);
+			}
+
+			public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index,
+					java.lang.Object value) {
+				return (Builder) super.setRepeatedField(field, index, value);
+			}
+
+			public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+					java.lang.Object value) {
+				return (Builder) super.addRepeatedField(field, value);
+			}
+
+			public Builder mergeFrom(com.google.protobuf.Message other) {
+				if (other instanceof org.eclipse.ecf.python.protobuf.Exporter.ExportRequest) {
+					return mergeFrom((org.eclipse.ecf.python.protobuf.Exporter.ExportRequest) other);
+				} else {
+					super.mergeFrom(other);
+					return this;
+				}
+			}
+
+			public Builder mergeFrom(org.eclipse.ecf.python.protobuf.Exporter.ExportRequest other) {
+				if (other == org.eclipse.ecf.python.protobuf.Exporter.ExportRequest.getDefaultInstance())
+					return this;
+				if (other.hasModuleName()) {
+					bitField0_ |= 0x00000001;
+					moduleName_ = other.moduleName_;
+					onChanged();
+				}
+				if (other.hasClassName()) {
+					bitField0_ |= 0x00000002;
+					className_ = other.className_;
+					onChanged();
+				}
+				internalGetMutableCreationArgs().mergeFrom(other.internalGetCreationArgs());
+				internalGetMutableOverridingExportProps().mergeFrom(other.internalGetOverridingExportProps());
+				this.mergeUnknownFields(other.unknownFields);
+				onChanged();
+				return this;
+			}
+
+			public final boolean isInitialized() {
+				if (!hasClassName()) {
+					return false;
+				}
+				return true;
+			}
+
+			public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
+					com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+				org.eclipse.ecf.python.protobuf.Exporter.ExportRequest parsedMessage = null;
+				try {
+					parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+				} catch (com.google.protobuf.InvalidProtocolBufferException e) {
+					parsedMessage = (org.eclipse.ecf.python.protobuf.Exporter.ExportRequest) e.getUnfinishedMessage();
+					throw e.unwrapIOException();
+				} finally {
+					if (parsedMessage != null) {
+						mergeFrom(parsedMessage);
+					}
+				}
+				return this;
+			}
+
+			private int bitField0_;
+
+			private java.lang.Object moduleName_ = "";
+
+			/**
+			 * <code>optional string module_name = 1;</code>
+			 */
+			public boolean hasModuleName() {
+				return ((bitField0_ & 0x00000001) == 0x00000001);
+			}
+
+			/**
+			 * <code>optional string module_name = 1;</code>
+			 */
+			public java.lang.String getModuleName() {
+				java.lang.Object ref = moduleName_;
+				if (!(ref instanceof java.lang.String)) {
+					com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+					java.lang.String s = bs.toStringUtf8();
+					if (bs.isValidUtf8()) {
+						moduleName_ = s;
+					}
+					return s;
+				} else {
+					return (java.lang.String) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string module_name = 1;</code>
+			 */
+			public com.google.protobuf.ByteString getModuleNameBytes() {
+				java.lang.Object ref = moduleName_;
+				if (ref instanceof String) {
+					com.google.protobuf.ByteString b = com.google.protobuf.ByteString
+							.copyFromUtf8((java.lang.String) ref);
+					moduleName_ = b;
+					return b;
+				} else {
+					return (com.google.protobuf.ByteString) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string module_name = 1;</code>
+			 */
+			public Builder setModuleName(java.lang.String value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000001;
+				moduleName_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string module_name = 1;</code>
+			 */
+			public Builder clearModuleName() {
+				bitField0_ = (bitField0_ & ~0x00000001);
+				moduleName_ = getDefaultInstance().getModuleName();
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string module_name = 1;</code>
+			 */
+			public Builder setModuleNameBytes(com.google.protobuf.ByteString value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000001;
+				moduleName_ = value;
+				onChanged();
+				return this;
+			}
+
+			private java.lang.Object className_ = "";
+
+			/**
+			 * <code>required string class_name = 2;</code>
+			 */
+			public boolean hasClassName() {
+				return ((bitField0_ & 0x00000002) == 0x00000002);
+			}
+
+			/**
+			 * <code>required string class_name = 2;</code>
+			 */
+			public java.lang.String getClassName() {
+				java.lang.Object ref = className_;
+				if (!(ref instanceof java.lang.String)) {
+					com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+					java.lang.String s = bs.toStringUtf8();
+					if (bs.isValidUtf8()) {
+						className_ = s;
+					}
+					return s;
+				} else {
+					return (java.lang.String) ref;
+				}
+			}
+
+			/**
+			 * <code>required string class_name = 2;</code>
+			 */
+			public com.google.protobuf.ByteString getClassNameBytes() {
+				java.lang.Object ref = className_;
+				if (ref instanceof String) {
+					com.google.protobuf.ByteString b = com.google.protobuf.ByteString
+							.copyFromUtf8((java.lang.String) ref);
+					className_ = b;
+					return b;
+				} else {
+					return (com.google.protobuf.ByteString) ref;
+				}
+			}
+
+			/**
+			 * <code>required string class_name = 2;</code>
+			 */
+			public Builder setClassName(java.lang.String value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000002;
+				className_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>required string class_name = 2;</code>
+			 */
+			public Builder clearClassName() {
+				bitField0_ = (bitField0_ & ~0x00000002);
+				className_ = getDefaultInstance().getClassName();
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>required string class_name = 2;</code>
+			 */
+			public Builder setClassNameBytes(com.google.protobuf.ByteString value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000002;
+				className_ = value;
+				onChanged();
+				return this;
+			}
+
+			private com.google.protobuf.MapField<java.lang.String, java.lang.String> creationArgs_;
+
+			private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetCreationArgs() {
+				if (creationArgs_ == null) {
+					return com.google.protobuf.MapField.emptyMapField(CreationArgsDefaultEntryHolder.defaultEntry);
+				}
+				return creationArgs_;
+			}
+
+			private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetMutableCreationArgs() {
+				onChanged();
+				;
+				if (creationArgs_ == null) {
+					creationArgs_ = com.google.protobuf.MapField
+							.newMapField(CreationArgsDefaultEntryHolder.defaultEntry);
+				}
+				if (!creationArgs_.isMutable()) {
+					creationArgs_ = creationArgs_.copy();
+				}
+				return creationArgs_;
+			}
+
+			public int getCreationArgsCount() {
+				return internalGetCreationArgs().getMap().size();
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+			 */
+
+			public boolean containsCreationArgs(java.lang.String key) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				return internalGetCreationArgs().getMap().containsKey(key);
+			}
+
+			/**
+			 * Use {@link #getCreationArgsMap()} instead.
+			 */
+			@java.lang.Deprecated
+			public java.util.Map<java.lang.String, java.lang.String> getCreationArgs() {
+				return getCreationArgsMap();
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+			 */
+
+			public java.util.Map<java.lang.String, java.lang.String> getCreationArgsMap() {
+				return internalGetCreationArgs().getMap();
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+			 */
+
+			public java.lang.String getCreationArgsOrDefault(java.lang.String key, java.lang.String defaultValue) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				java.util.Map<java.lang.String, java.lang.String> map = internalGetCreationArgs().getMap();
+				return map.containsKey(key) ? map.get(key) : defaultValue;
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+			 */
+
+			public java.lang.String getCreationArgsOrThrow(java.lang.String key) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				java.util.Map<java.lang.String, java.lang.String> map = internalGetCreationArgs().getMap();
+				if (!map.containsKey(key)) {
+					throw new java.lang.IllegalArgumentException();
+				}
+				return map.get(key);
+			}
+
+			public Builder clearCreationArgs() {
+				internalGetMutableCreationArgs().getMutableMap().clear();
+				return this;
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+			 */
+
+			public Builder removeCreationArgs(java.lang.String key) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				internalGetMutableCreationArgs().getMutableMap().remove(key);
+				return this;
+			}
+
+			/**
+			 * Use alternate mutation accessors instead.
+			 */
+			@java.lang.Deprecated
+			public java.util.Map<java.lang.String, java.lang.String> getMutableCreationArgs() {
+				return internalGetMutableCreationArgs().getMutableMap();
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+			 */
+			public Builder putCreationArgs(java.lang.String key, java.lang.String value) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				if (value == null) {
+					throw new java.lang.NullPointerException();
+				}
+				internalGetMutableCreationArgs().getMutableMap().put(key, value);
+				return this;
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; creation_args = 3;</code>
+			 */
+
+			public Builder putAllCreationArgs(java.util.Map<java.lang.String, java.lang.String> values) {
+				internalGetMutableCreationArgs().getMutableMap().putAll(values);
+				return this;
+			}
+
+			private com.google.protobuf.MapField<java.lang.String, java.lang.String> overridingExportProps_;
+
+			private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetOverridingExportProps() {
+				if (overridingExportProps_ == null) {
+					return com.google.protobuf.MapField
+							.emptyMapField(OverridingExportPropsDefaultEntryHolder.defaultEntry);
+				}
+				return overridingExportProps_;
+			}
+
+			private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetMutableOverridingExportProps() {
+				onChanged();
+				;
+				if (overridingExportProps_ == null) {
+					overridingExportProps_ = com.google.protobuf.MapField
+							.newMapField(OverridingExportPropsDefaultEntryHolder.defaultEntry);
+				}
+				if (!overridingExportProps_.isMutable()) {
+					overridingExportProps_ = overridingExportProps_.copy();
+				}
+				return overridingExportProps_;
+			}
+
+			public int getOverridingExportPropsCount() {
+				return internalGetOverridingExportProps().getMap().size();
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+			 */
+
+			public boolean containsOverridingExportProps(java.lang.String key) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				return internalGetOverridingExportProps().getMap().containsKey(key);
+			}
+
+			/**
+			 * Use {@link #getOverridingExportPropsMap()} instead.
+			 */
+			@java.lang.Deprecated
+			public java.util.Map<java.lang.String, java.lang.String> getOverridingExportProps() {
+				return getOverridingExportPropsMap();
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+			 */
+
+			public java.util.Map<java.lang.String, java.lang.String> getOverridingExportPropsMap() {
+				return internalGetOverridingExportProps().getMap();
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+			 */
+
+			public java.lang.String getOverridingExportPropsOrDefault(java.lang.String key,
+					java.lang.String defaultValue) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				java.util.Map<java.lang.String, java.lang.String> map = internalGetOverridingExportProps().getMap();
+				return map.containsKey(key) ? map.get(key) : defaultValue;
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+			 */
+
+			public java.lang.String getOverridingExportPropsOrThrow(java.lang.String key) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				java.util.Map<java.lang.String, java.lang.String> map = internalGetOverridingExportProps().getMap();
+				if (!map.containsKey(key)) {
+					throw new java.lang.IllegalArgumentException();
+				}
+				return map.get(key);
+			}
+
+			public Builder clearOverridingExportProps() {
+				internalGetMutableOverridingExportProps().getMutableMap().clear();
+				return this;
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+			 */
+
+			public Builder removeOverridingExportProps(java.lang.String key) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				internalGetMutableOverridingExportProps().getMutableMap().remove(key);
+				return this;
+			}
+
+			/**
+			 * Use alternate mutation accessors instead.
+			 */
+			@java.lang.Deprecated
+			public java.util.Map<java.lang.String, java.lang.String> getMutableOverridingExportProps() {
+				return internalGetMutableOverridingExportProps().getMutableMap();
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+			 */
+			public Builder putOverridingExportProps(java.lang.String key, java.lang.String value) {
+				if (key == null) {
+					throw new java.lang.NullPointerException();
+				}
+				if (value == null) {
+					throw new java.lang.NullPointerException();
+				}
+				internalGetMutableOverridingExportProps().getMutableMap().put(key, value);
+				return this;
+			}
+
+			/**
+			 * <code>map&lt;string, string&gt; overriding_export_props = 4;</code>
+			 */
+
+			public Builder putAllOverridingExportProps(java.util.Map<java.lang.String, java.lang.String> values) {
+				internalGetMutableOverridingExportProps().getMutableMap().putAll(values);
+				return this;
+			}
+
+			public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+				return super.setUnknownFields(unknownFields);
+			}
+
+			public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+				return super.mergeUnknownFields(unknownFields);
+			}
+
+			// @@protoc_insertion_point(builder_scope:org.eclipse.ecf.python.protobuf.ExportRequest)
+		}
+
+		// @@protoc_insertion_point(class_scope:org.eclipse.ecf.python.protobuf.ExportRequest)
+		private static final org.eclipse.ecf.python.protobuf.Exporter.ExportRequest DEFAULT_INSTANCE;
+		static {
+			DEFAULT_INSTANCE = new org.eclipse.ecf.python.protobuf.Exporter.ExportRequest();
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportRequest getDefaultInstance() {
+			return DEFAULT_INSTANCE;
+		}
+
+		@java.lang.Deprecated
+		public static final com.google.protobuf.Parser<ExportRequest> PARSER = new com.google.protobuf.AbstractParser<ExportRequest>() {
+			public ExportRequest parsePartialFrom(com.google.protobuf.CodedInputStream input,
+					com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+					throws com.google.protobuf.InvalidProtocolBufferException {
+				return new ExportRequest(input, extensionRegistry);
+			}
+		};
+
+		public static com.google.protobuf.Parser<ExportRequest> parser() {
+			return PARSER;
+		}
+
+		@java.lang.Override
+		public com.google.protobuf.Parser<ExportRequest> getParserForType() {
+			return PARSER;
+		}
+
+		public org.eclipse.ecf.python.protobuf.Exporter.ExportRequest getDefaultInstanceForType() {
+			return DEFAULT_INSTANCE;
+		}
+
+	}
+
+	public interface ExportResponseOrBuilder extends
+			// @@protoc_insertion_point(interface_extends:org.eclipse.ecf.python.protobuf.ExportResponse)
+			com.google.protobuf.MessageOrBuilder {
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		boolean hasEndpointId();
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		java.lang.String getEndpointId();
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		com.google.protobuf.ByteString getEndpointIdBytes();
+
+		/**
+		 * <code>optional string error_message = 2;</code>
+		 */
+		boolean hasErrorMessage();
+
+		/**
+		 * <code>optional string error_message = 2;</code>
+		 */
+		java.lang.String getErrorMessage();
+
+		/**
+		 * <code>optional string error_message = 2;</code>
+		 */
+		com.google.protobuf.ByteString getErrorMessageBytes();
+	}
+
+	/**
+	 * Protobuf type {@code org.eclipse.ecf.python.protobuf.ExportResponse}
+	 */
+	public static final class ExportResponse extends com.google.protobuf.GeneratedMessageV3 implements
+			// @@protoc_insertion_point(message_implements:org.eclipse.ecf.python.protobuf.ExportResponse)
+			ExportResponseOrBuilder {
+		private static final long serialVersionUID = 0L;
+
+		// Use ExportResponse.newBuilder() to construct.
+		private ExportResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+			super(builder);
+		}
+
+		private ExportResponse() {
+			endpointId_ = "";
+			errorMessage_ = "";
+		}
+
+		@java.lang.Override
+		public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
+			return this.unknownFields;
+		}
+
+		private ExportResponse(com.google.protobuf.CodedInputStream input,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			this();
+			if (extensionRegistry == null) {
+				throw new java.lang.NullPointerException();
+			}
+			int mutable_bitField0_ = 0;
+			com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet
+					.newBuilder();
+			try {
+				boolean done = false;
+				while (!done) {
+					int tag = input.readTag();
+					switch (tag) {
+					case 0:
+						done = true;
+						break;
+					default: {
+						if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+							done = true;
+						}
+						break;
+					}
+					case 10: {
+						com.google.protobuf.ByteString bs = input.readBytes();
+						bitField0_ |= 0x00000001;
+						endpointId_ = bs;
+						break;
+					}
+					case 18: {
+						com.google.protobuf.ByteString bs = input.readBytes();
+						bitField0_ |= 0x00000002;
+						errorMessage_ = bs;
+						break;
+					}
+					}
+				}
+			} catch (com.google.protobuf.InvalidProtocolBufferException e) {
+				throw e.setUnfinishedMessage(this);
+			} catch (java.io.IOException e) {
+				throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
+			} finally {
+				this.unknownFields = unknownFields.build();
+				makeExtensionsImmutable();
+			}
+		}
+
+		public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+			return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor;
+		}
+
+		protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+			return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_fieldAccessorTable
+					.ensureFieldAccessorsInitialized(org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.class,
+							org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.Builder.class);
+		}
+
+		private int bitField0_;
+		public static final int ENDPOINT_ID_FIELD_NUMBER = 1;
+		private volatile java.lang.Object endpointId_;
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		public boolean hasEndpointId() {
+			return ((bitField0_ & 0x00000001) == 0x00000001);
+		}
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		public java.lang.String getEndpointId() {
+			java.lang.Object ref = endpointId_;
+			if (ref instanceof java.lang.String) {
+				return (java.lang.String) ref;
+			} else {
+				com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+				java.lang.String s = bs.toStringUtf8();
+				if (bs.isValidUtf8()) {
+					endpointId_ = s;
+				}
+				return s;
+			}
+		}
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		public com.google.protobuf.ByteString getEndpointIdBytes() {
+			java.lang.Object ref = endpointId_;
+			if (ref instanceof java.lang.String) {
+				com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+				endpointId_ = b;
+				return b;
+			} else {
+				return (com.google.protobuf.ByteString) ref;
+			}
+		}
+
+		public static final int ERROR_MESSAGE_FIELD_NUMBER = 2;
+		private volatile java.lang.Object errorMessage_;
+
+		/**
+		 * <code>optional string error_message = 2;</code>
+		 */
+		public boolean hasErrorMessage() {
+			return ((bitField0_ & 0x00000002) == 0x00000002);
+		}
+
+		/**
+		 * <code>optional string error_message = 2;</code>
+		 */
+		public java.lang.String getErrorMessage() {
+			java.lang.Object ref = errorMessage_;
+			if (ref instanceof java.lang.String) {
+				return (java.lang.String) ref;
+			} else {
+				com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+				java.lang.String s = bs.toStringUtf8();
+				if (bs.isValidUtf8()) {
+					errorMessage_ = s;
+				}
+				return s;
+			}
+		}
+
+		/**
+		 * <code>optional string error_message = 2;</code>
+		 */
+		public com.google.protobuf.ByteString getErrorMessageBytes() {
+			java.lang.Object ref = errorMessage_;
+			if (ref instanceof java.lang.String) {
+				com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+				errorMessage_ = b;
+				return b;
+			} else {
+				return (com.google.protobuf.ByteString) ref;
+			}
+		}
+
+		private byte memoizedIsInitialized = -1;
+
+		public final boolean isInitialized() {
+			byte isInitialized = memoizedIsInitialized;
+			if (isInitialized == 1)
+				return true;
+			if (isInitialized == 0)
+				return false;
+
+			memoizedIsInitialized = 1;
+			return true;
+		}
+
+		public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+			if (((bitField0_ & 0x00000001) == 0x00000001)) {
+				com.google.protobuf.GeneratedMessageV3.writeString(output, 1, endpointId_);
+			}
+			if (((bitField0_ & 0x00000002) == 0x00000002)) {
+				com.google.protobuf.GeneratedMessageV3.writeString(output, 2, errorMessage_);
+			}
+			unknownFields.writeTo(output);
+		}
+
+		public int getSerializedSize() {
+			int size = memoizedSize;
+			if (size != -1)
+				return size;
+
+			size = 0;
+			if (((bitField0_ & 0x00000001) == 0x00000001)) {
+				size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, endpointId_);
+			}
+			if (((bitField0_ & 0x00000002) == 0x00000002)) {
+				size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, errorMessage_);
+			}
+			size += unknownFields.getSerializedSize();
+			memoizedSize = size;
+			return size;
+		}
+
+		@java.lang.Override
+		public boolean equals(final java.lang.Object obj) {
+			if (obj == this) {
+				return true;
+			}
+			if (!(obj instanceof org.eclipse.ecf.python.protobuf.Exporter.ExportResponse)) {
+				return super.equals(obj);
+			}
+			org.eclipse.ecf.python.protobuf.Exporter.ExportResponse other = (org.eclipse.ecf.python.protobuf.Exporter.ExportResponse) obj;
+
+			boolean result = true;
+			result = result && (hasEndpointId() == other.hasEndpointId());
+			if (hasEndpointId()) {
+				result = result && getEndpointId().equals(other.getEndpointId());
+			}
+			result = result && (hasErrorMessage() == other.hasErrorMessage());
+			if (hasErrorMessage()) {
+				result = result && getErrorMessage().equals(other.getErrorMessage());
+			}
+			result = result && unknownFields.equals(other.unknownFields);
+			return result;
+		}
+
+		@java.lang.Override
+		public int hashCode() {
+			if (memoizedHashCode != 0) {
+				return memoizedHashCode;
+			}
+			int hash = 41;
+			hash = (19 * hash) + getDescriptor().hashCode();
+			if (hasEndpointId()) {
+				hash = (37 * hash) + ENDPOINT_ID_FIELD_NUMBER;
+				hash = (53 * hash) + getEndpointId().hashCode();
+			}
+			if (hasErrorMessage()) {
+				hash = (37 * hash) + ERROR_MESSAGE_FIELD_NUMBER;
+				hash = (53 * hash) + getErrorMessage().hashCode();
+			}
+			hash = (29 * hash) + unknownFields.hashCode();
+			memoizedHashCode = hash;
+			return hash;
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(java.nio.ByteBuffer data)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(java.nio.ByteBuffer data,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
+				com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
+				com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(byte[] data)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(byte[] data,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(java.io.InputStream input)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(java.io.InputStream input,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseDelimitedFrom(
+				java.io.InputStream input) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseDelimitedFrom(
+				java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input,
+					extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
+				com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parseFrom(
+				com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+		}
+
+		public Builder newBuilderForType() {
+			return newBuilder();
+		}
+
+		public static Builder newBuilder() {
+			return DEFAULT_INSTANCE.toBuilder();
+		}
+
+		public static Builder newBuilder(org.eclipse.ecf.python.protobuf.Exporter.ExportResponse prototype) {
+			return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+		}
+
+		public Builder toBuilder() {
+			return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+		}
+
+		@java.lang.Override
+		protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+			Builder builder = new Builder(parent);
+			return builder;
+		}
+
+		/**
+		 * Protobuf type {@code org.eclipse.ecf.python.protobuf.ExportResponse}
+		 */
+		public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+				// @@protoc_insertion_point(builder_implements:org.eclipse.ecf.python.protobuf.ExportResponse)
+				org.eclipse.ecf.python.protobuf.Exporter.ExportResponseOrBuilder {
+			public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor;
+			}
+
+			protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_fieldAccessorTable
+						.ensureFieldAccessorsInitialized(org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.class,
+								org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.Builder.class);
+			}
+
+			// Construct using org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.newBuilder()
+			private Builder() {
+				maybeForceBuilderInitialization();
+			}
+
+			private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+				super(parent);
+				maybeForceBuilderInitialization();
+			}
+
+			private void maybeForceBuilderInitialization() {
+				if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
+				}
+			}
+
+			public Builder clear() {
+				super.clear();
+				endpointId_ = "";
+				bitField0_ = (bitField0_ & ~0x00000001);
+				errorMessage_ = "";
+				bitField0_ = (bitField0_ & ~0x00000002);
+				return this;
+			}
+
+			public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor;
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.ExportResponse getDefaultInstanceForType() {
+				return org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.getDefaultInstance();
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.ExportResponse build() {
+				org.eclipse.ecf.python.protobuf.Exporter.ExportResponse result = buildPartial();
+				if (!result.isInitialized()) {
+					throw newUninitializedMessageException(result);
+				}
+				return result;
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.ExportResponse buildPartial() {
+				org.eclipse.ecf.python.protobuf.Exporter.ExportResponse result = new org.eclipse.ecf.python.protobuf.Exporter.ExportResponse(
+						this);
+				int from_bitField0_ = bitField0_;
+				int to_bitField0_ = 0;
+				if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+					to_bitField0_ |= 0x00000001;
+				}
+				result.endpointId_ = endpointId_;
+				if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+					to_bitField0_ |= 0x00000002;
+				}
+				result.errorMessage_ = errorMessage_;
+				result.bitField0_ = to_bitField0_;
+				onBuilt();
+				return result;
+			}
+
+			public Builder clone() {
+				return (Builder) super.clone();
+			}
+
+			public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+				return (Builder) super.setField(field, value);
+			}
+
+			public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+				return (Builder) super.clearField(field);
+			}
+
+			public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+				return (Builder) super.clearOneof(oneof);
+			}
+
+			public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index,
+					java.lang.Object value) {
+				return (Builder) super.setRepeatedField(field, index, value);
+			}
+
+			public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+					java.lang.Object value) {
+				return (Builder) super.addRepeatedField(field, value);
+			}
+
+			public Builder mergeFrom(com.google.protobuf.Message other) {
+				if (other instanceof org.eclipse.ecf.python.protobuf.Exporter.ExportResponse) {
+					return mergeFrom((org.eclipse.ecf.python.protobuf.Exporter.ExportResponse) other);
+				} else {
+					super.mergeFrom(other);
+					return this;
+				}
+			}
+
+			public Builder mergeFrom(org.eclipse.ecf.python.protobuf.Exporter.ExportResponse other) {
+				if (other == org.eclipse.ecf.python.protobuf.Exporter.ExportResponse.getDefaultInstance())
+					return this;
+				if (other.hasEndpointId()) {
+					bitField0_ |= 0x00000001;
+					endpointId_ = other.endpointId_;
+					onChanged();
+				}
+				if (other.hasErrorMessage()) {
+					bitField0_ |= 0x00000002;
+					errorMessage_ = other.errorMessage_;
+					onChanged();
+				}
+				this.mergeUnknownFields(other.unknownFields);
+				onChanged();
+				return this;
+			}
+
+			public final boolean isInitialized() {
+				return true;
+			}
+
+			public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
+					com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+				org.eclipse.ecf.python.protobuf.Exporter.ExportResponse parsedMessage = null;
+				try {
+					parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+				} catch (com.google.protobuf.InvalidProtocolBufferException e) {
+					parsedMessage = (org.eclipse.ecf.python.protobuf.Exporter.ExportResponse) e.getUnfinishedMessage();
+					throw e.unwrapIOException();
+				} finally {
+					if (parsedMessage != null) {
+						mergeFrom(parsedMessage);
+					}
+				}
+				return this;
+			}
+
+			private int bitField0_;
+
+			private java.lang.Object endpointId_ = "";
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public boolean hasEndpointId() {
+				return ((bitField0_ & 0x00000001) == 0x00000001);
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public java.lang.String getEndpointId() {
+				java.lang.Object ref = endpointId_;
+				if (!(ref instanceof java.lang.String)) {
+					com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+					java.lang.String s = bs.toStringUtf8();
+					if (bs.isValidUtf8()) {
+						endpointId_ = s;
+					}
+					return s;
+				} else {
+					return (java.lang.String) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public com.google.protobuf.ByteString getEndpointIdBytes() {
+				java.lang.Object ref = endpointId_;
+				if (ref instanceof String) {
+					com.google.protobuf.ByteString b = com.google.protobuf.ByteString
+							.copyFromUtf8((java.lang.String) ref);
+					endpointId_ = b;
+					return b;
+				} else {
+					return (com.google.protobuf.ByteString) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public Builder setEndpointId(java.lang.String value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000001;
+				endpointId_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public Builder clearEndpointId() {
+				bitField0_ = (bitField0_ & ~0x00000001);
+				endpointId_ = getDefaultInstance().getEndpointId();
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public Builder setEndpointIdBytes(com.google.protobuf.ByteString value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000001;
+				endpointId_ = value;
+				onChanged();
+				return this;
+			}
+
+			private java.lang.Object errorMessage_ = "";
+
+			/**
+			 * <code>optional string error_message = 2;</code>
+			 */
+			public boolean hasErrorMessage() {
+				return ((bitField0_ & 0x00000002) == 0x00000002);
+			}
+
+			/**
+			 * <code>optional string error_message = 2;</code>
+			 */
+			public java.lang.String getErrorMessage() {
+				java.lang.Object ref = errorMessage_;
+				if (!(ref instanceof java.lang.String)) {
+					com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+					java.lang.String s = bs.toStringUtf8();
+					if (bs.isValidUtf8()) {
+						errorMessage_ = s;
+					}
+					return s;
+				} else {
+					return (java.lang.String) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string error_message = 2;</code>
+			 */
+			public com.google.protobuf.ByteString getErrorMessageBytes() {
+				java.lang.Object ref = errorMessage_;
+				if (ref instanceof String) {
+					com.google.protobuf.ByteString b = com.google.protobuf.ByteString
+							.copyFromUtf8((java.lang.String) ref);
+					errorMessage_ = b;
+					return b;
+				} else {
+					return (com.google.protobuf.ByteString) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string error_message = 2;</code>
+			 */
+			public Builder setErrorMessage(java.lang.String value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000002;
+				errorMessage_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string error_message = 2;</code>
+			 */
+			public Builder clearErrorMessage() {
+				bitField0_ = (bitField0_ & ~0x00000002);
+				errorMessage_ = getDefaultInstance().getErrorMessage();
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string error_message = 2;</code>
+			 */
+			public Builder setErrorMessageBytes(com.google.protobuf.ByteString value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000002;
+				errorMessage_ = value;
+				onChanged();
+				return this;
+			}
+
+			public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+				return super.setUnknownFields(unknownFields);
+			}
+
+			public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+				return super.mergeUnknownFields(unknownFields);
+			}
+
+			// @@protoc_insertion_point(builder_scope:org.eclipse.ecf.python.protobuf.ExportResponse)
+		}
+
+		// @@protoc_insertion_point(class_scope:org.eclipse.ecf.python.protobuf.ExportResponse)
+		private static final org.eclipse.ecf.python.protobuf.Exporter.ExportResponse DEFAULT_INSTANCE;
+		static {
+			DEFAULT_INSTANCE = new org.eclipse.ecf.python.protobuf.Exporter.ExportResponse();
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.ExportResponse getDefaultInstance() {
+			return DEFAULT_INSTANCE;
+		}
+
+		@java.lang.Deprecated
+		public static final com.google.protobuf.Parser<ExportResponse> PARSER = new com.google.protobuf.AbstractParser<ExportResponse>() {
+			public ExportResponse parsePartialFrom(com.google.protobuf.CodedInputStream input,
+					com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+					throws com.google.protobuf.InvalidProtocolBufferException {
+				return new ExportResponse(input, extensionRegistry);
+			}
+		};
+
+		public static com.google.protobuf.Parser<ExportResponse> parser() {
+			return PARSER;
+		}
+
+		@java.lang.Override
+		public com.google.protobuf.Parser<ExportResponse> getParserForType() {
+			return PARSER;
+		}
+
+		public org.eclipse.ecf.python.protobuf.Exporter.ExportResponse getDefaultInstanceForType() {
+			return DEFAULT_INSTANCE;
+		}
+
+	}
+
+	public interface UnexportRequestOrBuilder extends
+			// @@protoc_insertion_point(interface_extends:org.eclipse.ecf.python.protobuf.UnexportRequest)
+			com.google.protobuf.MessageOrBuilder {
+
+		/**
+		 * <code>required string endpoint_id = 1;</code>
+		 */
+		boolean hasEndpointId();
+
+		/**
+		 * <code>required string endpoint_id = 1;</code>
+		 */
+		java.lang.String getEndpointId();
+
+		/**
+		 * <code>required string endpoint_id = 1;</code>
+		 */
+		com.google.protobuf.ByteString getEndpointIdBytes();
+	}
+
+	/**
+	 * Protobuf type {@code org.eclipse.ecf.python.protobuf.UnexportRequest}
+	 */
+	public static final class UnexportRequest extends com.google.protobuf.GeneratedMessageV3 implements
+			// @@protoc_insertion_point(message_implements:org.eclipse.ecf.python.protobuf.UnexportRequest)
+			UnexportRequestOrBuilder {
+		private static final long serialVersionUID = 0L;
+
+		// Use UnexportRequest.newBuilder() to construct.
+		private UnexportRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+			super(builder);
+		}
+
+		private UnexportRequest() {
+			endpointId_ = "";
+		}
+
+		@java.lang.Override
+		public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
+			return this.unknownFields;
+		}
+
+		private UnexportRequest(com.google.protobuf.CodedInputStream input,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			this();
+			if (extensionRegistry == null) {
+				throw new java.lang.NullPointerException();
+			}
+			int mutable_bitField0_ = 0;
+			com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet
+					.newBuilder();
+			try {
+				boolean done = false;
+				while (!done) {
+					int tag = input.readTag();
+					switch (tag) {
+					case 0:
+						done = true;
+						break;
+					default: {
+						if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+							done = true;
+						}
+						break;
+					}
+					case 10: {
+						com.google.protobuf.ByteString bs = input.readBytes();
+						bitField0_ |= 0x00000001;
+						endpointId_ = bs;
+						break;
+					}
+					}
+				}
+			} catch (com.google.protobuf.InvalidProtocolBufferException e) {
+				throw e.setUnfinishedMessage(this);
+			} catch (java.io.IOException e) {
+				throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
+			} finally {
+				this.unknownFields = unknownFields.build();
+				makeExtensionsImmutable();
+			}
+		}
+
+		public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+			return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor;
+		}
+
+		protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+			return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_fieldAccessorTable
+					.ensureFieldAccessorsInitialized(org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.class,
+							org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.Builder.class);
+		}
+
+		private int bitField0_;
+		public static final int ENDPOINT_ID_FIELD_NUMBER = 1;
+		private volatile java.lang.Object endpointId_;
+
+		/**
+		 * <code>required string endpoint_id = 1;</code>
+		 */
+		public boolean hasEndpointId() {
+			return ((bitField0_ & 0x00000001) == 0x00000001);
+		}
+
+		/**
+		 * <code>required string endpoint_id = 1;</code>
+		 */
+		public java.lang.String getEndpointId() {
+			java.lang.Object ref = endpointId_;
+			if (ref instanceof java.lang.String) {
+				return (java.lang.String) ref;
+			} else {
+				com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+				java.lang.String s = bs.toStringUtf8();
+				if (bs.isValidUtf8()) {
+					endpointId_ = s;
+				}
+				return s;
+			}
+		}
+
+		/**
+		 * <code>required string endpoint_id = 1;</code>
+		 */
+		public com.google.protobuf.ByteString getEndpointIdBytes() {
+			java.lang.Object ref = endpointId_;
+			if (ref instanceof java.lang.String) {
+				com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+				endpointId_ = b;
+				return b;
+			} else {
+				return (com.google.protobuf.ByteString) ref;
+			}
+		}
+
+		private byte memoizedIsInitialized = -1;
+
+		public final boolean isInitialized() {
+			byte isInitialized = memoizedIsInitialized;
+			if (isInitialized == 1)
+				return true;
+			if (isInitialized == 0)
+				return false;
+
+			if (!hasEndpointId()) {
+				memoizedIsInitialized = 0;
+				return false;
+			}
+			memoizedIsInitialized = 1;
+			return true;
+		}
+
+		public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+			if (((bitField0_ & 0x00000001) == 0x00000001)) {
+				com.google.protobuf.GeneratedMessageV3.writeString(output, 1, endpointId_);
+			}
+			unknownFields.writeTo(output);
+		}
+
+		public int getSerializedSize() {
+			int size = memoizedSize;
+			if (size != -1)
+				return size;
+
+			size = 0;
+			if (((bitField0_ & 0x00000001) == 0x00000001)) {
+				size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, endpointId_);
+			}
+			size += unknownFields.getSerializedSize();
+			memoizedSize = size;
+			return size;
+		}
+
+		@java.lang.Override
+		public boolean equals(final java.lang.Object obj) {
+			if (obj == this) {
+				return true;
+			}
+			if (!(obj instanceof org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest)) {
+				return super.equals(obj);
+			}
+			org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest other = (org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest) obj;
+
+			boolean result = true;
+			result = result && (hasEndpointId() == other.hasEndpointId());
+			if (hasEndpointId()) {
+				result = result && getEndpointId().equals(other.getEndpointId());
+			}
+			result = result && unknownFields.equals(other.unknownFields);
+			return result;
+		}
+
+		@java.lang.Override
+		public int hashCode() {
+			if (memoizedHashCode != 0) {
+				return memoizedHashCode;
+			}
+			int hash = 41;
+			hash = (19 * hash) + getDescriptor().hashCode();
+			if (hasEndpointId()) {
+				hash = (37 * hash) + ENDPOINT_ID_FIELD_NUMBER;
+				hash = (53 * hash) + getEndpointId().hashCode();
+			}
+			hash = (29 * hash) + unknownFields.hashCode();
+			memoizedHashCode = hash;
+			return hash;
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(java.nio.ByteBuffer data)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(java.nio.ByteBuffer data,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
+				com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
+				com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(byte[] data)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(byte[] data,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(java.io.InputStream input)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(java.io.InputStream input,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseDelimitedFrom(
+				java.io.InputStream input) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseDelimitedFrom(
+				java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input,
+					extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
+				com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parseFrom(
+				com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+		}
+
+		public Builder newBuilderForType() {
+			return newBuilder();
+		}
+
+		public static Builder newBuilder() {
+			return DEFAULT_INSTANCE.toBuilder();
+		}
+
+		public static Builder newBuilder(org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest prototype) {
+			return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+		}
+
+		public Builder toBuilder() {
+			return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+		}
+
+		@java.lang.Override
+		protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+			Builder builder = new Builder(parent);
+			return builder;
+		}
+
+		/**
+		 * Protobuf type {@code org.eclipse.ecf.python.protobuf.UnexportRequest}
+		 */
+		public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+				// @@protoc_insertion_point(builder_implements:org.eclipse.ecf.python.protobuf.UnexportRequest)
+				org.eclipse.ecf.python.protobuf.Exporter.UnexportRequestOrBuilder {
+			public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor;
+			}
+
+			protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_fieldAccessorTable
+						.ensureFieldAccessorsInitialized(org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.class,
+								org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.Builder.class);
+			}
+
+			// Construct using org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.newBuilder()
+			private Builder() {
+				maybeForceBuilderInitialization();
+			}
+
+			private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+				super(parent);
+				maybeForceBuilderInitialization();
+			}
+
+			private void maybeForceBuilderInitialization() {
+				if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
+				}
+			}
+
+			public Builder clear() {
+				super.clear();
+				endpointId_ = "";
+				bitField0_ = (bitField0_ & ~0x00000001);
+				return this;
+			}
+
+			public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor;
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest getDefaultInstanceForType() {
+				return org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.getDefaultInstance();
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest build() {
+				org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest result = buildPartial();
+				if (!result.isInitialized()) {
+					throw newUninitializedMessageException(result);
+				}
+				return result;
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest buildPartial() {
+				org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest result = new org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest(
+						this);
+				int from_bitField0_ = bitField0_;
+				int to_bitField0_ = 0;
+				if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+					to_bitField0_ |= 0x00000001;
+				}
+				result.endpointId_ = endpointId_;
+				result.bitField0_ = to_bitField0_;
+				onBuilt();
+				return result;
+			}
+
+			public Builder clone() {
+				return (Builder) super.clone();
+			}
+
+			public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+				return (Builder) super.setField(field, value);
+			}
+
+			public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+				return (Builder) super.clearField(field);
+			}
+
+			public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+				return (Builder) super.clearOneof(oneof);
+			}
+
+			public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index,
+					java.lang.Object value) {
+				return (Builder) super.setRepeatedField(field, index, value);
+			}
+
+			public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+					java.lang.Object value) {
+				return (Builder) super.addRepeatedField(field, value);
+			}
+
+			public Builder mergeFrom(com.google.protobuf.Message other) {
+				if (other instanceof org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest) {
+					return mergeFrom((org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest) other);
+				} else {
+					super.mergeFrom(other);
+					return this;
+				}
+			}
+
+			public Builder mergeFrom(org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest other) {
+				if (other == org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest.getDefaultInstance())
+					return this;
+				if (other.hasEndpointId()) {
+					bitField0_ |= 0x00000001;
+					endpointId_ = other.endpointId_;
+					onChanged();
+				}
+				this.mergeUnknownFields(other.unknownFields);
+				onChanged();
+				return this;
+			}
+
+			public final boolean isInitialized() {
+				if (!hasEndpointId()) {
+					return false;
+				}
+				return true;
+			}
+
+			public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
+					com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+				org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest parsedMessage = null;
+				try {
+					parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+				} catch (com.google.protobuf.InvalidProtocolBufferException e) {
+					parsedMessage = (org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest) e.getUnfinishedMessage();
+					throw e.unwrapIOException();
+				} finally {
+					if (parsedMessage != null) {
+						mergeFrom(parsedMessage);
+					}
+				}
+				return this;
+			}
+
+			private int bitField0_;
+
+			private java.lang.Object endpointId_ = "";
+
+			/**
+			 * <code>required string endpoint_id = 1;</code>
+			 */
+			public boolean hasEndpointId() {
+				return ((bitField0_ & 0x00000001) == 0x00000001);
+			}
+
+			/**
+			 * <code>required string endpoint_id = 1;</code>
+			 */
+			public java.lang.String getEndpointId() {
+				java.lang.Object ref = endpointId_;
+				if (!(ref instanceof java.lang.String)) {
+					com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+					java.lang.String s = bs.toStringUtf8();
+					if (bs.isValidUtf8()) {
+						endpointId_ = s;
+					}
+					return s;
+				} else {
+					return (java.lang.String) ref;
+				}
+			}
+
+			/**
+			 * <code>required string endpoint_id = 1;</code>
+			 */
+			public com.google.protobuf.ByteString getEndpointIdBytes() {
+				java.lang.Object ref = endpointId_;
+				if (ref instanceof String) {
+					com.google.protobuf.ByteString b = com.google.protobuf.ByteString
+							.copyFromUtf8((java.lang.String) ref);
+					endpointId_ = b;
+					return b;
+				} else {
+					return (com.google.protobuf.ByteString) ref;
+				}
+			}
+
+			/**
+			 * <code>required string endpoint_id = 1;</code>
+			 */
+			public Builder setEndpointId(java.lang.String value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000001;
+				endpointId_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>required string endpoint_id = 1;</code>
+			 */
+			public Builder clearEndpointId() {
+				bitField0_ = (bitField0_ & ~0x00000001);
+				endpointId_ = getDefaultInstance().getEndpointId();
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>required string endpoint_id = 1;</code>
+			 */
+			public Builder setEndpointIdBytes(com.google.protobuf.ByteString value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000001;
+				endpointId_ = value;
+				onChanged();
+				return this;
+			}
+
+			public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+				return super.setUnknownFields(unknownFields);
+			}
+
+			public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+				return super.mergeUnknownFields(unknownFields);
+			}
+
+			// @@protoc_insertion_point(builder_scope:org.eclipse.ecf.python.protobuf.UnexportRequest)
+		}
+
+		// @@protoc_insertion_point(class_scope:org.eclipse.ecf.python.protobuf.UnexportRequest)
+		private static final org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest DEFAULT_INSTANCE;
+		static {
+			DEFAULT_INSTANCE = new org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest();
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest getDefaultInstance() {
+			return DEFAULT_INSTANCE;
+		}
+
+		@java.lang.Deprecated
+		public static final com.google.protobuf.Parser<UnexportRequest> PARSER = new com.google.protobuf.AbstractParser<UnexportRequest>() {
+			public UnexportRequest parsePartialFrom(com.google.protobuf.CodedInputStream input,
+					com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+					throws com.google.protobuf.InvalidProtocolBufferException {
+				return new UnexportRequest(input, extensionRegistry);
+			}
+		};
+
+		public static com.google.protobuf.Parser<UnexportRequest> parser() {
+			return PARSER;
+		}
+
+		@java.lang.Override
+		public com.google.protobuf.Parser<UnexportRequest> getParserForType() {
+			return PARSER;
+		}
+
+		public org.eclipse.ecf.python.protobuf.Exporter.UnexportRequest getDefaultInstanceForType() {
+			return DEFAULT_INSTANCE;
+		}
+
+	}
+
+	public interface UnexportResponseOrBuilder extends
+			// @@protoc_insertion_point(interface_extends:org.eclipse.ecf.python.protobuf.UnexportResponse)
+			com.google.protobuf.MessageOrBuilder {
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		boolean hasEndpointId();
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		java.lang.String getEndpointId();
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		com.google.protobuf.ByteString getEndpointIdBytes();
+
+		/**
+		 * <code>required bool success = 2;</code>
+		 */
+		boolean hasSuccess();
+
+		/**
+		 * <code>required bool success = 2;</code>
+		 */
+		boolean getSuccess();
+
+		/**
+		 * <code>optional string message = 3;</code>
+		 */
+		boolean hasMessage();
+
+		/**
+		 * <code>optional string message = 3;</code>
+		 */
+		java.lang.String getMessage();
+
+		/**
+		 * <code>optional string message = 3;</code>
+		 */
+		com.google.protobuf.ByteString getMessageBytes();
+	}
+
+	/**
+	 * Protobuf type {@code org.eclipse.ecf.python.protobuf.UnexportResponse}
+	 */
+	public static final class UnexportResponse extends com.google.protobuf.GeneratedMessageV3 implements
+			// @@protoc_insertion_point(message_implements:org.eclipse.ecf.python.protobuf.UnexportResponse)
+			UnexportResponseOrBuilder {
+		private static final long serialVersionUID = 0L;
+
+		// Use UnexportResponse.newBuilder() to construct.
+		private UnexportResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+			super(builder);
+		}
+
+		private UnexportResponse() {
+			endpointId_ = "";
+			success_ = false;
+			message_ = "";
+		}
+
+		@java.lang.Override
+		public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
+			return this.unknownFields;
+		}
+
+		private UnexportResponse(com.google.protobuf.CodedInputStream input,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			this();
+			if (extensionRegistry == null) {
+				throw new java.lang.NullPointerException();
+			}
+			int mutable_bitField0_ = 0;
+			com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet
+					.newBuilder();
+			try {
+				boolean done = false;
+				while (!done) {
+					int tag = input.readTag();
+					switch (tag) {
+					case 0:
+						done = true;
+						break;
+					default: {
+						if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+							done = true;
+						}
+						break;
+					}
+					case 10: {
+						com.google.protobuf.ByteString bs = input.readBytes();
+						bitField0_ |= 0x00000001;
+						endpointId_ = bs;
+						break;
+					}
+					case 16: {
+						bitField0_ |= 0x00000002;
+						success_ = input.readBool();
+						break;
+					}
+					case 26: {
+						com.google.protobuf.ByteString bs = input.readBytes();
+						bitField0_ |= 0x00000004;
+						message_ = bs;
+						break;
+					}
+					}
+				}
+			} catch (com.google.protobuf.InvalidProtocolBufferException e) {
+				throw e.setUnfinishedMessage(this);
+			} catch (java.io.IOException e) {
+				throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
+			} finally {
+				this.unknownFields = unknownFields.build();
+				makeExtensionsImmutable();
+			}
+		}
+
+		public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+			return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor;
+		}
+
+		protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+			return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_fieldAccessorTable
+					.ensureFieldAccessorsInitialized(org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.class,
+							org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.Builder.class);
+		}
+
+		private int bitField0_;
+		public static final int ENDPOINT_ID_FIELD_NUMBER = 1;
+		private volatile java.lang.Object endpointId_;
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		public boolean hasEndpointId() {
+			return ((bitField0_ & 0x00000001) == 0x00000001);
+		}
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		public java.lang.String getEndpointId() {
+			java.lang.Object ref = endpointId_;
+			if (ref instanceof java.lang.String) {
+				return (java.lang.String) ref;
+			} else {
+				com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+				java.lang.String s = bs.toStringUtf8();
+				if (bs.isValidUtf8()) {
+					endpointId_ = s;
+				}
+				return s;
+			}
+		}
+
+		/**
+		 * <code>optional string endpoint_id = 1;</code>
+		 */
+		public com.google.protobuf.ByteString getEndpointIdBytes() {
+			java.lang.Object ref = endpointId_;
+			if (ref instanceof java.lang.String) {
+				com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+				endpointId_ = b;
+				return b;
+			} else {
+				return (com.google.protobuf.ByteString) ref;
+			}
+		}
+
+		public static final int SUCCESS_FIELD_NUMBER = 2;
+		private boolean success_;
+
+		/**
+		 * <code>required bool success = 2;</code>
+		 */
+		public boolean hasSuccess() {
+			return ((bitField0_ & 0x00000002) == 0x00000002);
+		}
+
+		/**
+		 * <code>required bool success = 2;</code>
+		 */
+		public boolean getSuccess() {
+			return success_;
+		}
+
+		public static final int MESSAGE_FIELD_NUMBER = 3;
+		private volatile java.lang.Object message_;
+
+		/**
+		 * <code>optional string message = 3;</code>
+		 */
+		public boolean hasMessage() {
+			return ((bitField0_ & 0x00000004) == 0x00000004);
+		}
+
+		/**
+		 * <code>optional string message = 3;</code>
+		 */
+		public java.lang.String getMessage() {
+			java.lang.Object ref = message_;
+			if (ref instanceof java.lang.String) {
+				return (java.lang.String) ref;
+			} else {
+				com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+				java.lang.String s = bs.toStringUtf8();
+				if (bs.isValidUtf8()) {
+					message_ = s;
+				}
+				return s;
+			}
+		}
+
+		/**
+		 * <code>optional string message = 3;</code>
+		 */
+		public com.google.protobuf.ByteString getMessageBytes() {
+			java.lang.Object ref = message_;
+			if (ref instanceof java.lang.String) {
+				com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+				message_ = b;
+				return b;
+			} else {
+				return (com.google.protobuf.ByteString) ref;
+			}
+		}
+
+		private byte memoizedIsInitialized = -1;
+
+		public final boolean isInitialized() {
+			byte isInitialized = memoizedIsInitialized;
+			if (isInitialized == 1)
+				return true;
+			if (isInitialized == 0)
+				return false;
+
+			if (!hasSuccess()) {
+				memoizedIsInitialized = 0;
+				return false;
+			}
+			memoizedIsInitialized = 1;
+			return true;
+		}
+
+		public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+			if (((bitField0_ & 0x00000001) == 0x00000001)) {
+				com.google.protobuf.GeneratedMessageV3.writeString(output, 1, endpointId_);
+			}
+			if (((bitField0_ & 0x00000002) == 0x00000002)) {
+				output.writeBool(2, success_);
+			}
+			if (((bitField0_ & 0x00000004) == 0x00000004)) {
+				com.google.protobuf.GeneratedMessageV3.writeString(output, 3, message_);
+			}
+			unknownFields.writeTo(output);
+		}
+
+		public int getSerializedSize() {
+			int size = memoizedSize;
+			if (size != -1)
+				return size;
+
+			size = 0;
+			if (((bitField0_ & 0x00000001) == 0x00000001)) {
+				size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, endpointId_);
+			}
+			if (((bitField0_ & 0x00000002) == 0x00000002)) {
+				size += com.google.protobuf.CodedOutputStream.computeBoolSize(2, success_);
+			}
+			if (((bitField0_ & 0x00000004) == 0x00000004)) {
+				size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, message_);
+			}
+			size += unknownFields.getSerializedSize();
+			memoizedSize = size;
+			return size;
+		}
+
+		@java.lang.Override
+		public boolean equals(final java.lang.Object obj) {
+			if (obj == this) {
+				return true;
+			}
+			if (!(obj instanceof org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse)) {
+				return super.equals(obj);
+			}
+			org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse other = (org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse) obj;
+
+			boolean result = true;
+			result = result && (hasEndpointId() == other.hasEndpointId());
+			if (hasEndpointId()) {
+				result = result && getEndpointId().equals(other.getEndpointId());
+			}
+			result = result && (hasSuccess() == other.hasSuccess());
+			if (hasSuccess()) {
+				result = result && (getSuccess() == other.getSuccess());
+			}
+			result = result && (hasMessage() == other.hasMessage());
+			if (hasMessage()) {
+				result = result && getMessage().equals(other.getMessage());
+			}
+			result = result && unknownFields.equals(other.unknownFields);
+			return result;
+		}
+
+		@java.lang.Override
+		public int hashCode() {
+			if (memoizedHashCode != 0) {
+				return memoizedHashCode;
+			}
+			int hash = 41;
+			hash = (19 * hash) + getDescriptor().hashCode();
+			if (hasEndpointId()) {
+				hash = (37 * hash) + ENDPOINT_ID_FIELD_NUMBER;
+				hash = (53 * hash) + getEndpointId().hashCode();
+			}
+			if (hasSuccess()) {
+				hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
+				hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getSuccess());
+			}
+			if (hasMessage()) {
+				hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
+				hash = (53 * hash) + getMessage().hashCode();
+			}
+			hash = (29 * hash) + unknownFields.hashCode();
+			memoizedHashCode = hash;
+			return hash;
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(java.nio.ByteBuffer data)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(java.nio.ByteBuffer data,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
+				com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
+				com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(byte[] data)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(byte[] data,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws com.google.protobuf.InvalidProtocolBufferException {
+			return PARSER.parseFrom(data, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(java.io.InputStream input)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(java.io.InputStream input,
+				com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseDelimitedFrom(
+				java.io.InputStream input) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseDelimitedFrom(
+				java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input,
+					extensionRegistry);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
+				com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parseFrom(
+				com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+				throws java.io.IOException {
+			return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+		}
+
+		public Builder newBuilderForType() {
+			return newBuilder();
+		}
+
+		public static Builder newBuilder() {
+			return DEFAULT_INSTANCE.toBuilder();
+		}
+
+		public static Builder newBuilder(org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse prototype) {
+			return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+		}
+
+		public Builder toBuilder() {
+			return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+		}
+
+		@java.lang.Override
+		protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+			Builder builder = new Builder(parent);
+			return builder;
+		}
+
+		/**
+		 * Protobuf type {@code org.eclipse.ecf.python.protobuf.UnexportResponse}
+		 */
+		public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+				// @@protoc_insertion_point(builder_implements:org.eclipse.ecf.python.protobuf.UnexportResponse)
+				org.eclipse.ecf.python.protobuf.Exporter.UnexportResponseOrBuilder {
+			public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor;
+			}
+
+			protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_fieldAccessorTable
+						.ensureFieldAccessorsInitialized(
+								org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.class,
+								org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.Builder.class);
+			}
+
+			// Construct using org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.newBuilder()
+			private Builder() {
+				maybeForceBuilderInitialization();
+			}
+
+			private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+				super(parent);
+				maybeForceBuilderInitialization();
+			}
+
+			private void maybeForceBuilderInitialization() {
+				if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
+				}
+			}
+
+			public Builder clear() {
+				super.clear();
+				endpointId_ = "";
+				bitField0_ = (bitField0_ & ~0x00000001);
+				success_ = false;
+				bitField0_ = (bitField0_ & ~0x00000002);
+				message_ = "";
+				bitField0_ = (bitField0_ & ~0x00000004);
+				return this;
+			}
+
+			public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+				return org.eclipse.ecf.python.protobuf.Exporter.internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor;
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse getDefaultInstanceForType() {
+				return org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.getDefaultInstance();
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse build() {
+				org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse result = buildPartial();
+				if (!result.isInitialized()) {
+					throw newUninitializedMessageException(result);
+				}
+				return result;
+			}
+
+			public org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse buildPartial() {
+				org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse result = new org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse(
+						this);
+				int from_bitField0_ = bitField0_;
+				int to_bitField0_ = 0;
+				if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+					to_bitField0_ |= 0x00000001;
+				}
+				result.endpointId_ = endpointId_;
+				if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+					to_bitField0_ |= 0x00000002;
+				}
+				result.success_ = success_;
+				if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+					to_bitField0_ |= 0x00000004;
+				}
+				result.message_ = message_;
+				result.bitField0_ = to_bitField0_;
+				onBuilt();
+				return result;
+			}
+
+			public Builder clone() {
+				return (Builder) super.clone();
+			}
+
+			public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+				return (Builder) super.setField(field, value);
+			}
+
+			public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+				return (Builder) super.clearField(field);
+			}
+
+			public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+				return (Builder) super.clearOneof(oneof);
+			}
+
+			public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index,
+					java.lang.Object value) {
+				return (Builder) super.setRepeatedField(field, index, value);
+			}
+
+			public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+					java.lang.Object value) {
+				return (Builder) super.addRepeatedField(field, value);
+			}
+
+			public Builder mergeFrom(com.google.protobuf.Message other) {
+				if (other instanceof org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse) {
+					return mergeFrom((org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse) other);
+				} else {
+					super.mergeFrom(other);
+					return this;
+				}
+			}
+
+			public Builder mergeFrom(org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse other) {
+				if (other == org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse.getDefaultInstance())
+					return this;
+				if (other.hasEndpointId()) {
+					bitField0_ |= 0x00000001;
+					endpointId_ = other.endpointId_;
+					onChanged();
+				}
+				if (other.hasSuccess()) {
+					setSuccess(other.getSuccess());
+				}
+				if (other.hasMessage()) {
+					bitField0_ |= 0x00000004;
+					message_ = other.message_;
+					onChanged();
+				}
+				this.mergeUnknownFields(other.unknownFields);
+				onChanged();
+				return this;
+			}
+
+			public final boolean isInitialized() {
+				if (!hasSuccess()) {
+					return false;
+				}
+				return true;
+			}
+
+			public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
+					com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+				org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse parsedMessage = null;
+				try {
+					parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+				} catch (com.google.protobuf.InvalidProtocolBufferException e) {
+					parsedMessage = (org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse) e
+							.getUnfinishedMessage();
+					throw e.unwrapIOException();
+				} finally {
+					if (parsedMessage != null) {
+						mergeFrom(parsedMessage);
+					}
+				}
+				return this;
+			}
+
+			private int bitField0_;
+
+			private java.lang.Object endpointId_ = "";
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public boolean hasEndpointId() {
+				return ((bitField0_ & 0x00000001) == 0x00000001);
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public java.lang.String getEndpointId() {
+				java.lang.Object ref = endpointId_;
+				if (!(ref instanceof java.lang.String)) {
+					com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+					java.lang.String s = bs.toStringUtf8();
+					if (bs.isValidUtf8()) {
+						endpointId_ = s;
+					}
+					return s;
+				} else {
+					return (java.lang.String) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public com.google.protobuf.ByteString getEndpointIdBytes() {
+				java.lang.Object ref = endpointId_;
+				if (ref instanceof String) {
+					com.google.protobuf.ByteString b = com.google.protobuf.ByteString
+							.copyFromUtf8((java.lang.String) ref);
+					endpointId_ = b;
+					return b;
+				} else {
+					return (com.google.protobuf.ByteString) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public Builder setEndpointId(java.lang.String value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000001;
+				endpointId_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public Builder clearEndpointId() {
+				bitField0_ = (bitField0_ & ~0x00000001);
+				endpointId_ = getDefaultInstance().getEndpointId();
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string endpoint_id = 1;</code>
+			 */
+			public Builder setEndpointIdBytes(com.google.protobuf.ByteString value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000001;
+				endpointId_ = value;
+				onChanged();
+				return this;
+			}
+
+			private boolean success_;
+
+			/**
+			 * <code>required bool success = 2;</code>
+			 */
+			public boolean hasSuccess() {
+				return ((bitField0_ & 0x00000002) == 0x00000002);
+			}
+
+			/**
+			 * <code>required bool success = 2;</code>
+			 */
+			public boolean getSuccess() {
+				return success_;
+			}
+
+			/**
+			 * <code>required bool success = 2;</code>
+			 */
+			public Builder setSuccess(boolean value) {
+				bitField0_ |= 0x00000002;
+				success_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>required bool success = 2;</code>
+			 */
+			public Builder clearSuccess() {
+				bitField0_ = (bitField0_ & ~0x00000002);
+				success_ = false;
+				onChanged();
+				return this;
+			}
+
+			private java.lang.Object message_ = "";
+
+			/**
+			 * <code>optional string message = 3;</code>
+			 */
+			public boolean hasMessage() {
+				return ((bitField0_ & 0x00000004) == 0x00000004);
+			}
+
+			/**
+			 * <code>optional string message = 3;</code>
+			 */
+			public java.lang.String getMessage() {
+				java.lang.Object ref = message_;
+				if (!(ref instanceof java.lang.String)) {
+					com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+					java.lang.String s = bs.toStringUtf8();
+					if (bs.isValidUtf8()) {
+						message_ = s;
+					}
+					return s;
+				} else {
+					return (java.lang.String) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string message = 3;</code>
+			 */
+			public com.google.protobuf.ByteString getMessageBytes() {
+				java.lang.Object ref = message_;
+				if (ref instanceof String) {
+					com.google.protobuf.ByteString b = com.google.protobuf.ByteString
+							.copyFromUtf8((java.lang.String) ref);
+					message_ = b;
+					return b;
+				} else {
+					return (com.google.protobuf.ByteString) ref;
+				}
+			}
+
+			/**
+			 * <code>optional string message = 3;</code>
+			 */
+			public Builder setMessage(java.lang.String value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000004;
+				message_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string message = 3;</code>
+			 */
+			public Builder clearMessage() {
+				bitField0_ = (bitField0_ & ~0x00000004);
+				message_ = getDefaultInstance().getMessage();
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional string message = 3;</code>
+			 */
+			public Builder setMessageBytes(com.google.protobuf.ByteString value) {
+				if (value == null) {
+					throw new NullPointerException();
+				}
+				bitField0_ |= 0x00000004;
+				message_ = value;
+				onChanged();
+				return this;
+			}
+
+			public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+				return super.setUnknownFields(unknownFields);
+			}
+
+			public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+				return super.mergeUnknownFields(unknownFields);
+			}
+
+			// @@protoc_insertion_point(builder_scope:org.eclipse.ecf.python.protobuf.UnexportResponse)
+		}
+
+		// @@protoc_insertion_point(class_scope:org.eclipse.ecf.python.protobuf.UnexportResponse)
+		private static final org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse DEFAULT_INSTANCE;
+		static {
+			DEFAULT_INSTANCE = new org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse();
+		}
+
+		public static org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse getDefaultInstance() {
+			return DEFAULT_INSTANCE;
+		}
+
+		@java.lang.Deprecated
+		public static final com.google.protobuf.Parser<UnexportResponse> PARSER = new com.google.protobuf.AbstractParser<UnexportResponse>() {
+			public UnexportResponse parsePartialFrom(com.google.protobuf.CodedInputStream input,
+					com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+					throws com.google.protobuf.InvalidProtocolBufferException {
+				return new UnexportResponse(input, extensionRegistry);
+			}
+		};
+
+		public static com.google.protobuf.Parser<UnexportResponse> parser() {
+			return PARSER;
+		}
+
+		@java.lang.Override
+		public com.google.protobuf.Parser<UnexportResponse> getParserForType() {
+			return PARSER;
+		}
+
+		public org.eclipse.ecf.python.protobuf.Exporter.UnexportResponse getDefaultInstanceForType() {
+			return DEFAULT_INSTANCE;
+		}
+
+	}
+
+	private static final com.google.protobuf.Descriptors.Descriptor internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor;
+	private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_fieldAccessorTable;
+	private static final com.google.protobuf.Descriptors.Descriptor internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_descriptor;
+	private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_fieldAccessorTable;
+	private static final com.google.protobuf.Descriptors.Descriptor internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_descriptor;
+	private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_fieldAccessorTable;
+	private static final com.google.protobuf.Descriptors.Descriptor internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor;
+	private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_fieldAccessorTable;
+	private static final com.google.protobuf.Descriptors.Descriptor internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor;
+	private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_fieldAccessorTable;
+	private static final com.google.protobuf.Descriptors.Descriptor internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor;
+	private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_fieldAccessorTable;
+
+	public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
+		return descriptor;
+	}
+
+	private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+	static {
+		java.lang.String[] descriptorData = { "\n\016exporter.proto\022\037org.eclipse.ecf.python"
+				+ ".protobuf\"\360\002\n\rExportRequest\022\023\n\013module_na"
+				+ "me\030\001 \001(\t\022\022\n\nclass_name\030\002 \002(\t\022W\n\rcreation"
+				+ "_args\030\003 \003(\0132@.org.eclipse.ecf.python.pro"
+				+ "tobuf.ExportRequest.CreationArgsEntry\022j\n"
+				+ "\027overriding_export_props\030\004 \003(\0132I.org.ecl" + "ipse.ecf.python.protobuf.ExportRequest.O"
+				+ "verridingExportPropsEntry\0323\n\021CreationArg"
+				+ "sEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032<"
+				+ "\n\032OverridingExportPropsEntry\022\013\n\003key\030\001 \001("
+				+ "\t\022\r\n\005value\030\002 \001(\t:\0028\001\"<\n\016ExportResponse\022\023"
+				+ "\n\013endpoint_id\030\001 \001(\t\022\025\n\rerror_message\030\002 \001"
+				+ "(\t\"&\n\017UnexportRequest\022\023\n\013endpoint_id\030\001 \002"
+				+ "(\t\"I\n\020UnexportResponse\022\023\n\013endpoint_id\030\001 "
+				+ "\001(\t\022\017\n\007success\030\002 \002(\010\022\017\n\007message\030\003 \001(\t" };
+		com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+			public com.google.protobuf.ExtensionRegistry assignDescriptors(
+					com.google.protobuf.Descriptors.FileDescriptor root) {
+				descriptor = root;
+				return null;
+			}
+		};
+		com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData,
+				new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
+		internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor = getDescriptor().getMessageTypes()
+				.get(0);
+		internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+				internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor,
+				new java.lang.String[] { "ModuleName", "ClassName", "CreationArgs", "OverridingExportProps", });
+		internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_descriptor = internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor
+				.getNestedTypes().get(0);
+		internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+				internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_CreationArgsEntry_descriptor,
+				new java.lang.String[] { "Key", "Value", });
+		internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_descriptor = internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_descriptor
+				.getNestedTypes().get(1);
+		internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+				internal_static_org_eclipse_ecf_python_protobuf_ExportRequest_OverridingExportPropsEntry_descriptor,
+				new java.lang.String[] { "Key", "Value", });
+		internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor = getDescriptor().getMessageTypes()
+				.get(1);
+		internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+				internal_static_org_eclipse_ecf_python_protobuf_ExportResponse_descriptor,
+				new java.lang.String[] { "EndpointId", "ErrorMessage", });
+		internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor = getDescriptor().getMessageTypes()
+				.get(2);
+		internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+				internal_static_org_eclipse_ecf_python_protobuf_UnexportRequest_descriptor,
+				new java.lang.String[] { "EndpointId", });
+		internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor = getDescriptor().getMessageTypes()
+				.get(3);
+		internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+				internal_static_org_eclipse_ecf_python_protobuf_UnexportResponse_descriptor,
+				new java.lang.String[] { "EndpointId", "Success", "Message", });
+	}
+
+	// @@protoc_insertion_point(outer_class_scope)
 }
