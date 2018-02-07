@@ -106,6 +106,7 @@
     <module>bundles/org.eclipse.ecf.provider.py4j.protobuf</module>
     <module>bundles/org.eclipse.ecf.provider.py4j.flatbuf</module>
     <module>bundles/org.eclipse.ecf.python.protobuf</module>
+    <module>bundles/org.eclipse.ecf.python</module>
     
     <module>examples/org.eclipse.ecf.examples.hello</module>    
     <module>examples/org.eclipse.ecf.examples.hello.javahost</module>    
