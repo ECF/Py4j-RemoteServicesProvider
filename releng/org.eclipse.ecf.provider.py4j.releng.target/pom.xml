@@ -24,15 +24,6 @@
             <goals>
               <goal>attach-artifact</goal>
             </goals>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>ecf-neon.target</file>
-                  <type>target</type>
-                  <classifier>ecf-neon</classifier>
-                </artifact>
-              </artifacts>
-            </configuration>
           </execution>
         </executions>
       </plugin>

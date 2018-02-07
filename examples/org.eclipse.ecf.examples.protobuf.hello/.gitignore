@@ -1,2 +1,4 @@
 /bin/
 /target/
+/python-src/*.pyc
+/python-src/__pycache__/*
