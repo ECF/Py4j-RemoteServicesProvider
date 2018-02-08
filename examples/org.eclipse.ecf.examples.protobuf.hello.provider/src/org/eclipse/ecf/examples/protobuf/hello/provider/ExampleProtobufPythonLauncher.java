@@ -1,7 +1,5 @@
 package org.eclipse.ecf.examples.protobuf.hello.provider;
 
-import java.io.File;
-
 import org.eclipse.ecf.provider.py4j.Py4jProvider;
 import org.eclipse.ecf.python.PythonLaunchCommandProvider;
 import org.eclipse.ecf.python.PythonLauncher;
