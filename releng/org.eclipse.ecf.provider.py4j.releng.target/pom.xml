@@ -9,6 +9,7 @@
     <relativePath>../../</relativePath>
   </parent>
   <artifactId>org.eclipse.ecf.provider.py4j.releng.target</artifactId>
+  <version>1.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <build>
@@ -38,5 +39,4 @@
       </plugin>
     </plugins>
   </build>
-  <version>1.4.0-SNAPSHOT</version>
 </project>
