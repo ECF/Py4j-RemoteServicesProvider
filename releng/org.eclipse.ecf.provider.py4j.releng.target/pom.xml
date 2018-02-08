@@ -24,6 +24,15 @@
             <goals>
               <goal>attach-artifact</goal>
             </goals>
+            <configuration>
+              <artifacts>
+                <artifact>
+                  <file>ecf-oxygen.target</file>
+                  <type>target</type>
+                  <classifier>ecf-oxygen</classifier>
+                </artifact>
+              </artifacts>
+            </configuration>
           </execution>
         </executions>
       </plugin>
