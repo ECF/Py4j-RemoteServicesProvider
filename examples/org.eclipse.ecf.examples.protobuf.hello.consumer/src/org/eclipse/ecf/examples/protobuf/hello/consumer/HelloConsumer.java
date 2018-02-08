@@ -4,16 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent;
+import org.eclipse.ecf.examples.protobuf.hello.IHello;
 import org.eclipse.ecf.python.protobuf.Exporter.ExportRequest;
 import org.eclipse.ecf.python.protobuf.PythonServiceExporterAsync;
-import org.eclipse.ecf.examples.protobuf.hello.IHello;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-
-import py4j.PythonThrowable;
 
 @Component(immediate = true)
 public class HelloConsumer {
@@ -42,8 +40,6 @@ public class HelloConsumer {
 					HelloMsgContent result = helloService.sayHello(createRequest());
 					System.out.println("Java received sayHello result="+result);
 				} catch (Exception e) {
-					PythonThrowable pt = (PythonThrowable) e.getCause().getCause().getCause();
-					pt.printStackTrace();
 					e.printStackTrace();
 				}
 			}}).start();
