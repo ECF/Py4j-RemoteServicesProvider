@@ -255,19 +255,19 @@ class JavaPathHook(object):
         Initialize this path provider with a path_list (list of Strings)
         that is to be added to the sys.path
         '''
-        print('initialize_path path_list='+str(path_list))
+        pass
         
     def _add_code_path(self,path):
         '''
         Add a single path (string) to the sys.path 
         '''
-        print('add_code_path='+str(path))
+        pass
         
     def _remove_code_path(self,path):
         '''
         Remove a single path (string) from the sys.path
         '''
-        print('remove_code_path='+str(path))
+        pass
         
     class Java:
         implements = [JAVA_PATH_PROVIDER]

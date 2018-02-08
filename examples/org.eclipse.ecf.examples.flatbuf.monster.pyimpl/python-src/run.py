@@ -81,7 +81,7 @@ class MonsterServiceImpl:
         
     @flatbuf_remote_service_method(arg_type=Monster.Monster,return_type=Monster.Monster)
     def scareWith(self,monster):
-        print("scareWidth called with monster name="+monster.Name())
+        print("scareWidth called with monster name="+str(monster.Name(),'utf-8'))
         return self.createMonster()
     
 if __name__ == '__main__':
