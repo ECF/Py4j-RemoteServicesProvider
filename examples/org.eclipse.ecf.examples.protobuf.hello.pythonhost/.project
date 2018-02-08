@@ -3,6 +3,7 @@
 	<name>org.eclipse.ecf.examples.protobuf.hello.pythonhost</name>
 	<comment></comment>
 	<projects>
+		<project>osgiservicebridge</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
