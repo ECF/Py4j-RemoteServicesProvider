@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ECF Python Protobuf API
 Bundle-SymbolicName: org.eclipse.ecf.python.protobuf
 Bundle-Activator: org.eclipse.ecf.internal.python.protobuf.Activator
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
