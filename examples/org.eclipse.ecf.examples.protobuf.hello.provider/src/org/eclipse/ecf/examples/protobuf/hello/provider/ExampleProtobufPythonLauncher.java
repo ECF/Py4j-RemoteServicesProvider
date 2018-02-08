@@ -40,12 +40,6 @@ public class ExampleProtobufPythonLauncher extends ProtobufPythonLauncher implem
 	@Activate
 	protected void activate(BundleContext context) throws Exception {
 		super.activate(context);
-
-		// this.pythonWorkingDirectory = Paths.get(".").toFile();
-		// XXX testing with non-installed osgiservicebridge code
-		this.pythonWorkingDirectory = new File(
-				"C:\\Users\\slewis\\git\\Py4j-RemoteServicesProvider\\python\\osgiservicebridge\\src");
-		// launch python immediately
 		launch(null,null);
 	}
 	
