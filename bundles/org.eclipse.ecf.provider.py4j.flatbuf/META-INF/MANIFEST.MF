@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Google Flatbuf Py4j Provider
 Bundle-SymbolicName: org.eclipse.ecf.provider.py4j.flatbuf
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.100.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: com.google.flatbuffers,
@@ -29,4 +29,4 @@ Require-Bundle: org.eclipse.equinox.common,
  org.eclipse.ecf.remoteservice.asyncproxy;bundle-version="2.0.100"
 Export-Package: org.eclipse.ecf.provider.py4j.flatbuf;version="1.0.0"
 DynamicImport-Package: *
-Provide-Capability: osgi.remoteserviceadmin.distribution; configs:List<String>="ecf.py4j.consumer.fb"; version:Version=1.1
+Provide-Capability: osgi.remoteserviceadmin.distribution; configs:List<String>="ecf.py4j.host.fb,ecf.py4j.consumer.fb"; version:Version=1.1
