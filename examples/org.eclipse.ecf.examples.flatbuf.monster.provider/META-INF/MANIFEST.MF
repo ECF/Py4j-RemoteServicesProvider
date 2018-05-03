@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ECF Flatbuf Monster Provider
 Bundle-SymbolicName: org.eclipse.ecf.examples.flatbuf.monster.provider
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 1.1.1.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/org.eclipse.ecf.examples.flatbuf.monster.provider.ExampleFlatbufPy4jProvider.xml
@@ -16,3 +16,4 @@ Import-Package: org.eclipse.ecf.core.identity,
  org.osgi.service.component.annotations;resolution:=optional,
  org.osgi.service.remoteserviceadmin;version="1.1.0"
 DynamicImport-Package: *
+Automatic-Module-Name: org.eclipse.ecf.examples.flatbuf.monster.provider

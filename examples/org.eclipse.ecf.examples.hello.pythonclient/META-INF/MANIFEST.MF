@@ -2,4 +2,5 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pythonclient
 Bundle-SymbolicName: org.eclipse.ecf.examples.hello.pythonclient
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
+Automatic-Module-Name: org.eclipse.ecf.examples.hello.pythonclient

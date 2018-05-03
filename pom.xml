@@ -122,6 +122,9 @@
     <module>examples/org.eclipse.ecf.examples.flatbuf.monster.provider</module>
     <module>examples/org.eclipse.ecf.examples.importhook.main</module>
     <module>examples/org.eclipse.ecf.examples.importhook.module</module>
+    <module>
+    	examples/org.eclipse.ecf.examples.protobuf.hello.pythonhost
+    </module>
   </modules>
 
   <build>

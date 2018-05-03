@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Consumer
 Bundle-SymbolicName: org.eclipse.ecf.examples.protobuf.hello.consumer
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 1.1.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.google.protobuf;version="3.2.0",
  org.eclipse.ecf.examples.protobuf.hello,
@@ -11,3 +11,4 @@ Import-Package: com.google.protobuf;version="3.2.0",
  py4j;version="0.10.6"
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.consumer.HelloConsumer.xml
+Automatic-Module-Name: org.eclipse.ecf.examples.protobuf.hello.consumer

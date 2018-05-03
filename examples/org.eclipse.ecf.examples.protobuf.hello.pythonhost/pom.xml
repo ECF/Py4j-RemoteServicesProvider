@@ -8,7 +8,7 @@
    <version>1.0.0-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
-  <artifactId>org.eclipse.ecf.examples.hello</artifactId>
+  <artifactId>org.eclipse.ecf.examples.protobuf.hello.pythonhost</artifactId>
   <packaging>eclipse-plugin</packaging>
   <version>1.0.1-SNAPSHOT</version>
 </project>

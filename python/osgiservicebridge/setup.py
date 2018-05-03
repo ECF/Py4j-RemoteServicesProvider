@@ -22,7 +22,7 @@ exec(compile(open(VERSION_PATH).read(),
      VERSION_PATH, "exec"))
 VERSION = __version__  # noqa
 
-JAVA_FILE='java/osgiservicebridge-java-bundles_2.7.1.zip'
+JAVA_FILE='java/osgiservicebridge-java-bundles_2.7.2.zip'
 
 setup(
     name='osgiservicebridge',
@@ -70,6 +70,7 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         "Programming Language :: Java",
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Object Brokering",

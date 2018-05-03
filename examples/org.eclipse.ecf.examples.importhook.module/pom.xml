@@ -10,4 +10,5 @@
   </parent>
   <artifactId>org.eclipse.ecf.examples.importhook.module</artifactId>
   <packaging>eclipse-plugin</packaging>
-  </project>
+  <version>1.0.1-SNAPSHOT</version>
+</project>

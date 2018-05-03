@@ -2,11 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Flatbuf Direct Remote Services Provider
 Bundle-SymbolicName: org.eclipse.ecf.provider.direct.flatbuf
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.flatbuffers;version="1.0.0",
+ org.eclipse.ecf.core;version="3.0.0",
  org.eclipse.ecf.core.identity;version="3.3.0",
  org.eclipse.ecf.core.util;version="3.4.0",
  org.eclipse.ecf.provider.direct;version="1.0.0",
@@ -18,3 +19,4 @@ Import-Package: com.google.flatbuffers;version="1.0.0",
  org.slf4j;version="1.7.2"
 Require-Bundle: org.eclipse.equinox.common;bundle-version="3.9.0"
 Export-Package: org.eclipse.ecf.provider.direct.flatbuf;version="1.0.0"
+Automatic-Module-Name: org.eclipse.ecf.provider.direct.flatbuf
