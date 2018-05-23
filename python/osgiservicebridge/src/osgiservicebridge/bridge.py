@@ -149,8 +149,9 @@ def prepare_java_props(java_props):
     :return: dictionary of properties with same (string) keys and values converted via prepare_java_prim
     '''
     result = {}
-    for entry in java_props.entrySet():
-        result[entry.getKey()] = prepare_java_prim(entry.getValue())
+    keys = [str(k) for k in java_props.keySet()]
+    for key in keys:
+        result[key] = prepare_java_prim(java_props.get(key))
     return result
 
 class Py4jServiceBridgeEventListener(object):
