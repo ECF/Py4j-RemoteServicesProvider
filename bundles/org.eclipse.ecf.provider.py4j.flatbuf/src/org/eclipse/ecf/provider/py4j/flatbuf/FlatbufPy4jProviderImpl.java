@@ -40,7 +40,7 @@ import com.google.flatbuffers.Table;
 public class FlatbufPy4jProviderImpl extends Py4jProviderImpl
 		implements RemoteServiceAdminListener, Py4jProvider, DirectProvider {
 
-	protected static final String[] py4jFlatbufSupportedIntents = { "passByValue", "exactlyOnce", "ordered" };
+	protected static final String[] py4jFlatbufSupportedIntents = { "passByValue", "exactlyOnce", "ordered", "py4j", "flatbuf" };
 
 	@Reference
 	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
