@@ -6,7 +6,8 @@ Bundle-Version: 1.0.1.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl.xml
+Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl.xml,
+ OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl2.xml
 Import-Package: com.google.protobuf;version="3.3.1",
  org.eclipse.ecf.examples.protobuf.hello,
  org.eclipse.ecf.provider.py4j,

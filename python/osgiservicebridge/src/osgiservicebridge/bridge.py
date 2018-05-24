@@ -26,12 +26,14 @@ __docformat__ = "restructuredtext en"
 from logging import getLogger as getLibLogger
 
 _logger = getLibLogger(__name__)
-
+_timing = getLibLogger("timing."+__name__)
 # ------------------------------------------------------------------------------
 
 from threading import RLock, Condition
 import sys
 import importlib
+import time
+
 
 _done = False
 __condition = Condition()
@@ -892,3 +894,65 @@ class OSGIPythonModuleLoader(object):
         except Exception as e:
             _logger.error('error in Py4jOSGILoader.exec_module.exec code='+str(code))
             raise e
+
+class JavaServiceMethod(object):
+    
+    def __init__(self,proxy,name):
+        self._java_proxy = proxy
+        self._methodname = name
+       
+    def __call__(self,*args):
+        jresult = None
+        t0 = time.time()
+        try:
+            jresult = getattr(self._java_proxy,self._methodname)(args)
+        except Exception as e:
+            _logger.exception("Exception making remote java call to methodname="+self._methodname)
+            raise e
+        _timing.debug("protobuf.exec;time="+str(1000*(time.time()-t0))+"ms")
+        return jresult
+
+JAVA_OBJECT_METHODS = [ 'equals', 'hashCode', 'wait', 'notify', 'notifyAll']
+
+def get_interface_methods(java_interface_class, proxy):
+    result_methods = []
+    try:
+        jmethods = java_interface_class.getMethods()
+        for jmethod in jmethods:
+            jmethod_name = jmethod.getName()
+            if (jmethod_name not in JAVA_OBJECT_METHODS):
+                result_methods.append(JavaServiceMethod(proxy,jmethod_name))
+        return result_methods
+    except Exception as e:
+        _logger.exception('Could not get interface methods from java_interface_class='+str(java_interface_class))
+        raise e
+
+def get_interfaces_methods(jvm, interfaces, proxy):
+    result = {}
+    for interface in interfaces:
+        interface_class = jvm.java.lang.Class.forName(interface)
+        result[interface] = get_interface_methods(interface_class, proxy)
+    return result
+
+class JavaServiceProxy(object):
+    
+    def __init__(self, jvm, interfaces, proxy):
+        self._interfaces = get_interfaces_methods(jvm,interfaces,proxy)
+        
+    def _find_java_method(self,name):
+        for method_list in self._interfaces.values():
+            for method in method_list:
+                if name  == method._methodname:
+                    return method
+        return None
+    
+    def __getattr__(self, name):
+        if name == "__call__":
+            raise AttributeError
+            
+        java_method = self._find_java_method(name)
+        if not java_method:
+            raise AttributeError
+        
+        return java_method
+
