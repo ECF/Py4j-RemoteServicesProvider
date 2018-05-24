@@ -149,8 +149,10 @@ def prepare_java_props(java_props):
     :return: dictionary of properties with same (string) keys and values converted via prepare_java_prim
     '''
     result = {}
-    keys = [str(k) for k in java_props.keySet()]
-    for key in keys:
+    java_set = java_props.keySet()
+    java_array = java_set.toArray()
+    for i in range(int(java_set.size())):
+        key = str(java_array[i])
         result[key] = prepare_java_prim(java_props.get(key))
     return result
 
@@ -631,61 +633,53 @@ class Py4jServiceBridge(object):
     
     # Methods called by java  
     def _import_service_from_java(self,proxy,props):
-        try:
-            endpointid = None
             local_props = prepare_java_props(props)
-            try:
-                endpointid = local_props[ENDPOINT_ID]
-            except KeyError:
-                pass
+            endpointid = local_props.get(ENDPOINT_ID,None)
             if endpointid:
                 endpoint = (proxy,local_props)
                 with self._imported_endpoints_lock:
                     self._imported_endpoints[endpointid] = endpoint
-            if self._service_listener and endpointid:
-                try:
-                    self._service_listener.service_imported(self, endpointid, endpoint[0], endpoint[1])
-                except Exception as e:
-                    _logger.error('__import_service_from_java listener threw exception endpointid='+endpointid, e)
-        except Exception as e:
-            _logger.error(e)
-            raise e
+                if self._service_listener:
+                    try:
+                        self._service_listener.service_imported(self, endpointid, endpoint[0], endpoint[1])
+                    except:
+                        _logger.error('__import_service_from_java listener threw exception endpointid='+endpointid)
 
     def _modify_service_from_java(self,newprops):
         newendpoint = None
         python_newprops = self._prepare_props(newprops)
-        try:
-            endpointid = python_newprops[ENDPOINT_ID]
+        endpointid = python_newprops.get(ENDPOINT_ID,None)
+        if endpointid:
             with self._imported_endpoints_lock:
-                endpoint = self._imported_endpoints[endpointid]
-                self._imported_endpoints[endpointid] = (endpoint[0],python_newprops)
-        except KeyError:
-            pass
-        if self._service_listener and newendpoint:
-            try:
-                self._service_listener.service_modified(self, endpointid, newendpoint[0], newendpoint[1])
-            except Exception as e:
-                _logger.error('__modify_service_from_java listener threw exception endpointid='+endpointid, e)
+                oldendpoint = self._imported_endpoints[endpointid]
+                newendpoint = (oldendpoint[0],python_newprops)
+                self._imported_endpoints[endpointid] = newendpoint
+            if self._service_listener:
+                try:
+                    self._service_listener.service_modified(self, endpointid, newendpoint[0], newendpoint[1])
+                except:
+                    _logger.error('__modify_service_from_java listener threw exception endpointid='+endpointid)
    
     def _unimport_service_from_java(self,props):
         endpoint = None
-        endpointid = None
         local_props = prepare_java_props(props)
-        try:
-            endpointid = local_props[ENDPOINT_ID]
+        endpointid = local_props.get(ENDPOINT_ID,None)
+        if endpointid:
             with self._imported_endpoints_lock:
                 endpoint = self._imported_endpoints.pop(endpointid, None)
-        except KeyError:
-            pass
         if self._service_listener and endpoint:
             try:
                 self._service_listener.service_unimported(self, endpointid, endpoint[0], endpoint[1])
-            except Exception as e:
-                _logger.error('__unimport_service_from_java listener threw exception endpointid='+endpointid, e)
+            except:
+                _logger.error('__unimport_service_from_java listener threw exception endpointid='+endpointid)
                 
-    def _remove_export_endpoint(self,endpointid):
+    def remove_export_endpoint(self,endpointid):
         with self._exported_endpoints_lock:
             return self._exported_endpoints.pop(endpointid, None)
+
+    def remove_import_endpoint(self,endpointid):
+        with self._imported_endpoints_lock:
+            return self._imported_endpoints.pop(endpointid, None)
         
     def _convert_string_list(self,l):
         llength = len(l)
