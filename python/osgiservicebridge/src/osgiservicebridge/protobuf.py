@@ -174,7 +174,7 @@ def bytes_to_pmessage(pmessage_class, message_bytes):
         _logger.exception('bytes_to_pmessage could not parse message from bytes. message_instance=%' % (pmessage_instance))
         raise e
     t1 = time.time()
-    _timing.debug("protobuf.bytes_to_pmessage;diff="+str(1000*(t1-t0))+"ms")
+    _timing.debug("protobuf.bytes_to_pmessage;diff={0}".format(1000*(t1-t0)))
     return pmessage_instance
 
 def bytes_to_jmessage(jmessage_class, message_bytes):
@@ -199,7 +199,7 @@ def bytes_to_jmessage(jmessage_class, message_bytes):
         _logger.exception('bytes_to_jmessage could not parse message from bytes.  message_instance=%' % (jmessage_instance))
         raise e
     t1 = time.time()
-    _timing.debug("protobuf.bytes_to_jmessage;ddiff="+str(1000*(t1-t0))+"ms")
+    _timing.debug("protobuf.bytes_to_jmessage;diff={0}".format(1000*(t1-t0)))
     return jmessage_instance
 
 def pmessage_to_bytes(pmessage):
@@ -215,7 +215,7 @@ def pmessage_to_bytes(pmessage):
         if PY2:
             pmessage_bytes = bytearray(pmessage_bytes)
     t1 = time.time()
-    _timing.debug("protobuf.pmessage_to_bytes;diff="+str(1000*(t1-t0))+"ms")
+    _timing.debug("protobuf.pmessage_to_bytes;diff={0}".format(1000*(t1-t0)))
     return pmessage_bytes
 
 def jmessage_to_bytes(jmessage):
@@ -231,7 +231,7 @@ def jmessage_to_bytes(jmessage):
         if PY2:
             jmessage_bytes = bytearray(jmessage_bytes)
     t1 = time.time()
-    _timing.debug("protobuf.jmessage_to_bytes;diff="+str(1000*(t1-t0))+"ms")
+    _timing.debug("protobuf.jmessage_to_bytes;diff={0}".format(1000*(t1-t0)))
     return jmessage_bytes
 
 def pmessage_to_jmessage(jmessage_class, pmessage):
@@ -336,7 +336,7 @@ def protobuf_remote_service_method(arg_type,return_type=None):
                 logged_wrapped_exception('Remote method invoke failed')
                 raise e
             t1 = time.time()
-            _timing.debug("protobuf.exec;time="+str(1000*(t1-t0))+"ms")
+            _timing.debug("protobuf.exec;time={0}".format(1000*(t1-t0)))
             if not func._return_type is None:
                 isinstance(respb,func._return_type)
             return pmessage_to_bytes(respb)
@@ -364,7 +364,7 @@ def get_interface_methods(java_interface_class, proxy):
                 result_methods.append(ProtobufServiceMethod(proxy,jmethod_name,java_parameter_types,python_return_type))
         return result_methods
     except Exception as e:
-        _logger.exception('Could not get interface methods from java_interface_class='+str(java_interface_class))
+        _logger.exception('Could not get interface methods from java_interface_class={0}'.format(java_interface_class))
         raise e
     
 def get_interfaces_methods(jvm, interfaces, proxy):
@@ -395,10 +395,10 @@ class ProtobufServiceMethod(object):
         try:
             jresult = getattr(self._java_proxy,self._methodname)(jmessage)
         except Exception as e:
-            _logger.exception("Exception making remote java call to methodname="+self._methodname)
+            _logger.exception("Exception making remote java call to methodname={0}".format(self._methodname))
             raise e
         t1 = time.time()
-        _timing.debug("protobuf.exec;time="+str(1000*(t1-t0))+"ms")
+        _timing.debug("protobuf.exec;time={0}".format(1000*(t1-t0)))
         if not jresult:
             return None
         # convert java result to bytes
@@ -410,8 +410,10 @@ class ProtobufServiceMethod(object):
 
 class ProtobufServiceProxy(object):
     
-    def __init__(self, jvm, interfaces, proxy):
+    def __init__(self, jvm, interfaces, proxy, proxyid=None):
         self._interfaces = get_interfaces_methods(jvm,interfaces,proxy)
+        self._proxy = proxy
+        self._proxyid = proxyid
         
     def _find_java_method(self,name):
         for method_list in self._interfaces.values():
@@ -422,14 +424,18 @@ class ProtobufServiceProxy(object):
     
     def __getattr__(self, name):
         if name == "__call__":
-            raise AttributeError
-            
+            raise AttributeError("Cannot call method '__call__' on proxy")
+        # find java_method (JavaServiceMethod) with same name
         java_method = self._find_java_method(name)
+        # if not found, we throw
         if not java_method:
-            raise AttributeError
-        
+            raise AttributeError("'{0}' not found on {1};specs={2}".format(name,self.__str__(),[intf for intf in self._interfaces.keys()]))
+        # else return it
         return java_method
 
+    def __str__(self):
+        return 'ProtobufServiceProxy;{0}'.format(str(self._proxy) if not self._proxyid else self._proxyid)
+    
 class ProtobufServiceRegistry(Py4jServiceBridgeEventListener,JavaRemoteServiceRegistry):
     
     def __init__(self):
@@ -489,7 +495,7 @@ class PythonServiceExporter(object):
                 module_ = importlib.import_module(module_name)
                 sys.modules[module_name] = module_
         except (ImportError, IOError) as ex:
-            _logger.exception('Could not load module='+module_name,ex)
+            _logger.exception('Could not load module={0}'.format(module_name,ex))
             return None
         return module_
     
@@ -510,12 +516,10 @@ class PythonServiceExporter(object):
         try:
             module = self._load_module(export_request.module_name)
             if not module:
-                return self._create_error_export_response('Cannot get module for module_name='+\
-                                                          str(export_request.module_name))
+                return self._create_error_export_response('Cannot get module for module_name={0}'.format(export_request.module_name))
             clazz = self._get_class_from_module(module, export_request.class_name)
             if not clazz:
-                return self._create_error_export_response('Cannot get class for class_name='+\
-                                                          str(export_request.class_name))
+                return self._create_error_export_response('Cannot get class for class_name={0}'.format(export_request.class_name))
             args = export_request.creation_args
             if not args or len(args) <= 0:
                 inst = clazz()
@@ -524,7 +528,7 @@ class PythonServiceExporter(object):
             export_id = self._bridge.export(inst,export_request.overriding_export_props)
             return self._create_success_export_response(export_id)
         except Exception as ex:
-            _logger.exception('Could not create and export with request='+str(export_request))
+            _logger.exception('Could not create and export with request={0}'.format(export_request))
             return self._create_error_export_response(str(ex))
         
     @protobuf_remote_service_method(arg_type=UnexportRequest,return_type=UnexportResponse)

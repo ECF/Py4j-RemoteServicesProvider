@@ -346,7 +346,7 @@ class Py4jServiceBridge(object):
             self.__export(svc,export_props)
         except Exception as e:
             # if it fails, remove from exported endpoints
-            self._remove_export_endpoint(endpointid)
+            self.remove_export_endpoint(endpointid)
             raise e
         return endpointid
 
@@ -396,8 +396,7 @@ class Py4jServiceBridge(object):
         with self._lock:
             self._raise_not_connected()
         if endpointid:
-            with self._exported_endpoints_lock:
-                endpoint = self._remove_export_endpoint(endpointid)
+            endpoint = self.remove_export_endpoint(endpointid)
         if endpoint:
             try:
                 self.__unexport(endpoint[1])
@@ -437,10 +436,7 @@ class Py4jServiceBridge(object):
         service, element 1 is the dictionary of properties.
         '''
         with self._imported_endpoints_lock:
-            try:
-                return self._imported_endpoints[endpointid]
-            except KeyError:
-                return None
+            return self._imported_endpoints.get(endpointid,None)
     
     def get_export_endpoint(self,endpointid):
         '''
@@ -451,10 +447,7 @@ class Py4jServiceBridge(object):
         service, element 1 is the dictionary of properties.
         '''
         with self._exported_endpoints_lock:
-            try:
-                return self._exported_endpoints[endpointid]
-            except KeyError:
-                return None
+            return self._exported_endpoints.get(endpointid,None)
             
     def get_export_endpoint_for_rsid(self,rsId):  
         with self._exported_endpoints_lock:     
@@ -590,7 +583,6 @@ class Py4jServiceBridge(object):
             ecfprops = osgiservicebridge.get_ecf_props(myid, PY4J_NAMESPACE, rsvc_id)
             return osgiservicebridge.merge_dicts(osgiprops,ecfprops)
 
-
     def _started(self, sender, **kwargs):
         if self._connection_listener:
             self._connection_listener.started(kwargs["server"])
@@ -615,20 +607,15 @@ class Py4jServiceBridge(object):
         if self._connection_listener:
             self._connection_listener.pre_shutdown(kwargs["server"])
 
-    
     def _post_shutdown(self, sender, **kwargs):
         with self._imported_endpoints_lock:
             for endpointid in self._imported_endpoints.keys():
-                endpoint = None
-                try:
-                    endpoint = self._imported_endpoints[endpointid]
-                except KeyError:
-                    pass
+                endpoint = self._imported_endpoints.get(endpointid,None)
                 if self._service_listener and endpoint:
                     try:
                         self._service_listener.service_unimported(self, endpointid, endpoint[0], endpoint[1])
-                    except Exception as e:
-                        _logger.error('_unimport_service_from_java listener threw exception endpointid='+endpointid, e)
+                    except:
+                        _logger.exception('_unimport_service_from_java listener threw exception endpointid={0}'.format(endpointid))
         self.disconnect();
         if self._connection_listener:
             self._connection_listener.post_shutdown(kwargs["server"])
@@ -645,7 +632,7 @@ class Py4jServiceBridge(object):
                     try:
                         self._service_listener.service_imported(self, endpointid, endpoint[0], endpoint[1])
                     except:
-                        _logger.error('__import_service_from_java listener threw exception endpointid='+endpointid)
+                        _logger.exception('__import_service_from_java listener threw exception endpointid={0}'.format(endpointid))
 
     def _modify_service_from_java(self,newprops):
         newendpoint = None
@@ -660,20 +647,19 @@ class Py4jServiceBridge(object):
                 try:
                     self._service_listener.service_modified(self, endpointid, newendpoint[0], newendpoint[1])
                 except:
-                    _logger.error('__modify_service_from_java listener threw exception endpointid='+endpointid)
+                    _logger.exception('__modify_service_from_java listener threw exception endpointid={0}'.format(endpointid))
    
     def _unimport_service_from_java(self,props):
         endpoint = None
         local_props = prepare_java_props(props)
         endpointid = local_props.get(ENDPOINT_ID,None)
         if endpointid:
-            with self._imported_endpoints_lock:
-                endpoint = self._imported_endpoints.pop(endpointid, None)
+            endpoint = self.remove_import_endpoint(endpointid)
         if self._service_listener and endpoint:
             try:
                 self._service_listener.service_unimported(self, endpointid, endpoint[0], endpoint[1])
             except:
-                _logger.error('__unimport_service_from_java listener threw exception endpointid='+endpointid)
+                _logger.exception('__unimport_service_from_java listener threw exception endpointid={0}'.format(endpointid))
                 
     def remove_export_endpoint(self,endpointid):
         with self._exported_endpoints_lock:
@@ -851,8 +837,8 @@ class OSGIPythonModuleFinder(object):
         pckg = False
         try:
             python_type = self._bridge.get_module_type(self._path_entry + modname)
-        except Exception as e:
-            _logger.error('error in Py4jFinder.find_spec._bridge.get_module_type uri='+self._path_entry + modname,e)
+        except:
+            _logger.exception('error in Py4jFinder.find_spec._bridge.get_module_type uri={0}'.format(self._path_entry + modname))
             return None
         if python_type == 0:
             return None
@@ -885,14 +871,14 @@ class OSGIPythonModuleLoader(object):
         try:
             code = self._bridge.get_module_code(self._path_entry + modname, self._ispackage)
         except Exception as e:
-            _logger.error('error in Py4jOSGILoader.exec_module._bridge.get_module_code uri='+self._path_entry + modname,e)
+            _logger.exception('error in Py4jOSGILoader.exec_module._bridge.get_module_code uri={0}'.format(self._path_entry + modname))
             raise e
         if not code:
             code = ''
         try:
             exec(compile(code+'\n', module.__spec__.origin, 'exec'), module.__dict__, module.__dict__)
-        except Exception as e:
-            _logger.error('error in Py4jOSGILoader.exec_module.exec code='+str(code))
+        except:
+            _logger.exception('error in Py4jOSGILoader.exec_module.exec code={0}'.format(code))
             raise e
 
 class JavaServiceMethod(object):
@@ -902,17 +888,16 @@ class JavaServiceMethod(object):
         self._methodname = name
        
     def __call__(self,*args):
-        jresult = None
         t0 = time.time()
         try:
-            jresult = getattr(self._java_proxy,self._methodname)(args)
+            jresult = getattr(self._java_proxy,self._methodname)(*args)
         except Exception as e:
-            _logger.exception("Exception making remote java call to methodname="+self._methodname)
+            _logger.exception("Exception making remote java call to methodname={0}".format(self._methodname))
             raise e
-        _timing.debug("protobuf.exec;time="+str(1000*(time.time()-t0))+"ms")
+        _timing.debug("protobuf.exec;time={0}ms".format(1000*(time.time()-t0)))
         return jresult
 
-JAVA_OBJECT_METHODS = [ 'equals', 'hashCode', 'wait', 'notify', 'notifyAll']
+JAVA_OBJECT_METHODS = [ 'equals', 'hashCode', 'wait', 'notify', 'notifyAll', 'toString']
 
 def get_interface_methods(java_interface_class, proxy):
     result_methods = []
@@ -924,7 +909,7 @@ def get_interface_methods(java_interface_class, proxy):
                 result_methods.append(JavaServiceMethod(proxy,jmethod_name))
         return result_methods
     except Exception as e:
-        _logger.exception('Could not get interface methods from java_interface_class='+str(java_interface_class))
+        _logger.exception('Could not get interface methods from java_interface_class={0}'.format(java_interface_class))
         raise e
 
 def get_interfaces_methods(jvm, interfaces, proxy):
@@ -936,8 +921,10 @@ def get_interfaces_methods(jvm, interfaces, proxy):
 
 class JavaServiceProxy(object):
     
-    def __init__(self, jvm, interfaces, proxy):
+    def __init__(self, jvm, interfaces, proxy, proxyid=None):
         self._interfaces = get_interfaces_methods(jvm,interfaces,proxy)
+        self._proxy = proxy
+        self._proxyid = proxyid
         
     def _find_java_method(self,name):
         for method_list in self._interfaces.values():
@@ -948,11 +935,14 @@ class JavaServiceProxy(object):
     
     def __getattr__(self, name):
         if name == "__call__":
-            raise AttributeError
-            
+            raise AttributeError("Cannot call method '__call__' on proxy")
+        # find java_method (JavaServiceMethod) with same name
         java_method = self._find_java_method(name)
+        # if not found, we throw
         if not java_method:
-            raise AttributeError
-        
+            raise AttributeError("'{0}' not found on {1};specs={2}".format(name,self.__str__(),[intf for intf in self._interfaces.keys()]))
+        # else return it
         return java_method
 
+    def __str__(self):
+        return 'JavaServiceProxy;{0}'.format(str(self._proxy) if not self._proxyid else self._proxyid)

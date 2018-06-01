@@ -148,10 +148,7 @@ def get_prop_value(name, props, default=None):
     '''
     if not props:
         return default
-    try:
-        return props[name]
-    except KeyError:
-        return default
+    return props.get(name,default)
 
 def set_prop_if_null(name, props, ifnull):     
     '''
