@@ -881,48 +881,131 @@ class OSGIPythonModuleLoader(object):
             _logger.exception('error in Py4jOSGILoader.exec_module.exec code={0}'.format(code))
             raise e
 
+JAVA_OBJECT_METHODS = [ 'equals', 'hashCode', 'wait', 'notify', 'notifyAll', 'toString']
+JAVA_NONASYNC_RETURN_TYPES = { 'java.lang.Object', 'java.lang.String', 'java.lang.Integer', 'java.lang.Long', 'java.lang.Boolean', 'java.lang.Short', 'java.lang.Byte',
+                              'java.lang.Double', 'java.lang.Throwable','java.lang.Enum','java.lang.Float'}
+FUTURE_ASYNC_TYPE = 1
+COMPLETION_STAGE_ASYNC_TYPE = 2
+PROMISE_ASYNC_TYPE = 3
+IFUTURE_ASYNC_TYPE = 4
+
+COMPLETABLE_FUTURE_CLASS_NAME = 'java.util.concurrent.CompletableFuture'
+COMPLETION_STAGE_INTF_NAME = 'java.util.concurrent.CompletionStage'
+FUTURE_INTF_NAME = 'java.util.concurrent.Future'
+IFUTURE_INTF_NAME = 'org.eclipse.equinox.concurrent.future.IFuture'
+PROMISE_CLASS_NAME = 'org.osgi.util.promise.Promise'
+
+ASYNC_CLASS_NAMES = {COMPLETABLE_FUTURE_CLASS_NAME:FUTURE_ASYNC_TYPE,PROMISE_CLASS_NAME:PROMISE_ASYNC_TYPE}
+ASYNC_INTF_NAMES = {COMPLETION_STAGE_INTF_NAME:COMPLETION_STAGE_ASYNC_TYPE,FUTURE_INTF_NAME:FUTURE_ASYNC_TYPE,IFUTURE_INTF_NAME:IFUTURE_ASYNC_TYPE}
+
+def get_jasynctype(jclass,executor,timeout,timeunit):
+    jclassname = jclass.getName()
+    if not executor or jclassname in JAVA_NONASYNC_RETURN_TYPES:
+        return None
+    async_type = None
+    if jclassname in ASYNC_CLASS_NAMES.keys():
+        async_type = ASYNC_CLASS_NAMES[jclassname]
+    else:
+        for intf in jclass.getInterfaces():
+            intf_name = intf.getName()
+            if intf_name in ASYNC_INTF_NAMES:
+                async_type = ASYNC_INTF_NAMES[intf_name]
+                break
+    # If found on clazz or interfaces, return found type        
+    if async_type:
+        return JavaAsyncMethodType(executor,async_type,timeout,timeunit)
+    super_clazz = jclass.getSuperclass()
+    if super_clazz:
+        return get_jasynctype(super_clazz)
+
+def return_jasyncresult(result_func,async_type,timeout,timeunit,jasync):
+    jresult = None
+    if not async_type:
+        jresult = jasync
+    elif async_type == FUTURE_ASYNC_TYPE:
+        if timeunit:
+            jresult = jasync.get(timeout,timeunit)
+        else:
+            jresult = jasync.get()
+    elif async_type == COMPLETION_STAGE_ASYNC_TYPE:
+        # call recursively after calling jresult.toComple
+        jresult = jasync(FUTURE_ASYNC_TYPE, timeout, timeunit, jresult.toCompletableFuture())
+    elif async_type == PROMISE_ASYNC_TYPE:
+        jresult = jasync.getValue()
+    elif async_type == IFUTURE_ASYNC_TYPE:
+        jresult = jasync.get()
+    if result_func:
+        return result_func(jresult)
+    return jresult
+    
+class JavaAsyncMethodType():
+    
+    def __init__(self,executor,async_type,timeout=0,timeunit=None):
+        self._executor = executor
+        self._async_type = async_type
+        self._timeout = timeout
+        self._timeunit = timeunit
+    
+    def _invoke_return_jasync_result(self, result_fn, invoke_fn, *args):
+        timeout = self._timeout
+        if timeout == None:
+            timeout = 0
+        # invoke future and wait for timeout to get java result
+        jasyncresult = self._executor.submit(invoke_fn,*args).result(timeout)
+        # Now return return jasyncresult
+        return return_jasyncresult(result_fn, self._async_type, self._timeout, self._timeunit, jasyncresult)
+                                          
+    def _invoke_return_future(self,invoke_fn,call_fn,*args):
+        # submit self._invoke_return_jasync_result and return future
+        return self._executor.submit(self._invoke_return_jasync_result, invoke_fn, call_fn, *args)
+
 class JavaServiceMethod(object):
     
-    def __init__(self,proxy,name):
+    def __init__(self,proxy,method_name,java_async_method_type=None):
         self._java_proxy = proxy
-        self._methodname = name
-       
-    def __call__(self,*args):
+        self._methodname = method_name
+        self._jasync_methtype = java_async_method_type
+        
+    def _call_sync(self,*args):
         t0 = time.time()
-        try:
-            jresult = getattr(self._java_proxy,self._methodname)(*args)
-        except Exception as e:
-            _logger.exception("Exception making remote java call to methodname={0}".format(self._methodname))
-            raise e
-        _timing.debug("protobuf.exec;time={0}ms".format(1000*(time.time()-t0)))
+        jresult = getattr(self._java_proxy,self._methodname)(*args)
+        _timing.debug("java.exec;time={0}ms".format(1000*(time.time()-t0)))
         return jresult
+    
+    def _process_result(self,jresult):
+        # simply return the java result with no mofifiction
+        # subclasses may override to process java result before returning (e.g. protobuf)
+        return jresult
+    
+    def __call__(self,*args):
+        if self._jasync_methtype:
+            # return future who's result will be
+            # jasynctype = self._call_sync
+            # jresult = jasynctype.get() <- based upon type of java async...e.g. CompletableFuture,CompletionStage,
+            # Future, or Promise
+            # return the value returned from _process_result(jresult)
+            return self._jasync_methtype._invoke_return_future(self._process_result,self._call_sync,*args)
+        else:
+            # call everything synchronously in this thread
+            return self._process_result(self._call_sync(*args))
 
-JAVA_OBJECT_METHODS = [ 'equals', 'hashCode', 'wait', 'notify', 'notifyAll', 'toString']
-
-def get_interface_methods(java_interface_class, proxy):
-    result_methods = []
-    try:
-        jmethods = java_interface_class.getMethods()
-        for jmethod in jmethods:
-            jmethod_name = jmethod.getName()
-            if (jmethod_name not in JAVA_OBJECT_METHODS):
-                result_methods.append(JavaServiceMethod(proxy,jmethod_name))
-        return result_methods
-    except Exception as e:
-        _logger.exception('Could not get interface methods from java_interface_class={0}'.format(java_interface_class))
-        raise e
-
-def get_interfaces_methods(jvm, interfaces, proxy):
-    result = {}
-    for interface in interfaces:
-        interface_class = jvm.java.lang.Class.forName(interface)
-        result[interface] = get_interface_methods(interface_class, proxy)
-    return result
+def get_interface_methods(jmethods, proxy, executor = None, timeout = None, timeunit = None):
+    return [JavaServiceMethod(proxy,
+                jmethod.getName(),
+                get_jasynctype(jmethod.getReturnType(),
+                                    executor,
+                                    timeout,
+                                    timeunit)) for jmethod in jmethods if not jmethod.getName() in JAVA_OBJECT_METHODS ]
 
 class JavaServiceProxy(object):
     
-    def __init__(self, jvm, interfaces, proxy, proxyid=None):
-        self._interfaces = get_interfaces_methods(jvm,interfaces,proxy)
+    def __init__(self, jvm, interfaces, proxy, proxyid=None, timeout=30, executor=None):
+        self._interfaces = { interface:
+                            get_interface_methods(jvm.java.lang.Class.forName(interface).getMethods(), 
+                                                  proxy, 
+                                                  executor,
+                                                  timeout, 
+                                                  jvm.java.util.concurrent.TimeUnit.SECONDS) for interface in interfaces}
         self._proxy = proxy
         self._proxyid = proxyid
         

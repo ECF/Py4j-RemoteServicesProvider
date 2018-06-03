@@ -27,7 +27,8 @@ from google.protobuf.message import Message
 from google.protobuf.descriptor_pb2 import DescriptorProto
 from google.protobuf.descriptor import MakeDescriptor
 from google.protobuf.reflection import MakeClass
-from osgiservicebridge.bridge import JavaRemoteServiceRegistry, Py4jServiceBridgeEventListener
+from osgiservicebridge.bridge import JavaRemoteServiceRegistry, Py4jServiceBridgeEventListener,\
+    JavaServiceMethod, get_jasynctype, JavaServiceProxy, JAVA_OBJECT_METHODS
 
 from osgiservicebridge import ECF_SERVICE_EXPORTED_ASYNC_INTERFACES
 
@@ -351,88 +352,63 @@ def get_python_return_type(java_return_class):
     pdesc_proto.MergeFromString(jdesc_bytes)
     return MakeClass(MakeDescriptor(pdesc_proto))
     
-def get_interface_methods(java_interface_class, proxy):
-    result_methods = []
-    try:
-        jmethods = java_interface_class.getMethods()
-        for jmethod in jmethods:
-            jmethod_name = jmethod.getName()
-            if (jmethod_name not in JAVA_OBJECT_METHODS):
-                java_parameter_types = jmethod.getParameterTypes()
-                java_return_class = jmethod.getReturnType()
-                python_return_type = get_python_return_type(java_return_class)
-                result_methods.append(ProtobufServiceMethod(proxy,jmethod_name,java_parameter_types,python_return_type))
-        return result_methods
-    except Exception as e:
-        _logger.exception('Could not get interface methods from java_interface_class={0}'.format(java_interface_class))
-        raise e
-    
-def get_interfaces_methods(jvm, interfaces, proxy):
-    result = {}
-    for interface in interfaces:
-        interface_class = jvm.java.lang.Class.forName(interface)
-        result[interface] = get_interface_methods(interface_class, proxy)
-    return result
+def get_protobuf_interface_methods(jmethods, proxy, executor = None, timeout = None, timeunit = None):
+    return [ProtobufServiceMethod(proxy,
+                jmethod.getName(),
+                get_jasynctype(jmethod.getReturnType(),
+                                    executor,
+                                    timeout,
+                                    timeunit),
+                                    jmethod.getParameterTypes(),
+                                    get_python_return_type(jmethod.getReturnType())
+                ) for jmethod in jmethods if not jmethod.getName() in JAVA_OBJECT_METHODS ]
 
-class ProtobufServiceMethod(object):
+class ProtobufServiceMethod(JavaServiceMethod):
     
-    def __init__(self,proxy,name,java_arg_types,python_return_type):
-        self._java_proxy = proxy
-        self._methodname = name
-        self._java_arg_types = java_arg_types
+    def __init__(self, proxy, method_name, java_async_method_type, java_param_types, python_return_type):
+        JavaServiceMethod.__init__(self, proxy, method_name, java_async_method_type)
+        self._java_param_types = java_param_types
         self._python_return_type = python_return_type
     
-    def __call__(self,*args):
-        # serialize python message to bytes
-        pmessage_bytes = pmessage_to_bytes(args[0])
-        jmessage = None
-        if pmessage_bytes:
-            # convert bytes to java message
-            jmessage = bytes_to_jmessage(self._java_arg_types[0], pmessage_bytes)
-        # make remote java call with java message
-        t0 = time.time()
-        jresult = None
-        try:
-            jresult = getattr(self._java_proxy,self._methodname)(jmessage)
-        except Exception as e:
-            _logger.exception("Exception making remote java call to methodname={0}".format(self._methodname))
-            raise e
-        t1 = time.time()
-        _timing.debug("protobuf.exec;time={0}".format(1000*(t1-t0)))
-        if not jresult:
-            return None
+    # called by superclass to actually make the synchronous remote call (may be
+    # on separate thread)
+    def _call_sync(self,*args):
+        # check arguments
+        call_args = [None]
+        if len(args) > 0:
+            # normal case is that there is one argument that
+            # should be a protobuf message
+            protobuf_arg = args[0]
+            if protobuf_arg:
+                t0 = time.time()
+                # serialize python message to bytes
+                pmessage_bytes = pmessage_to_bytes(protobuf_arg)
+                if pmessage_bytes:
+                    call_args = [bytes_to_jmessage(self._java_param_types[0], pmessage_bytes)]
+        _timing.debug("protobuf.argserialize;time={0}".format(1000*(time.time()-t0)))
+        # now call superclass with first call_args [jmessage]
+        return JavaServiceMethod._call_sync(self,*call_args)
+    
+    def _process_result(self, jresult):
         # convert java result to bytes
         jbytes = jmessage_to_bytes(jresult)
         if PY2:
             jbytes = str(jbytes)
         # convert bytes to python return type
         return bytes_to_pmessage(self._python_return_type, jbytes)
-
-class ProtobufServiceProxy(object):
     
-    def __init__(self, jvm, interfaces, proxy, proxyid=None):
-        self._interfaces = get_interfaces_methods(jvm,interfaces,proxy)
+class ProtobufServiceProxy(JavaServiceProxy):
+    
+    def __init__(self, jvm, interfaces, proxy, proxyid=None, timeout=30, executor=None):
+        self._interfaces = { interface:
+                            get_protobuf_interface_methods(jvm.java.lang.Class.forName(interface).getMethods(), 
+                            proxy, 
+                            executor,
+                            timeout, 
+                            jvm.java.util.concurrent.TimeUnit.SECONDS) for interface in interfaces}
         self._proxy = proxy
         self._proxyid = proxyid
         
-    def _find_java_method(self,name):
-        for method_list in self._interfaces.values():
-            for method in method_list:
-                if name  == method._methodname:
-                    return method
-        return None
-    
-    def __getattr__(self, name):
-        if name == "__call__":
-            raise AttributeError("Cannot call method '__call__' on proxy")
-        # find java_method (JavaServiceMethod) with same name
-        java_method = self._find_java_method(name)
-        # if not found, we throw
-        if not java_method:
-            raise AttributeError("'{0}' not found on {1};specs={2}".format(name,self.__str__(),[intf for intf in self._interfaces.keys()]))
-        # else return it
-        return java_method
-
     def __str__(self):
         return 'ProtobufServiceProxy;{0}'.format(str(self._proxy) if not self._proxyid else self._proxyid)
     
@@ -459,8 +435,6 @@ class ProtobufServiceRegistry(Py4jServiceBridgeEventListener,JavaRemoteServiceRe
 
 import importlib
 import inspect
-
-JAVA_OBJECT_METHODS = [ 'equals', 'hashCode', 'wait', 'notify', 'notifyAll', 'getClass', 'toString']
 
 PYTHON_SERVICE_EXPORTER_PACKAGE='org.eclipse.ecf.python.protobuf'
 PYTHON_SERVICE_EXPORTER_PACKAGE_VERSION='1.0.0'
