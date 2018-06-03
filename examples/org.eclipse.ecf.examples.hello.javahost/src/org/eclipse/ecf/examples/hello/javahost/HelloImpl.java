@@ -8,12 +8,14 @@
  ******************************************************************************/
 package org.eclipse.ecf.examples.hello.javahost;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.eclipse.ecf.examples.hello.IHello;
 import org.eclipse.ecf.provider.py4j.Py4jProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-@Component(immediate=true,property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.host"})
+@Component(immediate=true,property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.host","osgi.basic.timeout=50","service.intents=osgi.async"})
 public class HelloImpl implements IHello {
 
 	@Reference
@@ -27,8 +29,15 @@ public class HelloImpl implements IHello {
 	
 	@Override
 	public String sayHello(String from, String message) {
-		System.out.println("sayHello from: "+from+" with message:"+message);
-		return "Hi "+from + ", nice to see you";
+		System.out.println("Java.sayHello called by "+from+" with message: '"+message+"'");
+		return "Java says: Hi "+from + ", nice to see you";
+	}
+
+	@Override
+	public CompletableFuture<String> sayHelloAsync(String from, String message) {
+		CompletableFuture<String> result = new CompletableFuture<String>();
+		result.complete(sayHello(from,message));
+		return result;
 	}
 
 }

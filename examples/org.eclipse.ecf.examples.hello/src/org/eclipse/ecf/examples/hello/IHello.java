@@ -8,7 +8,11 @@
  ******************************************************************************/
 package org.eclipse.ecf.examples.hello;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface IHello {
 
 	String sayHello(String from, String message);
+	
+	CompletableFuture<String> sayHelloAsync(String from, String message);
 }
