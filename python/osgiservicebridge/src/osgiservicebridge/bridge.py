@@ -905,20 +905,12 @@ def get_jasynctype(jclass,executor,timeout,timeunit):
     async_type = None
     if jclassname in ASYNC_CLASS_NAMES.keys():
         async_type = ASYNC_CLASS_NAMES[jclassname]
-    else:
-        for intf in jclass.getInterfaces():
-            intf_name = intf.getName()
-            if intf_name in ASYNC_INTF_NAMES:
-                async_type = ASYNC_INTF_NAMES[intf_name]
-                break
-    # If found on clazz or interfaces, return found type        
+    elif jclassname in ASYNC_INTF_NAMES:
+        async_type = ASYNC_INTF_NAMES[jclassname]
     if async_type:
         return JavaAsyncMethodType(executor,async_type,timeout,timeunit)
-    super_clazz = jclass.getSuperclass()
-    if super_clazz:
-        return get_jasynctype(super_clazz)
 
-def return_jasyncresult(result_func,async_type,timeout,timeunit,jasync):
+def get_jasyncresult(result_func,async_type,timeout,timeunit,jasync):
     jresult = None
     if not async_type:
         jresult = jasync
@@ -929,7 +921,7 @@ def return_jasyncresult(result_func,async_type,timeout,timeunit,jasync):
             jresult = jasync.get()
     elif async_type == COMPLETION_STAGE_ASYNC_TYPE:
         # call recursively after calling jresult.toComple
-        jresult = jasync(FUTURE_ASYNC_TYPE, timeout, timeunit, jresult.toCompletableFuture())
+        return get_jasyncresult(result_func,FUTURE_ASYNC_TYPE, timeout, timeunit, jasync.toCompletableFuture())
     elif async_type == PROMISE_ASYNC_TYPE:
         jresult = jasync.getValue()
     elif async_type == IFUTURE_ASYNC_TYPE:
@@ -953,7 +945,7 @@ class JavaAsyncMethodType():
         # invoke future and wait for timeout to get java result
         jasyncresult = self._executor.submit(invoke_fn,*args).result(timeout)
         # Now return return jasyncresult
-        return return_jasyncresult(result_fn, self._async_type, self._timeout, self._timeunit, jasyncresult)
+        return get_jasyncresult(result_fn, self._async_type, self._timeout, self._timeunit, jasyncresult)
                                           
     def _invoke_return_future(self,invoke_fn,call_fn,*args):
         # submit self._invoke_return_jasync_result and return future

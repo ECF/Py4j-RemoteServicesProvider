@@ -11,22 +11,11 @@ package org.eclipse.ecf.examples.hello.javahost;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.ecf.examples.hello.IHello;
-import org.eclipse.ecf.provider.py4j.Py4jProvider;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
-@Component(immediate=true,property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.host","osgi.basic.timeout=50","service.intents=osgi.async"})
+@Component(immediate=true,property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.host","osgi.basic.timeout=50","service.intents=py4j.async"})
 public class HelloImpl implements IHello {
 
-	@Reference
-	// Making this a reference waits to activate and export this component until 
-	// there is a Py4jProvider available
-	void bindPy4jDirectProvider(Py4jProvider provider) {
-	}
-	
-	void unbindPy4jDirectProvider(Py4jProvider provider) {
-	}
-	
 	@Override
 	public String sayHello(String from, String message) {
 		System.out.println("Java.sayHello called by "+from+" with message: '"+message+"'");
@@ -35,8 +24,9 @@ public class HelloImpl implements IHello {
 
 	@Override
 	public CompletableFuture<String> sayHelloAsync(String from, String message) {
+		System.out.println("Java.sayHelloAsync called by "+from+" with message: '"+message+"'");
 		CompletableFuture<String> result = new CompletableFuture<String>();
-		result.complete(sayHello(from,message));
+		result.complete("JavaAsync says: Hi "+from + ", nice to see you");
 		return result;
 	}
 

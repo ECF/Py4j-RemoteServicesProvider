@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="false" name="org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl2">
-   <property name="service.exported.interfaces" value="*"/>
-   <property name="service.exported.configs" value="ecf.py4j.host.pb"/>
-   <service>
-      <provide interface="org.eclipse.ecf.examples.protobuf.hello.IHello"/>
-   </service>
-   <implementation class="org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl2"/>
-</scr:component>

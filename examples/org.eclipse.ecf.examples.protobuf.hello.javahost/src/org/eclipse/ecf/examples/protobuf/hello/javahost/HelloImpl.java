@@ -1,36 +1,39 @@
 package org.eclipse.ecf.examples.protobuf.hello.javahost;
 
-import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent;
-import org.eclipse.ecf.python.protobuf.PythonServiceExporter;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.eclipse.ecf.examples.protobuf.hello.IHello;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
-@Component(immediate=true,property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.host.pb"})
+import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent;
+import org.eclipse.ecf.examples.protobuf.hello.IHello;
+import org.osgi.service.component.annotations.Component;
+
+@Component(immediate = true, property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.host.pb",
+		"service.intents=osgi.async" })
 public class HelloImpl implements IHello {
 
-	@Reference(policy=ReferencePolicy.DYNAMIC)
-	void bindPythonServiceExporter(PythonServiceExporter exporter) {
-	}
-	void unbindPythonServiceExporter(PythonServiceExporter exporter) {
-	}
-	
-	HelloMsgContent createResponse() {
+	HelloMsgContent createResponse(String method) {
 		HelloMsgContent.Builder b1 = HelloMsgContent.newBuilder();
 		b1.addX(1.1);
 		b1.addX(1.2);
-		b1.setF("java");
+		b1.setF(method);
 		b1.setTo("python");
-		b1.setHellomsg("Hello response from java");
-		b1.setH("some other message");
+		b1.setHellomsg("Hello response from " + method);
+		b1.setH("howdy");
 		return b1.build();
 	}
 
 	@Override
 	public HelloMsgContent sayHello(HelloMsgContent message) throws Exception {
-		System.out.println("sayHello called from python with message="+message);
-		return createResponse();
+		System.out.println("sayHello called with message=" + message);
+		return createResponse("sayHello");
+	}
+
+	@Override
+	public CompletionStage<HelloMsgContent> sayHelloAsync(HelloMsgContent message) throws Exception {
+		System.out.println("sayHelloAsync called with message=" + message);
+		CompletableFuture<HelloMsgContent> result = new CompletableFuture<HelloMsgContent>();
+		result.complete(createResponse("sayHelloAsync"));
+		return result;
 	}
 
 }

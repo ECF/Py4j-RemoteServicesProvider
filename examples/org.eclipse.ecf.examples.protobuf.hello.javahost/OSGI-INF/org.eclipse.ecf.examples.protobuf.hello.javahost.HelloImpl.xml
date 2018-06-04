@@ -2,9 +2,9 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl">
    <property name="service.exported.interfaces" value="*"/>
    <property name="service.exported.configs" value="ecf.py4j.host.pb"/>
+   <property name="service.intents" value="osgi.async"/>
    <service>
       <provide interface="org.eclipse.ecf.examples.protobuf.hello.IHello"/>
    </service>
-   <reference bind="bindPythonServiceExporter" interface="org.eclipse.ecf.python.protobuf.PythonServiceExporter" name="PythonServiceExporter" policy="dynamic" unbind="unbindPythonServiceExporter"/>
    <implementation class="org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl"/>
 </scr:component>

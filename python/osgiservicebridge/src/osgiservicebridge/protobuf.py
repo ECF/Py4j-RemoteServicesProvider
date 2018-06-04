@@ -344,7 +344,7 @@ def protobuf_remote_service_method(arg_type,return_type=None):
         return wrapper
     return pbwrapper
 
-def get_python_return_type(java_return_class):
+def get_pb_return_type(java_return_class):
     jdesc_bytes = java_return_class.getMethod("getDescriptor",None).invoke(None,None).toProto().toByteArray()
     if PY2:
         jdesc_bytes = str(jdesc_bytes)
@@ -352,16 +352,19 @@ def get_python_return_type(java_return_class):
     pdesc_proto.MergeFromString(jdesc_bytes)
     return MakeClass(MakeDescriptor(pdesc_proto))
     
-def get_protobuf_interface_methods(jmethods, proxy, executor = None, timeout = None, timeunit = None):
-    return [ProtobufServiceMethod(proxy,
-                jmethod.getName(),
-                get_jasynctype(jmethod.getReturnType(),
-                                    executor,
-                                    timeout,
-                                    timeunit),
-                                    jmethod.getParameterTypes(),
-                                    get_python_return_type(jmethod.getReturnType())
-                ) for jmethod in jmethods if not jmethod.getName() in JAVA_OBJECT_METHODS ]
+def get_pb_service_methods(jmethods, proxy, executor = None, timeout = None, timeunit = None):
+    result = []
+    for jmethod in jmethods:
+        method_name = jmethod.getName()
+        if not method_name in JAVA_OBJECT_METHODS:
+            rettype = jmethod.getReturnType()
+            java_async_type = get_jasynctype(rettype, executor, timeout, timeunit)
+            if java_async_type:
+                python_ret_type = None
+            else:
+                python_ret_type = get_pb_return_type(rettype)
+            result.append(ProtobufServiceMethod(proxy,method_name,java_async_type,jmethod.getParameterTypes(),python_ret_type))
+    return result
 
 class ProtobufServiceMethod(JavaServiceMethod):
     
@@ -390,6 +393,8 @@ class ProtobufServiceMethod(JavaServiceMethod):
         return JavaServiceMethod._call_sync(self,*call_args)
     
     def _process_result(self, jresult):
+        if not self._python_return_type:
+            self._python_return_type = get_pb_return_type(jresult.getClass())
         # convert java result to bytes
         jbytes = jmessage_to_bytes(jresult)
         if PY2:
@@ -401,7 +406,7 @@ class ProtobufServiceProxy(JavaServiceProxy):
     
     def __init__(self, jvm, interfaces, proxy, proxyid=None, timeout=30, executor=None):
         self._interfaces = { interface:
-                            get_protobuf_interface_methods(jvm.java.lang.Class.forName(interface).getMethods(), 
+                            get_pb_service_methods(jvm.java.lang.Class.forName(interface).getMethods(), 
                             proxy, 
                             executor,
                             timeout, 

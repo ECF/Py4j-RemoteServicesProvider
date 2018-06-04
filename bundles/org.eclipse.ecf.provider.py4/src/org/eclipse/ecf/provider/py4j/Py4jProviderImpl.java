@@ -47,7 +47,7 @@ import py4j.Py4JServerConnection;
  */
 public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteServiceAdminListener, Py4jProvider {
 
-	protected static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered", "py4j", "osgi.basic", "osgi.async" };
+	protected static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered", "py4j", "py4j.async", "osgi.async", "osgi.basic", "osgi.private", "osgi.confidential" };
 
 	protected ID localId;
 	
