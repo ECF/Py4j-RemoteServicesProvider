@@ -12,7 +12,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 
-@Component(immediate=true)
+@Component(immediate=true,property = {"debug=true", "port=25333", "pythonPort=25334" })
 public class ExamplePy4jProvider extends Py4jProviderImpl implements Py4jProvider, RemoteServiceAdminListener {
 
 	@Override
