@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="Py4j Provider PhotonTarget" sequenceNumber="41">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ecf.py4j.feature.feature.group" version="1.1.2.201805031451"/>
-<repository location="https://raw.githubusercontent.com/ECF/Py4j-OSGi/master/build/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.license.feature.group" version="1.0.1.v20140414-1359"/>
 <repository location="http://download.eclipse.org/cbi/updates/license/1.0.1.v20140414-1359"/>
 </location>
@@ -31,5 +27,10 @@
 <repository location="http://download.eclipse.org/rt/ecf/3.14.0/site.p2"/>
 </location>
 <location path="${project_loc:org.eclipse.ecf.provider.py4j.releng.target}/bundles" type="Directory"/>
+	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+		<unit id="org.eclipse.ecf.py4j.feature.source.feature.group" version="1.2.0.201806051323"/>
+		<repository location="https://raw.githubusercontent.com/ECF/Py4j-OSGi/master/build/"/>
+		<unit id="org.eclipse.ecf.py4j.feature.feature.group" version="1.2.0.201806051323"/>
+	</location>
 </locations>
 </target>
