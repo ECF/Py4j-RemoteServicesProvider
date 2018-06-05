@@ -10,19 +10,17 @@ package org.eclipse.ecf.provider.direct.util;
 
 import java.io.InvalidObjectException;
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ecf.core.identity.ID;
-import org.eclipse.ecf.core.util.ECFException;
 import org.eclipse.ecf.provider.direct.ExternalServiceProvider;
 import org.eclipse.ecf.remoteservice.IRemoteService;
 import org.eclipse.ecf.remoteservice.client.AbstractClientContainer;
 import org.eclipse.ecf.remoteservice.client.AbstractRSAClientContainer;
 import org.eclipse.ecf.remoteservice.client.AbstractRSAClientService;
 import org.eclipse.ecf.remoteservice.client.RemoteServiceClientRegistration;
-import org.eclipse.equinox.concurrent.future.IExecutor;
-import org.eclipse.equinox.concurrent.future.IProgressRunnable;
+import org.eclipse.ecf.remoteservice.events.IRemoteCallCompleteEvent;
 
 /**
  * Implementation of ECF client container for direct distribution providers.
@@ -65,44 +63,25 @@ public class DirectClientContainer extends AbstractRSAClientContainer {
 			super(container, registration);
 		}
 
-		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@SuppressWarnings("rawtypes")
 		@Override
-		protected Object invokeAsync(final RSARemoteCall remoteCall) throws ECFException {
-			final CompletableFuture cf = new CompletableFuture();
-			IExecutor executor = getIFutureExecutor(remoteCall);
-			if (executor == null)
-				throw new ECFException("no executor available to invoke asynchronously");
-			executor.execute(new IProgressRunnable() {
-				@Override
-				public Object run(IProgressMonitor arg0) throws Exception {
-					try {
-						Object[] params = remoteCall.getParameters();
-						Class[] paramTypes = (params == null) ? new Class[0] : new Class[params.length];
-						if (params != null)
-							for (int i = 0; i < params.length; i++)
-								paramTypes[i] = params[i].getClass();
-						cf.complete(invokeMethod(getProxy().getClass().getMethod(remoteCall.getMethod(), paramTypes),
-								params));
-					} catch (Throwable e) {
-						cf.completeExceptionally(e);
-					}
-					return null;
-				}
-			}, null);
-			return cf;
+		protected Callable<IRemoteCallCompleteEvent> getAsyncCallable(final RSARemoteCall call) {
+			return () -> {
+				Object result = invokeMethod(call.getReflectMethod(), call.getParameters());
+				return createRCCESuccess(((CompletableFuture) result).get());
+			};
 		}
-
-		private Object invokeMethod(Method m, Object[] parameters) throws ECFException {
-			try {
-				return m.invoke(getProxy(), parameters);
-			} catch (Throwable e) {
-				throw new ECFException("Cannot invoke remoteCall on proxy", e);
-			}
-		}
-
+		
 		@Override
-		protected Object invokeSync(RSARemoteCall remoteCall) throws ECFException {
-			return invokeMethod(remoteCall.getReflectMethod(), remoteCall.getParameters());
+		protected Callable<Object> getSyncCallable(final RSARemoteCall call) {
+			return () -> {
+				return invokeMethod(call.getReflectMethod(),call.getParameters());
+			};
+		}
+		
+		private Object invokeMethod(Method m, Object[] parameters) throws Exception {
+			Object proxy = ((DirectClientContainer) container).getProxy(registration);
+			return m.invoke(proxy, parameters);
 		}
 	}
 

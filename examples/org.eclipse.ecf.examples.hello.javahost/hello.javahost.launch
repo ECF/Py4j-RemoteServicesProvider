@@ -22,5 +22,5 @@
 <booleanAttribute key="tracing" value="false"/>
 <booleanAttribute key="useCustomFeatures" value="false"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>
-<stringAttribute key="workspace_bundles" value="org.eclipse.ecf.examples.hello.javahost@default:default,org.eclipse.ecf.examples.hello.provider@default:default,org.eclipse.ecf.examples.hello@default:default,org.eclipse.ecf.provider.direct@default:default,org.eclipse.ecf.provider.py4j@default:default"/>
+<stringAttribute key="workspace_bundles" value="org.eclipse.ecf.examples.hello.javahost@default:default,org.eclipse.ecf.examples.hello.provider@default:default,org.eclipse.ecf.examples.hello@default:default,org.eclipse.ecf.provider.direct@default:default,org.eclipse.ecf.provider.py4j@default:default,org.py4j.osgi@default:default"/>
 </launchConfiguration>

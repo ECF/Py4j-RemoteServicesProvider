@@ -269,30 +269,19 @@ def merge_dicts(*dict_args):
         result.update(dictionary)
     return result
 
-def get_rsa_props(object_class, exported_cfgs=None, intents=None, ep_svc_id=None, fw_id=None, pkg_vers=None):
-    '''
-    Get all of the RSA properties given the minimum required information.
-    
-    :param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
-    :param exported_cfgs: a list of strings that are to be associated with the SERVICE_EXPORTED_CONFIGS and SERVICE_IMPORTED_CONFIGS RSA properties.  Must not be None and must contain 1 or more strings
-    :param intents: a list of strings to be associated with the SERVICE_INTENTS.   May be None or not provided.
-    :param ep_svc_id: the value of the ENDPOINT_SERVICE_ID.  If None, will be given a new unique number via get_next_rsid().  If not None, must be integer.
-    :param fw_id: the framework id as string.  If None a new uuid will be used.
-    :param pkg_vers: a list of tuples with a package name as first item in tuple (String, and the version string as the second item.  Example:  [('org.eclipse.ecf','1.0.0')].  If None, nothing is added to the returned dictionary.
-    :return: a single dictionary containing all the OSGi RSA-required endpoint properties.
-    '''              
+def get_rsa_props(object_class, exported_cfgs, remote_intents_supported=None, ep_svc_id=None, fw_id=None, pkg_vers=None, service_intents=None):
     results = {}
-    if not object_class or len(object_class) == 0:
+    if not object_class:
         raise ArgumentError('object_class must be an [] of Strings')
     results['objectClass'] = object_class
-    if exported_cfgs is None:
-        exported_cfgs = PY4J_EXPORTED_CONFIGS
-    results[SERVICE_EXPORTED_CONFIGS] = exported_cfgs
+    if not exported_cfgs:
+        raise ArgumentError('rmt_configs must be an array of Strings')
+    results[REMOTE_CONFIGS_SUPPORTED] = exported_cfgs
     results[SERVICE_IMPORTED_CONFIGS] = exported_cfgs
-    if intents:
-        results[SERVICE_INTENTS] = intents
-    else:
-        results[SERVICE_INTENTS] = PY4J_SERVICE_INTENTS
+    if remote_intents_supported:
+        results[REMOTE_INTENTS_SUPPORTED] = remote_intents_supported
+    if service_intents:
+        results[SERVICE_INTENTS] = service_intents
     if not ep_svc_id:
         ep_svc_id = get_next_rsid()
     results[ENDPOINT_SERVICE_ID] = ep_svc_id
@@ -304,14 +293,12 @@ def get_rsa_props(object_class, exported_cfgs=None, intents=None, ep_svc_id=None
         if isinstance(pkg_vers,type(tuple())):
             pkg_vers = [pkg_vers]
         for pkg_ver in pkg_vers:
-            key = ENDPOINT_PACKAGE_VERSION_ + pkg_ver[0]
-            results[key] = pkg_ver[1]
+            results[pkg_ver[0]] = pkg_ver[1]
     results[ENDPOINT_ID] = create_uuid()
     results[SERVICE_IMPORTED] = 'true'
-    results[SERVICE_EXPORTED_INTERFACES] = '*'
     return results
 
-def get_ecf_props(ep_id, ep_id_ns, rsvc_id=None, ep_ts=None):
+def get_ecf_props(ep_id, ep_id_ns=None, rsvc_id=None, ep_ts=None):
     '''
     Get all of the ECF RS properties given the minimum required information.
     
@@ -350,33 +337,14 @@ def get_extra_props(props):
                 result[key] = value
     return result
 
-def get_edef_props(object_class, ecf_ep_id, ep_namespace=None, ep_rsvc_id=None, exported_cfgs = None, ep_ts=None, intents=None, fw_id=None, pkg_ver=None):
-    '''
-    Get both OSGi RSA properties and ECF RS properties in a single dictionary.
-    
-    :param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
-    :param exported_cfgs: a list of strings that are to be associated with the SERVICE_EXPORTED_CONFIGS and SERVICE_IMPORTED_CONFIGS RSA properties.  Must not be None and must contain 1 or more strings
-    :param ep_namespace: a string that is the ECF_ENDPOINT_CONTAINERID_NAMESPACE value.
-    :param ecf_ep_id: an integer to be used for the ECF_ENDPOINT_ID value.
-    :param ep_rsvc_id: an optional integer that will be the value of ECF_RSVC_ID
-    :param ep_ts: an optional integer timestamp.   if None, the returned value of time_since_epoch() will be used.
-    :param intents: a list of strings to be associated with the SERVICE_INTENTS.   May be None or not provided.
-    :param fw_id: the framework id as string.  If None a new uuid will be used.
-    :param pkg_vers: a list of tuples with a package name as first item in tuple (String, and the version string as the second item.  Example:  [('org.eclipse.ecf','1.0.0')].  If None, nothing is added to the returned dictionary.
-    :return: a single dictionary containing all the OSGI RSA + ECF RS-required properties.
-    '''              
-    osgi_props = get_rsa_props(object_class, exported_cfgs, intents, ep_rsvc_id, fw_id, pkg_ver)
+def get_edef_props(object_class, exported_cfgs, ep_namespace, ecf_ep_id, ep_rsvc_id, ep_ts, remote_intents=None, fw_id=None, pkg_ver=None, service_intents=None):
+    osgi_props = get_rsa_props(object_class, exported_cfgs, remote_intents, ep_rsvc_id, fw_id, pkg_ver, service_intents)
     ecf_props = get_ecf_props(ecf_ep_id, ep_namespace, ep_rsvc_id, ep_ts)
     return merge_dicts(osgi_props,ecf_props)
 
 def get_edef_props_error(object_class):
-    '''
-    Get OSGi RSA properties and ECF RS properties in a single dictionary for an error condition.
-    
-    :param object_class: a list of strings.  Must not be None, and must contain 1 or more strings
-    :return: a single dictionary containing all the OSGI RSA + ECF RS-required properties.
-    '''              
-    return get_edef_props(object_class, ERROR_IMPORTED_CONFIGS, ERROR_NAMESPACE, ERROR_EP_ID, ERROR_ECF_EP_ID, 0, 0, None, None)
+    return get_edef_props(object_class, ERROR_IMPORTED_CONFIGS, ERROR_NAMESPACE, ERROR_EP_ID, ERROR_ECF_EP_ID, 0, 0)
+
 #----------------------------------------------------------------------------------
 def check_strings_in_list(l):
     for item in l:

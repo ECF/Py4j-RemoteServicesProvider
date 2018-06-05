@@ -28,7 +28,9 @@ from google.protobuf.descriptor_pb2 import DescriptorProto
 from google.protobuf.descriptor import MakeDescriptor
 from google.protobuf.reflection import MakeClass
 from osgiservicebridge.bridge import JavaRemoteServiceRegistry, Py4jServiceBridgeEventListener,\
-    JavaServiceMethod, get_jasynctype, JavaServiceProxy, JAVA_OBJECT_METHODS
+    JavaServiceMethod, JavaServiceProxy, JAVA_OBJECT_METHODS,\
+    ServiceMethod, get_interfaces,\
+    get_return_methtype
 
 from osgiservicebridge import ECF_SERVICE_EXPORTED_ASYNC_INTERFACES
 
@@ -352,24 +354,23 @@ def get_pb_return_type(java_return_class):
     pdesc_proto.MergeFromString(jdesc_bytes)
     return MakeClass(MakeDescriptor(pdesc_proto))
     
-def get_pb_service_methods(jmethods, proxy, executor = None, timeout = None, timeunit = None):
-    result = []
-    for jmethod in jmethods:
-        method_name = jmethod.getName()
-        if not method_name in JAVA_OBJECT_METHODS:
-            rettype = jmethod.getReturnType()
-            java_async_type = get_jasynctype(rettype, executor, timeout, timeunit)
-            if java_async_type:
-                python_ret_type = None
-            else:
-                python_ret_type = get_pb_return_type(rettype)
-            result.append(ProtobufServiceMethod(proxy,method_name,java_async_type,jmethod.getParameterTypes(),python_ret_type))
-    return result
+def get_pb_service_methods(jmethods, service, executor, timeout, timeunit):
+    '''
+    get list of service methods by invoking cls constructor with service, jmethod.getName(), and MethodType for method return type
+    '''
+    return [ProtobufServiceMethod(service,
+                jmethod.getName(),
+                get_return_methtype(jmethod.getReturnType().getName(),
+                               executor,
+                               timeout,
+                               timeunit),
+                               jmethod.getParameterTypes(),
+                               None) for jmethod in jmethods if not jmethod.getName() in JAVA_OBJECT_METHODS ]
 
 class ProtobufServiceMethod(JavaServiceMethod):
     
-    def __init__(self, proxy, method_name, java_async_method_type, java_param_types, python_return_type):
-        JavaServiceMethod.__init__(self, proxy, method_name, java_async_method_type)
+    def __init__(self, proxy, method_name, method_type, java_param_types, python_return_type):
+        ServiceMethod.__init__(self,proxy,method_name,method_type)
         self._java_param_types = java_param_types
         self._python_return_type = python_return_type
     
@@ -404,19 +405,10 @@ class ProtobufServiceMethod(JavaServiceMethod):
     
 class ProtobufServiceProxy(JavaServiceProxy):
     
-    def __init__(self, jvm, interfaces, proxy, proxyid=None, timeout=30, executor=None):
-        self._interfaces = { interface:
-                            get_pb_service_methods(jvm.java.lang.Class.forName(interface).getMethods(), 
-                            proxy, 
-                            executor,
-                            timeout, 
-                            jvm.java.util.concurrent.TimeUnit.SECONDS) for interface in interfaces}
+    def __init__(self, jvm, interfaces, proxy, executor, timeout=30):
+        self._interfaces = get_interfaces(jvm, interfaces, get_pb_service_methods, proxy, executor, timeout)
         self._proxy = proxy
-        self._proxyid = proxyid
         
-    def __str__(self):
-        return 'ProtobufServiceProxy;{0}'.format(str(self._proxy) if not self._proxyid else self._proxyid)
-    
 class ProtobufServiceRegistry(Py4jServiceBridgeEventListener,JavaRemoteServiceRegistry):
     
     def __init__(self):

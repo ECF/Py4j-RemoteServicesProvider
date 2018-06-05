@@ -8,6 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.ecf.examples.hello,
  org.eclipse.ecf.provider.py4j;version="2.0.0",
  org.osgi.service.component.annotations;resolution:=optional
-Service-Component: OSGI-INF/org.eclipse.ecf.examples.hello.javahost.HelloImpl.xml
+Service-Component: OSGI-INF/org.eclipse.ecf.examples.hello.javahost.HelloImpl.xml,
+ OSGI-INF/org.eclipse.ecf.examples.hello.javahost.HelloConsumer.xml
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.eclipse.ecf.examples.hello.javahost

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.ecf.examples.hello.javahost.HelloConsumer">
+   <reference bind="bindHello" interface="org.eclipse.ecf.examples.hello.IHello" name="Hello" target="(service.imported=*)" unbind="unbindHello"/>
+   <implementation class="org.eclipse.ecf.examples.hello.javahost.HelloConsumer"/>
+</scr:component>
