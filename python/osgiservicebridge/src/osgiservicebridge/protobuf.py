@@ -354,18 +354,19 @@ def get_pb_return_type(java_return_class):
     pdesc_proto.MergeFromString(jdesc_bytes)
     return MakeClass(MakeDescriptor(pdesc_proto))
     
-def get_pb_service_methods(jmethods, service, executor, timeout, timeunit):
+def get_pb_service_methods(jvm, jmethods, service, executor, timeout, timeunit):
     '''
     get list of service methods by invoking cls constructor with service, jmethod.getName(), and MethodType for method return type
     '''
     return [ProtobufServiceMethod(service,
                 jmethod.getName(),
-                get_return_methtype(jmethod.getReturnType().getName(),
-                               executor,
-                               timeout,
-                               timeunit),
-                               jmethod.getParameterTypes(),
-                               None) for jmethod in jmethods if not jmethod.getName() in JAVA_OBJECT_METHODS ]
+                get_return_methtype(jvm,
+                                    jmethod.getReturnType().getName(),
+                                    executor,
+                                    timeout,
+                                    timeunit),
+                                    jmethod.getParameterTypes(),
+                                    None) for jmethod in jmethods if not jmethod.getName() in JAVA_OBJECT_METHODS ]
 
 class ProtobufServiceMethod(JavaServiceMethod):
     
