@@ -8,3 +8,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.ecf.examples.hello
 Automatic-Module-Name: org.eclipse.ecf.examples.hello
+Import-Package: org.osgi.util.promise;version="1.0.0"

@@ -16,6 +16,7 @@ OSGi service bridge Google protocol buffers (protobuf) support
     limitations under the License.
 '''
 from osgiservicebridge.version import __version__ as __v__
+from concurrent.futures._base import Future
 # Version
 __version__ = __v__
 
@@ -988,6 +989,28 @@ def get_python_service_methods(jvm, jmethods, service, executor, timeout, timeun
                                timeout, 
                                timeunit)
 
+def create_completable_future(jvm, result):
+    cf = jvm.java.util.concurrent.CompletableFuture()
+    cf.complete(result)
+    return cf
+
+def create_promise(jvm, result):
+    deferred = jvm.org.osgi.util.promise.Deferred()
+    deferred.resolve(result)
+    return deferred.getPromise()
+
+def create_ifuture(jvm, result):
+    executor = jvm.org.eclipse.equinox.concurrent.future.ImmediateExecutor()
+    return executor.execute(_ProgressRunnable(result),None)
+    
+class _ProgressRunnable():
+    
+    def __init__(self,result):
+        self._result = result
+        
+    def run(self,monitor):
+        return self._result
+    
 class ReturnMethodType():
     '''
     Method type to represent the type of Java method.  e.g. one of SYNC_TYPE, FUTURE_ASYNC_TYPE,
@@ -1029,12 +1052,17 @@ class ReturnMethodType():
         return invoke_sync_timeout(self._executor, self._timeout, result_fn, call_fn, *args)
     
     def _convert_async_return(self,presult):
+        if isinstance(presult, Future):
+            presult = presult.result(self._timeout)
         if self._async_type == SYNC_TYPE:
             return presult
-        else:
-            cf = self._jvm.java.util.concurrent.CompletableFuture()
-            cf.complete(presult)
-            return cf
+        elif self._async_type == COMPLETABLE_FUTURE_ASYNC_TYPE or self._async_type == FUTURE_ASYNC_TYPE or self._async_type == COMPLETION_STAGE_ASYNC_TYPE:
+            return create_completable_future(self._jvm, presult)
+        elif self._async_type == PROMISE_ASYNC_TYPE:
+            return create_promise(self._jvm, presult)
+        elif self._async_type == IFUTURE_ASYNC_TYPE:
+            return create_ifuture(self._jvm, presult)
+        
             
 class ServiceMethod(): 
     

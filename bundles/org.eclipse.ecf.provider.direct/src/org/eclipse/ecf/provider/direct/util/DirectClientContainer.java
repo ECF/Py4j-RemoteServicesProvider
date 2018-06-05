@@ -11,11 +11,11 @@ package org.eclipse.ecf.provider.direct.util;
 import java.io.InvalidObjectException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.provider.direct.ExternalServiceProvider;
 import org.eclipse.ecf.remoteservice.IRemoteService;
+import org.eclipse.ecf.remoteservice.asyncproxy.AsyncReturnUtil;
 import org.eclipse.ecf.remoteservice.client.AbstractClientContainer;
 import org.eclipse.ecf.remoteservice.client.AbstractRSAClientContainer;
 import org.eclipse.ecf.remoteservice.client.AbstractRSAClientService;
@@ -43,6 +43,7 @@ public class DirectClientContainer extends AbstractRSAClientContainer {
 
 	@Override
 	protected IRemoteService createRemoteService(RemoteServiceClientRegistration registration) {
+		// See DirectRSAClientService class below
 		return new DirectRSAClientService(this, registration);
 	}
 
@@ -63,24 +64,36 @@ public class DirectClientContainer extends AbstractRSAClientContainer {
 			super(container, registration);
 		}
 
-		@SuppressWarnings("rawtypes")
 		@Override
 		protected Callable<IRemoteCallCompleteEvent> getAsyncCallable(final RSARemoteCall call) {
 			return () -> {
-				Object result = invokeMethod(call.getReflectMethod(), call.getParameters());
-				return createRCCESuccess(((CompletableFuture) result).get());
+				Method reflectMethod = call.getReflectMethod();
+				// Invoke selected method on proxy.  This will make the actual
+				// remote call
+				Object result = invokeMethodOnProxy(reflectMethod, call.getParameters());
+				// Get return type from reflectMethod
+				Class<?> returnClass = reflectMethod.getReturnType();
+				// The return type should be one of the async types and we use the 
+				// AsyncReturnUtil to convert from the async type to the simple type (i.e. the type returned)
+				// by the async result
+				Object simpleResult = AsyncReturnUtil.convertAsyncToReturn(result,returnClass,call.getTimeout());
+				// And return a success event
+				return createRCCESuccess(simpleResult);
 			};
 		}
 		
 		@Override
 		protected Callable<Object> getSyncCallable(final RSARemoteCall call) {
 			return () -> {
-				return invokeMethod(call.getReflectMethod(),call.getParameters());
+				// Synchronously invoke the call method on the proxy
+				return invokeMethodOnProxy(call.getReflectMethod(),call.getParameters());
 			};
 		}
 		
-		private Object invokeMethod(Method m, Object[] parameters) throws Exception {
+		private Object invokeMethodOnProxy(Method m, Object[] parameters) throws Exception {
+			// Get the proxy for this registration and container
 			Object proxy = ((DirectClientContainer) container).getProxy(registration);
+			// Invoke the method on it with given parameters
 			return m.invoke(proxy, parameters);
 		}
 	}

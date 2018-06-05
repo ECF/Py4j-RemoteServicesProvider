@@ -14,6 +14,10 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(immediate = true)
+/**
+ * Example consumer of IHello remote service (implemented in Python).
+  *
+ */
 public class HelloConsumer {
 
 	private PythonServiceExporterAsync exporter;
