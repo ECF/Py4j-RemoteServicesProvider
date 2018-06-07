@@ -1,12 +1,12 @@
-Py4j-RemoteServicesProvider
+Python.Java Remote Services
 ===========================
-An ECF Remote Services Distribution Provider for [OSGi Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html).  This allows dynamic remote procedure call between Java and Python objects.  Python-Implementations can be exposed to Java consumers as OSGi services, and Java-based OSGi services can be exposed to Python consumers.
+An Remote Services Distribution Provider for [OSGi R7 Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html).  This allows dynamic remote procedure call between Java and Python objects.  Python-Implementations can be exposed to Java consumers as OSGi services, and Java-based OSGi services can be exposed to Python consumers.
 
-## Python-Implemented OSGi Services
+## Python Services accessed from Java
 
 See [here](https://wiki.eclipse.org/Tutorial:_Python_for_OSGi_Services) for a tutorial based on this use case.
 
-## Java-Implemented OSGi Services accessed from Python
+## Java Services accessed from Python
 For example, to make an OSGi service available for access in Python it's only necessary to add an OSGi-standard service property.
 
 <pre>
@@ -21,7 +21,8 @@ public class EvalImpl implements Eval {
 
 Using [ECF's Remote Service Admin](https://wiki.eclipse.org/Eclipse_Communication_Framework_Project#OSGi_Remote_Services) implementation and the [IPOPO 0.8 and above](https://ipopo.readthedocs.io/en/0.7.0/), a proxy for service instance will be injected into a Python service consumer(s), allowing it to call the eval on this OSGi service instance.
 
-# NEW: Support for OSGi R7 Async Remote Services.  OSGi R7 Remote Services includes support for [Asynchronous Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html#d0e1407).  This allows Remote Services with return values of CompletableFuture, Future, or OSGi's Promise to be asynchronously executed asynchronously via Python object instances.
+## NEW: Support for OSGi R7 Async Remote Services
+OSGi R7 Remote Services includes support for [Asynchronous Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html#d0e1407) supporting Remote Services with return values of CompletableFuture, Future, or OSGi's Promise (Java) that will be executed asynchronously.
 
 ## Download and Install
 ### Java Components
@@ -38,7 +39,7 @@ For support please file an issue on this repo, or contact [scottslewis@gmail.com
 
 ### Python Components
 
-The Python OSGi Service Bridge may be installed via pip:
+Python OSGi Service Bridge may be installed via pip:
 
 <pre>
 pip install osgiservicebridge
@@ -51,6 +52,6 @@ The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](
 LICENSE
 =======
 
-Py4j-RemoteServicesProvider is distributed with the Apache3 license. See LICENSE.txt for more
+Python.Java Remote Services is distributed with the Apache3 license. See LICENSE in this directory for more
 information.
 
