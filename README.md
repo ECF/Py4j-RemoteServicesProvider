@@ -1,5 +1,6 @@
-# Py4j-RemoteServicesProvider
-An ECF Remote Services/RSA Provider that uses Py4j as the transport.   This allows easy and dynamic rpc between Java and Python objects.  Python-Implementations can be exposed to Java consumers as OSGi services, and Java-based OSGi services can be exposed to Python consumers.
+Py4j-RemoteServicesProvider
+===========================
+An ECF Remote Services Distribution Provider for [OSGi Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html).  This allows dynamic remote procedure call between Java and Python objects.  Python-Implementations can be exposed to Java consumers as OSGi services, and Java-based OSGi services can be exposed to Python consumers.
 
 ## Python-Implemented OSGi Services
 
@@ -18,7 +19,9 @@ public class EvalImpl implements Eval {
 }
 </pre>
 
-Using [ECF's RSA](https://wiki.eclipse.org/Eclipse_Communication_Framework_Project#OSGi_Remote_Services) implementation, a proxy for this eval service instance will be injected into a Python application, allowing it to call eval on this OSGi service instance.
+Using [ECF's Remote Service Admin](https://wiki.eclipse.org/Eclipse_Communication_Framework_Project#OSGi_Remote_Services) implementation and the [IPOPO 0.8 and above](https://ipopo.readthedocs.io/en/0.7.0/), a proxy for service instance will be injected into a Python service consumer(s), allowing it to call the eval on this OSGi service instance.
+
+# NEW: Support for OSGi R7 Async Remote Services.  OSGi R7 Remote Services includes support for [Asynchronous Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html#d0e1407).  This allows Remote Services with return values of CompletableFuture, Future, or OSGi's Promise to be asynchronously executed asynchronously via Python object instances.
 
 ## Download and Install
 ### Java Components
@@ -27,13 +30,9 @@ Using [ECF's RSA](https://wiki.eclipse.org/Eclipse_Communication_Framework_Proje
 
 The Py4j Remote Services Provider depends upon the ECF implementation of the OSGi Remote Service Admin (RSA).   The latest version is available at [Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.eclipse.ecf%22) and as an Eclipse p2 repository or zip as described by [this download page](https://www.eclipse.org/ecf/downloads.php).
 
-A recent build of the Java components (OSGi bundles) exist in binary form in the plugins subdirectory underneath [this directory](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/build):https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/build
+A recent build of the Java components (OSGi bundles) exist in [this directory](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/build):https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/build
 
 A P2 Repository is also available in that same directory...i.e:  https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/build.  Add this URL with name (e.g.):  ECF Py4j Provider.
-
-Also present is a [Karaf](http://karaf.apache.org/) Features repository:  https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/build/karaf-features.xml
-
-Of course you may also build the components from source via Maven.   After importing projects, the target platform should be set to the contents of this file:  https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/releng/org.eclipse.ecf.provider.py4j.releng.target/ecf-oxygen.target.   This assumes the use of Java8 and Eclipse Oxygen or newer. 
 
 For support please file an issue on this repo, or contact [scottslewis@gmail.com](mailto:scottslewis@gmail.com)
 
@@ -45,7 +44,13 @@ The Python OSGi Service Bridge may be installed via pip:
 pip install osgiservicebridge
 </pre>
 
-The Python OSGi Service Bridge depends upon both [Py4j](https://www.py4j.org/) 0.10.6+ and [Google Protocol Buffers version 3.3.1](https://developers.google.com/protocol-buffers/).   pip will install these dependencies via the command above.
+The Python OSGi Service Bridge depends upon both [Py4j](https://www.py4j.org/) 0.10.7+ and [Google Protocol Buffers version 3.5.1](https://developers.google.com/protocol-buffers/).   pip will install these dependencies via the command above.
 
-The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/python/osgiservicebridge) project.   This package should be installed into Python 2.7 or Python 3.3+ prior to running the example (in, e.g. the run.py in examples/org.eclipse.ecf.examples.protobuf.hello/python-src directory).
+The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/python/osgiservicebridge) project.   This package should be installed into Python 3.3+ prior to running the example (in, e.g. the run.py in examples/org.eclipse.ecf.examples.protobuf.hello/python-src directory).
+
+LICENSE
+=======
+
+Py4j-RemoteServicesProvider is distributed with the Apache3 license. See LICENSE.txt for more
+information.
 
