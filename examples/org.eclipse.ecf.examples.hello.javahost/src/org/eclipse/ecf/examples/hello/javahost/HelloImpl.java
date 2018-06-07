@@ -17,7 +17,7 @@ import org.osgi.util.promise.Promise;
 
 @Component(immediate=true,property = { "service.exported.interfaces=*",  // RS/RSA-required to export as remote service
 									   "service.exported.configs=ecf.py4j.host",  // Required to specify py4j java provider
-									   "osgi.basic.timeout=50000",    // timeout of 50000ms=50 seconds
+									   "osgi.basic.timeout:Long=50000",    // timeout of 50000ms=50 seconds
 									   "service.intents=osgi.async"}) // osgi.async intent to get the behavior
 																	   // defined <a href="https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html#d0e1407">here</a>.
 /**

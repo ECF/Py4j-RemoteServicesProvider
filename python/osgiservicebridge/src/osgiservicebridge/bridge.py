@@ -919,7 +919,7 @@ def get_jasyncresult(result_func,async_type,timeout,timeunit,jasync):
         jresult = jasync
     elif async_type == FUTURE_ASYNC_TYPE or async_type == COMPLETABLE_FUTURE_ASYNC_TYPE:
         if timeunit:
-            jresult = jasync.get(timeout,timeunit)
+            jresult = jasync.get(int(timeout),timeunit)
         else:
             jresult = jasync.get()
     elif async_type == COMPLETION_STAGE_ASYNC_TYPE:
@@ -1062,8 +1062,7 @@ class ReturnMethodType():
             return create_promise(self._jvm, presult)
         elif self._async_type == IFUTURE_ASYNC_TYPE:
             return create_ifuture(self._jvm, presult)
-        
-            
+
 class ServiceMethod(): 
     
     def __init__(self,service,method_name,method_type):
@@ -1098,8 +1097,9 @@ class PythonServiceMethod(ServiceMethod):
         return self._method_type._convert_async_return(presult)
     
     def __call__(self,*args):
-        # If it's a PythonHostServiceMethod, then we invoke _invoke_pservice
+        # If it's a PythonServiceMethod, then we invoke _invoke_pservice
         return self._method_type._invoke_pservice(self._process_result,self._call_sync,*args)
+    
     
 class Py4jService():
     
@@ -1138,5 +1138,5 @@ class PythonService(Py4jService):
 
     def __init__(self, bridge, interfaces, svc_object, executor, timeout):
         Py4jService.__init__(self, svc_object)
-        osgiservicebridge._modify_remoteservice_class(PythonService,{ 'objectClass': interfaces })
+        osgiservicebridge._modify_remoteservice_class(PythonService, { 'objectClass': interfaces })
         self._interfaces = get_interfaces(bridge.get_jvm(), interfaces, get_python_service_methods, svc_object, executor, timeout)

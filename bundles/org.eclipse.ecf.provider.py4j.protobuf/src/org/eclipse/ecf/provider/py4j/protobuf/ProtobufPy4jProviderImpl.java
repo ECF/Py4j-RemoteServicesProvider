@@ -31,7 +31,6 @@ import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 
 import com.google.protobuf.Message;
-import com.google.protobuf.Parser;
 
 /**
  * Implementation of Protobuf-py4j remote service distribution provider.
@@ -42,7 +41,8 @@ import com.google.protobuf.Parser;
 public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 		implements RemoteServiceAdminListener, Py4jProvider, DirectProvider {
 
-	protected static final String[] py4jProtobufSupportedIntents = { "passByValue", "exactlyOnce", "ordered", "py4j", "py4j.protobuf", "py4j.async", "osgi.async", "osgi.basic", "osgi.private", "osgi.confidential" };
+	protected static final String[] py4jProtobufSupportedIntents = { "passByValue", "exactlyOnce", "ordered", "py4j",
+			"py4j.protobuf", "py4j.async", "osgi.async", "osgi.basic", "osgi.private", "osgi.confidential" };
 
 	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
 		super.bindEndpointEventListener(eel, props);
@@ -80,10 +80,9 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 										Py4jNamespace.createUUID(), new ProtobufCallableEndpoint() {
 											@Override
 											public <A extends Message> Message call_endpoint(Long rsId,
-													String methodName, A message, Parser<?> resultParser)
-													throws Exception {
+													String methodName, A message) throws Exception {
 												return getProtobufCallableEndpoint().call_endpoint(rsId, methodName,
-														message, resultParser);
+														message);
 											}
 										});
 							}

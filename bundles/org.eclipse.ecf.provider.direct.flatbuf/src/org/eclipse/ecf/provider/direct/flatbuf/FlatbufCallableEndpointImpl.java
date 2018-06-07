@@ -81,7 +81,7 @@ public class FlatbufCallableEndpointImpl implements FlatbufCallableEndpoint {
 		long start = 0;
 		if (timingLogger != null && timingLogger.isDebugEnabled())
 			start = System.currentTimeMillis();
-		byte[] resultBytes = getExternalCallableEndpoint()._call_endpoint(rsId, methodName, messageBytes);
+		byte[] resultBytes = (byte[]) getExternalCallableEndpoint()._call_endpoint(rsId, methodName, messageBytes);
 		if (timingLogger != null && timingLogger.isDebugEnabled()) {
 			long end = System.currentTimeMillis();
 			timingLogger.debug("protobuf.pythonrpc;rsId=" + rsId + ";method=" + methodName + ";time=" + (end - start));

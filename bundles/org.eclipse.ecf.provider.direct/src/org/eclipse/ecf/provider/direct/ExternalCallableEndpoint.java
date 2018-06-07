@@ -17,6 +17,6 @@ package org.eclipse.ecf.provider.direct;
  */
 public interface ExternalCallableEndpoint {
 
-	byte[] _call_endpoint(Long rsId, String methodName, byte[] serializedArgs) throws Exception;
+	Object _call_endpoint(Long rsId, String methodName, byte[] serializedArgs) throws Exception;
 
 }

@@ -8,6 +8,7 @@ Import-Package: com.google.protobuf;version="3.2.0",
  org.eclipse.ecf.examples.protobuf.hello,
  org.eclipse.ecf.python.protobuf;version="1.0.0",
  org.osgi.service.component.annotations;resolution:=optional,
+ org.osgi.util.promise;version="1.0.0",
  py4j;version="0.10.6"
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.consumer.HelloConsumer.xml

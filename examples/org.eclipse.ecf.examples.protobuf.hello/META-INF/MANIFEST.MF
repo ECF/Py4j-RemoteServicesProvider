@@ -6,6 +6,7 @@ Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Import-Package: com.google.protobuf;version="3.2.0"
+Import-Package: com.google.protobuf;version="3.2.0",
+ org.osgi.util.promise;version="1.0.0"
 Export-Package: org.eclipse.ecf.examples.protobuf.hello
 Automatic-Module-Name: org.eclipse.ecf.examples.protobuf.hello

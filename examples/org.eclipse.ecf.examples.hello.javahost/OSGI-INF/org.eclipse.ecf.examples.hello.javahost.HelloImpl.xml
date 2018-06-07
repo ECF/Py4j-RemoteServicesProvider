@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.eclipse.ecf.examples.hello.javahost.HelloImpl">
    <property name="service.exported.interfaces" value="*"/>
    <property name="service.exported.configs" value="ecf.py4j.host"/>
-   <property name="osgi.basic.timeout" value="50000"/>
+   <property name="osgi.basic.timeout" type="Long" value="50000"/>
    <property name="service.intents" value="osgi.async"/>
    <service>
       <provide interface="org.eclipse.ecf.examples.hello.IHello"/>

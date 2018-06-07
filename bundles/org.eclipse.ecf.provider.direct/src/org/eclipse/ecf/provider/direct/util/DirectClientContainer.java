@@ -68,28 +68,28 @@ public class DirectClientContainer extends AbstractRSAClientContainer {
 		protected Callable<IRemoteCallCompleteEvent> getAsyncCallable(final RSARemoteCall call) {
 			return () -> {
 				Method reflectMethod = call.getReflectMethod();
-				// Invoke selected method on proxy.  This will make the actual
+				// Invoke selected method on proxy. This will make the actual
 				// remote call
 				Object result = invokeMethodOnProxy(reflectMethod, call.getParameters());
 				// Get return type from reflectMethod
 				Class<?> returnClass = reflectMethod.getReturnType();
-				// The return type should be one of the async types and we use the 
+				// The return type should be one of the async types and we use the
 				// AsyncReturnUtil to convert from the async type to the simple type (i.e. the type returned)
 				// by the async result
-				Object simpleResult = AsyncReturnUtil.convertAsyncToReturn(result,returnClass,call.getTimeout());
+				Object simpleResult = AsyncReturnUtil.convertAsyncToReturn(result, returnClass, call.getTimeout());
 				// And return a success event
 				return createRCCESuccess(simpleResult);
 			};
 		}
-		
+
 		@Override
 		protected Callable<Object> getSyncCallable(final RSARemoteCall call) {
 			return () -> {
 				// Synchronously invoke the call method on the proxy
-				return invokeMethodOnProxy(call.getReflectMethod(),call.getParameters());
+				return invokeMethodOnProxy(call.getReflectMethod(), call.getParameters());
 			};
 		}
-		
+
 		private Object invokeMethodOnProxy(Method m, Object[] parameters) throws Exception {
 			// Get the proxy for this registration and container
 			Object proxy = ((DirectClientContainer) container).getProxy(registration);

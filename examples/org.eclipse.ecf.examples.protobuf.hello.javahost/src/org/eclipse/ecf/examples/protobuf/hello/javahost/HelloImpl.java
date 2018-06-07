@@ -6,6 +6,8 @@ import java.util.concurrent.CompletionStage;
 import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent;
 import org.eclipse.ecf.examples.protobuf.hello.IHello;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.util.promise.Deferred;
+import org.osgi.util.promise.Promise;
 
 @Component(immediate = true, property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.host.pb",
 		"service.intents=osgi.async" })
@@ -24,16 +26,24 @@ public class HelloImpl implements IHello {
 
 	@Override
 	public HelloMsgContent sayHello(HelloMsgContent message) throws Exception {
-		System.out.println("sayHello called with message=" + message);
+		System.out.println("pb.sayHello called with message=" + message);
 		return createResponse("sayHello");
 	}
 
 	@Override
 	public CompletionStage<HelloMsgContent> sayHelloAsync(HelloMsgContent message) throws Exception {
-		System.out.println("sayHelloAsync called with message=" + message);
+		System.out.println("pb.sayHelloAsync called with message=" + message);
 		CompletableFuture<HelloMsgContent> result = new CompletableFuture<HelloMsgContent>();
 		result.complete(createResponse("sayHelloAsync"));
 		return result;
+	}
+
+	@Override
+	public Promise<HelloMsgContent> sayHelloPromise(HelloMsgContent message) throws Exception {
+		System.out.println("pb.sayHelloPromise called with message=" + message);
+		Deferred<HelloMsgContent> result = new Deferred<HelloMsgContent>();
+		result.resolve(createResponse("sayHelloPromise"));
+		return result.getPromise();
 	}
 
 }

@@ -42,7 +42,7 @@ public interface IHello {
 	 * @param message a String message
 	 * @return CompletableFuture that invokes remote method asynchronously to complete.  
 	 * Will throw java.util.concurrent.TimeoutException if response is not
-	 * received in within timeout provided via osgi.basic.timeout intent
+	 * received in within timeout provided via osgi.basic.timeout service prop on imple
 	 */
 	CompletableFuture<String> sayHelloAsync(String from, String message);
 	
@@ -54,7 +54,7 @@ public interface IHello {
 	 * @param message a String message
 	 * @return Promis that invokes remote method asynchronously to complete.  
 	 * Will throw java.util.concurrent.TimeoutException if response is not
-	 * received in within timeout provided via osgi.basic.timeout intent
+	 * received in within timeout provided via osgi.basic.timeout service prop on impl
 	 */
 	Promise<String> sayHelloPromise(String from, String message);
 	
