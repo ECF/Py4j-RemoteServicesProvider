@@ -21,4 +21,9 @@ public interface ProtobufPy4jConstants {
 	public static final String JAVA_CONSUMER_CONFIG_TYPE = "ecf.py4j.consumer.pb";
 	public static final String PYTHON_CONSUMER_CONFIG_TYPE = "ecf.py4j.consumer.python.pb";
 
+	public static final String JAVA_PROTOBUF_HOST_CONFIG_TYPE = "ecf.py4j.protobuf.host";
+	public static final String JAVA_PROTOBUF_CONSUMER_CONFIG_TYPE = "ecf.py4j.protobuf.consumer";
+	public static final String PYTHON_PROTOBUF_HOST_CONFIG_TYPE = "ecf.py4j.python.protobuf.host";
+	public static final String PYTHON_PROTOBUF_CONSUMER_CONFIG_TYPE = "ecf.py4j.python.protobuf.consumer";
+
 }

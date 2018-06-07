@@ -240,7 +240,7 @@ public abstract class AbstractDirectProvider
 		}
 
 		@Override
-		public Object _call_endpoint(Long rsId, String methodName, byte[] serializedArgs) throws Exception {
+		public byte[] _call_endpoint(Long rsId, String methodName, byte[] serializedArgs) throws Exception {
 			return ece._call_endpoint(rsId, methodName, serializedArgs);
 		}
 

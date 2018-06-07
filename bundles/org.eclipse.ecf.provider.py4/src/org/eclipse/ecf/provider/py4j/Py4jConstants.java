@@ -22,7 +22,7 @@ public interface Py4jConstants {
 	public static final String NAMESPACE_PYTHON_PATH = "/python";
 
 	public static final String JAVA_HOST_CONFIG_TYPE = "ecf.py4j.host";
-	public static final String PYTHON_HOST_CONFIG_TYPE = "ecf.py4j.host.python";
 	public static final String JAVA_CONSUMER_CONFIG_TYPE = "ecf.py4j.consumer";
+	public static final String PYTHON_HOST_CONFIG_TYPE = "ecf.py4j.host.python";
 	public static final String PYTHON_CONSUMER_CONFIG_TYPE = "ecf.py4j.consumer.python";
 }

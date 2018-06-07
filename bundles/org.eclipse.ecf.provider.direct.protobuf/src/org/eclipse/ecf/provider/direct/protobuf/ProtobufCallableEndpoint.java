@@ -9,9 +9,11 @@
 package org.eclipse.ecf.provider.direct.protobuf;
 
 import com.google.protobuf.Message;
+import com.google.protobuf.Parser;
 
 public interface ProtobufCallableEndpoint {
 
-	<A extends Message> Message call_endpoint(Long rsId, String methodName, A message) throws Exception;
+	<A extends Message> Message call_endpoint(Long rsId, String methodName, A message, Parser<?> resultParser)
+			throws Exception;
 
 }

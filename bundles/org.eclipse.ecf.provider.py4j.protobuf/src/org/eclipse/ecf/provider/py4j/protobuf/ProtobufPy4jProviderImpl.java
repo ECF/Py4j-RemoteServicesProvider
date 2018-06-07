@@ -17,6 +17,7 @@ import org.eclipse.ecf.provider.direct.DirectProvider;
 import org.eclipse.ecf.provider.direct.ExternalCallableEndpoint;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpoint;
 import org.eclipse.ecf.provider.direct.protobuf.ProtobufCallableEndpointImpl;
+import org.eclipse.ecf.provider.direct.util.DirectClientContainer;
 import org.eclipse.ecf.provider.direct.util.DirectHostContainer;
 import org.eclipse.ecf.provider.direct.util.DirectRemoteServiceClientDistributionProvider;
 import org.eclipse.ecf.provider.direct.util.DirectRemoteServiceHostDistributionProvider;
@@ -31,6 +32,7 @@ import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 
 import com.google.protobuf.Message;
+import com.google.protobuf.Parser;
 
 /**
  * Implementation of Protobuf-py4j remote service distribution provider.
@@ -54,11 +56,29 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 
 	protected ServiceRegistration<?> protobufHostReg = null;
 	protected ServiceRegistration<?> protobufClientReg = null;
+	protected ServiceRegistration<?> protobufNewHostReg = null;
+	protected ServiceRegistration<?> protobufNewClientReg = null;
+
 
 	protected void registerProtobufHostDistributionProvider() {
 		protobufHostReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
 				new DirectRemoteServiceHostDistributionProvider(ProtobufPy4jConstants.JAVA_HOST_CONFIG_TYPE,
 						ProtobufPy4jConstants.PYTHON_CONSUMER_CONFIG_TYPE, new IDirectContainerInstantiator() {
+							@Override
+							public IContainer createContainer() throws ContainerCreateException {
+								ID lId = ProtobufPy4jProviderImpl.this.localId;
+								if (lId == null)
+									throw new ContainerCreateException("Cannot create container with null localId");
+								return new DirectHostContainer(lId, getInternalServiceProvider());
+							}
+						}, py4jProtobufSupportedIntents),
+				null);
+	}
+
+	protected void registerNewProtobufHostDistributionProvider() {
+		protobufNewHostReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
+				new DirectRemoteServiceHostDistributionProvider(ProtobufPy4jConstants.JAVA_PROTOBUF_HOST_CONFIG_TYPE,
+						ProtobufPy4jConstants.PYTHON_PROTOBUF_CONSUMER_CONFIG_TYPE, new IDirectContainerInstantiator() {
 							@Override
 							public IContainer createContainer() throws ContainerCreateException {
 								ID lId = ProtobufPy4jProviderImpl.this.localId;
@@ -80,11 +100,24 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 										Py4jNamespace.createUUID(), new ProtobufCallableEndpoint() {
 											@Override
 											public <A extends Message> Message call_endpoint(Long rsId,
-													String methodName, A message) throws Exception {
+													String methodName, A message, Parser<?> resultParser)
+													throws Exception {
 												return getProtobufCallableEndpoint().call_endpoint(rsId, methodName,
-														message);
+														message, resultParser);
 											}
 										});
+							}
+						}, py4jProtobufSupportedIntents),
+				null);
+	}
+
+	protected void registerNewProtobufClientDistributionProvider() {
+		protobufNewClientReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
+				new DirectRemoteServiceClientDistributionProvider(ProtobufPy4jConstants.JAVA_PROTOBUF_CONSUMER_CONFIG_TYPE,
+						ProtobufPy4jConstants.PYTHON_PROTOBUF_HOST_CONFIG_TYPE, new IDirectContainerInstantiator() {
+							@Override
+							public IContainer createContainer() throws ContainerCreateException {
+								return new DirectClientContainer(Py4jNamespace.createUUID(),getServiceProxyProvider());
 							}
 						}, py4jProtobufSupportedIntents),
 				null);
@@ -103,6 +136,8 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 			super.activate(context, properties);
 			registerProtobufHostDistributionProvider();
 			registerProtobufClientDistributionProvider();
+			registerNewProtobufHostDistributionProvider();
+			registerNewProtobufClientDistributionProvider();
 		}
 	}
 
@@ -148,6 +183,14 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 			if (protobufHostReg != null) {
 				protobufHostReg.unregister();
 				protobufHostReg = null;
+			}
+			if (protobufNewClientReg != null) {
+				protobufNewClientReg.unregister();
+				protobufNewClientReg = null;
+			}
+			if (protobufNewHostReg != null) {
+				protobufNewHostReg.unregister();
+				protobufNewHostReg = null;
 			}
 		}
 	}

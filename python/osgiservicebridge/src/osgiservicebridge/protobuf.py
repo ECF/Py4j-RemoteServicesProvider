@@ -466,21 +466,20 @@ def get_pb_type_from_java_class(java_class):
     pdesc_proto.MergeFromString(jdesc_bytes)
     return MakeClass(MakeDescriptor(pdesc_proto))
 
-def get_jmessage_from_presult(jvm,presult):
+def get_jparser_from_pdescriptor(jvm,pdescriptor):
     try:
-        descriptor = presult.DESCRIPTOR
-        dfilename = os.path.splitext(os.path.basename(descriptor.file.name))[0]
-        fqcname = "{0}.{1}${2}".format(descriptor.file.package,dfilename[0].upper() + dfilename[1:],descriptor.name)
-        return getattr(jvm,fqcname).parseFrom(pmessage_to_bytes(presult))
+        dfilename = os.path.splitext(os.path.basename(pdescriptor.file.name))[0]
+        fqcname = "{0}.{1}${2}".format(pdescriptor.file.package,dfilename[0].upper() + dfilename[1:],pdescriptor.name)
+        return getattr(jvm,fqcname)
     except Exception as e:
-        logging.exception('exception in get_jmessage_from_presult')
+        logging.exception('get_jparser_from_descriptor')
         raise e
-     
+
 def get_pb_service_methods(jvm, jmethods, service, executor, timeout, timeunit):
     '''
     get list of service methods by invoking cls constructor with service, jmethod.getName(), and MethodType for method return type
     '''
-    return [ProtobufJavaServiceMethodProtobufServiceMethod(service,
+    return [ProtobufJavaServiceMethod(service,
                 jmethod.getName(),
                 get_return_methtype(jvm,
                                     jmethod.getReturnType().getName(),
@@ -512,43 +511,43 @@ class ProtobufPythonService(Py4jService):
         osgiservicebridge._modify_remoteservice_class(ProtobufPythonService, { 'objectClass': interfaces })
         self._interfaces = get_interfaces(bridge.get_jvm(), interfaces, get_pb_python_service_methods, svc_object, executor, timeout)
 
-    def _raw_bytes_from_java(self,method_name,serialized_args):
-        # find java_method (ServiceMethod) with same name
-        method = self._find_method(method_name)
-        # if not found, we throw
-        if not method:
-            raise AttributeError("'{0}' not found on {1};specs={2}".format(method_name,self.__str__(),[intf for intf in self._interfaces.keys()]))
-        return method._invoke_pbservice(serialized_args)
-
-    def __getattr__(self, name):
-        if name == "__call__":
-            raise AttributeError("Cannot call method '__call__' on service={0}".format(self._proxy))
-        elif name == '_raw_bytes_from_java':
-            return self._raw_bytes_from_java
-
 class ProtobufPythonServiceMethod(PythonServiceMethod):
     
     def __init__(self,service,method_name,method_type, java_param_types, jvm):
         PythonServiceMethod.__init__(self, service, method_name, method_type)
-        self._pmessage_arg_type = get_pb_type_from_java_class(java_param_types[0])
         self._jvm = jvm
+        self._jreturn_parser = None
+        if java_param_types:
+            self._is_pbmessage = jvm.java.lang.Class.forName('com.google.protobuf.Message').isAssignableFrom(java_param_types[0])
+            if self._is_pbmessage:
+                # if it is a pbmessage type
+                # then get the python message type given the first java param type
+                self._pmessage_arg_type = get_pb_type_from_java_class(java_param_types[0])
         
     def _process_result(self,presult):
+        presult = presult.result(self._method_type._timeout) if isinstance(presult, Future) else presult
         if presult:
-            if isinstance(presult, Future):
-                presult = presult.result(self._method_type._timeout)
+            if not self._jreturn_parser:
+                # get and cache self._jreturn_parser
+                self._jreturn_parser = get_jparser_from_pdescriptor(self._jvm, presult.DESCRIPTOR)
+            # time the conversion to jmessage including serialization
             t0 = time.time()
-            jreturn = get_jmessage_from_presult(self._jvm, presult)
+            # we convert
+            presult = self._jreturn_parser.parseFrom(pmessage_to_bytes(presult))
             _timing.debug("protobuf.returnserialize;time={0}".format(1000*(time.time()-t0)))
-            return jreturn
+        return PythonServiceMethod._process_result(self, presult)
     
-    def _invoke_pbservice(self,serialized_pmessage):
-        pmessage = None
-        if serialized_pmessage:
-            t0 = time.time()
-            pmessage = bytes_to_pmessage(self._pmessage_arg_type,serialized_pmessage)
-            _timing.debug("protobuf.argdeserialize;time={0}".format(1000*(time.time()-t0)))
-        return self._method_type._invoke_pservice(self._process_result,self._call_sync,pmessage)
+    def _call_sync(self, *args):
+        call_args = args
+        if self._is_pbmessage:
+            first = args[0] if args else None
+            if first:
+                # for pb services the first argument should be a java Message subclass
+                t0 = time.time()
+                pmessage = jmessage_to_pmessage(self._pmessage_arg_type, first)
+                _timing.debug("protobuf.argdeserialize;time={0}".format(1000*(time.time()-t0)))
+                call_args = [pmessage] + list(args)[1:]
+        return PythonServiceMethod._call_sync(self,*call_args)
 
 # -----------------------------------------------------------------------------------------------
 class ProtobufJavaServiceProxy(JavaServiceProxy):
@@ -557,7 +556,7 @@ class ProtobufJavaServiceProxy(JavaServiceProxy):
         self._interfaces = get_interfaces(jvm, interfaces, get_pb_service_methods, proxy, executor, timeout)
         self._proxy = proxy
         
-class ProtobufJavaServiceMethodProtobufServiceMethod(JavaServiceMethod):
+class ProtobufJavaServiceMethod(JavaServiceMethod):
     
     def __init__(self, proxy, method_name, method_type, java_param_types):
         ServiceMethod.__init__(self,proxy,method_name,method_type)
