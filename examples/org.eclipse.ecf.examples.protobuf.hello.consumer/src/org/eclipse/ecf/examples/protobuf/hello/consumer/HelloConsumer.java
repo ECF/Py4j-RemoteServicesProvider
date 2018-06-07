@@ -2,8 +2,8 @@ package org.eclipse.ecf.examples.protobuf.hello.consumer;
 
 import java.util.concurrent.CompletionStage;
 
-import org.eclipse.ecf.examples.protobuf.hello.IHello;
 import org.eclipse.ecf.examples.protobuf.hello.Hellomsg.HelloMsgContent;
+import org.eclipse.ecf.examples.protobuf.hello.IHello;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -65,14 +65,13 @@ public class HelloConsumer {
 		System.out.println("done with calling pb.sayHelloAsync");
 		// Call remote sayHelloPromise implementation
 		Promise<HelloMsgContent> promise = this.helloservice.sayHelloPromise(createRequestMessage());
-		promise.onResolve(new Runnable() {
-			public void run() {
-				try {
-					System.out.println("pbsayHelloPromise received result="+promise.getValue());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-		}});
+		promise.onResolve(() -> {
+			try {
+				System.out.println("pbsayHelloPromise received result="+promise.getValue());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 		System.out.println("done with calling pbsayHelloPromise");
 	}
 
