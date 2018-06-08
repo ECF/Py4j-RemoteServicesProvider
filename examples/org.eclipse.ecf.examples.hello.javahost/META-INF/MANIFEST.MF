@@ -6,7 +6,6 @@ Bundle-Version: 1.1.0.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.ecf.examples.hello,
- org.eclipse.ecf.provider.py4j;version="2.0.0",
  org.osgi.service.component.annotations;resolution:=optional,
  org.osgi.util.promise;version="1.0.0"
 Service-Component: OSGI-INF/org.eclipse.ecf.examples.hello.javahost.HelloImpl.xml,
