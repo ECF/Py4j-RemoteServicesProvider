@@ -44,7 +44,7 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 		implements RemoteServiceAdminListener, Py4jProvider, DirectProvider {
 
 	protected static final String[] py4jProtobufSupportedIntents = { "passByValue", "exactlyOnce", "ordered", "py4j",
-			"py4j.protobuf", "py4j.async", "osgi.async", "osgi.basic", "osgi.private", "osgi.confidential" };
+			"py4j.protobuf", "py4j.async", "osgi.async", "osgi.private", "osgi.confidential" };
 
 	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
 		super.bindEndpointEventListener(eel, props);
