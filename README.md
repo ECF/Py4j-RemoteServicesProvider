@@ -52,6 +52,6 @@ The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](
 LICENSE
 =======
 
-Python.Java Remote Services is distributed with the Apache3 license. See LICENSE in this directory for more
+Python.Java Remote Services is distributed with the Apache2 license. See LICENSE in this directory for more
 information.
 
