@@ -2,27 +2,47 @@ Python.Java Remote Services
 ===========================
 An Remote Services Distribution Provider for [OSGi R7 Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html).  This allows dynamic remote procedure call between Java and Python objects.  Python-Implementations can be exposed to Java consumers as OSGi services, and Java-based OSGi services can be exposed to Python consumers.
 
-## Python Services accessed from Java
-
-See [here](https://wiki.eclipse.org/Tutorial:_Python_for_OSGi_Services) for a tutorial based on this use case.
-
-## Java Services accessed from Python
-For example, to make an OSGi service available for access in Python it's only necessary to add an OSGi-standard service property.
-
-<pre>
-@Component(property = { "service.exported.interfaces=*", // RS standard service property
-                        "service.exported.configs=ecf.py4j.host"})   //  RS standard service property
-public class EvalImpl implements Eval {
-	public double eval(String expression) throws Exception {
-           ...Java impl here
-        }
-}
-</pre>
-
-Using [ECF's Remote Service Admin](https://wiki.eclipse.org/Eclipse_Communication_Framework_Project#OSGi_Remote_Services) implementation and the [IPOPO 0.8 and above](https://ipopo.readthedocs.io/en/0.7.0/), a proxy for service instance will be injected into a Python service consumer(s), allowing it to call the eval on this OSGi service instance.
-
 ## NEW: Support for OSGi R7 Async Remote Services
 OSGi R7 Remote Services includes support for [Asynchronous Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html#d0e1407) supporting Remote Services with return values of CompletableFuture, Future, or OSGi's Promise (Java) that will be executed asynchronously.
+
+## NEW: Bndtools templates to run Python.Java Hello Example app and Python.Java Protobuf Hello Example app.
+Their is now [support for using ECF Remote Services impl with Bndtools](https://wiki.eclipse.org/Bndtools_Support_for_Remote_Services_Development).  There are now templates in the [bndtools.workspace](https://github.com/ECF/bndtools.workspace) that will run the Python.Java Hello and Protobuf Hello Examples.  Here are the instructions for using the Hello template (also appears in help window when selecting the ECF Python.Java Hello Example template:
+<pre>
+This template will create a bndrun for launching the Python.Java Hello example application.
+Source code repo: https://github.com/ECF/Py4j-RemoteServicesProvider
+Once launched, enable listening by enabling component:  org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider
+e.g. at the osgi console:
+scr:enable org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider
+This command should result in output:
+...
+Jun 14, 2018 12:15:34 PM py4j.GatewayServer fireServerStarted
+INFO: Gateway Server Started
+The java gateway has started listening for connections on port 23333. This port is specified in 
+org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider component source.
+Once the gateway is started, to export a IHello impl remote service (before or after python connection), enable this component:
+scr:enable org.eclipse.ecf.examples.hello.javahost.HelloImpl
+If exported, this will produce endpoint description xml to the console, and the hello impl service will be available to import
+and consumption from Python.
+</pre>
+
+Here are the instructions for the ECF Python.Java Protobuf Hello Example template:
+<pre>
+This template will create a bndrun for launching the Python.Java Protobuf Hello example application.
+Source code repo: https://github.com/ECF/Py4j-RemoteServicesProvider
+Once launched, enable listening by enabling component:  org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPy4jProvider
+e.g. at the osgi console:
+scr:enable org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPy4jProvider
+This command should result in output:
+...
+Jun 14, 2018 12:15:34 PM py4j.GatewayServer fireServerStarted
+INFO: Gateway Server Started
+The java gateway has started listening for connections on port 23333. This port is specified in 
+org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPy4jProvider component source.
+Once the gateway is started, to export a protobuf IHello impl remote service (before or after python connection), enable this component:
+scr:enable org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl
+If exported, this will produce endpoint description xml to the console, and the hello impl service will be available to import
+and consumption from Python.
+</pre>
 
 ## Download and Install
 ### Java Components
