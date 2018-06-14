@@ -9,7 +9,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
 
-@Component(immediate = true, property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.protobuf.host",
+@Component(immediate = true, enabled = false, property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.protobuf.host",
 		"service.intents=osgi.async" })
 public class HelloImpl implements IHello {
 
