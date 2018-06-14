@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Example Hello Provider
 Bundle-SymbolicName: org.eclipse.ecf.examples.protobuf.hello.provider
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 1.2.1.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.eclipse.ecf.core.identity,
@@ -20,4 +20,4 @@ Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.provider.Exa
 Bundle-ActivationPolicy: lazy
 DynamicImport-Package: *
 Automatic-Module-Name: org.eclipse.ecf.examples.protobuf.hello.provider
-
+Provide-Capability: osgi.remoteserviceadmin.distribution

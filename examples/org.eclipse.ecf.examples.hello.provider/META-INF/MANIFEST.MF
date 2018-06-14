@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hello Example Provider
 Bundle-SymbolicName: org.eclipse.ecf.examples.hello.provider
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 1.2.1.qualifier
 Bundle-Vendor: Eclipse.org - ECF
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
@@ -16,3 +16,4 @@ Import-Package: org.eclipse.ecf.core.identity,
 Service-Component: OSGI-INF/org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider.xml
 DynamicImport-Package: *
 Automatic-Module-Name: org.eclipse.ecf.examples.hello.provider
+Provide-Capability: osgi.remoteserviceadmin.distribution

@@ -38,7 +38,7 @@ public class ExampleProtobufPy4jProvider extends ProtobufPy4jProviderImpl
 		super.unbindModuleResolver(ref);
 	}
 	
-	@Reference
+	@Reference(policy=ReferencePolicy.DYNAMIC)
 	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings({ "rawtypes" }) Map props) {
 		super.bindEndpointEventListener(eel, props);
 	}
