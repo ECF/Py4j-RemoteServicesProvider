@@ -1,5 +1,6 @@
-<features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"	name="ecf-rs-p2j-2.8.4">
-    <feature name="ecf-rs-p2j-examples-hello" version="2.8.4" description="ECF Python.Java Distribution Provider with Hello Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"	name="ecf-remoteservices-python.java-2.8.4">
+	
+    <feature name="ecf-rs-distribution-python.java" version=2.8.4" description="ECF Python.Java Core. See https://github.com/ECF/Py4j-RemoteServicesProvider  ">
             <feature>ecf-rs-rsa</feature>
             <feature>ecf-rs-console</feature>
             <bundle>
@@ -14,6 +15,42 @@
             <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct_2.3.1.201806141110.jar</bundle>
             <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j_2.2.3.201806141110.jar</bundle>
             <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.py4j.osgi_1.2.0.201806141110.jar</bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.python_1.0.3.201806141110.jar</bundle>
+    </feature>
+	
+    <feature name="ecf-rs-examples-python.java-hello" version="2.8.4" description="ECF Python.Java Hello Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
+            <feature>ecf-rs-distribution-python.java</feature>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.hello.provider_1.2.3.201806141110.jar
+	    </bundle>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.hello_1.1.1.201806141110.jar
+	    </bundle>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.hello.javahost_1.1.3.201806141110.jar
+	    </bundle>
+    </feature>
+    
+    <feature name="ecf-rs-distribution-python.java-protobuf" version="2.8.4" description="ECF Python.Java Distribution Provider.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
+            <feature>ecf-rs-distribution-python.java</feature>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/com.diffplug.osgi.extension.sun.misc_0.0.0.jar
+	    </bundle>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/com.google.protobuf_3.5.1.jar
+	    </bundle>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.apache.commons.exec_1.3.0.jar
+	    </bundle>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct.protobuf_2.2.1.201806141110.jar
+	    </bundle>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j.protobuf_1.4.2.201806141110.jar
+	    </bundle>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.python.protobuf_1.1.2.201806141110.jar
+	    </bundle>
     </feature>
 
 </features>	
