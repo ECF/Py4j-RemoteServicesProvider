@@ -1,0 +1,16 @@
+   <feature name="ecf-rs-p2j-examples-hello" version="2.8.4" description="ECF Python.Java Distribution Provider with Hello Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
+		        <feature>ecf-rs-rsa</feature>
+		        <feature>ecf-rs-console</feature>
+            <bundle>
+                http://download.eclipse.org/tools/orbit/downloads/drops/R20180525155205/repository/plugins/org.apache.log4j_1.2.15.v201012070815.jar            
+            </bundle>
+            <bundle>
+			          http://download.eclipse.org/tools/orbit/downloads/drops2/R20180606145124/repository/plugins/org.slf4j.api_1.7.10.v20170428-1633.jar
+		        </bundle>
+            <bundle>
+                http://download.eclipse.org/tools/orbit/downloads/drops/R20180525155205/repository/plugins/org.slf4j.log4j_1.7.2.v20130115-1340.jar            
+            </bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct_2.3.1.201806141110.jar</bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j_2.2.3.201806141110.jar</bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.py4j.osgi_1.2.0.201806141110.jar</bundle>
+    </feature>
