@@ -53,4 +53,17 @@
 	    </bundle>
     </feature>
 
+    <feature name="ecf-rs-examples-python.java-protobuf-hello" version="2.8.4" description="ECF Python.Java Protobuf Hello Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
+            <feature>ecf-rs-distribution-python.java-protobuf</feature>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello_1.2.1.201806141110.jar
+	    </bundle>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello.provider_1.2.3.201806141110.jar
+	    </bundle>
+	    <bundle>
+	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello.javahost_1.2.2.201806141110.jar
+	    </bundle>
+    </feature>
+
 </features>	
