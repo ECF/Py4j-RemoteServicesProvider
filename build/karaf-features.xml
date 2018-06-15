@@ -37,9 +37,6 @@
     <feature name="ecf-rs-distribution-python.java-protobuf" version="2.8.4" description="ECF Python.Java Distribution Provider.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
             <feature>ecf-rs-distribution-python.java</feature>
 	    <bundle>
-	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/com.diffplug.osgi.extension.sun.misc_0.0.0.jar
-	    </bundle>
-	    <bundle>
 	        https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/com.google.protobuf_3.5.1.jar
 	    </bundle>
 	    <bundle>
