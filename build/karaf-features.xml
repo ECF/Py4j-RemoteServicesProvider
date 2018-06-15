@@ -1,5 +1,5 @@
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
-	name="ecf-rs-p2j">
+	name="ecf-rs-p2j-2.8.4">
     <feature name="ecf-rs-p2j-examples-hello" version="2.8.4" description="ECF Python.Java Distribution Provider with Hello Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
 		        <feature>ecf-rs-rsa</feature>
 		        <feature>ecf-rs-console</feature>
