@@ -14,9 +14,7 @@ Import-Package: org.eclipse.ecf.core.identity,
  org.osgi.framework;version="1.8.0",
  org.osgi.service.component.annotations;resolution:=optional,
  org.osgi.service.remoteserviceadmin;version="1.1.0"
-Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPy4jProvider.xml,
- OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPythonLauncher.xml,
- OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPythonLaunchCommandProvider.xml
+Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPy4jProvider.xml
 Bundle-ActivationPolicy: lazy
 DynamicImport-Package: *
 Automatic-Module-Name: org.eclipse.ecf.examples.protobuf.hello.provider

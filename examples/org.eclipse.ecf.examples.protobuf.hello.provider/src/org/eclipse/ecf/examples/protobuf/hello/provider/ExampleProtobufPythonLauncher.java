@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
-@Component(immediate=true)
+//@Component(immediate=true)
 public class ExampleProtobufPythonLauncher extends ProtobufPythonLauncher implements PythonLauncher {
 
 	@Override
