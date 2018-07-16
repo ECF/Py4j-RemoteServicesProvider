@@ -7,43 +7,42 @@ OSGi R7 Remote Services includes support for [Asynchronous Remote Services](http
 
 ## NEW: Bndtools templates to run Python.Java Hello Example app and Python.Java Protobuf Hello Example app.
 Their is now [support for using ECF Remote Services impl with Bndtools](https://wiki.eclipse.org/Bndtools_Support_for_Remote_Services_Development).  There are now templates in the [bndtools.workspace](https://github.com/ECF/bndtools.workspace) that will run the Python.Java Hello and Protobuf Hello Examples.  Here are the instructions for using the Hello template (also appears in help window when selecting the ECF Python.Java Hello Example template:
-<pre>
 This template will create a bndrun for launching the Python.Java Hello example application.
 Source code repo: https://github.com/ECF/Py4j-RemoteServicesProvider
-Once launched, enable listening by enabling component:  org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider
-e.g. at the osgi console:
-scr:enable org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider
-This command should result in output:
-...
-Jun 14, 2018 12:15:34 PM py4j.GatewayServer fireServerStarted
+
+Once the resulting bndrun file is resolved and the program is run, output like this will appear in console
+<pre>
+g! SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Jul 15, 2018 7:54:36 PM py4j.GatewayServer fireServerStarted
 INFO: Gateway Server Started
-The java gateway has started listening for connections on port 23333. This port is specified in 
-org.eclipse.ecf.examples.hello.provider.ExamplePy4jProvider component source.
-Once the gateway is started, to export a IHello impl remote service (before or after python connection), enable this component:
-scr:enable org.eclipse.ecf.examples.hello.javahost.HelloImpl
-If exported, this will produce endpoint description xml to the console, and the hello impl service will be available to import
-and consumption from Python.
+19:54:36.814;EXPORT_REGISTRATION;exportedSR=[org.eclipse.ecf.examples.hello.IHello];cID=URIID [uri=py4j://127.0.0.1:25333/java];rsId=1
+--Endpoint Description---
+<endpoint-descriptions xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0">
+  <endpoint-description>
+  ...
 </pre>
 
-Here are the instructions for the ECF Python.Java Protobuf Hello Example template:
+This means that the Java gateway listener is waiting for connections from a Python process.
+
+Instructions for the ECF Python.Java Protobuf Hello Example template:
 <pre>
 This template will create a bndrun for launching the Python.Java Protobuf Hello example application.
 Source code repo: https://github.com/ECF/Py4j-RemoteServicesProvider
-Once launched, enable listening by enabling component:  org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPy4jProvider
-e.g. at the osgi console:
-scr:enable org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPy4jProvider
-This command should result in output:
-...
-Jun 14, 2018 12:15:34 PM py4j.GatewayServer fireServerStarted
+Once the resulting bndrun file is resolved and the program is run, output like this will appear in console
+<pre>
+g! SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Jul 15, 2018 7:54:36 PM py4j.GatewayServer fireServerStarted
 INFO: Gateway Server Started
-The java gateway has started listening for connections on port 23333. This port is specified in 
-org.eclipse.ecf.examples.protobuf.hello.provider.ExampleProtobufPy4jProvider component source.
-Once the gateway is started, to export a protobuf IHello impl remote service (before or after python connection), enable this component:
-scr:enable org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl
-If exported, this will produce endpoint description xml to the console, and the hello impl service will be available to import
-and consumption from Python.
+19:54:36.814;EXPORT_REGISTRATION;exportedSR=[org.eclipse.ecf.examples.protobuf.hello.IHello];cID=URIID [uri=py4j://127.0.0.1:25333/java];rsId=1
+--Endpoint Description---
+<endpoint-descriptions xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0">
+  <endpoint-description>
+  ...
 </pre>
-
 ## Download and Install
 ### Java Components
 
