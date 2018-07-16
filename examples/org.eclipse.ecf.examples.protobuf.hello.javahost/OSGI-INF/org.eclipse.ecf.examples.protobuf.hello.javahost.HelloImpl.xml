@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="false" immediate="true" name="org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.eclipse.ecf.examples.protobuf.hello.javahost.HelloImpl">
    <property name="service.exported.interfaces" value="*"/>
    <property name="service.exported.configs" value="ecf.py4j.protobuf.host"/>
    <property name="service.intents" value="osgi.async"/>

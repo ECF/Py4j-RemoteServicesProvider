@@ -9,6 +9,7 @@
 package org.eclipse.ecf.provider.py4j;
 
 import java.net.InetAddress;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,7 @@ import org.eclipse.ecf.provider.py4j.identity.Py4jNamespace;
 import org.eclipse.ecf.remoteservice.provider.IRemoteServiceDistributionProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
@@ -46,6 +48,14 @@ import py4j.Py4JServerConnection;
  *
  */
 public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteServiceAdminListener, Py4jProvider {
+
+	@SuppressWarnings("rawtypes")
+	public static Map getPropsFromReference(ServiceReference<?> sr) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		for (String key : sr.getPropertyKeys())
+			result.put(key, sr.getProperty(key));
+		return result;
+	}
 
 	protected static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered", "py4j", "py4j.async", "osgi.async", "osgi.private", "osgi.confidential" };
 
