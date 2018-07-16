@@ -27,10 +27,11 @@ INFO: Gateway Server Started
 This means that the Java gateway listener is waiting for connections from a Python process.
 
 Instructions for the ECF Python.Java Protobuf Hello Example template:
-<pre>
+
 This template will create a bndrun for launching the Python.Java Protobuf Hello example application.
 Source code repo: https://github.com/ECF/Py4j-RemoteServicesProvider
 Once the resulting bndrun file is resolved and the program is run, output like this will appear in console
+
 <pre>
 g! SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
 SLF4J: Defaulting to no-operation (NOP) logger implementation
@@ -43,10 +44,11 @@ INFO: Gateway Server Started
   <endpoint-description>
   ...
 </pre>
+
 ## Download and Install
 ### Java Components
 
-#### Dependencies
+### Dependencies
 
 The Py4j Remote Services Provider depends upon the ECF implementation of the OSGi Remote Service Admin (RSA).   The latest version is available at [Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.eclipse.ecf%22) and as an Eclipse p2 repository or zip as described by [this download page](https://www.eclipse.org/ecf/downloads.php).
 
