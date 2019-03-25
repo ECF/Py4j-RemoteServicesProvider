@@ -62,7 +62,7 @@
       <plugin id="org.eclipse.osgi.util"/>
       <plugin id="org.py4j.osgi"/>
       <plugin id="org.slf4j.api"/>
-      <plugin id="org.slf4j.impl.log4j12" fragment="true"/>
+      <plugin id="org.slf4j.apis.log4j"/>
    </plugins>
 
    <configurations>
