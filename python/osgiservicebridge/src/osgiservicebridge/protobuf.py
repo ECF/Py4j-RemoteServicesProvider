@@ -28,9 +28,8 @@ from osgiservicebridge import ENDPOINT_PACKAGE_VERSION_
 import time
 
 from google.protobuf.message import Message
+from google.protobuf.descriptor import EnumDescriptor, EnumValueDescriptor, Descriptor, FieldDescriptor, _OptionsOrNone
 from google.protobuf.descriptor_pb2 import DescriptorProto
-from google.protobuf.descriptor import MakeDescriptor
-from google.protobuf.reflection import MakeClass
 from osgiservicebridge.bridge import JavaRemoteServiceRegistry, Py4jServiceBridgeEventListener,\
     JavaServiceMethod, JavaServiceProxy, JAVA_OBJECT_METHODS,\
     ServiceMethod, get_interfaces,\
@@ -41,6 +40,16 @@ from osgiservicebridge import ECF_SERVICE_EXPORTED_ASYNC_INTERFACES
 from osgiservicebridge.exporter_pb2 import ExportRequest,ExportResponse,UnexportRequest,UnexportResponse
 from concurrent.futures._base import Future
 from concurrent.futures.thread import ThreadPoolExecutor
+from google.protobuf import symbol_database, descriptor_pool
+from _thread import RLock
+from google.protobuf.internal import api_implementation
+
+_USE_C_DESCRIPTORS = False
+if api_implementation.Type() == 'cpp':  
+    # Used by MakeDescriptor in cpp mode
+    import binascii
+    from google.protobuf.pyext import _message
+    _USE_C_DESCRIPTORS = getattr(_message, '_USE_C_DESCRIPTORS', False)
 
 # Documentation strings format
 __docformat__ = "restructuredtext en"
@@ -70,6 +79,10 @@ PB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
 PB_SERVICE_RETURN_TYPE_ATTR = '_return_type'
 PB_SERVICE_ARG_TYPE_ATTR = '_arg_type'
 PB_SERVICE_SOURCE_ATTR = '_source'
+
+_default_symbol_db = symbol_database.Default()
+_default_descriptor_pool = descriptor_pool.Default()
+
 
 def get_instance_method(instance, method_name):
     '''
@@ -453,18 +466,129 @@ class PythonServiceExporter(object):
         else:
             result.success = False
         return result
+
+def MakeClassDescriptor(descriptor_pool, desc_proto, package='', build_file_if_cpp=True, syntax=None):
+    if api_implementation.Type() == 'cpp' and build_file_if_cpp:
+        # The C++ implementation requires all descriptors to be backed by the same
+        # definition in the C++ descriptor pool. To do this, we build a
+        # FileDescriptorProto with the same definition as this descriptor and build
+        # it into the pool.
+        from google.protobuf import descriptor_pb2
+        file_descriptor_proto = descriptor_pb2.FileDescriptorProto()
+        file_descriptor_proto.message_type.add().MergeFrom(desc_proto)
+
+        # Generate a random name for this proto file to prevent conflicts with any
+        # imported ones. We need to specify a file name so the descriptor pool
+        # accepts our FileDescriptorProto, but it is not important what that file
+        # name is actually set to.
+        proto_name = binascii.hexlify(os.urandom(16)).decode('ascii')
+
+        if package:
+            file_descriptor_proto.name = os.path.join(package.replace('.', '/'),
+                                                proto_name + '.proto')
+            file_descriptor_proto.package = package
+        else:
+            file_descriptor_proto.name = proto_name + '.proto'
+
+        _default_descriptor_pool.Add(file_descriptor_proto)
+        result = descriptor_pool.FindFileByName(file_descriptor_proto.name)
+
+        if _USE_C_DESCRIPTORS:
+            return result.message_types_by_name[desc_proto.name]
+
+    full_message_name = [desc_proto.name]
+    if package: full_message_name.insert(0, package)
+
+    # Create Descriptors for enum types
+    enum_types = {}
+    for enum_proto in desc_proto.enum_type:
+        full_name = '.'.join(full_message_name + [enum_proto.name])
+        enum_desc = EnumDescriptor(
+            enum_proto.name, full_name, None, [
+                EnumValueDescriptor(enum_val.name, ii, enum_val.number)
+                for ii, enum_val in enumerate(enum_proto.value)])
+        enum_types[full_name] = enum_desc
+
+    # Create Descriptors for nested types
+    nested_types = {}
+    for nested_proto in desc_proto.nested_type:
+        full_name = '.'.join(full_message_name + [nested_proto.name])
+        # Nested types are just those defined inside of the message, not all types
+        # used by fields in the message, so no loops are possible here.
+        nested_desc = MakeClassDescriptor(descriptor_pool,nested_proto,
+                                 package='.'.join(full_message_name),
+                                 build_file_if_cpp=False,
+                                 syntax=syntax)
+        nested_types[full_name] = nested_desc
+
+    fields = []
+    for field_proto in desc_proto.field:
+        full_name = '.'.join(full_message_name + [field_proto.name])
+        enum_desc = None
+        nested_desc = None
+        if field_proto.json_name:
+            json_name = field_proto.json_name
+        else:
+            json_name = None
+        if field_proto.HasField('type_name'):
+            type_name = field_proto.type_name
+            full_type_name = '.'.join(full_message_name +
+                                [type_name[type_name.rfind('.')+1:]])
+            if full_type_name in nested_types:
+                nested_desc = nested_types[full_type_name]
+            elif full_type_name in enum_types:
+                enum_desc = enum_types[full_type_name]
+            # Else type_name references a non-local type, which isn't implemented
+        field = FieldDescriptor(
+            field_proto.name, full_name, field_proto.number - 1,
+            field_proto.number, field_proto.type,
+            FieldDescriptor.ProtoTypeToCppProtoType(field_proto.type),
+            field_proto.label, None, nested_desc, enum_desc, None, False, None,
+            options=_OptionsOrNone(field_proto), has_default_value=False,
+            json_name=json_name)
+        fields.append(field)
+
+    desc_name = '.'.join(full_message_name)
+    return Descriptor(desc_proto.name, desc_name, None, None, fields,
+                    list(nested_types.values()), list(enum_types.values()), [],
+                    options=_OptionsOrNone(desc_proto))
     
+    
+_lock = RLock()
+_jclass_pclass_map = {}
+
+class PBClass(object):
+    
+    def __init__(self, java_class, pool = _default_descriptor_pool):
+        self._descriptor_pool = pool
+        self._java_class = java_class
+        jdesc_bytes = java_class.getMethod("getDescriptor",None).invoke(None,None).toProto().toByteArray()
+        if PY2:
+            jdesc_bytes = str(jdesc_bytes)
+        pdesc_proto = DescriptorProto()
+        pdesc_proto.MergeFromString(jdesc_bytes)
+        try:
+            pdesc_proto_desc = self._descriptor_pool.FindFileContainingSymbol(pdesc_proto.name).message_types_by_name[pdesc_proto.name]
+        except KeyError:
+            pdesc_proto_desc = MakeClassDescriptor(self._descriptor_pool, pdesc_proto)
+        self._python_class = _default_symbol_db.GetPrototype(pdesc_proto_desc)
+     
+    def GetJavaClass(self):
+        return self._java_class   
+
+    def GetPythonClass(self):
+        return self._python_class   
+ 
 # ---------------------------------------------------------------------------------------------------------
 #  API for async method invocation
 # ---------------------------------------------------------------------------------------------------------
-
 def get_pb_type_from_java_class(java_class):
-    jdesc_bytes = java_class.getMethod("getDescriptor",None).invoke(None,None).toProto().toByteArray()
-    if PY2:
-        jdesc_bytes = str(jdesc_bytes)
-    pdesc_proto = DescriptorProto()
-    pdesc_proto.MergeFromString(jdesc_bytes)
-    return MakeClass(MakeDescriptor(pdesc_proto))
+    with _lock:
+        pbclass_entry = _jclass_pclass_map.get(java_class,None)
+        if not pbclass_entry:
+            pbclass_entry = PBClass(java_class)
+            _jclass_pclass_map[java_class] = pbclass_entry
+    return pbclass_entry.GetPythonClass()
 
 def get_jparser_from_pdescriptor(jvm,pdescriptor):
     try:
