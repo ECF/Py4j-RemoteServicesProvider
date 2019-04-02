@@ -1,4 +1,4 @@
-<features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"	name="ecf-remoteservices-python.java-2.8.4">
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"	name="ecf-remoteservices-python.java-2.9.0">
 	
     <feature name="ecf-rs-distribution-python.java" version="2.9.0" description="ECF Python.Java Core. See https://github.com/ECF/Py4j-RemoteServicesProvider">
             <feature>ecf-rs-rsa</feature>
