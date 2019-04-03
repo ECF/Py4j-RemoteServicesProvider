@@ -490,7 +490,7 @@ def MakeClassDescriptor(descriptor_pool, desc_proto, package='', build_file_if_c
         else:
             file_descriptor_proto.name = proto_name + '.proto'
 
-        _default_descriptor_pool.Add(file_descriptor_proto)
+        descriptor_pool.Add(file_descriptor_proto)
         result = descriptor_pool.FindFileByName(file_descriptor_proto.name)
 
         if _USE_C_DESCRIPTORS:

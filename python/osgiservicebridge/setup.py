@@ -10,10 +10,6 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-# Get the long description from the README file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
-
 import os
 
 VERSION_PATH = os.path.join("src", "osgiservicebridge", "version.py")
@@ -35,7 +31,12 @@ setup(
     version=VERSION,
 
     description='OSGi services implemented in Python',
-    long_description=long_description,
+    long_description='osgiservicebridge provides the Python library '
+                     'for OSGi R7 remote services between Java '
+                     'and Python.  See the github project '
+                     'at https://github.com/ECF/Py4j-RemoteServicesProvider '
+                     'for detailed information about OSGi remote services '
+                     'and for examples',
 
     # The project's main homepage.
     url='https://github.com/ECF/Py4j-RemoteServicesProvider',
