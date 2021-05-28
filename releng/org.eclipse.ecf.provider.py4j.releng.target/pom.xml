@@ -9,7 +9,7 @@
     <relativePath>../../</relativePath>
   </parent>
   <artifactId>org.eclipse.ecf.provider.py4j.releng.target</artifactId>
-  <version>1.3.0-SNAPSHOT</version>
+  <version>1.3.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <build>
@@ -27,15 +27,15 @@
             </goals>
             <configuration>
               <artifacts>
-                <artifact>
-                  <file>ecf-oxygen.target</file>
-                  <type>target</type>
-                  <classifier>ecf-oxygen</classifier>
-                </artifact>
                  <artifact>
                   <file>ecf-photon.target</file>
                   <type>target</type>
                   <classifier>ecf-photon</classifier>
+                </artifact>
+                 <artifact>
+                  <file>ecf-2020-06.target</file>
+                  <type>target</type>
+                  <classifier>ecf-2020-06</classifier>
                 </artifact>
               </artifacts>
             </configuration>

@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ECF Hello Example API
 Bundle-SymbolicName: org.eclipse.ecf.examples.hello
-Bundle-Version: 1.1.1.qualifier
+Bundle-Version: 1.1.2.qualifier
 Bundle-Vendor: Eclipse.org - ECF
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.ecf.examples.hello
 Automatic-Module-Name: org.eclipse.ecf.examples.hello

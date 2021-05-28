@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Protobuf Hello Example Provider
 Bundle-SymbolicName: org.eclipse.ecf.examples.protobuf.hello.provider
-Bundle-Version: 1.2.4.qualifier
+Bundle-Version: 1.2.5.qualifier
 Bundle-Vendor: Eclipse.org - ECF
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.ecf.provider.py4j.protobuf,
  org.osgi.framework;version="1.8.0"
 Bundle-ActivationPolicy: lazy

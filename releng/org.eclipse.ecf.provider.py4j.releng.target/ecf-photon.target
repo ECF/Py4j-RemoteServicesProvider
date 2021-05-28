@@ -21,7 +21,7 @@
 <unit id="org.eclipse.ecf.remoteservice.sdk.examples.feature.source.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.remoteservice.sdk.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.remoteservice.sdk.feature.source.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/rt/ecf/3.14.4/site.p2"/>
+<repository location="http://download.eclipse.org/rt/ecf/3.14.21/site.p2"/>
 </location>
 <location path="${project_loc:org.eclipse.ecf.provider.py4j.releng.target}/bundles" type="Directory"/>
 	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
