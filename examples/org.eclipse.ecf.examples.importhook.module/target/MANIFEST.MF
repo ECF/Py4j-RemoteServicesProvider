@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Example ImportHook Module
 Bundle-SymbolicName: org.eclipse.ecf.examples.importhook.module
 Bundle-Version: 1.0.2.v20180614-1811
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.ecf.provider.direct;version="2.0.0",org.osgi
  .framework;version="1.8.0",org.osgi.service.component.annotations;resol

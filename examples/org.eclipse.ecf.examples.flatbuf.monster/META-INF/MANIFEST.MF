@@ -4,7 +4,7 @@ Bundle-Name: Monster
 Bundle-SymbolicName: org.eclipse.ecf.examples.flatbuf.monster
 Bundle-Version: 1.0.1.qualifier
 Bundle-Vendor: Eclipse.org - ECF
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: com.google.flatbuffers;version="1.0.0"
 Export-Package: org.eclipse.ecf.examples.flatbuf.monster
 Automatic-Module-Name: org.eclipse.ecf.examples.flatbuf.monster

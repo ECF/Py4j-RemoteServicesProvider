@@ -4,7 +4,7 @@ Bundle-Name: ECF Hello Example Host
 Bundle-SymbolicName: org.eclipse.ecf.examples.hello.javahost
 Bundle-Version: 1.1.4.qualifier
 Bundle-Vendor: Eclipse.org - ECF
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: org.eclipse.ecf.examples.hello,
  org.osgi.service.component.annotations;resolution:=optional,
  org.osgi.util.promise;version="1.0.0"

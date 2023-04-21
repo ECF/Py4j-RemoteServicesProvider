@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.ecf.provider.py4j.feature"
       label="ECF Py4j Remote Services Distribution Provider Feature"
-      version="2.9.1.qualifier"
+      version="2.10.0.qualifier"
       provider-name="Eclipse.org - ECF">
 
    <description url="http://www.example.com/description">
@@ -26,13 +26,6 @@
 
    <plugin
          id="org.eclipse.ecf.provider.py4j"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.google.protobuf"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -159,6 +152,20 @@
 
    <plugin
          id="org.apache.commons.exec"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.com.google.protobuf.protobuf-java"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.com.google.protobuf.protobuf-java.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
