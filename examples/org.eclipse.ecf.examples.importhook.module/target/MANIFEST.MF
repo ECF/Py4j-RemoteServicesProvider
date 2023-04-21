@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Example ImportHook Module
 Bundle-SymbolicName: org.eclipse.ecf.examples.importhook.module
-Bundle-Version: 1.0.2.v20180614-1811
+Bundle-Version: 1.0.2.v20230421-2314
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.ecf.provider.direct;version="2.0.0",org.osgi
@@ -13,6 +13,8 @@ Service-Component: OSGI-INF/org.eclipse.ecf.examples.importhook.module.E
 Automatic-Module-Name: org.eclipse.ecf.examples.importhook.module
 Eclipse-SourceReferences: scm:git:https://github.com/ECF/Py4j-RemoteServ
  icesProvider.git/examples/org.eclipse.ecf.examples.importhook.module;pa
- th="examples/org.eclipse.ecf.examples.importhook.module";commitId=fa819
- ea68ccb834bcb8d7ea27f2ad5481b89b0e3
+ th="examples/org.eclipse.ecf.examples.importhook.module";commitId=1cd79
+ 503d18fabcdc3b4e9a002d1db4124da3cb9
+Bundle-License: Apache v2.0;link="https://www.apache.org/licenses/LICENS
+ E-2.0"
 
