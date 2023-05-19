@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='2'>
-  <unit id='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230421-2314' singleton='false' generation='2'>
-    <update id='org.eclipse.ecf.examples.importhook.module' range='[0.0.0,1.0.2.v20230421-2314)' severity='0'/>
+  <unit id='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230519-0524' singleton='false' generation='2'>
+    <update id='org.eclipse.ecf.examples.importhook.module' range='[0.0.0,1.0.2.v20230519-0524)' severity='0'/>
     <properties size='5'>
       <property name='org.eclipse.equinox.p2.name' value='Example ImportHook Module'/>
       <property name='maven-groupId' value='org.eclipse.ecf.provider.py4j'/>
@@ -10,9 +10,9 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='4'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230421-2314'/>
-      <provided namespace='osgi.bundle' name='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230421-2314'/>
-      <provided namespace='osgi.identity' name='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230421-2314'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230519-0524'/>
+      <provided namespace='osgi.bundle' name='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230519-0524'/>
+      <provided namespace='osgi.identity' name='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230519-0524'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -30,19 +30,19 @@
       </requiredProperties>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230421-2314'/>
+      <artifact classifier='osgi.bundle' id='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230519-0524'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.eclipse.ecf.examples.importhook.module&#xA;Bundle-Version: 1.0.2.v20230421-2314&#xA;
+          Bundle-SymbolicName: org.eclipse.ecf.examples.importhook.module&#xA;Bundle-Version: 1.0.2.v20230519-0524&#xA;
         </instruction>
       </instructions>
     </touchpointData>
   </unit>
-  <unit id='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230421-2314' singleton='false'>
-    <update id='org.eclipse.ecf.examples.importhook.module.source' range='[0.0.0,1.0.2.v20230421-2314)' severity='0'/>
+  <unit id='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230519-0524' singleton='false'>
+    <update id='org.eclipse.ecf.examples.importhook.module.source' range='[0.0.0,1.0.2.v20230519-0524)' severity='0'/>
     <properties size='10'>
       <property name='df_LT.bundleVendor' value='unknown'/>
       <property name='df_LT.bundleName' value='Example ImportHook Module Source'/>
@@ -56,9 +56,9 @@
       <property name='maven-type' value='java-source'/>
     </properties>
     <provides size='5'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230421-2314'/>
-      <provided namespace='osgi.bundle' name='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230421-2314'/>
-      <provided namespace='osgi.identity' name='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230421-2314'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230519-0524'/>
+      <provided namespace='osgi.bundle' name='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230519-0524'/>
+      <provided namespace='osgi.identity' name='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230519-0524'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -67,13 +67,13 @@
       <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
     </provides>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230421-2314'/>
+      <artifact classifier='osgi.bundle' id='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230519-0524'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.eclipse.ecf.examples.importhook.module.source&#xA;Bundle-Version: 1.0.2.v20230421-2314&#xA;
+          Bundle-SymbolicName: org.eclipse.ecf.examples.importhook.module.source&#xA;Bundle-Version: 1.0.2.v20230519-0524&#xA;
         </instruction>
       </instructions>
     </touchpointData>

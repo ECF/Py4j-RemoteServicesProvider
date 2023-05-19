@@ -5,6 +5,7 @@
 	<projects>
 		<project>org.eclipse.ecf.examples.importhook.module</project>
 		<project>osgiservicebridge</project>
+		<project>py4j-python</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

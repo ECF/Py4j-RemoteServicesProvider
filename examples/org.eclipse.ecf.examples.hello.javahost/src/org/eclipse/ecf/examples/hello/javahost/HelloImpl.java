@@ -34,11 +34,8 @@ public class HelloImpl implements IHello {
 	@Override
 	public CompletableFuture<String> sayHelloAsync(String from, String message) {
 		System.out.println("Java.sayHelloAsync called by "+from+" with message: '"+message+"'");
-		CompletableFuture<String> result = new CompletableFuture<String>();
 		// Simplest impl is to complete right away
-		result.complete("JavaAsync says: Hi "+from + ", nice to see you");
-		// Must return a non-null CompletableFuture instance
-		return result;
+		return CompletableFuture.completedFuture("JavaAsync says: Hi "+from + ", nice to see you");
 	}
 
 	@Override

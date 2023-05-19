@@ -44,7 +44,7 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 			if (timingLogger != null && timingLogger.isDebugEnabled()) {
 				long endTime = System.currentTimeMillis();
 				timingLogger.debug("protobuf.request.serialize;class=" + message.getClass().getName() + ";dif="
-						+ (endTime - startTime)+"ms");
+						+ (endTime - startTime) + "ms");
 			}
 		}
 		return messageBytes;
@@ -54,7 +54,7 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 			throws InvalidProtocolBufferException {
 		long startTime = 0;
 		// If result is null/None then return null
-		if (resultBytes == null || resultParser == null) 
+		if (resultBytes == null || resultParser == null)
 			return null;
 		// Now deserialize result
 		if (timingLogger != null && timingLogger.isDebugEnabled())
@@ -63,8 +63,8 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 		Message result = (Message) resultParser.parseFrom(resultBytes);
 		if (timingLogger != null && timingLogger.isDebugEnabled()) {
 			long endTime = System.currentTimeMillis();
-			timingLogger.debug(
-					"protobuf.response.parse;class=" + result.getClass().getName() + ";diff=" + (endTime - startTime)+"ms");
+			timingLogger.debug("protobuf.response.parse;class=" + result.getClass().getName() + ";diff="
+					+ (endTime - startTime) + "ms");
 		}
 		return result;
 	}
@@ -76,7 +76,8 @@ public class ProtobufCallableEndpointImpl implements ProtobufCallableEndpoint {
 		byte[] resultBytes = getExternalCallableEndpoint()._call_endpoint(rsId, methodName, messageBytes);
 		if (timingLogger != null && timingLogger.isDebugEnabled()) {
 			long end = System.currentTimeMillis();
-			timingLogger.debug("protobuf.pythonrpc;rsId=" + rsId + ";method=" + methodName + ";time=" + (end - start)+"ms");
+			timingLogger.debug(
+					"protobuf.pythonrpc;rsId=" + rsId + ";method=" + methodName + ";time=" + (end - start) + "ms");
 		}
 		return resultBytes;
 	}

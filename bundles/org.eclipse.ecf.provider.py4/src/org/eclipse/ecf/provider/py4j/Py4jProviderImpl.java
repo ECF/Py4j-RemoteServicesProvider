@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
@@ -57,27 +58,28 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		return result;
 	}
 
-	protected static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered", "py4j", "py4j.async", "osgi.async", "osgi.private", "osgi.confidential" };
+	protected static final String[] py4jSupportedIntents = { "passByReference", "exactlyOnce", "ordered", "py4j",
+			"py4j.async", "osgi.async", "osgi.private", "osgi.confidential" };
 
 	protected ID localId;
-	
+
 	protected ID getLocalID() {
 		synchronized (getLock()) {
 			return localId;
 		}
 	}
-	
+
 	protected void setLocalId(String address, int port) {
 		synchronized (getLock()) {
-			localId = Py4jNamespace.createPy4jID(address,port);
+			localId = Py4jNamespace.createPy4jID(address, port);
 		}
 	}
-	
-	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
+
+	public void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
 		super.bindEndpointEventListener(eel, props);
 	}
 
-	protected void unbindEndpointEventListener(EndpointEventListener eel) {
+	public void unbindEndpointEventListener(EndpointEventListener eel) {
 		super.unbindEndpointEventListener(eel);
 	}
 
@@ -175,11 +177,9 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 							@Override
 							public IContainer createContainer() throws ContainerCreateException {
 								ID lId = Py4jProviderImpl.this.localId;
-								if (lId == null) 
+								if (lId == null)
 									throw new ContainerCreateException("Cannot create container with null localId");
-								return new DirectHostContainer(
-										lId,
-										getInternalServiceProvider());
+								return new DirectHostContainer(lId, getInternalServiceProvider());
 							}
 						}, py4jSupportedIntents),
 				null);
@@ -212,7 +212,7 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 	public static final String CONNECT_TIMEOUT_SYSPROP = PP + CONNECT_TIMEOUT_PROP;
 	public static final String MINCONNECTION_TIME_PROP = "minConnectionTime";
 	public static final String MINCONNECTION_TIME_SYSPROP = PP + MINCONNECTION_TIME_PROP;
-	
+
 	public @interface Config {
 		int pythonPort() default 25334;
 
@@ -225,7 +225,7 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		int readTimeout() default 0;
 
 		int connectTimeout() default 0;
-		
+
 		int minConnectionTime() default 0;
 	}
 
@@ -237,24 +237,26 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 				.setClassLoadingStrategyBundles(new Bundle[] { getContext().getBundle() }).setDebug(debug);
 	}
 
-	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
+	public void activate(BundleContext context, Map<String, ?> properties) throws Exception {
 		super.activate(context);
 		Integer pythonPort = PropertiesUtil.getIntValue(PYTHON_PORT_SYSPROP, properties, PYTHON_PORT_PROP,
 				py4j.GatewayServer.DEFAULT_PYTHON_PORT);
 		Integer port = PropertiesUtil.getIntValue(JAVA_PORT_SYSPROP, properties, JAVA_PORT_PROP,
 				py4j.GatewayServer.DEFAULT_PORT);
 		Boolean debug = PropertiesUtil.getBooleanValue(DEBUG_SYSPROP, properties, DEBUG_PROP, false);
-		String address = PropertiesUtil.getStringValue(ADDRESS_SYSPROP, properties, ADDRESS_PROP, py4j.GatewayServer.DEFAULT_ADDRESS);
+		String address = PropertiesUtil.getStringValue(ADDRESS_SYSPROP, properties, ADDRESS_PROP,
+				py4j.GatewayServer.DEFAULT_ADDRESS);
 		Integer readTimeout = PropertiesUtil.getIntValue(READ_TIMEOUT_SYSPROP, properties, READ_TIMEOUT_PROP,
 				py4j.GatewayServer.DEFAULT_READ_TIMEOUT);
 		Integer connectTimeout = PropertiesUtil.getIntValue(CONNECT_TIMEOUT_SYSPROP, properties, CONNECT_TIMEOUT_PROP,
 				py4j.GatewayServer.DEFAULT_CONNECT_TIMEOUT);
-		Integer minConnectionTime = PropertiesUtil.getIntValue(MINCONNECTION_TIME_SYSPROP, properties, MINCONNECTION_TIME_PROP, 0);
+		Integer minConnectionTime = PropertiesUtil.getIntValue(MINCONNECTION_TIME_SYSPROP, properties,
+				MINCONNECTION_TIME_PROP, 0);
 		synchronized (getLock()) {
-			createOSGiGateway(pythonPort,address,minConnectionTime);
+			createOSGiGateway(pythonPort, address, minConnectionTime);
 			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(port, address, debug,
 					readTimeout, connectTimeout);
-			setLocalId(address,port);
+			setLocalId(address, port);
 			createAndStartGatewayServer(builder.build());
 			registerHostDistributionProvider();
 			registerClientDistributionProvider();
@@ -262,11 +264,13 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 	}
 
 	protected void createAndStartGatewayServer(GatewayServerConfiguration serverConfiguration) throws Exception {
+		py4j.GatewayServer.PY4J_LOGGER.setLevel(Level.FINEST);
 		this.gatewayServer = new GatewayServer(serverConfiguration);
 	}
 
 	protected void createOSGiGateway(int pythonPort, String address, int minConnectionTime) throws Exception {
-		this.osgiGateway = new DirectProviderGateway(this, new CallbackClient(pythonPort,InetAddress.getByName(address),minConnectionTime,TimeUnit.SECONDS));
+		this.osgiGateway = new DirectProviderGateway(this,
+				new CallbackClient(pythonPort, InetAddress.getByName(address), minConnectionTime, TimeUnit.SECONDS));
 	}
 
 	protected void activate(BundleContext context, Config config) throws Exception {
@@ -279,7 +283,7 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		Integer connectTimeout = config.connectTimeout();
 		Integer minConnectionTime = config.minConnectionTime();
 		synchronized (getLock()) {
-			createOSGiGateway(pythonPort,address,minConnectionTime);
+			createOSGiGateway(pythonPort, address, minConnectionTime);
 			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(javaPort, address,
 					debug, readTimeout, connectTimeout);
 			createAndStartGatewayServer(builder.build());
@@ -289,7 +293,7 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		}
 	}
 
-	protected void deactivate() {
+	public void deactivate() {
 		synchronized (getLock()) {
 			super.deactivate(getContext());
 			if (hostReg != null) {

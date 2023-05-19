@@ -12,7 +12,8 @@ import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
 
 /**
- * Container instantiator for direct remote service client and host distribution providers
+ * Container instantiator for direct remote service client and host distribution
+ * providers
  * 
  * @author slewis
  *

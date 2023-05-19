@@ -29,7 +29,6 @@ import time
 
 from google.protobuf.message import Message
 from google.protobuf.descriptor import EnumDescriptor, EnumValueDescriptor, Descriptor, FieldDescriptor, _OptionsOrNone
-from google.protobuf.descriptor_pb2 import DescriptorProto
 from osgiservicebridge.bridge import JavaRemoteServiceRegistry, Py4jServiceBridgeEventListener,\
     JavaServiceMethod, JavaServiceProxy, JAVA_OBJECT_METHODS,\
     ServiceMethod, get_interfaces,\
@@ -41,14 +40,15 @@ from osgiservicebridge.exporter_pb2 import ExportRequest,ExportResponse,Unexport
 from concurrent.futures._base import Future
 from concurrent.futures.thread import ThreadPoolExecutor
 from google.protobuf import symbol_database, descriptor_pool
-from _thread import RLock
+from threading import RLock
 from google.protobuf.internal import api_implementation
+from google.protobuf.descriptor_pb2 import _DESCRIPTORPROTO
 
 _USE_C_DESCRIPTORS = False
 if api_implementation.Type() == 'cpp':  
     # Used by MakeDescriptor in cpp mode
     import binascii
-    from google.protobuf.pyext import _message
+    from google.protobuf import message as _message
     _USE_C_DESCRIPTORS = getattr(_message, '_USE_C_DESCRIPTORS', False)
 
 # Documentation strings format
@@ -474,7 +474,7 @@ def MakeClassDescriptor(descriptor_pool, desc_proto, package='', build_file_if_c
         # FileDescriptorProto with the same definition as this descriptor and build
         # it into the pool.
         from google.protobuf import descriptor_pb2
-        file_descriptor_proto = descriptor_pb2.FileDescriptorProto()
+        file_descriptor_proto = descriptor_pb2._FIELDDESCRIPTORPROTO
         file_descriptor_proto.message_type.add().MergeFrom(desc_proto)
 
         # Generate a random name for this proto file to prevent conflicts with any
@@ -565,7 +565,7 @@ class PBClass(object):
         jdesc_bytes = java_class.getMethod("getDescriptor",None).invoke(None,None).toProto().toByteArray()
         if PY2:
             jdesc_bytes = str(jdesc_bytes)
-        pdesc_proto = DescriptorProto()
+        pdesc_proto = _DESCRIPTORPROTO
         pdesc_proto.MergeFromString(jdesc_bytes)
         try:
             pdesc_proto_desc = self._descriptor_pool.FindFileContainingSymbol(pdesc_proto.name).message_types_by_name[pdesc_proto.name]

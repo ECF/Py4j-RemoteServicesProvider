@@ -11,8 +11,9 @@ package org.eclipse.ecf.provider.direct;
 import java.util.Map;
 
 /**
- * Interface exposed to external processes for directly discovering services exported by the external process. For
- * example, services hosted/implemented in Python are made available as java remote services by using this interface.
+ * Interface exposed to external processes for directly discovering services
+ * exported by the external process. For example, services hosted/implemented in
+ * Python are made available as java remote services by using this interface.
  * 
  * @author slewis
  *

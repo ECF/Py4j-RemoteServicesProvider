@@ -18,7 +18,8 @@ import org.eclipse.ecf.remoteservice.provider.RemoteServiceContainerInstantiator
 import org.eclipse.ecf.remoteservice.provider.RemoteServiceDistributionProvider;
 
 /**
- * Support superclass for DirectRemoteServiceClientDistributionPovider, and DirectRemoteServiceClientDistributionPovider
+ * Support superclass for DirectRemoteServiceClientDistributionPovider, and
+ * DirectRemoteServiceClientDistributionPovider
  * 
  * @author slewis
  *

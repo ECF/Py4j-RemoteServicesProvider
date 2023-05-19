@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product uid="hello.javahost" useFeatures="false" includeLaunchers="true">
+<product uid="hello.javahost" useFeatures="false" includeLaunchers="true" autoIncludeRequirements="true">
 
    <configIni use="default">
    </configIni>
@@ -38,14 +38,19 @@
       <plugin id="org.eclipse.ecf.discovery"/>
       <plugin id="org.eclipse.ecf.examples.hello"/>
       <plugin id="org.eclipse.ecf.examples.hello.javahost"/>
-      <plugin id="org.eclipse.ecf.examples.hello.provider"/>
+      <plugin id="org.eclipse.ecf.examples.importhook.module"/>
+      <plugin id="org.eclipse.ecf.examples.protobuf.hello"/>
+      <plugin id="org.eclipse.ecf.examples.protobuf.hello.javahost"/>
       <plugin id="org.eclipse.ecf.identity"/>
       <plugin id="org.eclipse.ecf.osgi.services.distribution"/>
       <plugin id="org.eclipse.ecf.osgi.services.remoteserviceadmin"/>
       <plugin id="org.eclipse.ecf.osgi.services.remoteserviceadmin.console"/>
       <plugin id="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy"/>
       <plugin id="org.eclipse.ecf.provider.direct"/>
+      <plugin id="org.eclipse.ecf.provider.direct.protobuf"/>
       <plugin id="org.eclipse.ecf.provider.py4j"/>
+      <plugin id="org.eclipse.ecf.provider.py4j.protobuf"/>
+      <plugin id="org.eclipse.ecf.python.protobuf"/>
       <plugin id="org.eclipse.ecf.remoteservice"/>
       <plugin id="org.eclipse.ecf.remoteservice.asyncproxy"/>
       <plugin id="org.eclipse.equinox.common"/>
@@ -59,6 +64,7 @@
       <plugin id="org.py4j.osgi"/>
       <plugin id="org.slf4j.api"/>
       <plugin id="org.slf4j.apis.log4j"/>
+      <plugin id="wrapped.com.google.protobuf.protobuf-java"/>
    </plugins>
 
    <configurations>

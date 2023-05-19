@@ -83,9 +83,9 @@ public class PropertiesUtil {
 		else if (val instanceof Integer)
 			return ((Integer) val).longValue();
 		else if (val instanceof String)
-			return new Long((String) val);
+			return Long.valueOf((String) val);
 		else
-			return new Long(0);
+			return Long.valueOf(0);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

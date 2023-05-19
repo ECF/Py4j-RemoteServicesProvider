@@ -99,7 +99,6 @@ public class ProtobufClientContainer extends AbstractRSAClientContainer {
 			return null;
 		}
 
-
 		private Object invokeCall(RSARemoteCall remoteCall) throws Exception {
 			// Checks on arguments/parameters
 			Object[] args = remoteCall.getParameters();
@@ -126,8 +125,8 @@ public class ProtobufClientContainer extends AbstractRSAClientContainer {
 			@SuppressWarnings("rawtypes")
 			Parser parser = null;
 			if (!returnType.equals(Void.TYPE)) {
-					Method m = returnType.getMethod(PROTOBUF_PARSER_STATIC_METHODNAME, (Class[]) null);
-					parser = Parser.class.cast(m.invoke(null, (Object[]) null));
+				Method m = returnType.getMethod(PROTOBUF_PARSER_STATIC_METHODNAME, (Class[]) null);
+				parser = Parser.class.cast(m.invoke(null, (Object[]) null));
 				// Actually make call via AbstractProtobufCallableEndpoint
 				return endpoint.call_endpoint(rsId, remoteCall.getMethod(), (Message) message, parser);
 			}

@@ -278,6 +278,43 @@ class JavaPathHook(object):
     class Java:
         implements = [JAVA_PATH_PROVIDER]
                 
+from py4j.java_collections import JavaMap, JavaMember, JavaIterator, register_output_converter
+from py4j import protocol as proto
+
+class BridgeJavaIterator(JavaIterator):
+    def __init__(self, target_id, gateway_client):
+        JavaIterator.__init__(self, target_id, gateway_client)
+
+    def next(self):
+        if self._next_name not in self._methods:
+            self._methods[self._next_name] = JavaMember(
+                self._next_name, self,
+                self._target_id, self._gateway_client)
+        if self.hasNext():
+            return self._methods[self._next_name]()
+        else:
+            raise StopIteration()
+        
+    __next__ = next
+    
+class BridgeJavaMap(JavaMap):
+    
+    def __init__(self, target_id, gateway_client):
+        JavaMap.__init__(self, target_id, gateway_client)
+        
+    def __repr__(self):
+        items = (
+            "{0}: {1}".format(repr(k), repr(self.get(k)))
+            for k in self.keySet())
+        return "{{{0}}}".format(", ".join(items))
+    
+register_output_converter(
+proto.MAP_TYPE, lambda target_id, gateway_client:
+BridgeJavaMap(target_id, gateway_client))
+register_output_converter(
+proto.ITERATOR_TYPE, lambda target_id, gateway_client:
+BridgeJavaIterator(target_id, gateway_client))
+
 class Py4jServiceBridge(object):
     '''Py4jServiceBridge class
     This class provides and API for consumers to use the Py4jServiceBridge.  This 

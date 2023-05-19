@@ -37,8 +37,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Abstract direct provider. This class provides support for creating remote service distribution providers that have
- * direct connections. Py4j provider is such a distribution provider and is based on this class.
+ * Abstract direct provider. This class provides support for creating remote
+ * service distribution providers that have direct connections. Py4j provider is
+ * such a distribution provider and is based on this class.
  *
  */
 public abstract class AbstractDirectProvider
@@ -398,7 +399,7 @@ public abstract class AbstractDirectProvider
 			intdd = this.internalDirectDiscovery;
 		}
 		if (intdd != null) {
-			Map<String, Object> edmap = ed.getProperties();
+			Map<String, Object> edmap = new HashMap<String,Object>(ed.getProperties());
 			switch (type) {
 			case EndpointEvent.ADDED:
 				intdd._external_discoverService(svc, edmap);
@@ -414,21 +415,26 @@ public abstract class AbstractDirectProvider
 	}
 
 	/**
-	 * Method should be called by external process first thing upon connection. This will return and impl of
-	 * ExternalDirectDiscovery interface to allow external process to export, update, unexport remote services to this
-	 * Java process for remote service import,update,unimport. It should not be called by Java code directly.
+	 * Method should be called by external process first thing upon connection. This
+	 * will return and impl of ExternalDirectDiscovery interface to allow external
+	 * process to export, update, unexport remote services to this Java process for
+	 * remote service import,update,unimport. It should not be called by Java code
+	 * directly.
 	 * 
-	 * @return implementation of ExternalDirectDiscovery. Must not return <code>null</code>.
+	 * @return implementation of ExternalDirectDiscovery. Must not return
+	 *         <code>null</code>.
 	 */
 	public ExternalDirectDiscovery _getExternalDirectDiscovery() {
 		return this;
 	}
 
 	/**
-	 * Method to be called by Java code to get access to export,update, unexport semantics for exported remote services.
+	 * Method to be called by Java code to get access to export,update, unexport
+	 * semantics for exported remote services.
 	 * 
-	 * @return InternalServiceProvider allowing remote serice containers (e.g. DirectHostContainer) to communicate to
-	 *         external processes that new Java/OSGi remote services are available for use.
+	 * @return InternalServiceProvider allowing remote serice containers (e.g.
+	 *         DirectHostContainer) to communicate to external processes that new
+	 *         Java/OSGi remote services are available for use.
 	 */
 	public InternalServiceProvider getInternalServiceProvider() {
 		return this;
@@ -530,7 +536,7 @@ public abstract class AbstractDirectProvider
 		}
 	}
 
-	protected void bindModuleResolver(ServiceReference<ModuleResolver> ref) {
+	public void bindModuleResolver(ServiceReference<ModuleResolver> ref) {
 		Bundle b = ref.getBundle();
 		synchronized (ModuleResolvers) {
 			List<ServiceReference<ModuleResolver>> existingList = ModuleResolvers.get(b);
@@ -542,7 +548,7 @@ public abstract class AbstractDirectProvider
 		fireModuleResolver(ref, true);
 	}
 
-	protected void unbindModuleResolver(ServiceReference<ModuleResolver> ref) {
+	public void unbindModuleResolver(ServiceReference<ModuleResolver> ref) {
 		Bundle b = ref.getBundle();
 		synchronized (ModuleResolvers) {
 			List<ServiceReference<ModuleResolver>> existingList = ModuleResolvers.get(b);

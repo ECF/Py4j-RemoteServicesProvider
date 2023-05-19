@@ -46,11 +46,11 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 	protected static final String[] py4jProtobufSupportedIntents = { "passByValue", "exactlyOnce", "ordered", "py4j",
 			"py4j.protobuf", "py4j.async", "osgi.async", "osgi.private", "osgi.confidential" };
 
-	protected void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
+	public void bindEndpointEventListener(EndpointEventListener eel, @SuppressWarnings("rawtypes") Map props) {
 		super.bindEndpointEventListener(eel, props);
 	}
 
-	protected void unbindEndpointEventListener(EndpointEventListener eel) {
+	public void unbindEndpointEventListener(EndpointEventListener eel) {
 		super.unbindEndpointEventListener(eel);
 	}
 
@@ -58,7 +58,6 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 	protected ServiceRegistration<?> protobufClientReg = null;
 	protected ServiceRegistration<?> protobufNewHostReg = null;
 	protected ServiceRegistration<?> protobufNewClientReg = null;
-
 
 	protected void registerProtobufHostDistributionProvider() {
 		protobufHostReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
@@ -113,11 +112,12 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 
 	protected void registerNewProtobufClientDistributionProvider() {
 		protobufNewClientReg = getContext().registerService(IRemoteServiceDistributionProvider.class,
-				new DirectRemoteServiceClientDistributionProvider(ProtobufPy4jConstants.JAVA_PROTOBUF_CONSUMER_CONFIG_TYPE,
+				new DirectRemoteServiceClientDistributionProvider(
+						ProtobufPy4jConstants.JAVA_PROTOBUF_CONSUMER_CONFIG_TYPE,
 						ProtobufPy4jConstants.PYTHON_PROTOBUF_HOST_CONFIG_TYPE, new IDirectContainerInstantiator() {
 							@Override
 							public IContainer createContainer() throws ContainerCreateException {
-								return new DirectClientContainer(Py4jNamespace.createUUID(),getServiceProxyProvider());
+								return new DirectClientContainer(Py4jNamespace.createUUID(), getServiceProxyProvider());
 							}
 						}, py4jProtobufSupportedIntents),
 				null);
@@ -131,7 +131,7 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 		}
 	}
 
-	protected void activate(BundleContext context, Map<String, ?> properties) throws Exception {
+	public void activate(BundleContext context, Map<String, ?> properties) throws Exception {
 		synchronized (getLock()) {
 			super.activate(context, properties);
 			registerProtobufHostDistributionProvider();
@@ -173,7 +173,7 @@ public class ProtobufPy4jProviderImpl extends Py4jProviderImpl
 		}
 	}
 
-	protected void deactivate() {
+	public void deactivate() {
 		synchronized (getLock()) {
 			super.deactivate();
 			if (protobufClientReg != null) {

@@ -9,10 +9,12 @@
 package org.eclipse.ecf.provider.direct;
 
 /**
- * An external service provider may need to provide a way for the OSGi remote service to get a hold of the proxy, and
- * this interface may be used to do so. For example, a service exposed by a Python class will need to provide a way for
- * the RSA-constructed proxy to call the underlying proxy. This interface allows remote service client containers (e.g.
- * DirectClientContainer) to get access to the underlying proxy so that it can be called when appropriate.
+ * An external service provider may need to provide a way for the OSGi remote
+ * service to get a hold of the proxy, and this interface may be used to do so.
+ * For example, a service exposed by a Python class will need to provide a way
+ * for the RSA-constructed proxy to call the underlying proxy. This interface
+ * allows remote service client containers (e.g. DirectClientContainer) to get
+ * access to the underlying proxy so that it can be called when appropriate.
  * 
  * @author slewis
  *

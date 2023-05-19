@@ -74,7 +74,8 @@ public class DirectClientContainer extends AbstractRSAClientContainer {
 				// Get return type from reflectMethod
 				Class<?> returnClass = reflectMethod.getReturnType();
 				// The return type should be one of the async types and we use the
-				// AsyncReturnUtil to convert from the async type to the simple type (i.e. the type returned)
+				// AsyncReturnUtil to convert from the async type to the simple type (i.e. the
+				// type returned)
 				// by the async result
 				Object simpleResult = AsyncReturnUtil.convertAsyncToReturn(result, returnClass, call.getTimeout());
 				// And return a success event
