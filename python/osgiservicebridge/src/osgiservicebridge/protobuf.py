@@ -27,6 +27,7 @@ from osgiservicebridge import ENDPOINT_PACKAGE_VERSION_
 
 import time
 
+from google.protobuf import message_factory as _message_factory
 from google.protobuf.message import Message
 from google.protobuf.descriptor import EnumDescriptor, EnumValueDescriptor, Descriptor, FieldDescriptor, _OptionsOrNone
 from osgiservicebridge.bridge import JavaRemoteServiceRegistry, Py4jServiceBridgeEventListener,\
@@ -42,7 +43,6 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from google.protobuf import symbol_database, descriptor_pool
 from threading import RLock
 from google.protobuf.internal import api_implementation
-from google.protobuf.descriptor_pb2 import _DESCRIPTORPROTO
 
 _USE_C_DESCRIPTORS = False
 if api_implementation.Type() == 'cpp':  
@@ -141,7 +141,7 @@ def create_return_instance(instance, method_name):
     PB_SERVICE_RETURN_TYPE_ATTR on the function.
     '''
     ret_type = get_instance_return_type(instance, method_name)
-    if ret_type is not None:
+    if ret_type:
         return ret_type()
     return None
 
@@ -161,7 +161,7 @@ def get_name_and_type_dict(m):
     result = dict()
     for key in m:
         val = m[key]
-        if val is None:
+        if val == None:
             result[key] = 'None'
         else:
             result[key] = fully_qualified_classname(type(val))
@@ -169,7 +169,7 @@ def get_name_and_type_dict(m):
 
 def fully_qualified_classname(c):
     module = c.__module__
-    if module is None or module == str.__class__.__module__:
+    if module == None or module == str.__class__.__module__:
         return c.__name__
     return module + '.' + c.__name__
                 
@@ -359,7 +359,7 @@ def protobuf_remote_service_method(arg_type,return_type=None):
                 raise e
             t1 = time.time()
             _timing.debug("protobuf.exec;time={0}".format(1000*(t1-t0)))
-            if not func._return_type is None:
+            if func._return_type:
                 isinstance(respb,func._return_type)
             return pmessage_to_bytes(respb)
         return wrapper
@@ -557,28 +557,6 @@ def MakeClassDescriptor(descriptor_pool, desc_proto, package='', build_file_if_c
 _lock = RLock()
 _jclass_pclass_map = {}
 
-class PBClass(object):
-    
-    def __init__(self, java_class, pool = _default_descriptor_pool):
-        self._descriptor_pool = pool
-        self._java_class = java_class
-        jdesc_bytes = java_class.getMethod("getDescriptor",None).invoke(None,None).toProto().toByteArray()
-        if PY2:
-            jdesc_bytes = str(jdesc_bytes)
-        pdesc_proto = _DESCRIPTORPROTO
-        pdesc_proto.MergeFromString(jdesc_bytes)
-        try:
-            pdesc_proto_desc = self._descriptor_pool.FindFileContainingSymbol(pdesc_proto.name).message_types_by_name[pdesc_proto.name]
-        except KeyError:
-            pdesc_proto_desc = MakeClassDescriptor(self._descriptor_pool, pdesc_proto)
-        self._python_class = _default_symbol_db.GetPrototype(pdesc_proto_desc)
-     
-    def GetJavaClass(self):
-        return self._java_class   
-
-    def GetPythonClass(self):
-        return self._python_class   
- 
 # ---------------------------------------------------------------------------------------------------------
 #  API for async method invocation
 # ---------------------------------------------------------------------------------------------------------
@@ -586,9 +564,13 @@ def get_pb_type_from_java_class(java_class):
     with _lock:
         pbclass_entry = _jclass_pclass_map.get(java_class,None)
         if not pbclass_entry:
-            pbclass_entry = PBClass(java_class)
-            _jclass_pclass_map[java_class] = pbclass_entry
-    return pbclass_entry.GetPythonClass()
+            # get full name for java class descriptor
+            pdesc_desc_fn = java_class.getMethod("getDescriptor",None).invoke(None,None).getFullName()
+            if pdesc_desc_fn:
+                # find message type descriptor from name
+                msg_descriptor = _default_descriptor_pool.FindMessageTypeByName(pdesc_desc_fn)
+                if msg_descriptor:
+                    return _message_factory.GetMessageClass(msg_descriptor)
 
 def get_jparser_from_pdescriptor(jvm,pdescriptor):
     try:

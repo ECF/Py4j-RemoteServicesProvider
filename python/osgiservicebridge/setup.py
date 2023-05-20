@@ -90,7 +90,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['py4j>=0.10.9.7','protobuf==3.22.2'],
+    install_requires=['py4j>=0.10.9.7','protobuf==4.22.5'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,

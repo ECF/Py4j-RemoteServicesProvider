@@ -105,7 +105,7 @@ def create_return_instance(instance, method_name):
     PB_SERVICE_RETURN_TYPE_ATTR on the function.
     '''
     ret_type = get_instance_return_type(instance, method_name)
-    if ret_type is not None:
+    if ret_type:
         return ret_type()
     return None
 
@@ -125,7 +125,7 @@ def get_name_and_type_dict(m):
     result = dict()
     for key in m:
         val = m[key]
-        if val is None:
+        if not val :
             result[key] = 'None'
         else:
             result[key] = fully_qualified_classname(type(val))
@@ -133,7 +133,7 @@ def get_name_and_type_dict(m):
 
 def fully_qualified_classname(c):
     module = c.__module__
-    if module is None or module == str.__class__.__module__:
+    if not module or module == str.__class__.__module__:
         return c.__name__
     return module + '.' + c.__name__
                 
@@ -261,7 +261,7 @@ def flatbuf_remote_service_method(arg_type,return_type=None):
                 raise e
             t1 = time.time()
             _timing.debug("flatbuf.exec;time="+str(1000*(t1-t0))+"ms")
-            if not func._return_type is None:
+            if func._return_type:
                 isinstance(builder,Builder)
             return return_serialize(builder)
         return wrapper

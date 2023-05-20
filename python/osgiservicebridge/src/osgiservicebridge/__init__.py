@@ -123,7 +123,7 @@ def get_matching_interfaces(origin, propValue):
     :param propValue: a string with '*' to match all from origin, otherwise return propValue
     :return: value of origin if propValue == '*', otherwise propValue
     '''
-    if origin is None or propValue is None:
+    if origin == None or propValue == None:
         return None
     if isinstance(propValue,type("")):
         if propValue == '*':
@@ -159,7 +159,7 @@ def set_prop_if_null(name, props, ifnull):
     :return: None
     '''
     v = get_prop_value(name,props)
-    if v is None:
+    if v == None:
         props[name] = ifnull
 
 def get_string_plus_property_value(value):
@@ -198,7 +198,7 @@ def get_string_plus_property(name, props, default=None):
     For example, the 'objectArray' value in OSGi Remote Services
     '''              
     val = get_string_plus_property_value(get_prop_value(name,props,default))
-    return default if val is None else val
+    return default if val == None else val
 
 def get_package_from_classname(classname):
     '''

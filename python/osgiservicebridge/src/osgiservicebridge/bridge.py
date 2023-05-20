@@ -494,7 +494,7 @@ class Py4jServiceBridge(object):
         with self._exported_endpoints_lock:     
             for eptuple in self._exported_endpoints.values():
                 val = eptuple[1][osgiservicebridge.ECF_RSVC_ID]
-                if not val is None and val == rsId:
+                if val and val == rsId:
                     return eptuple[0]
         return None
                 
@@ -525,7 +525,7 @@ class Py4jServiceBridge(object):
             self._gateway_parameters = self._gateway_parameters if self._gateway_parameters else GatewayParameters()
             
         with self._lock:
-            if not self._gateway is None:
+            if not self._gateway == None:
                 raise OSError('already connected to java gateway')
             server_started.connect(self._started)
             self._gateway = JavaGateway(gateway_parameters=self._gateway_parameters,callback_server_parameters=self._callback_server_parameters)
