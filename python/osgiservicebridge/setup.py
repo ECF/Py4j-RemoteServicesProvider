@@ -18,7 +18,7 @@ exec(compile(open(VERSION_PATH).read(),
      VERSION_PATH, "exec"))
 VERSION = __version__  # noqa
 
-JAVA_FILE='java/py4j-remoteservicesprovider_2.9.0.zip'
+JAVA_FILE='java/py4j-remoteservicesprovider_2.11.0.zip'
 
 setup(
     name='osgiservicebridge',
@@ -65,11 +65,12 @@ setup(
 
         # Specify the Python versions you support here. In particular, ensure
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        "Programming Language :: Java",
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+       "Programming Language :: Java",
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Object Brokering",
     ],
@@ -89,7 +90,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['py4j>=0.10.7','protobuf>=3.7.0'],
+    install_requires=['py4j>=0.10.9.7','protobuf==3.22.2'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
