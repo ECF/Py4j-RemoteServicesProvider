@@ -6,7 +6,7 @@ An Remote Services Distribution Provider for [OSGi R7 Remote Services](https://o
 OSGi R7 Remote Services includes support for [Asynchronous Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html#d0e1407) supporting Remote Services with return values of CompletableFuture, Future, or OSGi's Promise (Java) that will be executed asynchronously.
 
 ## NEW: Bndtools templates to run Python.Java Hello Example app and Python.Java Protobuf Hello Example app.
-Their is now [support for using ECF Remote Services impl with Bndtools](https://wiki.eclipse.org/Bndtools_Support_for_Remote_Services_Development).  There are now templates in the [bndtools.workspace](https://github.com/ECF/bndtools.workspace) that will run the Python.Java Hello and Protobuf Hello Examples.  Here are the instructions for using the Hello template (also appears in help window when selecting the ECF Python.Java Hello Example template:
+There is now [support for using ECF Remote Services impl with Bndtools](https://wiki.eclipse.org/Bndtools_Support_for_Remote_Services_Development).  There are now templates in the [bndtools.workspace](https://github.com/ECF/bndtools.workspace) that will run the Python.Java Hello and Protobuf Hello Examples.  Here are the instructions for using the Hello template (also appears in help window when selecting the ECF Python.Java Hello Example template:
 This template will create a bndrun for launching the Python.Java Hello example application.
 Source code repo: https://github.com/ECF/Py4j-RemoteServicesProvider
 
