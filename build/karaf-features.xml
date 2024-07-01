@@ -1,5 +1,7 @@
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"	name="ecf-remoteservices-python.java-2.11.0">
 	
+	<repository>https://download.eclipse.org/rt/ecf/latest/karaf-features.xml</repository>
+
     <feature name="ecf-rs-distribution-python.java" version="2.11.0" description="ECF Python.Java Core. See https://github.com/ECF/Py4j-RemoteServicesProvider">
             <feature>ecf-rs-rsa</feature>
             <feature>ecf-rs-console</feature>
