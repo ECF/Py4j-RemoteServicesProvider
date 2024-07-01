@@ -113,7 +113,7 @@ public abstract class AbstractPythonLauncher implements PythonLauncher {
 	}
 
 	protected Executor createExecutor() {
-		return new DefaultExecutor();
+		return new DefaultExecutor.Builder<>().get();
 	}
 
 	protected String createPythonLaunchCommand() {

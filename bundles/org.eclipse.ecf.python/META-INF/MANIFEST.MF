@@ -2,12 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ECF Python API
 Bundle-SymbolicName: org.eclipse.ecf.python
-Bundle-Version: 1.0.3.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Version: 1.0.4.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.ecf.python;version="1.0.0"
 Import-Package: org.apache.commons.exec;version="1.3.0",
  org.eclipse.ecf.provider.direct;version="2.0.0",
+ org.eclipse.ecf.python,
  org.osgi.framework;version="1.8.0",
  org.osgi.service.component;version="1.3.0",
  org.slf4j

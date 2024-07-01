@@ -1,26 +1,64 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.EquinoxLauncher">
-<booleanAttribute key="append.args" value="true"/>
-<booleanAttribute key="automaticAdd" value="false"/>
-<booleanAttribute key="automaticValidate" value="true"/>
-<stringAttribute key="bootstrap" value=""/>
-<stringAttribute key="checked" value="[NONE]"/>
-<booleanAttribute key="clearConfig" value="true"/>
-<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/importhook.java"/>
-<booleanAttribute key="default" value="true"/>
-<booleanAttribute key="default_auto_start" value="true"/>
-<intAttribute key="default_start_level" value="4"/>
-<booleanAttribute key="includeOptional" value="false"/>
-<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
-<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -console"/>
-<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.ignoreApp=true -Dosgi.noShutdown=true -Dorg.eclipse.ecf.provider.py4j.debug=true -Dlog4j.configuration=file:${project_loc:org.eclipse.ecf.examples.protobuf.hello}/log4j.properties"/>
-<stringAttribute key="pde.version" value="3.3"/>
-<booleanAttribute key="show_selected_only" value="false"/>
-<stringAttribute key="target_bundles" value="com.diffplug.osgi.extension.sun.misc@default:false,wrapped.com.google.protobuf.protobuf-java@default:default,org.apache.commons.exec@default:default,org.apache.felix.gogo.command@default:default,org.apache.felix.gogo.runtime@default:default,org.apache.felix.gogo.shell@default:default,org.apache.felix.scr@default:default,org.apache.log4j@default:default,org.eclipse.core.jobs@default:default,org.eclipse.ecf.discovery@default:default,org.eclipse.ecf.identity@default:default,org.eclipse.ecf.osgi.services.distribution@5:default,org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy@default:default,org.eclipse.ecf.osgi.services.remoteserviceadmin@5:default,org.eclipse.ecf.remoteservice.asyncproxy*2.0.100.v20160907-0906@default:default,org.eclipse.ecf.remoteservice@default:default,org.eclipse.ecf.sharedobject@default:default,org.eclipse.ecf@default:default,org.eclipse.equinox.common@2:true,org.eclipse.equinox.concurrent@default:default,org.eclipse.equinox.console@default:default,org.eclipse.equinox.ds@1:true,org.eclipse.equinox.event@default:default,org.eclipse.equinox.util@default:default,org.eclipse.osgi.services.remoteserviceadmin@default:default,org.eclipse.osgi.services@default:default,org.eclipse.osgi.util@default:default,org.eclipse.osgi@-1:true,org.py4j.osgi@default:default,org.slf4j.api@default:default,org.slf4j.impl.log4j12@default:false"/>
-<booleanAttribute key="tracing" value="false"/>
-<booleanAttribute key="useCustomFeatures" value="false"/>
-<booleanAttribute key="useDefaultConfigArea" value="true"/>
-<stringAttribute key="workspace_bundles" value="org.eclipse.ecf.examples.importhook.module@default:default,org.eclipse.ecf.examples.protobuf.hello.provider@default:default,org.eclipse.ecf.provider.direct.protobuf@default:default,org.eclipse.ecf.provider.direct@default:default,org.eclipse.ecf.provider.py4j.protobuf@default:default,org.eclipse.ecf.provider.py4j@default:default,org.eclipse.ecf.python.protobuf@default:default,org.eclipse.ecf.python@default:default"/>
+    <booleanAttribute key="append.args" value="true"/>
+    <booleanAttribute key="automaticAdd" value="false"/>
+    <booleanAttribute key="automaticValidate" value="true"/>
+    <stringAttribute key="bootstrap" value=""/>
+    <stringAttribute key="checked" value="[NONE]"/>
+    <booleanAttribute key="clearConfig" value="true"/>
+    <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/importhook.java"/>
+    <booleanAttribute key="default" value="true"/>
+    <booleanAttribute key="default_auto_start" value="true"/>
+    <intAttribute key="default_start_level" value="4"/>
+    <setAttribute key="deselected_workspace_bundles"/>
+    <booleanAttribute key="includeOptional" value="false"/>
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -console"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.ignoreApp=true -Dosgi.noShutdown=true -Dorg.eclipse.ecf.provider.py4j.debug=true -Dlog4j.configuration=file:${project_loc:org.eclipse.ecf.examples.protobuf.hello}/log4j.properties"/>
+    <stringAttribute key="pde.version" value="3.3"/>
+    <setAttribute key="selected_target_bundles">
+        <setEntry value="org.apache.felix.gogo.command@default:default"/>
+        <setEntry value="org.apache.felix.gogo.runtime@default:default"/>
+        <setEntry value="org.apache.felix.gogo.shell@default:default"/>
+        <setEntry value="org.apache.felix.scr@1:true"/>
+        <setEntry value="org.apache.log4j@default:default"/>
+        <setEntry value="org.eclipse.core.jobs@default:default"/>
+        <setEntry value="org.eclipse.ecf.discovery@default:default"/>
+        <setEntry value="org.eclipse.ecf.identity@default:default"/>
+        <setEntry value="org.eclipse.ecf.osgi.services.distribution@5:default"/>
+        <setEntry value="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy@default:default"/>
+        <setEntry value="org.eclipse.ecf.osgi.services.remoteserviceadmin@5:default"/>
+        <setEntry value="org.eclipse.ecf.remoteservice.asyncproxy@default:default"/>
+        <setEntry value="org.eclipse.ecf.remoteservice@default:default"/>
+        <setEntry value="org.eclipse.ecf.sharedobject@default:default"/>
+        <setEntry value="org.eclipse.ecf@default:default"/>
+        <setEntry value="org.eclipse.equinox.common@2:true"/>
+        <setEntry value="org.eclipse.equinox.concurrent@default:default"/>
+        <setEntry value="org.eclipse.equinox.console@default:default"/>
+        <setEntry value="org.eclipse.equinox.event@default:default"/>
+        <setEntry value="org.eclipse.osgi.services.remoteserviceadmin@default:default"/>
+        <setEntry value="org.eclipse.osgi.services@default:default"/>
+        <setEntry value="org.eclipse.osgi.util@default:default"/>
+        <setEntry value="org.eclipse.osgi@-1:true"/>
+        <setEntry value="org.py4j.osgi@default:default"/>
+        <setEntry value="org.slf4j.api@default:default"/>
+        <setEntry value="wrapped.com.google.protobuf.protobuf-java@default:default"/>
+    </setAttribute>
+    <setAttribute key="selected_workspace_bundles">
+        <setEntry value="org.eclipse.ecf.examples.importhook.module@default:default"/>
+        <setEntry value="org.eclipse.ecf.provider.direct.protobuf@default:default"/>
+        <setEntry value="org.eclipse.ecf.provider.direct@default:default"/>
+        <setEntry value="org.eclipse.ecf.provider.py4j.protobuf@default:default"/>
+        <setEntry value="org.eclipse.ecf.provider.py4j@default:default"/>
+        <setEntry value="org.eclipse.ecf.python.protobuf@default:default"/>
+        <setEntry value="org.eclipse.ecf.python@default:default"/>
+    </setAttribute>
+    <booleanAttribute key="show_selected_only" value="false"/>
+    <booleanAttribute key="tracing" value="false"/>
+    <booleanAttribute key="useCustomFeatures" value="false"/>
+    <booleanAttribute key="useDefaultConfigArea" value="true"/>
 </launchConfiguration>

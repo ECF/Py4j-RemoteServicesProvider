@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" immediate="true" name="org.eclipse.ecf.examples.importhook.module.ExampleBundleModuleResolver">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" deactivate="deactivate" immediate="true" name="org.eclipse.ecf.examples.importhook.module.ExampleBundleModuleResolver">
    <property name="pathPrefix" value="/python-src"/>
    <service>
       <provide interface="org.eclipse.ecf.provider.direct.ModuleResolver"/>

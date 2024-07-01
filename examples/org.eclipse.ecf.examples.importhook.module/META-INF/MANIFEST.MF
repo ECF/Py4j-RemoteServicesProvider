@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Example ImportHook Module
 Bundle-SymbolicName: org.eclipse.ecf.examples.importhook.module
-Bundle-Version: 1.0.2.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Version: 1.0.3.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.ecf.provider.direct;version="2.0.0",
  org.osgi.framework;version="1.8.0",
  org.osgi.service.component.annotations;resolution:=optional
-Service-Component: OSGI-INF/org.eclipse.ecf.examples.importhook.module.ExampleBundleModuleResolver.xml
 Automatic-Module-Name: org.eclipse.ecf.examples.importhook.module
+Service-Component: OSGI-INF/org.eclipse.ecf.examples.importhook.module.ExampleBundleModuleResolver.xml

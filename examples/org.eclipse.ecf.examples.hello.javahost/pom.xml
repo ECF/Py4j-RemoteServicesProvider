@@ -10,5 +10,5 @@
   </parent>
   <artifactId>org.eclipse.ecf.examples.hello.javahost</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <version>1.1.4-SNAPSHOT</version>
+  <version>1.1.5-SNAPSHOT</version>
 </project>

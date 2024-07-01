@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ECF Protobuf Direct Provider
 Bundle-SymbolicName: org.eclipse.ecf.provider.direct.protobuf
-Bundle-Version: 2.2.2.qualifier
+Bundle-Version: 2.2.4.qualifier
 Bundle-Vendor: Eclipse.org - ECF
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.protobuf,
  org.eclipse.ecf.provider.direct;version="1.0.0",

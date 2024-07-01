@@ -6,8 +6,8 @@
             <bundle>http://download.eclipse.org/tools/orbit/downloads/drops/R20180525155205/repository/plugins/org.apache.log4j_1.2.15.v201012070815.jar</bundle>
             <bundle>http://download.eclipse.org/tools/orbit/downloads/drops2/R20170516192513/repository/plugins/org.slf4j.api_1.7.10.v20170428-1633.jar</bundle>
             <bundle>http://download.eclipse.org/tools/orbit/downloads/drops2/R20170516192513/repository/plugins/org.slf4j.apis.log4j_1.7.10.v20160208-0839.jar</bundle>
-	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.apache.commons.exec_1.3.0.jar</bundle>
-            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct_2.3.2.202305182153.jar</bundle>
+	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.apache.commons.commons-exec_1.4.0.jar</bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct_2.3.3.202406292243.jar</bundle>
 	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct.protobuf_2.2.2.202305182153.jar</bundle>
             <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j_2.4.0.202305182153.jar</bundle>
             <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j.protobuf_1.6.0.202305182153.jar</bundle>

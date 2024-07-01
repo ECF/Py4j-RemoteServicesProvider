@@ -10,5 +10,5 @@
   </parent>
   <artifactId>org.eclipse.ecf.python</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.4-SNAPSHOT</version>
 </project>

@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ECF Protobuf Py4j Direct Provider
 Bundle-SymbolicName: org.eclipse.ecf.provider.py4j.protobuf
-Bundle-Version: 1.6.0.qualifier
+Bundle-Version: 1.6.1.qualifier
 Bundle-Vendor: Eclipse.org - ECF
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: com.google.protobuf;version="3.2.0",
  org.eclipse.ecf.core;version="3.0.0",
  org.eclipse.ecf.core.identity;version="3.3.0",

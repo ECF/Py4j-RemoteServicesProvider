@@ -1,23 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository version='1.1.0'?>
 <artifacts size='2'>
-  <artifact classifier='osgi.bundle' id='org.eclipse.ecf.examples.importhook.module' version='1.0.2.v20230519-0524'>
+  <artifact classifier='osgi.bundle' id='org.eclipse.ecf.examples.importhook.module' version='1.0.3.v20240630-0539'>
     <properties size='6'>
-      <property name='artifact.size' value='5524'/>
-      <property name='download.size' value='5524'/>
+      <property name='artifact.size' value='5526'/>
+      <property name='download.size' value='5526'/>
       <property name='maven-groupId' value='org.eclipse.ecf.provider.py4j'/>
       <property name='maven-artifactId' value='org.eclipse.ecf.examples.importhook.module'/>
-      <property name='maven-version' value='1.0.2-SNAPSHOT'/>
+      <property name='maven-version' value='1.0.3-SNAPSHOT'/>
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
   </artifact>
-  <artifact classifier='osgi.bundle' id='org.eclipse.ecf.examples.importhook.module.source' version='1.0.2.v20230519-0524'>
+  <artifact classifier='osgi.bundle' id='org.eclipse.ecf.examples.importhook.module.source' version='1.0.3.v20240630-0539'>
     <properties size='7'>
-      <property name='artifact.size' value='5065'/>
-      <property name='download.size' value='5065'/>
+      <property name='artifact.size' value='5075'/>
+      <property name='download.size' value='5075'/>
       <property name='maven-groupId' value='org.eclipse.ecf.provider.py4j'/>
       <property name='maven-artifactId' value='org.eclipse.ecf.examples.importhook.module'/>
-      <property name='maven-version' value='1.0.2-SNAPSHOT'/>
+      <property name='maven-version' value='1.0.3-SNAPSHOT'/>
       <property name='maven-classifier' value='sources'/>
       <property name='maven-type' value='java-source'/>
     </properties>

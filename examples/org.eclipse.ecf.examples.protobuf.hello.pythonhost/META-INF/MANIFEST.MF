@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ECF Protobuf Hello Pythonhost Example
 Bundle-SymbolicName: org.eclipse.ecf.examples.protobuf.hello.pythonhost
-Bundle-Version: 1.0.2.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Version: 1.0.3.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.ecf.provider.direct,
  org.osgi.framework,
  org.osgi.service.component.annotations;resolution:=optional
-Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.pythonhost.PythonHostBundleModuleResolver.xml
 Automatic-Module-Name: org.eclipse.ecf.examples.protobuf.hello.pythonhost
+Service-Component: OSGI-INF/org.eclipse.ecf.examples.protobuf.hello.pythonhost.PythonHostBundleModuleResolver.xml
