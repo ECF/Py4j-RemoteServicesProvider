@@ -29,14 +29,13 @@ After installing all OSGi and ECF components, and exporting the HelloImpl servic
 
 The **py4j://127.0.0.1:25333/java** as the value for **ecf.endpoint.id** property indicates that a listener has been opened on 127.0.0.1 (localhost) using port 25333 and waiting for connections from clients.
 
-The example [python client program](examples/org.eclipse.ecf.examples.hello.pythonclient/src/run.py) can then be run 
-by first installing the osgiservicebridge
+To run the example [python client program](examples/org.eclipse.ecf.examples.hello.pythonclient/src/run.py) it's necessary to first install the osgiservicebridge (part of this codebase)
 
 <pre>
   pip install osgiservicebridge
 </pre>
 
-Then the python hello service client can be run by going to the [examples/org.eclipse.ecf.examples.hello.pythonclient/src](examples/org.eclipse.ecf.examples.hello.pythonclient/src) directory and running the pythonclient program.
+The python hello service client can be run by going to the [examples/org.eclipse.ecf.examples.hello.pythonclient/src](examples/org.eclipse.ecf.examples.hello.pythonclient/src) directory and running the pythonclient program.
 
 <pre>
   python run.py
@@ -60,8 +59,6 @@ service_unimported endpointid=02ea388d-417d-48ce-8372-ed9ed0714bb4;proxy=org.ecl
 ...more endpoint description contents
 disconnected...exiting
 </pre>
-
-This example shows the use of standard OSGi Remote Services to enable aribitrary Python -> Java remote procedure call.  It is also possible to have Java -> Python rpc (Java clients to Python implemented remote services)
 
 ## Protobuf-Serialization
 
