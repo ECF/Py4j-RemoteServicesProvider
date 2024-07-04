@@ -3,7 +3,7 @@ Python.Java Remote Services
 
 ## Quickstart Example
 
-One easy way to demonstrate the utility of this distribution provider is to have a Java-based [OSGi Remote Service](https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.remoteservices.html) able to be used by a Python process.
+One way to demonstrate this distribution provider is to have a Java-based [OSGi Remote Service](https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.remoteservices.html) and call/use it from a Python process.
 
 ### Karaf-Based OSGi Remote Service
 
