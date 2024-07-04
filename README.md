@@ -82,7 +82,7 @@ Python OSGi Service Bridge may be installed via pip:
 pip install osgiservicebridge
 </pre>
 
-The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/python/osgiservicebridge) project.   This package should be installed into Python 3.3+ prior to running the example (in, e.g. the run.py in ]examples/org.eclipse.ecf.examples.protobuf.hello/python-src](examples/org.eclipse.ecf.examples.protobuf.hello/python-src) directory).
+The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/python/osgiservicebridge) project.   This package should be installed into Python 3.3+ prior to running the pythonclient example.
 
 ### Python Impl of OSGi Bundle and Service Layers
 
