@@ -15,7 +15,7 @@ To install and start this example service in [Karaf 4.4.6](https://karaf.apache.
   karaf@root()> feature:install ecf-rs-examples-python.java-hello
 </pre>
 
-After some time to download all components and start and export the HelloImpl service, the Karaf console will print out the export registration, along with the endpoint desription in the OSGi standard format.
+After downloading and installing all OSGi and ECF components, and exporting the HelloImpl service, the Karaf console will print out the export registration, along with the endpoint desription in the OSGi standard format.
 
 <pre>
   19:20:03.679;EXPORT_REGISTRATION;exportedSR=[org.eclipse.ecf.examples.hello.IHello];cID=URIID [uri=py4j://127.0.0.1:25333/java];rsId=1
@@ -26,6 +26,38 @@ After some time to download all components and start and export the HelloImpl se
 ...continues with the entire endpoint description  
 </pre>
 
+The py4j://127.0.0.1:25333/java ad the value for ecf.endpoint.id property indicates that a listener has been opened on 127.0.0.1 (localhost) using port 25333 and waiting for connections from clients.
+
+The example [python client program](examples/org.eclipse.ecf.examples.hello.pythonclient/src/run.py) can then be run 
+by first installing the osgiservicebridge
+
+<pre>
+  pip install osgiservicebridge
+</pre>
+
+Then the python hello service client can be run by going to the [examples/org.eclipse.ecf.examples.hello.pythonclient/src](examples/org.eclipse.ecf.examples.hello.pythonclient/src) directory and running the program.
+
+<pre>
+  python run.py
+</pre>
+
+On the Karaf/Java side you should see something like this output to the console
+
+<pre>
+  Java.sayHello called by from.python with message: 'this is a big hello from Python!!!'
+</pre>
+
+and on the Python side it should have output like this
+
+<pre>
+  Py4j-RemoteServicesProvider\examples\org.eclipse.ecf.examples.hello.pythonclient\src>python run.py
+bridge created
+service_imported endpointid=02ea388d-417d-48ce-8372-ed9ed0714bb4;proxy=org.eclipse.ecf.examples.hello.javahost.HelloImpl@59f0e37d;endpoint_props={'objectClass': ['org.eclipse.ecf.examples.hello.IHello'], 'osgi.ds.satisfying.condition.target': '(osgi.condition.id=true)', 'ecf.endpoint.id': 'py4j://127.0.0.1:25333/java', 'endpoint.service.id': 115, 'ecf.endpoint.ts': 1720059603648, 'osgi.basic.timeout': 50000, 'remote.configs.supported': ['ecf.py4j.host'], 'remote.intents.supported': ['passByReference', 'exactlyOnce', 'ordered', 'py4j', 'py4j.async', 'osgi.async', 'osgi.private', 'osgi.confidential'], 'service.intents': 'osgi.async', 'ecf.endpoint.id.ns': 'ecf.namespace.py4j', 'endpoint.id': '02ea388d-417d-48ce-8372-ed9ed0714bb4', 'endpoint.framework.uuid': '291bc8b0-2058-466d-b98a-ab79803180f7', 'service.imported': 'true', 'service.imported.configs': ['ecf.py4j.host'], 'ecf.rsvc.id': 1}
+response=Java says: Hi from.python, nice to see you
+bridge connected
+service_unimported endpointid=02ea388d-417d-48ce-8372-ed9ed0714bb4;proxy=org.eclipse.ecf.examples.hello.javahost.HelloImpl@59f0e37d;endpoint_props={'objectClass': ['org.eclipse.ecf.examples.hello.IHello'], 'osgi.ds.satisfying.condition.target': '(osgi.condition.id=true)', 'ecf.endpoint.id': 'py4j://127.0.0.1:25333/java', 'endpoint.service.id': 115, 'ecf.endpoint.ts': 1720059603648, 'osgi.basic.timeout': 50000, 'remote.configs.supported': ['ecf.py4j.host'], 'remote.intents.supported': ['passByReference', 'exactlyOnce', 'ordered', 'py4j', 'py4j.async', 'osgi.async', 'osgi.private', 'osgi.confidential'], 'service.intents': 'osgi.async', 'ecf.endpoint.id.ns': 'ecf.namespace.py4j', 'endpoint.id': '02ea388d-417d-48ce-8372-ed9ed0714bb4', 'endpoint.framework.uuid': '291bc8b0-2058-466d-b98a-ab79803180f7', 'service.imported': 'true', 'service.imported.configs': ['ecf.py4j.host'], 'ecf.rsvc.id': 1}
+disconnected...exiting
+</pre>
 
 ===========================
 An Remote Services Distribution Provider for [OSGi R7 Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html).  This allows dynamic remote procedure call between Java and Python objects.  Python-Implementations can be exposed to Java consumers as OSGi services, and Java-based OSGi services can be exposed to Python consumers.
