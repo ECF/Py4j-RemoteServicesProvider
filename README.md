@@ -1,7 +1,10 @@
 Python.Java Remote Services
 ===========================
+
 ##Quickstart
+
 One easy way to demonstrate the utility of this distribution provider is to have a Java-based OSGi Service able to be consumed and use by a Python process.
+
 ###Karaf-Based OSGi Service
 In [HelloImpl.java](https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/examples/org.eclipse.ecf.examples.hello.javahost/src/org/eclipse/ecf/examples/hello/javahost/HelloImpl.java) is an small service with three service methods.[
 To install and start this service in [Karaf 4.4](https://karaf.apache.org/download) simply type into the karaf console
