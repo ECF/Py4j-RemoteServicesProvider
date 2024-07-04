@@ -11,9 +11,10 @@ This example [HelloImpl.java](https://github.com/ECF/Py4j-RemoteServicesProvider
 
 In [Karaf 4.4](https://karaf.apache.org/download) to install and start this service and all necessary OSGi and ECF components type:
 
-'''
-karaf@root()>feature:install ecf-rs-examples-python.java-hello
-'''
+....
+......karaf@root()>feature:install ecf-rs-examples-python.java-hello
+....
+
 ===========================
 An Remote Services Distribution Provider for [OSGi R7 Remote Services](https://osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html).  This allows dynamic remote procedure call between Java and Python objects.  Python-Implementations can be exposed to Java consumers as OSGi services, and Java-based OSGi services can be exposed to Python consumers.
 
