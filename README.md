@@ -3,7 +3,7 @@ Python.Java Remote Services
 
 ##Quickstart
 
-One easy way to demonstrate the utility of this distribution provider is to have a Java-based [OSGi Remote Service](https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.remoteservices.html) able to be consumed and use by a Python process.
+One easy way to demonstrate the utility of this distribution provider is to have a Java-based [OSGi Remote Service](https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.remoteservices.html) able to be used by a Python process.
 
 ### Example Karaf-Based OSGi Remote Service
 
@@ -20,10 +20,10 @@ After some time to download all components and start and export the HelloImpl se
 <pre>
   19:20:03.679;EXPORT_REGISTRATION;exportedSR=[org.eclipse.ecf.examples.hello.IHello];cID=URIID [uri=py4j://127.0.0.1:25333/java];rsId=1
 --Endpoint Description---
-<endpoint-descriptions xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0">
-  <endpoint-description>
-    <property name="ecf.endpoint.id" value-type="String" value="py4j://127.0.0.1:25333/java"/>
-      ...
+&lt;endpoint-descriptions xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0"&gt;>
+  &lt;<ndpoint-description&lt;
+    &lt;property name="ecf.endpoint.id" value-type="String" value="py4j://127.0.0.1:25333/java"/&gt;
+...    
 </pre>
 
 
