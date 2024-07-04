@@ -23,7 +23,7 @@ After some time to download all components and start and export the HelloImpl se
 &lt;endpoint-descriptions xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0"&gt;
   &lt;endpoint-description&lt;
     &lt;property name="ecf.endpoint.id" value-type="String" value="py4j://127.0.0.1:25333/java"/&gt;
-...    
+...continues with the entire endpoint description  
 </pre>
 
 
