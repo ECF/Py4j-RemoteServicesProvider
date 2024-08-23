@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product uid="hello.javahost" useFeatures="false" includeLaunchers="true" autoIncludeRequirements="true">
+<product uid="hello.javahost" type="bundles" includeLaunchers="true" autoIncludeRequirements="true">
 
    <configIni use="default">
    </configIni>
@@ -26,12 +26,11 @@
    </vm>
 
    <plugins>
-      <plugin id="org.apache.commons.exec"/>
+      <plugin id="org.apache.commons.commons-exec"/>
       <plugin id="org.apache.felix.gogo.command"/>
       <plugin id="org.apache.felix.gogo.runtime"/>
       <plugin id="org.apache.felix.gogo.shell"/>
       <plugin id="org.apache.felix.scr"/>
-      <plugin id="org.apache.log4j"/>
       <plugin id="org.eclipse.core.jobs"/>
       <plugin id="org.eclipse.ecf"/>
       <plugin id="org.eclipse.ecf.console"/>
@@ -73,5 +72,12 @@
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
    </configurations>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
 
 </product>
