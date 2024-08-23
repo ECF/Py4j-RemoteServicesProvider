@@ -30,14 +30,14 @@ import time
 from google.protobuf import message_factory as _message_factory
 from google.protobuf.message import Message
 from google.protobuf.descriptor import EnumDescriptor, EnumValueDescriptor, Descriptor, FieldDescriptor, _OptionsOrNone
-from osgiservicebridge.bridge import JavaRemoteServiceRegistry, Py4jServiceBridgeEventListener,\
-    JavaServiceMethod, JavaServiceProxy, JAVA_OBJECT_METHODS,\
-    ServiceMethod, get_interfaces,\
+from osgiservicebridge.bridge import JavaRemoteServiceRegistry, Py4jServiceBridgeEventListener, \
+    JavaServiceMethod, JavaServiceProxy, JAVA_OBJECT_METHODS, \
+    ServiceMethod, get_interfaces, \
     get_return_methtype, Py4jService, PythonServiceMethod
 
 from osgiservicebridge import ECF_SERVICE_EXPORTED_ASYNC_INTERFACES
 
-from osgiservicebridge.exporter_pb2 import ExportRequest,ExportResponse,UnexportRequest,UnexportResponse
+from osgiservicebridge.exporter_pb2 import ExportRequest, ExportResponse, UnexportRequest, UnexportResponse
 from concurrent.futures._base import Future
 from concurrent.futures.thread import ThreadPoolExecutor
 from google.protobuf import symbol_database, descriptor_pool
@@ -45,7 +45,7 @@ from threading import RLock
 from google.protobuf.internal import api_implementation
 
 _USE_C_DESCRIPTORS = False
-if api_implementation.Type() == 'cpp':  
+if api_implementation.Type() == 'cpp': 
     # Used by MakeDescriptor in cpp mode
     import binascii
     from google.protobuf import message as _message
@@ -60,7 +60,7 @@ __version__ = __v__
 
 # ------------------------------------------------------------------------------
 _logger = getLibLogger(__name__)
-_timing = getLibLogger("timing."+__name__)
+_timing = getLibLogger("timing." + __name__)
 # ------------------------------------------------------------------------------
 
 # PY2/PY3 version differentiation.
@@ -73,8 +73,8 @@ PYTHON_HOST_CONFIG_TYPE = 'ecf.py4j.host.python.pb';
 JAVA_CONSUMER_CONFIG_TYPE = 'ecf.py4j.consumer.pb';
 PYTHON_CONSUMER_CONFIG_TYPE = 'ecf.py4j.consumer.python.pb';
 
-PB_SERVICE_EXPORTED_CONFIG_DEFAULT=PYTHON_HOST_CONFIG_TYPE
-PB_SERVICE_EXPORTED_CONFIGS_DEFAULT=[PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
+PB_SERVICE_EXPORTED_CONFIG_DEFAULT = PYTHON_HOST_CONFIG_TYPE
+PB_SERVICE_EXPORTED_CONFIGS_DEFAULT = [PB_SERVICE_EXPORTED_CONFIG_DEFAULT]
 
 PB_SERVICE_RETURN_TYPE_ATTR = '_return_type'
 PB_SERVICE_ARG_TYPE_ATTR = '_arg_type'
@@ -93,6 +93,7 @@ def get_instance_method(instance, method_name):
     '''
     return getattr(instance, method_name, None)
 
+
 def get_instance_type(instance, method_name, func_attr_name):
     '''
     Return the class of the func_attr_name ('_return_type', or '_arg_type') on the method
@@ -110,6 +111,7 @@ def get_instance_type(instance, method_name, func_attr_name):
         return None
     return getattr(f, func_attr_name, None)
 
+
 def get_instance_return_type(instance, method_name):
     '''
     Return the class for the return_type for method_name on instance.
@@ -120,6 +122,7 @@ def get_instance_return_type(instance, method_name):
     '''
     return get_instance_type(instance, method_name, PB_SERVICE_RETURN_TYPE_ATTR)
 
+
 def get_instance_arg_type(instance, method_name):
     '''
     Return the class for the arg_type  for method_name on instance.
@@ -129,6 +132,7 @@ def get_instance_arg_type(instance, method_name):
     or no return type attribute on function.
     '''
     return get_instance_type(instance, method_name, PB_SERVICE_ARG_TYPE_ATTR)
+
 
 def create_return_instance(instance, method_name):
     '''
@@ -145,17 +149,21 @@ def create_return_instance(instance, method_name):
         return ret_type()
     return None
 
+
 def get_method_source(method):
-    return getattr(method,PB_SERVICE_SOURCE_ATTR, None)
+    return getattr(method, PB_SERVICE_SOURCE_ATTR, None)
+
 
 def set_method_source(method, sourcecode):
     setattr(method, PB_SERVICE_ARG_TYPE_ATTR, sourcecode)
+
     
-def update_method(method,oldfunc,new_source):
+def update_method(method, oldfunc, new_source):
     if method:
         setattr(method, PB_SERVICE_ARG_TYPE_ATTR, getattr(oldfunc, PB_SERVICE_ARG_TYPE_ATTR, None))
         setattr(method, PB_SERVICE_RETURN_TYPE_ATTR, getattr(oldfunc, PB_SERVICE_RETURN_TYPE_ATTR, None))
         setattr(method, PB_SERVICE_SOURCE_ATTR, new_source)
+
 
 def get_name_and_type_dict(m):
     result = dict()
@@ -167,14 +175,17 @@ def get_name_and_type_dict(m):
             result[key] = fully_qualified_classname(type(val))
     return result
 
+
 def fully_qualified_classname(c):
     module = c.__module__
     if module == None or module == str.__class__.__module__:
         return c.__name__
     return module + '.' + c.__name__
+
                 
-def _raw_bytes_from_java(self,methodName,serializedArgs):
-    return getattr(self,methodName)(serializedArgs)
+def _raw_bytes_from_java(self, methodName, serializedArgs):
+    return getattr(self, methodName)(serializedArgs)
+
 
 def bytes_to_pmessage(pmessage_class, message_bytes):
     if not message_bytes:
@@ -187,7 +198,7 @@ def bytes_to_pmessage(pmessage_class, message_bytes):
         raise e
     if PY2:
         message_bytes = str(message_bytes)
-    #Then pass to parser and return
+    # Then pass to parser and return
     t0 = time.time()
     try:
         # deserialze
@@ -196,8 +207,9 @@ def bytes_to_pmessage(pmessage_class, message_bytes):
         _logger.exception('bytes_to_pmessage could not parse message from bytes. message_instance=%' % (pmessage_instance))
         raise e
     t1 = time.time()
-    _timing.debug("protobuf.bytes_to_pmessage;diff={0}".format(1000*(t1-t0)))
+    _timing.debug("protobuf.bytes_to_pmessage;diff={0}".format(1000 * (t1 - t0)))
     return pmessage_instance
+
 
 def bytes_to_jmessage(jmessage_class, message_bytes):
     if not message_bytes:
@@ -205,13 +217,13 @@ def bytes_to_jmessage(jmessage_class, message_bytes):
     parser_instance = None
     try:
         parser_method = jmessage_class.getMethod("parser", None)
-        parser_instance = parser_method.invoke(None,None)
+        parser_instance = parser_method.invoke(None, None)
     except Exception as e:
         _logger.exception('bytes_to_jmessage could not create instance of message_class=%s' % (jmessage_class))
         raise e
     if PY2:
         message_bytes = bytearray(message_bytes)
-    #Then pass to parser and return
+    # Then pass to parser and return
     t0 = time.time()
     jmessage_instance = None
     try:
@@ -221,8 +233,9 @@ def bytes_to_jmessage(jmessage_class, message_bytes):
         _logger.exception('bytes_to_jmessage could not parse message from bytes.  message_instance=%' % (jmessage_instance))
         raise e
     t1 = time.time()
-    _timing.debug("protobuf.bytes_to_jmessage;diff={0}".format(1000*(t1-t0)))
+    _timing.debug("protobuf.bytes_to_jmessage;diff={0}".format(1000 * (t1 - t0)))
     return jmessage_instance
+
 
 def pmessage_to_bytes(pmessage):
     pmessage_bytes = None
@@ -237,8 +250,9 @@ def pmessage_to_bytes(pmessage):
         if PY2:
             pmessage_bytes = bytearray(pmessage_bytes)
     t1 = time.time()
-    _timing.debug("protobuf.pmessage_to_bytes;diff={0}".format(1000*(t1-t0)))
+    _timing.debug("protobuf.pmessage_to_bytes;diff={0}".format(1000 * (t1 - t0)))
     return pmessage_bytes
+
 
 def jmessage_to_bytes(jmessage):
     jmessage_bytes = None
@@ -253,8 +267,9 @@ def jmessage_to_bytes(jmessage):
         if PY2:
             jmessage_bytes = bytearray(jmessage_bytes)
     t1 = time.time()
-    _timing.debug("protobuf.jmessage_to_bytes;diff={0}".format(1000*(t1-t0)))
+    _timing.debug("protobuf.jmessage_to_bytes;diff={0}".format(1000 * (t1 - t0)))
     return jmessage_bytes
+
 
 def pmessage_to_jmessage(jmessage_class, pmessage):
     if not pmessage:
@@ -263,6 +278,7 @@ def pmessage_to_jmessage(jmessage_class, pmessage):
     if not message_bytes:
         return None
     return bytes_to_jmessage(jmessage_class, message_bytes)
+
     
 def jmessage_to_pmessage(pmessage_class, jmessage):
     if not jmessage:
@@ -273,7 +289,7 @@ def jmessage_to_pmessage(pmessage_class, jmessage):
     return bytes_to_pmessage(pmessage_class, message_bytes)
 
     
-def protobuf_remote_service(**kwargs):    
+def protobuf_remote_service(**kwargs): 
     '''
     Class decorator for protobuf-based remote services.  This class decorator is intended to be used as follows:
     
@@ -289,25 +305,28 @@ def protobuf_remote_service(**kwargs):
     :param kwargs: the kwargs dict required to have 'objectClass' item and
     and (optional) 'export_properties' item
     '''
+
     def decorate(cls):
         # setup the protocol buffers java-side config
         pb_svc_props = { osgiservicebridge.SERVICE_EXPORTED_CONFIGS: PB_SERVICE_EXPORTED_CONFIGS_DEFAULT }
         # get the 'service_properties' value from kwargs, if present
-        args_props = kwargs.pop(osgiservicebridge.EXPORT_PROPERTIES_NAME,None)
+        args_props = kwargs.pop(osgiservicebridge.EXPORT_PROPERTIES_NAME, None)
         # if it is present, then merge/override with the values given
         if args_props:
-            pb_svc_props = osgiservicebridge.merge_dicts(pb_svc_props,args_props)
+            pb_svc_props = osgiservicebridge.merge_dicts(pb_svc_props, args_props)
         # then set/reset the kwargs service_properties value
         kwargs[osgiservicebridge.EXPORT_PROPERTIES_NAME] = pb_svc_props
         # call _modify_remoteservice_class to modify the class itself (add Java inner 
         # class and set implements and service_properties values
-        cls = osgiservicebridge._modify_remoteservice_class(cls,kwargs)
+        cls = osgiservicebridge._modify_remoteservice_class(cls, kwargs)
         # set pbbuffers callback to _raw_bytes_from_java
         cls._raw_bytes_from_java = _raw_bytes_from_java
         return cls
+
     return decorate
 
-def protobuf_remote_service_method(arg_type,return_type=None):
+
+def protobuf_remote_service_method(arg_type, return_type=None):
     '''
     Method decorator for protobuf-based remote services method.  This class decorator is intended to be used as follows:
     
@@ -326,7 +345,9 @@ def protobuf_remote_service_method(arg_type,return_type=None):
     :param arg_type: the class of the pbarg type (will be instance of HelloMsgContent)
     '''
     issubclass(arg_type, Message)
+
     def pbwrapper(func):
+
         def logged_wrapped_exception(msg):
             exc_type, exc_value, exc_traceback = sys.exc_info()
             from traceback import format_exception
@@ -342,6 +363,7 @@ def protobuf_remote_service_method(arg_type,return_type=None):
             setattr(func, PB_SERVICE_SOURCE_ATTR, getsource(func))
         except:
             pass
+
         @wraps(func)
         def wrapper(*args):
             # set argClass to arg_type
@@ -353,19 +375,22 @@ def protobuf_remote_service_method(arg_type,return_type=None):
             t0 = time.time()
             try:
                 # Now actually call function, with self,pbMessage
-                respb = func(args[0],argInst)
+                respb = func(args[0], argInst)
             except Exception as e:
                 logged_wrapped_exception('Remote method invoke failed')
                 raise e
             t1 = time.time()
-            _timing.debug("protobuf.exec;time={0}".format(1000*(t1-t0)))
+            _timing.debug("protobuf.exec;time={0}".format(1000 * (t1 - t0)))
             if func._return_type:
-                isinstance(respb,func._return_type)
+                isinstance(respb, func._return_type)
             return pmessage_to_bytes(respb)
+
         return wrapper
+
     return pbwrapper
 
-class ProtobufServiceRegistry(Py4jServiceBridgeEventListener,JavaRemoteServiceRegistry):
+
+class ProtobufServiceRegistry(Py4jServiceBridgeEventListener, JavaRemoteServiceRegistry):
     
     def __init__(self):
         super(ProtobufServiceRegistry, self).__init__()
@@ -376,7 +401,7 @@ class ProtobufServiceRegistry(Py4jServiceBridgeEventListener,JavaRemoteServiceRe
         imported_configs = endpoint_props[osgiservicebridge.SERVICE_IMPORTED_CONFIGS]
         theproxy = None
         if (osgiservicebridge.protobuf.JAVA_HOST_CONFIG_TYPE in imported_configs):
-            theproxy = ProtobufJavaServiceProxy(servicebridge._gateway.jvm,endpoint_props[osgiservicebridge.OBJECT_CLASS],proxy,self._executor, self._timeout)
+            theproxy = ProtobufJavaServiceProxy(servicebridge._gateway.jvm, endpoint_props[osgiservicebridge.OBJECT_CLASS], proxy, self._executor, self._timeout)
         else:
             theproxy = proxy
         self._add_remoteservice(endpoint_props, theproxy)
@@ -387,16 +412,18 @@ class ProtobufServiceRegistry(Py4jServiceBridgeEventListener,JavaRemoteServiceRe
     def service_unimported(self, servicebridge, endpointid, proxy, endpoint_props):
         self._remove_remoteservice(endpointid)
 
-PYTHON_SERVICE_EXPORTER_PACKAGE='org.eclipse.ecf.python.protobuf'
-PYTHON_SERVICE_EXPORTER_PACKAGE_VERSION='1.0.0'
-PYTHON_SERVICE_EXPORTER=PYTHON_SERVICE_EXPORTER_PACKAGE + '.PythonServiceExporter'
+
+PYTHON_SERVICE_EXPORTER_PACKAGE = 'org.eclipse.ecf.python.protobuf'
+PYTHON_SERVICE_EXPORTER_PACKAGE_VERSION = '1.0.0'
+PYTHON_SERVICE_EXPORTER = PYTHON_SERVICE_EXPORTER_PACKAGE + '.PythonServiceExporter'
+
 
 @protobuf_remote_service(
-    objectClass=[PYTHON_SERVICE_EXPORTER],export_properties = { ECF_SERVICE_EXPORTED_ASYNC_INTERFACES: '*',
-                                                                 ENDPOINT_PACKAGE_VERSION_+PYTHON_SERVICE_EXPORTER_PACKAGE: PYTHON_SERVICE_EXPORTER_PACKAGE_VERSION })
+    objectClass=[PYTHON_SERVICE_EXPORTER], export_properties={ ECF_SERVICE_EXPORTED_ASYNC_INTERFACES: '*',
+                                                                 ENDPOINT_PACKAGE_VERSION_ + PYTHON_SERVICE_EXPORTER_PACKAGE: PYTHON_SERVICE_EXPORTER_PACKAGE_VERSION })
 class PythonServiceExporter(object):
     
-    def __init__(self,bridge):
+    def __init__(self, bridge):
         self._bridge = bridge
         
     def _create_error_export_response(self, message):
@@ -409,7 +436,7 @@ class PythonServiceExporter(object):
         result.endpoint_id = endpoint_id
         return result
     
-    def _load_module(self,module_name):
+    def _load_module(self, module_name):
         module_ = self.__class__.__module__
         if not module_name:
             return sys.modules['__main__']
@@ -420,13 +447,15 @@ class PythonServiceExporter(object):
                 module_ = importlib.import_module(module_name)
                 sys.modules[module_name] = module_
         except (ImportError, IOError) as ex:
-            _logger.exception('Could not load module={0}'.format(module_name,ex))
+            _logger.exception('Could not load module={0}'.format(module_name, ex))
             return None
         return module_
     
-    def _get_class_from_module(self,module,class_name):
+    def _get_class_from_module(self, module, class_name):
+
         def pred(clazz):
             return inspect.isclass(clazz)
+
         moduleclasses = inspect.getmembers(module, pred)
         if not moduleclasses:
             return None
@@ -436,7 +465,7 @@ class PythonServiceExporter(object):
                     return t[1]
         return None
     
-    @protobuf_remote_service_method(arg_type=ExportRequest,return_type=ExportResponse)
+    @protobuf_remote_service_method(arg_type=ExportRequest, return_type=ExportResponse)
     def createAndExport(self, export_request): 
         try:
             module = self._load_module(export_request.module_name)
@@ -450,13 +479,13 @@ class PythonServiceExporter(object):
                 inst = clazz()
             else:
                 inst = clazz(args)
-            export_id = self._bridge.export(inst,export_request.overriding_export_props)
+            export_id = self._bridge.export(inst, export_request.overriding_export_props)
             return self._create_success_export_response(export_id)
         except Exception as ex:
             _logger.exception('Could not create and export with request={0}'.format(export_request))
             return self._create_error_export_response(str(ex))
         
-    @protobuf_remote_service_method(arg_type=UnexportRequest,return_type=UnexportResponse)
+    @protobuf_remote_service_method(arg_type=UnexportRequest, return_type=UnexportResponse)
     def unexport(self, unexport_request):
         endpoint_id = self._bridge.unexport(unexport_request.endpoint_id)
         result = UnexportResponse()
@@ -466,6 +495,7 @@ class PythonServiceExporter(object):
         else:
             result.success = False
         return result
+
 
 def MakeClassDescriptor(descriptor_pool, desc_proto, package='', build_file_if_cpp=True, syntax=None):
     if api_implementation.Type() == 'cpp' and build_file_if_cpp:
@@ -515,7 +545,7 @@ def MakeClassDescriptor(descriptor_pool, desc_proto, package='', build_file_if_c
         full_name = '.'.join(full_message_name + [nested_proto.name])
         # Nested types are just those defined inside of the message, not all types
         # used by fields in the message, so no loops are possible here.
-        nested_desc = MakeClassDescriptor(descriptor_pool,nested_proto,
+        nested_desc = MakeClassDescriptor(descriptor_pool, nested_proto,
                                  package='.'.join(full_message_name),
                                  build_file_if_cpp=False,
                                  syntax=syntax)
@@ -532,8 +562,8 @@ def MakeClassDescriptor(descriptor_pool, desc_proto, package='', build_file_if_c
             json_name = None
         if field_proto.HasField('type_name'):
             type_name = field_proto.type_name
-            full_type_name = '.'.join(full_message_name +
-                                [type_name[type_name.rfind('.')+1:]])
+            full_type_name = '.'.join(full_message_name + 
+                                [type_name[type_name.rfind('.') + 1:]])
             if full_type_name in nested_types:
                 nested_desc = nested_types[full_type_name]
             elif full_type_name in enum_types:
@@ -557,29 +587,32 @@ def MakeClassDescriptor(descriptor_pool, desc_proto, package='', build_file_if_c
 _lock = RLock()
 _jclass_pclass_map = {}
 
+
 # ---------------------------------------------------------------------------------------------------------
 #  API for async method invocation
 # ---------------------------------------------------------------------------------------------------------
 def get_pb_type_from_java_class(java_class):
     with _lock:
-        pbclass_entry = _jclass_pclass_map.get(java_class,None)
+        pbclass_entry = _jclass_pclass_map.get(java_class, None)
         if not pbclass_entry:
             # get full name for java class descriptor
-            pdesc_desc_fn = java_class.getMethod("getDescriptor",None).invoke(None,None).getFullName()
+            pdesc_desc_fn = java_class.getMethod("getDescriptor", None).invoke(None, None).getFullName()
             if pdesc_desc_fn:
                 # find message type descriptor from name
                 msg_descriptor = _default_descriptor_pool.FindMessageTypeByName(pdesc_desc_fn)
                 if msg_descriptor:
-                    return _message_factory.GetMessageClass(msg_descriptor)
+                    return msg_descriptor._concrete_class
 
-def get_jparser_from_pdescriptor(jvm,pdescriptor):
+
+def get_jparser_from_pdescriptor(jvm, pdescriptor):
     try:
         dfilename = os.path.splitext(os.path.basename(pdescriptor.file.name))[0]
-        fqcname = "{0}.{1}${2}".format(pdescriptor.file.package,dfilename[0].upper() + dfilename[1:],pdescriptor.name)
-        return getattr(jvm,fqcname)
+        fqcname = "{0}.{1}${2}".format(pdescriptor.file.package, dfilename[0].upper() + dfilename[1:], pdescriptor.name)
+        return getattr(jvm, fqcname)
     except Exception as e:
         logging.exception('get_jparser_from_descriptor')
         raise e
+
 
 def get_pb_service_methods(jvm, jmethods, service, executor, timeout, timeunit):
     '''
@@ -593,6 +626,7 @@ def get_pb_service_methods(jvm, jmethods, service, executor, timeout, timeunit):
                                     timeout,
                                     timeunit),
                                     jmethod.getParameterTypes()) for jmethod in jmethods if not jmethod.getName() in JAVA_OBJECT_METHODS ]
+
 
 def get_pb_python_service_methods(jvm, jmethods, service, executor, timeout, timeunit):
     '''
@@ -610,6 +644,7 @@ def get_pb_python_service_methods(jvm, jmethods, service, executor, timeout, tim
 
 # -----------------------------------------------------------------------------------------------
 
+
 class ProtobufPythonService(Py4jService):
 
     def __init__(self, bridge, interfaces, svc_object, executor, timeout):
@@ -617,9 +652,10 @@ class ProtobufPythonService(Py4jService):
         osgiservicebridge._modify_remoteservice_class(ProtobufPythonService, { 'objectClass': interfaces })
         self._interfaces = get_interfaces(bridge.get_jvm(), interfaces, get_pb_python_service_methods, svc_object, executor, timeout)
 
+
 class ProtobufPythonServiceMethod(PythonServiceMethod):
     
-    def __init__(self,service,method_name,method_type, java_param_types, jvm):
+    def __init__(self, service, method_name, method_type, java_param_types, jvm):
         PythonServiceMethod.__init__(self, service, method_name, method_type)
         self._jvm = jvm
         self._jreturn_parser = None
@@ -630,7 +666,7 @@ class ProtobufPythonServiceMethod(PythonServiceMethod):
                 # then get the python message type given the first java param type
                 self._pmessage_arg_type = get_pb_type_from_java_class(java_param_types[0])
         
-    def _process_result(self,presult):
+    def _process_result(self, presult):
         presult = presult.result(self._method_type._timeout) if isinstance(presult, Future) else presult
         if presult:
             if not self._jreturn_parser:
@@ -640,7 +676,7 @@ class ProtobufPythonServiceMethod(PythonServiceMethod):
             t0 = time.time()
             # we convert
             presult = self._jreturn_parser.parseFrom(pmessage_to_bytes(presult))
-            _timing.debug("protobuf.returnserialize;time={0}".format(1000*(time.time()-t0)))
+            _timing.debug("protobuf.returnserialize;time={0}".format(1000 * (time.time() - t0)))
         return PythonServiceMethod._process_result(self, presult)
     
     def _call_sync(self, *args):
@@ -651,9 +687,10 @@ class ProtobufPythonServiceMethod(PythonServiceMethod):
                 # for pb services the first argument should be a java Message subclass
                 t0 = time.time()
                 pmessage = jmessage_to_pmessage(self._pmessage_arg_type, first)
-                _timing.debug("protobuf.argdeserialize;time={0}".format(1000*(time.time()-t0)))
+                _timing.debug("protobuf.argdeserialize;time={0}".format(1000 * (time.time() - t0)))
                 call_args = [pmessage] + list(args)[1:]
-        return PythonServiceMethod._call_sync(self,*call_args)
+        return PythonServiceMethod._call_sync(self, *call_args)
+
 
 # -----------------------------------------------------------------------------------------------
 class ProtobufJavaServiceProxy(JavaServiceProxy):
@@ -661,17 +698,18 @@ class ProtobufJavaServiceProxy(JavaServiceProxy):
     def __init__(self, jvm, interfaces, proxy, executor, timeout=30):
         self._interfaces = get_interfaces(jvm, interfaces, get_pb_service_methods, proxy, executor, timeout)
         self._proxy = proxy
+
         
 class ProtobufJavaServiceMethod(JavaServiceMethod):
     
     def __init__(self, proxy, method_name, method_type, java_param_types):
-        ServiceMethod.__init__(self,proxy,method_name,method_type)
+        ServiceMethod.__init__(self, proxy, method_name, method_type)
         self._java_param_types = java_param_types
         self._python_return_type = None
     
     # called by superclass to actually make the synchronous remote call (may be
     # on separate thread)
-    def _call_sync(self,*args):
+    def _call_sync(self, *args):
         # check arguments
         call_args = [None]
         if args and len(args) > 0:
@@ -679,15 +717,14 @@ class ProtobufJavaServiceMethod(JavaServiceMethod):
             # should be a protobuf message
             t0 = time.time()
             # serialize python message to bytes
-            call_args = [pmessage_to_jmessage(self._java_param_types[0],args[0])]
-            _timing.debug("protobuf.argserialize;time={0}".format(1000*(time.time()-t0)))
+            call_args = [pmessage_to_jmessage(self._java_param_types[0], args[0])]
+            _timing.debug("protobuf.argserialize;time={0}".format(1000 * (time.time() - t0)))
         # now call superclass with first call_args [jmessage]
-        return JavaServiceMethod._call_sync(self,*call_args)
+        return JavaServiceMethod._call_sync(self, *call_args)
     
     def _process_result(self, jresult):
         if not self._python_return_type:
             self._python_return_type = get_pb_type_from_java_class(jresult.getClass())
         # convert bytes to python return type
         return jmessage_to_pmessage(self._python_return_type, jresult)
-    
     
