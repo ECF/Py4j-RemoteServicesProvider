@@ -31,25 +31,33 @@ The **py4j://127.0.0.1:25333/java** as the value for **ecf.endpoint.id** propert
 
 To run the example [python client program](examples/org.eclipse.ecf.examples.hello.pythonclient/src/run.py) it's necessary to first install the osgiservicebridge python library (part of this codebase in [python/osgiservicebridge](python/osgiservicebridge)
 
-Pypi Install
+Osgiservicebridge Install
+
+Install via Pip
 
 <pre>
   pip install osgiservicebridge
 </pre>
 
-The python hello service client can be run by going to the [examples/org.eclipse.ecf.examples.hello.pythonclient/src](examples/org.eclipse.ecf.examples.hello.pythonclient/src) directory and running the pythonclient program.
+Install Locally in [python/osgiservicebridge](python/osgiservicebridge) directory
+
+<pre>
+  python setup.py install develop
+</pre>
+
+The python hello service client can then be run by going to the [examples/org.eclipse.ecf.examples.hello.pythonclient/src](examples/org.eclipse.ecf.examples.hello.pythonclient/src) directory and starting the run.py example program.
 
 <pre>
   python run.py
 </pre>
 
-On the Karaf/Java side you should see something like this output to the console
+After starting run.py, on the Karaf/Java side you should see something like this output to the console
 
 <pre>
   Java.sayHello called by from.python with message: 'this is a big hello from Python!!!'
 </pre>
 
-and on the Python side it will have console output like this
+and on the Python side there should be console output like this
 
 <pre>
 bridge created
@@ -62,31 +70,19 @@ service_unimported endpointid=02ea388d-417d-48ce-8372-ed9ed0714bb4;proxy=org.ecl
 disconnected...exiting
 </pre>
 
-## Protobuf-Serialization
+## Protobuf-Serialization/Deserialization
 
-This codebase to use [Google Protocol Buffers](https://protobuf.dev/) for high-performance serialization/deserialization, as well as support for client, server, and/or bidirectional streaming.
+This codebase to use [Google Protocol Buffers](https://protobuf.dev/) for high-performance serialization/deserialization, as well as support for client, server, and/or bidirectional streaming and [gRPC](https://grpc.io).
 
-### Dependencies
+## Support
 
-The Py4j Remote Services Provider depends upon the ECF implementation of the OSGi Remote Service Admin (RSA).   The latest version is available as an Eclipse p2 repository as described by [this download page](https://www.eclipse.org/ecf/downloads.php).
-
-A recent build of this repo's java components (OSGi bundles) exist in [this directory](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/build):https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/build
-
-A P2 Repository is also available in that same directory...i.e:  https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/build.  Add this URL with name (e.g.):  ECF Py4j Provider.
-
-For support please file an issue on this repo, or contact [scottslewis@gmail.com](mailto:scottslewis@gmail.com)
+For support please open an issue on this repo, or contact [scottslewis@gmail.com](mailto:scottslewis@gmail.com)
 
 ### Python Components
 
-Python OSGi Service Bridge may be installed via pip:
-
-<pre>
-pip install osgiservicebridge
-</pre>
-
 The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/python/osgiservicebridge) project.   This package should be installed into Python 3.3+ prior to running the pythonclient example.
 
-### Python Impl of OSGi Bundle, Service, and Remote Service Admin
+### Python Impl of OSGi Bundle, Service, and Remote Service Admin in [iPopo v3](https://ipopo.readthedocs.io/en/v3/foreword.html)
 
 A full Python implementation of OSGi bundle and service layer, along with Remote Services and Remote Service Admin implementations in python is also available via the [iPopo v3](https://ipopo.readthedocs.io/en/v3/foreword.html) project.   Note that this python based implementation of Remote Services and Remote Service Admin is makes Python and Java-based remote services completely interoperable, and allows the use of multi-language service discovery systems like [etcd3](https://etcd.io/) (discovery protocol for Kubernetes) and multi-language distribution systems such as [grpc](https://grpc.io/).
 
