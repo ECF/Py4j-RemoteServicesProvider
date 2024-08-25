@@ -39,7 +39,7 @@ Install via Pip
   pip install osgiservicebridge
 </pre>
 
-Install Locally in [python/osgiservicebridge](python/osgiservicebridge) directory
+OR install via repo by going to the [python/osgiservicebridge](python/osgiservicebridge) directory and running setup.py as follows
 
 <pre>
   python setup.py install develop
@@ -51,8 +51,7 @@ The python hello service client can then be run by going to the [examples/org.ec
   python run.py
 </pre>
 
-After starting run.py, on the Karaf/Java side you should see something like this output to the console
-
+After starting run.py, on the Karaf/Java side you should see console output like this
 <pre>
   Java.sayHello called by from.python with message: 'this is a big hello from Python!!!'
 </pre>
