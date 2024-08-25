@@ -86,7 +86,7 @@ The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](
 
 ### Python Impl of OSGi Bundle and Service Layers
 
-A full Python implementation of OSGi bundle and service layer, with Remote Services and Remote Service Admin implementations built-in is also available via the [iPopo](https://ipopo.readthedocs.io/en/1.0.1/) project.
+A full Python implementation of OSGi bundle and service layer, with Remote Services and Remote Service Admin implementations built-in is also available via the [iPopo v3](https://ipopo.readthedocs.io/en/v3/foreword.html) project.
 
 LICENSE
 =======
