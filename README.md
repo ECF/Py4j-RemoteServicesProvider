@@ -3,11 +3,11 @@ Python.Java Remote Services
 
 ## Quickstart Example
 
-One way to demonstrate this distribution provider is to have a Java-based [OSGi Remote Service](https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.remoteservices.html) and call/use it from a Python process.
+One way to demonstrate this distribution provider is to have a Java-based [OSGi Remote Service](https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.remoteservices.html) and call/use/consume it from a Python process or a Java process.  Just to be clear, with these same components (based upon OSGi Remote Services and Remote Service Admin specifications) it is completely possible to export a Python-implemented service, and consume the service from either a Java or Python process as well.  For simplification, the example below exports a remote service from Java, and imports/uses/consumes that service from Python.
 
 ### Karaf-Based OSGi Remote Service
 
-This example  [HelloImpl.java](https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/examples/org.eclipse.ecf.examples.hello.javahost/src/org/eclipse/ecf/examples/hello/javahost/HelloImpl.java) from this repository shows a small OSGi Async Remote Service with three simple service methods.
+This example  [HelloImpl.java](https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/examples/org.eclipse.ecf.examples.hello.javahost/src/org/eclipse/ecf/examples/hello/javahost/HelloImpl.java) from this repository shows a small [OSGi Async Remote Service](https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.remoteservices.html#d0e1496) with three service methods.
 
 To install and start this example service in [Karaf 4.4.6](https://karaf.apache.org/download) paste or type the following into the karaf console:
 
@@ -84,9 +84,9 @@ pip install osgiservicebridge
 
 The OSGi Service Bridge Python source code is in [the python/osgiservicebridge](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/python/osgiservicebridge) project.   This package should be installed into Python 3.3+ prior to running the pythonclient example.
 
-### Python Impl of OSGi Bundle and Service Layers
+### Python Impl of OSGi Bundle, Service, and Remote Service Admin
 
-A full Python implementation of OSGi bundle and service layer, with Remote Services and Remote Service Admin implementations built-in is also available via the [iPopo v3](https://ipopo.readthedocs.io/en/v3/foreword.html) project.
+A full Python implementation of OSGi bundle and service layer, along with Remote Services and Remote Service Admin implementations in python is also available via the [iPopo v3](https://ipopo.readthedocs.io/en/v3/foreword.html) project.   Note that this python based implementation of Remote Services and Remote Service Admin is makes Python and Java-based remote services completely interoperable, and allows the use of multi-language service discovery systems like [etcd3](https://etcd.io/) (discovery protocol for Kubernetes) and multi-language distribution systems such as [grpc](https://grpc.io/).
 
 LICENSE
 =======
