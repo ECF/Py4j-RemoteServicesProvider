@@ -29,7 +29,9 @@ After installing all OSGi and ECF components, and exporting the HelloImpl servic
 
 The **py4j://127.0.0.1:25333/java** as the value for **ecf.endpoint.id** property indicates that a listener has been opened on 127.0.0.1 (localhost) using port 25333 and waiting for connections from clients.
 
-To run the example [python client program](examples/org.eclipse.ecf.examples.hello.pythonclient/src/run.py) it's necessary to first install the osgiservicebridge (part of this codebase)
+To run the example [python client program](examples/org.eclipse.ecf.examples.hello.pythonclient/src/run.py) it's necessary to first install the osgiservicebridge python library (part of this codebase in [python/osgiservicebridge](python/osgiservicebridge)
+
+Pypi Install
 
 <pre>
   pip install osgiservicebridge
