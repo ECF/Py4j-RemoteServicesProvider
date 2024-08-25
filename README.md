@@ -33,7 +33,7 @@ To run the example [python client program](examples/org.eclipse.ecf.examples.hel
 
 Osgiservicebridge Install
 
-Install via Pip
+Install via Pip/Pypi (currently version 1.5.7)
 
 <pre>
   pip install osgiservicebridge
