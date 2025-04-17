@@ -64,9 +64,10 @@ setup(
         'License :: OSI Approved :: Apache Software License',
 
         # Specify the Python versions you support here. In particular, ensure
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
        "Programming Language :: Java",
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Object Brokering",
@@ -87,7 +88,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['py4j>=0.10.9.7', 'protobuf==3.20.3'],
+    install_requires=['py4j>=0.10.9.7', 'protobuf>=5.29.4'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
