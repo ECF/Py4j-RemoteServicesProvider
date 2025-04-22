@@ -12,7 +12,6 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
@@ -36,6 +35,8 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.py4j.osgi.GatewayServer;
 import org.py4j.osgi.GatewayServerConfiguration;
 import org.py4j.osgi.OSGiGateway;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import py4j.CallbackClient;
 import py4j.GatewayServerListener;
@@ -50,6 +51,8 @@ import py4j.Py4JServerConnection;
  */
 public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteServiceAdminListener, Py4jProvider {
 
+	private static Logger logger = LoggerFactory.getLogger(Py4jProviderImpl.class);
+	
 	@SuppressWarnings("rawtypes")
 	public static Map getPropsFromReference(ServiceReference<?> sr) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -119,27 +122,30 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 	private GatewayServerListener gatewayServerListener = new GatewayServerListener() {
 
 		@Override
-		public void connectionError(Exception arg0) {
-			logError("Connection error", arg0);
+		public void connectionError(Exception except) {
+			logError("Connection error", except);
 		}
 
 		@Override
-		public void connectionStarted(Py4JServerConnection arg0) {
+		public void connectionStarted(Py4JServerConnection connection) {
 			synchronized (getLock()) {
-				if (Py4jProviderImpl.this.connection != null)
-					logError("connectionStarted error: Already have connection=" + Py4jProviderImpl.this.connection
-							+ ".  New connectionStarted=" + arg0);
-				Py4jProviderImpl.this.connection = arg0;
+				if (Py4jProviderImpl.this.connection != null) {
+					logError("connectionStarted error: Already have connection on port=" + String.valueOf(connection.getSocket().getLocalPort()));
+				}
+				Py4jProviderImpl.this.connection = connection;
 			}
+			logger.debug("connectionStarted port=" + String.valueOf(connection.getSocket().getLocalPort()));
 		}
 
 		@Override
-		public void connectionStopped(Py4JServerConnection arg0) {
+		public void connectionStopped(Py4JServerConnection connection) {
 			hardClose();
+			logger.debug("connectionStopped port=" + String.valueOf(connection.getSocket().getLocalPort()));
 		}
 
 		@Override
 		public void serverError(Exception arg0) {
+			logger.error("gateway error",arg0);
 		}
 
 		@Override
@@ -152,10 +158,12 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 
 		@Override
 		public void serverStarted() {
+			logger.debug("gateway started");
 		}
 
 		@Override
 		public void serverStopped() {
+			logger.debug("gateway stopped");
 		}
 	};
 
@@ -241,7 +249,7 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		super.activate(context);
 		Integer pythonPort = PropertiesUtil.getIntValue(PYTHON_PORT_SYSPROP, properties, PYTHON_PORT_PROP,
 				py4j.GatewayServer.DEFAULT_PYTHON_PORT);
-		Integer port = PropertiesUtil.getIntValue(JAVA_PORT_SYSPROP, properties, JAVA_PORT_PROP,
+		Integer javaPort = PropertiesUtil.getIntValue(JAVA_PORT_SYSPROP, properties, JAVA_PORT_PROP,
 				py4j.GatewayServer.DEFAULT_PORT);
 		Boolean debug = PropertiesUtil.getBooleanValue(DEBUG_SYSPROP, properties, DEBUG_PROP, false);
 		String address = PropertiesUtil.getStringValue(ADDRESS_SYSPROP, properties, ADDRESS_PROP,
@@ -252,25 +260,32 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 				py4j.GatewayServer.DEFAULT_CONNECT_TIMEOUT);
 		Integer minConnectionTime = PropertiesUtil.getIntValue(MINCONNECTION_TIME_SYSPROP, properties,
 				MINCONNECTION_TIME_PROP, 0);
-		synchronized (getLock()) {
-			createOSGiGateway(pythonPort, address, minConnectionTime);
-			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(port, address, debug,
-					readTimeout, connectTimeout);
-			setLocalId(address, port);
-			createAndStartGatewayServer(builder.build());
-			registerHostDistributionProvider();
-			registerClientDistributionProvider();
-		}
+		doActivate(pythonPort, javaPort, debug, address, readTimeout, connectTimeout, minConnectionTime);
 	}
 
 	protected void createAndStartGatewayServer(GatewayServerConfiguration serverConfiguration) throws Exception {
-		py4j.GatewayServer.PY4J_LOGGER.setLevel(Level.FINEST);
 		this.gatewayServer = new GatewayServer(serverConfiguration);
 	}
 
 	protected void createOSGiGateway(int pythonPort, String address, int minConnectionTime) throws Exception {
 		this.osgiGateway = new DirectProviderGateway(this,
 				new CallbackClient(pythonPort, InetAddress.getByName(address), minConnectionTime, TimeUnit.SECONDS));
+	}
+
+	private void doActivate(int pythonPort, int javaPort, Boolean debug, String address, int readTimeout, int connectTimeout,
+			int minConnectTime) throws Exception {
+		synchronized (getLock()) {
+			createOSGiGateway(pythonPort, address, minConnectTime);
+			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(javaPort, address,
+					debug, readTimeout, connectTimeout);
+			logger.debug("starting gateway server javaPort=" + String.valueOf(javaPort) + ";pythonPort=" + String.valueOf(pythonPort) + ";address="
+					+ address + ";connectTimeout=" + String.valueOf(connectTimeout) + ";readTimeout="
+					+ String.valueOf(readTimeout) + ";minConnectTime=" + String.valueOf(minConnectTime));
+			createAndStartGatewayServer(builder.build());
+			setLocalId(address, javaPort);
+			registerHostDistributionProvider();
+			registerClientDistributionProvider();
+		}
 	}
 
 	protected void activate(BundleContext context, Config config) throws Exception {
@@ -281,16 +296,8 @@ public class Py4jProviderImpl extends AbstractDirectProvider implements RemoteSe
 		Boolean debug = config.debug();
 		Integer readTimeout = config.readTimeout();
 		Integer connectTimeout = config.connectTimeout();
-		Integer minConnectionTime = config.minConnectionTime();
-		synchronized (getLock()) {
-			createOSGiGateway(pythonPort, address, minConnectionTime);
-			GatewayServerConfiguration.Builder builder = createGatewayServerConfigurationBuilder(javaPort, address,
-					debug, readTimeout, connectTimeout);
-			createAndStartGatewayServer(builder.build());
-			setLocalId(address, javaPort);
-			registerHostDistributionProvider();
-			registerClientDistributionProvider();
-		}
+		Integer minConnectTime = config.minConnectionTime();
+		doActivate(pythonPort, javaPort, debug, address, readTimeout, connectTimeout, minConnectTime);
 	}
 
 	public void deactivate() {

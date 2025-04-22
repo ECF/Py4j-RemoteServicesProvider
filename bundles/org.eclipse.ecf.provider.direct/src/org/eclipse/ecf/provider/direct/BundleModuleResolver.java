@@ -17,9 +17,13 @@ import java.util.Enumeration;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BundleModuleResolver implements ModuleResolver {
 
+	private static Logger logger = LoggerFactory.getLogger(BundleModuleResolver.class);
+	
 	public static final String PATH_PREFIX_PROP = "pathPrefix";
 	public static final String PACKAGE_SUFFIX = "/";
 	public static final String PACKAGE_INIT_NAME = "__init__";
@@ -48,6 +52,7 @@ public class BundleModuleResolver implements ModuleResolver {
 	protected void deactivate() {
 		this.pathPrefix = null;
 		this.context = null;
+		logger = null;
 	}
 
 	protected Enumeration<String> getEntryPaths(String path) {
@@ -55,6 +60,7 @@ public class BundleModuleResolver implements ModuleResolver {
 	}
 
 	protected int getModuleType(String prefix, String pathSegment) {
+		logger.debug("prefix=" + prefix + ";pathSegment=" + pathSegment);
 		Enumeration<String> paths = getEntryPaths(prefix);
 		if (paths != null)
 			for (; paths.hasMoreElements();) {
@@ -74,6 +80,7 @@ public class BundleModuleResolver implements ModuleResolver {
 
 	@Override
 	public int getModuleType(String moduleName) {
+		logger.debug("moduleName=" + moduleName);
 		String[] pathSegments = moduleName.split("\\.");
 		String prefix = getPathPrefix();
 		int pathSegmentIndex = 0;
@@ -92,6 +99,7 @@ public class BundleModuleResolver implements ModuleResolver {
 	}
 
 	public static String readFileAsUTF8(URL url) throws IOException {
+		logger.debug("reading file=" + url);
 		InputStream ins = url.openStream();
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
@@ -108,6 +116,7 @@ public class BundleModuleResolver implements ModuleResolver {
 
 	@Override
 	public String getModuleCode(String moduleName, boolean ispackage) throws Exception {
+		logger.debug("module=" + moduleName + ";ispackage=" + ispackage);
 		String modulePath = getPathPrefix() + moduleName.replace('.', '/')
 				+ (ispackage ? PACKAGE_SUFFIX + PACKAGE_INIT_NAME + MODULE_SUFFIX : MODULE_SUFFIX);
 		URL url = getEntry(modulePath);

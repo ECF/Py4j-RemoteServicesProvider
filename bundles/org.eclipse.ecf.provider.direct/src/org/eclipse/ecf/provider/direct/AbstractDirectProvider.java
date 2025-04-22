@@ -589,6 +589,7 @@ public abstract class AbstractDirectProvider
 	@Override
 	public int getModuleType(String moduleUri) {
 		if (moduleUri != null) {
+			logger.debug("moduleUri=" + moduleUri);
 			ResolverInfo resolverInfo = convertPathToResolverInfo(moduleUri);
 			if (resolverInfo != null) {
 				ServiceReference<ModuleResolver> ref = findModuleResolverRef(resolverInfo);
@@ -597,6 +598,7 @@ public abstract class AbstractDirectProvider
 					if (bc != null) {
 						ModuleResolver bmr = bc.getService(ref);
 						if (bmr != null) {
+							logger.debug("moduleUri=" + moduleUri + " calling module resolver for ref="+ref);
 							int result = bmr.getModuleType(resolverInfo.remain);
 							bc.ungetService(ref);
 							return result;
@@ -611,6 +613,7 @@ public abstract class AbstractDirectProvider
 	@Override
 	public String getModuleCode(String moduleUri, boolean ispackage) throws Exception {
 		if (moduleUri != null) {
+			logger.debug("moduleUri=" + moduleUri + ";ispackage="+true);
 			ResolverInfo resolverInfo = convertPathToResolverInfo(moduleUri);
 			if (resolverInfo != null) {
 				ServiceReference<ModuleResolver> ref = findModuleResolverRef(resolverInfo);
@@ -619,6 +622,7 @@ public abstract class AbstractDirectProvider
 					if (bc != null) {
 						ModuleResolver bmr = bc.getService(ref);
 						if (bmr != null) {
+							logger.debug("moduleUri=" + moduleUri + ";ispackage=" + ispackage + " calling module resolver ref="+ref);
 							String result = bmr.getModuleCode(resolverInfo.remain, ispackage);
 							bc.ungetService(ref);
 							return result;

@@ -25,13 +25,15 @@ import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Activator implements BundleActivator {
 
 	private ProtobufPy4jProviderImpl providerImpl;
-	private boolean DEBUG = Boolean
-			.valueOf(System.getProperty("org.eclipse.ecf.provider.py4j.protobuf.debug", "false"));
 
+	private static Logger logger = LoggerFactory.getLogger(Activator.class);
+;
 	private ServiceTracker<EndpointEventListener, EndpointEventListener> eelSt;
 	private ServiceTracker<ModuleResolver, ModuleResolver> mrSt;
 
@@ -40,9 +42,9 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		Map<String, Object> props = new HashMap<String, Object>();
-		if (DEBUG)
+		if (logger.isDebugEnabled()) {
 			props.put("debug", "true");
-		else {
+		} else {
 			py4j.GatewayServer.turnLoggingOff();
 			py4j.GatewayServer.PY4J_LOGGER.setLevel(Level.SEVERE);
 		}
@@ -91,6 +93,7 @@ public class Activator implements BundleActivator {
 					}
 				});
 		mrSt.open();
+		// activating the providerImpl will setup java listener
 		providerImpl.activate(context, props);
 		this.providerReg = context.registerService(
 				new String[] { Py4jProvider.class.getName(), RemoteServiceAdminListener.class.getName() }, providerImpl, null);

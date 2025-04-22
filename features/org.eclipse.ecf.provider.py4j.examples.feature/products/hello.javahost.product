@@ -9,7 +9,7 @@
    <launcherArgs>
       <programArgs>-consoleLog -console
       </programArgs>
-      <vmArgs>-Declipse.ignoreApp=true -Dosgi.noShutdown=true
+      <vmArgs>-Declipse.ignoreApp=true -Dosgi.noShutdown=true -Dlogback.configurationFile=${project_loc:org.eclipse.ecf.examples.importhook.module}/logback.xml
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -26,6 +26,9 @@
    </vm>
 
    <plugins>
+      <plugin id="ch.qos.logback.classic"/>
+      <plugin id="ch.qos.logback.core"/>
+      <plugin id="ch.qos.logback.slf4j"/>
       <plugin id="org.apache.commons.commons-exec"/>
       <plugin id="org.apache.felix.gogo.command"/>
       <plugin id="org.apache.felix.gogo.runtime"/>
@@ -62,7 +65,6 @@
       <plugin id="org.eclipse.osgi.util"/>
       <plugin id="org.py4j.osgi"/>
       <plugin id="org.slf4j.api"/>
-      <plugin id="org.slf4j.apis.log4j"/>
       <plugin id="wrapped.com.google.protobuf.protobuf-java"/>
    </plugins>
 
