@@ -3,7 +3,7 @@ Python.Java Remote Services
 
 ## NEW: Using Python.Java Remote Services to Resolve Python Imports
 
-As part of the recent work on [iPOPO RSA](https://github.com/tcalmant/ipopo), an implementation of an import hook [pep-302](https://peps.python.org/pep-0302/) was created so that a java bundle containing python packages could be dynamically resolve python modules (via the import hook).  On the java side, the [https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/bundles/org.eclipse.ecf.provider.direct/src/org/eclipse/ecf/provider/direct/ModuleResolver.java](ModuleResolver) service interface exposes the methods called by a python import hook to resolve a python module.
+As part of recent work on [iPOPO RSA](https://github.com/tcalmant/ipopo), an implementation of a python import hook [pep-302](https://peps.python.org/pep-0302/) was created so using remote services java bundles could resolve python packages.  On the java side, the [https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/bundles/org.eclipse.ecf.provider.direct/src/org/eclipse/ecf/provider/direct/ModuleResolver.java](ModuleResolver) service interface exposes the methods called by a python import hook to resolve a python module.
 
 [Here](examples/org.eclipse.ecf.examples.importhook.module/src/org/eclipse/ecf/examples/importhook/module/ExampleBundleModuleResolver.java) is an example ModuleResolver service implementation for a python package named 'foo'.  Note that the PATH_PREFIX component property points to ['/python-src'](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/examples/org.eclipse.ecf.examples.importhook.module/python-src/) inside built bundle.
 
@@ -21,7 +21,8 @@ karaf@root()> feature:install ecf-rs-examples-python-importhook
 (few seconds pass for download and install)
 karaf@root()>
 ```
-By default, a Python.Java gateway will be started and be listening for python connections on localhost:25333 (unless configured otherwise).  The 'foo' package ModuleResolver service will also be available for resolving the 'foo' package.
+By default, a Python.Java gateway will be started and be listening for python connections on localhost:25333 (unless configured otherwise).  
+The 'foo' package ModuleResolver remote service will be available for resolving the 'foo' package.
 
 ### Start iPopo Example ImportHook Application
 The iPOPO project has a python-side Python.Java Distribution Provider, and a sample application to connect to the Java server at localhost:25333 and then resolve and run the code in the 'foo' package.  This sample application is [here](https://github.com/tcalmant/ipopo/blob/v3/samples/run_rsa_py4j_importhook.py).
@@ -65,45 +66,7 @@ Attempting connect to Python.Java OSGi server listening at 25333...
 ** Pelix Shell prompt **
 $ Component 'py4j-distribution-provider': error calling @ValidateComponent callback
 Traceback (most recent call last):
-  File "C:\Python313\Lib\site-packages\py4j\java_gateway.py", line 982, in _get_connection
-    connection = self.deque.pop()
-IndexError: pop from an empty deque
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Python313\Lib\site-packages\py4j\java_gateway.py", line 1170, in start
-    self.socket.connect((self.address, self.port))
-    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
-ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Users\slewi\git\scottslewis\ipopo\pelix\ipopo\instance.py", line 703, in __safe_validation_callback
-    return self.__validation_callback(event)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
-  File "C:\Users\slewi\git\scottslewis\ipopo\pelix\ipopo\instance.py", line 610, in __validation_callback
-    result = comp_callback(self.instance, *mapped_args)
-  File "C:\Users\slewi\git\scottslewis\ipopo\pelix\rsa\providers\distribution\py4j.py", line 371, in _validate
-    raise e
-  File "C:\Users\slewi\git\scottslewis\ipopo\pelix\rsa\providers\distribution\py4j.py", line 368, in _validate
-    self._bridge.connect(path_hook=OSGIPythonModulePathHook(self._bridge) if self._import_hook else None)
-    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Python313\Lib\site-packages\osgiservicebridge\bridge.py", line 575, in connect
-    self._consumer = self._gateway.entry_point._getExternalDirectDiscovery()
-                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "C:\Python313\Lib\site-packages\py4j\java_gateway.py", line 1361, in __call__
-    answer = self.gateway_client.send_command(command)
-  File "C:\Python313\Lib\site-packages\py4j\java_gateway.py", line 1036, in send_command
-    connection = self._get_connection()
-  File "C:\Python313\Lib\site-packages\py4j\java_gateway.py", line 984, in _get_connection
-    connection = self._create_connection()
-  File "C:\Python313\Lib\site-packages\py4j\java_gateway.py", line 990, in _create_connection
-    connection.start()
-    ~~~~~~~~~~~~~~~~^^
-  File "C:\Python313\Lib\site-packages\py4j\java_gateway.py", line 1182, in start
-    raise Py4JNetworkError(msg, e)
+...
 py4j.protocol.Py4JNetworkError: An error occurred while trying to connect to the Java server (127.0.0.1:25333)
 
 ```
