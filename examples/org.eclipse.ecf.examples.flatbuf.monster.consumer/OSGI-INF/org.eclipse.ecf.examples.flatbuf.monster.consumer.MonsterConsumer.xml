@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" immediate="true" name="org.eclipse.ecf.examples.flatbuf.monster.consumer.MonsterConsumer">
-   <reference bind="bindScare" interface="org.eclipse.ecf.examples.flatbuf.monster.IScare" name="Scare" unbind="unbindScare"/>
-   <implementation class="org.eclipse.ecf.examples.flatbuf.monster.consumer.MonsterConsumer"/>
-</scr:component>
