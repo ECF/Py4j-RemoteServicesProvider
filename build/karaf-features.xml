@@ -1,42 +1,42 @@
-<features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"	name="ecf-remoteservices-python.java-2.12.1">
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"	name="ecf-remoteservices-python.java-2.12.3">
 	
 	<repository>https://download.eclipse.org/rt/ecf/latest/karaf-features.xml</repository>
 
-    <feature name="ecf-rs-distribution-python.java" version="2.12.1" description="ECF Python.Java Core. See https://github.com/ECF/Py4j-RemoteServicesProvider">
+    <feature name="ecf-rs-distribution-python.java" version="2.12.3" description="ECF Python.Java Core. See https://github.com/ECF/Py4j-RemoteServicesProvider">
             <feature>ecf-rs-rsa</feature>
             <feature>ecf-rs-console</feature>
 	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.apache.commons.commons-exec_1.4.0.jar</bundle>
-            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct_2.3.4.202504221522.jar</bundle>
-	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct.protobuf_2.2.4.202504221522.jar</bundle>
-            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j_2.4.2.202504221522.jar</bundle>
-            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j.protobuf_1.6.2.202504221522.jar</bundle>
-            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.python_1.0.4.202504221522.jar</bundle>
- 	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.python.protobuf_1.2.3.202504221522.jar</bundle>
-            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.py4j.osgi_1.5.0.202504221522.jar</bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct_2.3.4.202504271747.jar</bundle>
+	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct.protobuf_2.2.4.202504271747.jar</bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j_2.4.2.202504271747.jar</bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j.protobuf_1.6.2.202504271747.jar</bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.python_1.0.4.202504271747.jar</bundle>
+ 	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.python.protobuf_1.2.3.202504271747.jar</bundle>
+            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.py4j.osgi_1.5.0.202504271747.jar</bundle>
 	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/wrapped.com.google.protobuf.protobuf-java_3.22.2.jar</bundle>
     </feature>
 	
-    <feature name="ecf-rs-examples-python.java-hello" version="2.12.1" description="ECF Python.Java Hello Servoce Java Impl Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
-            <feature version="2.12.1">ecf-rs-distribution-python.java</feature>
-	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.hello_1.1.3.202504271718.jar</bundle>
-	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.hello.javahost_1.1.5.202504271718.jar</bundle>
+    <feature name="ecf-rs-examples-python.java-hello" version="2.12.3" description="ECF Python.Java Hello Servoce Java Impl Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
+            <feature version="2.12.3">ecf-rs-distribution-python.java</feature>
+	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.hello_1.1.3.202504271747.jar</bundle>
+	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.hello.javahost_1.1.5.202504271747.jar</bundle>
     </feature>
     
-    <feature name="ecf-rs-examples-python.java-protobuf-hello" version="2.12.1" description="ECF Python.Java Protobuf Hello Service Java Impl/Python Consumer Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
-            <feature version="2.12.1">ecf-rs-distribution-python.java</feature>
-	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello_1.2.2.202504271718.jar</bundle>
-	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello.javahost_1.2.5.202504271718.jar</bundle>
+    <feature name="ecf-rs-examples-python.java-protobuf-hello" version="2.12.3" description="ECF Python.Java Protobuf Hello Service Java Impl/Python Consumer Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
+            <feature version="2.12.3">ecf-rs-distribution-python.java</feature>
+	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello_1.2.2.202504271747.jar</bundle>
+	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello.javahost_1.2.5.202504271747.jar</bundle>
     </feature>
 
-    <feature name="ecf-rs-examples-python.java-protobuf-hello-consumer" version="2.12.1" description="ECF Python.Java Protobuf Hello Service Java Consumer/Python Impl Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
-            <feature version="2.12.1">ecf-rs-distribution-python.java</feature>
-	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello_1.2.2.202504271718.jar</bundle>
-	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello.pythonhost_1.0.3.202504271718.jar</bundle>
+    <feature name="ecf-rs-examples-python.java-protobuf-hello-consumer" version="2.12.3" description="ECF Python.Java Protobuf Hello Service Java Consumer/Python Impl Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
+            <feature version="2.12.3">ecf-rs-distribution-python.java</feature>
+	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello_1.2.2.202504271747.jar</bundle>
+	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.protobuf.hello.pythonhost_1.0.3.202504271747.jar</bundle>
     </feature>
 
-    <feature name="ecf-rs-examples-python-importhook" version="2.12.1" description="ECF Python.Java ImportHook Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
-            <feature version="2.12.1">ecf-rs-distribution-python.java</feature>
-	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.importhook.module_1.0.3.202504271718.jar</bundle>
+    <feature name="ecf-rs-examples-python-importhook" version="2.12.3" description="ECF Python.Java ImportHook Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
+            <feature version="2.12.3">ecf-rs-distribution-python.java</feature>
+	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.importhook.module_1.0.3.202504271747.jar</bundle>
     </feature>
 
 </features>	
