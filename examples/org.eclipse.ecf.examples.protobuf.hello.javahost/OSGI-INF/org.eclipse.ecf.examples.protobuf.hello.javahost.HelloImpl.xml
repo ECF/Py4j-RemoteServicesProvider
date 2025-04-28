@@ -3,6 +3,7 @@
    <property name="service.exported.interfaces" value="*"/>
    <property name="service.exported.configs" value="ecf.py4j.protobuf.host"/>
    <property name="service.intents" value="osgi.async"/>
+   <property name="osgi.basic.timeout" type="Long" value="45000"/>
    <service>
       <provide interface="org.eclipse.ecf.examples.protobuf.hello.IHello"/>
    </service>

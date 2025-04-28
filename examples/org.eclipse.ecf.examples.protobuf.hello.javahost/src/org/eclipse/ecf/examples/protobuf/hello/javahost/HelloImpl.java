@@ -10,7 +10,7 @@ import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
 
 @Component(immediate = true, property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.protobuf.host",
-		"service.intents=osgi.async" })
+		"service.intents=osgi.async", "osgi.basic.timeout:Long=45000" })
 public class HelloImpl implements IHello {
 
 	HelloMsgContent createResponse(String method) {
