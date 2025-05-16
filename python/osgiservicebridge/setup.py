@@ -18,8 +18,6 @@ exec(compile(open(VERSION_PATH).read(),
      VERSION_PATH, "exec"))
 VERSION = __version__  # noqa
 
-JAVA_FILE = 'java/py4j-remoteservicesprovider_2.11.0.zip'
-
 setup(
     name='osgiservicebridge',
     packages=find_packages(where='src'),
@@ -32,7 +30,7 @@ setup(
 
     description='OSGi services implemented in Python',
     long_description='osgiservicebridge provides the Python library '
-                     'for OSGi R7 remote services between Java '
+                     'for OSGi R8 remote services between Java '
                      'and Python.  See the github project '
                      'at https://github.com/ECF/Py4j-RemoteServicesProvider '
                      'for detailed information about OSGi remote services '
@@ -110,7 +108,7 @@ setup(
     # need to place data files outside of your packages. See:
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    data_files=[('java', [JAVA_FILE])],
+    # data_files=[('java', [JAVA_FILE])],
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
