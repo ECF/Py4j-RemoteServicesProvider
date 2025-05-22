@@ -8,9 +8,6 @@
  ******************************************************************************/
 package org.eclipse.ecf.examples.ai.mcp.toolservice.impl;
 
-import java.util.List;
-
-import org.eclipse.ecf.ai.mcp.tools.util.ToolDescription;
 import org.eclipse.ecf.examples.ai.mcp.toolservice.ArithmeticTools;
 import org.osgi.service.component.annotations.Component;
 
@@ -24,10 +21,6 @@ public class ArithmeticToolsImpl implements ArithmeticTools {
 	@Override
 	public int multiply(int a, int b) {
 		return a * b;
-	}
-
-	public List<ToolDescription> getToolDescriptions(String interfaceClassName) {
-		return ToolDescription.fromService(this, interfaceClassName);
 	}
 
 }
