@@ -9,7 +9,6 @@
 package org.eclipse.ecf.examples.ai.mcp.toolservice;
 
 import org.eclipse.ecf.ai.mcp.tools.annotation.Tool;
-import org.eclipse.ecf.ai.mcp.tools.annotation.ToolAnnotation;
 import org.eclipse.ecf.ai.mcp.tools.annotation.ToolAnnotations;
 import org.eclipse.ecf.ai.mcp.tools.annotation.ToolParam;
 import org.eclipse.ecf.ai.mcp.tools.annotation.ToolResult;
@@ -18,7 +17,7 @@ import org.eclipse.ecf.ai.mcp.tools.service.ToolGroupService;
 public interface ArithmeticTools extends ToolGroupService {
 
 	@Tool(description = "computes the sum of the two integer arguments")
-	@ToolAnnotations({ @ToolAnnotation(destructiveHint = true) })
+	@ToolAnnotations(destructiveHint = true, title="howdy")
 	@ToolResult(description = "the integer result for this tool")
 	int add(@ToolParam(description = "a is the first argument") int a, @ToolParam(description = "b is the second argument") int b);
 
