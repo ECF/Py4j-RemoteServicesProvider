@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ECF MCP RemoteTool API Arithmetic Example
 Bundle-SymbolicName: org.eclipse.ecf.examples.ai.mcp.toolservice.api
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Export-Package: org.eclipse.ecf.examples.ai.mcp.toolservice.api
 Import-Package: org.eclipse.ecf.ai.mcp.tools.annotation,
  org.eclipse.ecf.ai.mcp.tools.service;version="1.1.0",
