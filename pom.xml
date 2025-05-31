@@ -108,6 +108,7 @@
     <module>examples/org.eclipse.ecf.examples.protobuf.hello.javahost</module>
     <module>examples/org.eclipse.ecf.examples.importhook.main</module>
     <module>examples/org.eclipse.ecf.examples.importhook.module</module>
+    <module>examples/org.eclipse.ecf.examples.ai.mcp.toolservice</module>
   </modules>
 
   <build>

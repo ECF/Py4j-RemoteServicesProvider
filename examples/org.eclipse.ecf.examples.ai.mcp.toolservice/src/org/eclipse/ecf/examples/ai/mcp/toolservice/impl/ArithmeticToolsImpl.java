@@ -8,7 +8,7 @@
  ******************************************************************************/
 package org.eclipse.ecf.examples.ai.mcp.toolservice.impl;
 
-import org.eclipse.ecf.examples.ai.mcp.toolservice.ArithmeticTools;
+import org.eclipse.ecf.examples.ai.mcp.toolservice.api.ArithmeticTools;
 import org.osgi.service.component.annotations.Component;
 
 @Component(immediate = true, property = { "service.exported.interfaces=*", "service.exported.configs=ecf.py4j.host" })

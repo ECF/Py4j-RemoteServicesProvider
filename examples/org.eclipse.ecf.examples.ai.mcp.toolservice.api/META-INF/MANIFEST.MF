@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ECF MCP RemoteTool API Arithmetic Example
+Bundle-SymbolicName: org.eclipse.ecf.examples.ai.mcp.toolservice.api
+Bundle-Version: 1.0.0.qualifier
+Export-Package: org.eclipse.ecf.examples.ai.mcp.toolservice.api
+Import-Package: org.eclipse.ecf.ai.mcp.tools.annotation,
+ org.eclipse.ecf.ai.mcp.tools.service;version="1.1.0",
+ org.eclipse.ecf.ai.mcp.tools.util;version="1.1.0"
+Automatic-Module-Name: org.eclipse.ecf.examples.ai.mcp.toolservice.api
+Bundle-RequiredExecutionEnvironment: JavaSE-17

@@ -3,7 +3,7 @@
    <property name="service.exported.interfaces" value="*"/>
    <property name="service.exported.configs" value="ecf.py4j.host"/>
    <service>
-      <provide interface="org.eclipse.ecf.examples.ai.mcp.toolservice.ArithmeticTools"/>
+      <provide interface="org.eclipse.ecf.examples.ai.mcp.toolservice.api.ArithmeticTools"/>
    </service>
    <implementation class="org.eclipse.ecf.examples.ai.mcp.toolservice.impl.ArithmeticToolsImpl"/>
 </scr:component>
