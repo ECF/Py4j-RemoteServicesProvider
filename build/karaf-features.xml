@@ -1,10 +1,11 @@
-<features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"	name="ecf-remoteservices-python.java-2.13.0">
-	
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0" name="ecf-remoteservices-sdk-3.16.2">
 	<repository>https://download.eclipse.org/rt/ecf/latest/karaf-features.xml</repository>
+	<repository>https://raw.githubusercontent.com/ECF/Py4j-OSGi/master/build/karaf-features.xml</repository>
 
     <feature name="ecf-rs-distribution-python.java" version="2.13.0" description="ECF Python.Java Core. See https://github.com/ECF/Py4j-RemoteServicesProvider">
             <feature>ecf-rs-rsa</feature>
             <feature>ecf-rs-console</feature>
+            <feature>org.py4j.osgi</feature>
 	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.apache.commons.commons-exec_1.5.0.jar</bundle>
 	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/com.google.protobuf_4.31.1.jar</bundle>
             <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.direct_2.3.4.202505311223.jar</bundle>
@@ -13,7 +14,6 @@
             <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.provider.py4j.protobuf_1.6.2.202505311223.jar</bundle>
             <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.python_1.1.1.202505311223.jar</bundle>
  	    	<bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.python.protobuf_1.3.0.202505311223.jar</bundle>
-            <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.py4j.osgi_1.6.1.202505311223.jar</bundle>
     </feature>
 	
     <feature name="ecf-rs-examples-python.java-hello" version="2.13.0" description="ECF Python.Java Hello Servoce Java Impl Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
@@ -46,4 +46,4 @@
 	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.importhook.module_1.0.3.202505311223.jar</bundle>
     </feature>
 
-</features>	
+</features>
