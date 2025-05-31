@@ -32,7 +32,7 @@
         <feature version="2.13.0">ecf-rs-distribution-python.java</feature>
         <feature>ecf-ai-mcp</feature>
 	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.ai.mcp.toolservice.api_1.0.0.202505311223.jar</bundle>
-	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.ai.mcp.toolservice_2.0.0.202505311223.jar</bundle>
+	    <bundle>https://raw.githubusercontent.com/ECF/Py4j-RemoteServicesProvider/master/build/plugins/org.eclipse.ecf.examples.ai.mcp.toolservice_2.0.1.202505311223.jar</bundle>
     </feature>
 
     <feature name="ecf-rs-examples-python.java-protobuf-hello-consumer" version="2.13.0" description="ECF Python.Java Protobuf Hello Service Java Consumer/Python Impl Example.  See https://github.com/ECF/Py4j-RemoteServicesProvider">
