@@ -1,6 +1,103 @@
 Python.Java Remote Services
 ===========================
 
+## NEW (6/1/2025) Remote Tools for Model Context Protocol (MCP) Servers
+
+The [Model Context Protocol](https://modelcontextprotocol.io/introduction) is a new [specification](https://modelcontextprotocol.io/specification/2025-03-26) and [multi-language implementation](https://github.com/modelcontextprotocol) for allowing LLMs to integrate and interact with other services.
+
+[Tools](https://modelcontextprotocol.io/docs/concepts/tools) are an important part of the specification, as they provide LLMs with the ability for LLMs to take actions, and provide standardized meta-data (aka tool descriptions) that the LLM can use decide upon and then take actions based upon the model context.
+
+The creation of MCP servers has/is [grwoing very quickly](https://github.com/modelcontextprotocol/servers).  Currently, however, most of these implementations do not support the ability to add and remove tools from MCP servers dynamically, and require a new server (and a new set of implemented tools) to used by clients.
+
+Enter Remote Tools for MCP Servers.  [This repo](https://github.com/ECF/Py4j-RemoteServicesProvider) makes available a [Remote Services distribution provider](https://docs.osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html) based upon Py4j and Python <-> Java RPC framework used by [Apache Spark](https://spark.apache.org/) and others.  Combined with [iPOPO](https://ipopo.readthedocs.io/en/3.0.0/), which is a component framework for Python, and includes RSA and a py4j distribution provider, it's now easy to use Remote Services to dynamically extend/enhance MCP python servers (FastMCP below) with new Java implemented tools.
+
+### Example:  Remote Arithmetic Tools
+
+[Here is an example Java interface](https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/examples/org.eclipse.ecf.examples.ai.mcp.toolservice.api/src/org/eclipse/ecf/examples/ai/mcp/toolservice/api/ArithmeticTools.java#L28) providing an ArithmeticTools declaration with MCP annotations:
+
+```
+public interface ArithmeticTools extends ToolGroupService {
+
+	@Tool(description = "computes the sum of the two integer arguments")
+	@ToolAnnotations(destructiveHint = true, title="howdy")
+	@ToolResult(description = "the integer result for this tool")
+	int add(@ToolParam(description = "a is the first argument") int a, @ToolParam(description = "b is the second argument") int b);
+
+	@Tool(description = "return the product of the two given integer arguments named a and b")
+	int multiply(@ToolParam(description = "a is the first argument") int a, @ToolParam(description = " b is the second argument") int b);
+
+}
+```
+
+And [here](https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/examples/org.eclipse.ecf.examples.ai.mcp.toolservice/src/org/eclipse/ecf/examples/ai/mcp/toolservice/impl/ArithmeticToolsImpl.java#L15) is a simple implementation of this interface.  Notice that neither the service interface nor implementation class refer to any classes that are part of RS/RSA, the distribution provider, karaf, or any other framework.
+
+### Exporting ArithmeticTools in Apache Karaf
+
+In [Karaf 4.4.6]() this example and all supporting code can be installed with these two karaf console commands
+
+```console
+karaf@root()> feature:repo-add https://download.eclipse.org/rt/ecf/latest/site.p2/karaf-features.xml
+```
+then
+```console
+karaf@root()> feature:install ecf-rs-examples-python.java-mcp-toolservice
+```
+This will produce debug output to your karaf console 
+```console
+14:39:05.818;EXPORT_REGISTRATION;exportedSR=[org.eclipse.ecf.examples.ai.mcp.toolservice.api.ArithmeticTools];cID=URIID [uri=py4j://127.0.0.1:25333/java];rsId=1
+--Endpoint Description---
+<endpoint-descriptions xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0">
+  <endpoint-description>
+    <property name="ecf.endpoint.id" value-type="String" value="py4j://127.0.0.1:25333/java"/>
+    <property name="ecf.endpoint.id.ns" value-type="String" value="ecf.namespace.py4j"/>
+    <property name="ecf.endpoint.ts" value-type="Long" value="1748727545801"/>
+    <property name="ecf.rsvc.id" value-type="Long" value="1"/>
+    <property name="endpoint.framework.uuid" value-type="String" value="82798710-8368-461b-b07d-0250e9e064cc"/>
+    <property name="endpoint.id" value-type="String" value="74b58995-4e59-4936-8743-4599066c1b10"/>
+    <property name="endpoint.service.id" value-type="Long" value="146"/>
+    <property name="objectClass" value-type="String">
+      <array>
+        <value>org.eclipse.ecf.examples.ai.mcp.toolservice.api.ArithmeticTools</value>
+      </array>
+    </property>
+    <property name="osgi.ds.satisfying.condition.target" value-type="String" value="(osgi.condition.id=true)"/>
+    <property name="remote.configs.supported" value-type="String">
+      <array>
+        <value>ecf.py4j.host</value>
+      </array>
+    </property>
+    <property name="remote.intents.supported" value-type="String">
+      <array>
+        <value>passByReference</value>
+        <value>exactlyOnce</value>
+        <value>ordered</value>
+        <value>py4j</value>
+        <value>py4j.async</value>
+        <value>osgi.async</value>
+        <value>osgi.private</value>
+        <value>osgi.confidential</value>
+      </array>
+    </property>
+    <property name="service.imported" value-type="String" value="true"/>
+    <property name="service.imported.configs" value-type="String">
+      <array>
+        <value>ecf.py4j.host</value>
+      </array>
+    </property>
+  </endpoint-description>
+</endpoint-descriptions>
+---End Endpoint Description
+---
+This output shows the remote service was exported via the py4j-remoteservices provider with all the RSA-specified remote service meta-data.  This means that
+the Karaf process is now listening on Java port 25333 (default py4j port) for connections from MCP servers.
+
+### Running the Python MCP Server
+
+[iPOPO](https://ipopo.readthedocs.io/en/3.0.0/) provides a spec-compliant implementaion of the [Remote Service Admin specification)(https://docs.osgi.org/specification/osgi.cmpn/7.0.0/service.remoteserviceadmin.html).  This allow a python MCP server to dynamically discover and inject
+remote services (like ArtithmeticTools) into a Python-base server such as FastMCP.
+
+TODO
+
 ## NEW (4/28/2025) Bndtools Template for Python.Java Remote Services Development
 
 There has been a new project template added to the [ECF Bndtools Workspace Template](https://github.com/ECF/bndtools.workspace) that uses the [ECF Python.Java Distribution Provider](https://github.com/ECF/Py4j-RemoteServicesProvider).  This distribution provider is based upon py4j, which supports high performance remote procedure call between python and java processes.
