@@ -5,7 +5,7 @@ Python.Java Remote Services
 
 The [Model Context Protocol](https://modelcontextprotocol.io/introduction) is a new [specification](https://modelcontextprotocol.io/specification/2025-03-26) and [multi-language implementation](https://github.com/modelcontextprotocol) for allowing LLMs to integrate and interact with other services.
 
-[Tools](https://modelcontextprotocol.io/docs/concepts/tools) are an important part of the specification, as they provide LLMs with the ability for LLMs to take actions, and provide standardized meta-data (aka tool descriptions) that the LLM can use decide upon and then take actions based upon the model context.
+[Tools](https://modelcontextprotocol.io/docs/concepts/tools) are an important part of the specification, as they provide AI/LLMs with the ability to take actions, providing standardized meta-data (aka tool descriptions) that the AI/LLM can use to decide upon, provide input for and then take actions based upon the model context.
 
 The creation of MCP servers has/is [grwoing very quickly](https://github.com/modelcontextprotocol/servers).  Currently, however, most of these implementations do not support the ability to add and remove tools from MCP servers dynamically, and require a new server (and a new set of implemented tools) to used by clients.
 
