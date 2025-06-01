@@ -87,7 +87,8 @@ This will produce debug output to your karaf console
   </endpoint-description>
 </endpoint-descriptions>
 ---End Endpoint Description
----
+```
+
 This output shows the remote service was exported via the py4j-remoteservices provider with all the RSA-specified remote service meta-data.  This means that
 the Karaf process is now listening on Java port 25333 (default py4j port) for connections from MCP servers.
 
