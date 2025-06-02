@@ -11,7 +11,7 @@ The creation of MCP servers has/is [grwoing very quickly](https://github.com/mod
 
 Enter Remote Tools for MCP Servers.  [This repo](https://github.com/ECF/Py4j-RemoteServicesProvider) makes available a [Remote Services distribution provider](https://docs.osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html) based upon Py4j and Python <-> Java RPC framework used by [Apache Spark](https://spark.apache.org/) and others.  Combined with [iPOPO](https://ipopo.readthedocs.io/en/3.0.0/), which is a component framework for Python, and includes RSA and a py4j distribution provider, it's now easy to use Remote Services to dynamically extend/enhance MCP python servers (FastMCP below) with new Java implemented tools.
 
-### Summary Architecture for Example
+### Summary Architecture for Example Below
 
 **MCP Client** (example: inspector) <-- MCP --> **MCP Server** (example: Python) <-- ArithmeticTools remote service --> **Remote ArithmeticTools Server** (example: Java)
 
@@ -32,8 +32,7 @@ public interface ArithmeticTools extends ToolGroupService {
 
 }
 ```
-
-And [here](https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/examples/org.eclipse.ecf.examples.ai.mcp.toolservice/src/org/eclipse/ecf/examples/ai/mcp/toolservice/impl/ArithmeticToolsImpl.java#L15) is a simple implementation of this interface.  Notice that neither the service interface nor implementation class refer to any classes that are part of RS/RSA, the distribution provider, karaf, or any other framework.
+[Here](https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/examples/org.eclipse.ecf.examples.ai.mcp.toolservice/src/org/eclipse/ecf/examples/ai/mcp/toolservice/impl/ArithmeticToolsImpl.java#L15) is a simple implementation of this interface.  Notice that neither the service interface nor implementation class refer to any classes that are part of RS/RSA, the distribution provider, karaf, or any other framework.
 
 ### Exporting ArithmeticTools in Apache Karaf
 
@@ -93,15 +92,45 @@ This will produce debug output to your karaf console
 ---End Endpoint Description
 ```
 
-This output shows the remote service was exported via the py4j-remoteservices provider with all the RSA-specified remote service meta-data.  This means that
+This output shows the remote service was exported via Remote Service Admin and the py4j-remoteservices distribution provider with all the RSA-specified remote service meta-data in a standard format (EndpointDescription).  This means that
 the Karaf process is now listening on Java port 25333 (default py4j port) for connections from MCP servers.
 
-### Running the Python MCP Server
+### Starting MCP Server with the MCP Inspector
+The MCP project has a testing/debugging client called the [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector).  The inspector will start the {iPopo Sample Remote tools MCP Server](https://github.com/tcalmant/ipopo/tree/v3/samples/remotetoolsserver) and connect to that server using the STDIO transport (i.e. sytem in and system out) to communicate via the MCP.
 
-[iPOPO](https://ipopo.readthedocs.io/en/3.0.0/) provides a spec-compliant implementaion of the [Remote Service Admin specification)(https://docs.osgi.org/specification/osgi.cmpn/7.0.0/service.remoteserviceadmin.html).  This allow a python MCP server to dynamically discover and inject
-remote services (like ArtithmeticTools) into a Python-base server such as FastMCP.
+See the [MCP Inspector docs](https://modelcontextprotocol.io/docs/tools/inspector) for instaliing and starting the inspector.
 
-TODO
+Requirements:  Python 3.12+
+
+Clone the iPOPO repo to get the sample application
+```
+git clone https://github.com/tcalmant/ipopo.git
+cd ipopo
+```
+Make sure that the requirements for the sample (in samples/remotetoolsserver/requirements.txt) are 
+``
+pip install -r samples/remotetoolsserver/requirements.txt
+```
+To start the inspector and have it launch (and connect to the running Java ArithmeticTools server)
+```
+set PYTHONPATH=IPOPO Clone LOCATION/ipopo;<Python install location>/site-packages
+npx @modelcontextprotocol/inspector python samples\\remotetoolsserver\\run_framework.py
+Starting MCP inspector...
+⚙️ Proxy server listening on port 6277
+🔍 MCP Inspector is up and running at http://127.0.0.1:6274
+```
+With Browser then navigate to:  http://127.0.0.1:6274
+In the Inspector UI, click Connect, the Tools, then List Tools
+![inspector1](https://github.com/user-attachments/assets/42bf11bf-50c4-4e25-966f-89d239f955c4)
+Note that the Tool and ToolParam annotation content from the ArithmeticTools Java interface  (for add and multiply tools) are presented in the inspector. This meta-data about the tool is dynamically added to the Python MCP Server and then communicated to the inspector via MCP.
+If the Karaf/Java ArithmeticTools component is stopped
+```
+karaf@root()> stop 23
+```
+Clicking List Tools in the inspector will show that they are gone
+![inspector2](https://github.com/user-attachments/assets/ef87a3aa-06c3-437b-89f8-02b5cc25ec2d)
+
+NOTE:  The inspector app currently has an issue with calling the add and multiply tools (via Call Tool button) because they are expecting integers as arguments and not strings.  The inspector currently doesn't provide specified integers to the MCP server.
 
 ## NEW (4/28/2025) Bndtools Template for Python.Java Remote Services Development
 
