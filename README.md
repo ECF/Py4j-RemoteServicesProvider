@@ -11,6 +11,10 @@ The creation of MCP servers has/is [grwoing very quickly](https://github.com/mod
 
 Enter Remote Tools for MCP Servers.  [This repo](https://github.com/ECF/Py4j-RemoteServicesProvider) makes available a [Remote Services distribution provider](https://docs.osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html) based upon Py4j and Python <-> Java RPC framework used by [Apache Spark](https://spark.apache.org/) and others.  Combined with [iPOPO](https://ipopo.readthedocs.io/en/3.0.0/), which is a component framework for Python, and includes RSA and a py4j distribution provider, it's now easy to use Remote Services to dynamically extend/enhance MCP python servers (FastMCP below) with new Java implemented tools.
 
+### Summary Architecture for Example
+
+**MCP Client** (example: inspector) <-- MCP --> **MCP Server** (example: Python) <-- ArithmeticTools remote service --> **Remote ArithmeticTools Server** (example: Java)
+
 ### Example:  Remote ArtithmeticTools service
 
 [Here is an example Java interface](https://github.com/ECF/Py4j-RemoteServicesProvider/blob/master/examples/org.eclipse.ecf.examples.ai.mcp.toolservice.api/src/org/eclipse/ecf/examples/ai/mcp/toolservice/api/ArithmeticTools.java#L28) providing an ArithmeticTools declaration with MCP annotations:
