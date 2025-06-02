@@ -113,8 +113,8 @@ pip install -r samples/remotetoolsserver/requirements.txt
 ```
 To start the inspector and have it launch (and connect to the running Java ArithmeticTools server)
 ```
-set PYTHONPATH=IPOPO Clone LOCATION/ipopo;<Python install location>/site-packages
-npx @modelcontextprotocol/inspector python samples\\remotetoolsserver\\run_framework.py
+set PYTHONPATH=<PARENT DIR>/ipopo;<PYTHON INSTALL DIR>/site-packages
+npx @modelcontextprotocol/inspector python samples/remotetoolsserver/run_framework.py
 Starting MCP inspector...
 ⚙️ Proxy server listening on port 6277
 🔍 MCP Inspector is up and running at http://127.0.0.1:6274
