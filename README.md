@@ -108,7 +108,7 @@ git clone https://github.com/tcalmant/ipopo.git
 cd ipopo
 ```
 Make sure that the requirements for the sample (in samples/remotetoolsserver/requirements.txt) are 
-``
+```
 pip install -r samples/remotetoolsserver/requirements.txt
 ```
 To start the inspector and have it launch (and connect to the running Java ArithmeticTools server)
