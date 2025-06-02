@@ -134,7 +134,7 @@ Clicking List Tools in the inspector will now show that add and multiple tools h
 
 ![inspector2](https://github.com/user-attachments/assets/ef87a3aa-06c3-437b-89f8-02b5cc25ec2d)
 
-NOTE:  The inspector app currently cannot successfully call the add and multiply tools (via Call Tool button) because they are expecting integers as arguments and not strings.  The inspector currently doesn't provide server specified integers input to the MCP server.  Other MCP clients (Claude, custom clients) do not have this problem.
+NOTE:  The inspector app currently cannot successfully call the add and multiply tools (via Call Tool button) because they are expecting integers as arguments and not strings.  The inspector currently doesn't provide server specified integers input to the MCP server.  Other MCP clients such as Claude, [custom/test clients](https://github.com/ECF/Py4j-RemoteServicesProvider/tree/master/examples/example-arithmetic-mcp-client) )do not have this problem.
 
 ## NEW (4/28/2025) Bndtools Template for Python.Java Remote Services Development
 
