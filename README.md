@@ -122,15 +122,19 @@ Starting MCP inspector...
 With Browser then navigate to:  http://127.0.0.1:6274
 In the Inspector UI, click Connect, the Tools, then List Tools
 ![inspector1](https://github.com/user-attachments/assets/42bf11bf-50c4-4e25-966f-89d239f955c4)
+
 Note that the Tool and ToolParam annotation content from the ArithmeticTools Java interface  (for add and multiply tools) are presented in the inspector. This meta-data about the tool is dynamically added to the Python MCP Server and then communicated to the inspector via MCP.
-If the Karaf/Java ArithmeticTools component is stopped
+
+If the Karaf/Java ArithmeticTools component is stopped in the Karaf/Java server...
 ```
 karaf@root()> stop 23
 ```
-Clicking List Tools in the inspector will show that they are gone
+
+Clicking List Tools in the inspector will now show that add and multiple tools have been dynamically removed from the Python MCP Server
+
 ![inspector2](https://github.com/user-attachments/assets/ef87a3aa-06c3-437b-89f8-02b5cc25ec2d)
 
-NOTE:  The inspector app currently has an issue with calling the add and multiply tools (via Call Tool button) because they are expecting integers as arguments and not strings.  The inspector currently doesn't provide specified integers to the MCP server.
+NOTE:  The inspector app currently cannot successfully call the add and multiply tools (via Call Tool button) because they are expecting integers as arguments and not strings.  The inspector currently doesn't provide server specified integers input to the MCP server.  Other clients (Claude, custom clients) do not have this problem.
 
 ## NEW (4/28/2025) Bndtools Template for Python.Java Remote Services Development
 
