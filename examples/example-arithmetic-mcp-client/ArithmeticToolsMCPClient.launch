@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/example-arithmetic-mcp-client/src/org/eclipse/ecf/example_mcp_client/ArithmeticToolsMCPClient.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <mapAttribute key="org.eclipse.debug.core.environmentVariables">
+        <mapEntry key="PYTHONPATH" value="C:\eclipse-2025-03a\eclipse\plugins\org.python.pydev.core_13.0.2.202503021229\pysrc\pydev_sitecustomize;C:\Users\slewi\git\scottslewis\ipopo;C:\Users\slewi\git\scottslewis\python-etcd3;C:\Users\slewi\git\Py4j-RemoteServicesProvider\python\osgiservicebridge\src;C:\Python313\DLLs;C:\Python313\Lib;C:\Python313;C:\Python313\Lib\site-packages"/>
+    </mapAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.ecf.example_mcp_client.ArithmeticToolsMCPClient"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="example-mcp-client"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="c:\\python313\\python C:\\Users\\slewi\\git\\scottslewis\\ipopo\\samples\\remotetoolsserver\\run_framework.py"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="example-arithmetic-mcp-client"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dlog4j2.configurationFile=log4j2.xml"/>
+</launchConfiguration>
