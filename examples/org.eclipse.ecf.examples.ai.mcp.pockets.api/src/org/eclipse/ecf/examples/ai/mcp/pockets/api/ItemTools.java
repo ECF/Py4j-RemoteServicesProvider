@@ -1,5 +1,7 @@
 package org.eclipse.ecf.examples.ai.mcp.pockets.api;
 
-public interface ItemTools {
+import org.eclipse.ecf.ai.mcp.tools.service.ToolGroupService;
+
+public interface ItemTools extends ToolGroupService {
 
 }
