@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pockets Example API
+Bundle-SymbolicName: org.eclipse.ecf.examples.ai.mcp.pockets.api
+Bundle-Version: 1.0.0.qualifier
+Import-Package: org.eclipse.ecf.ai.mcp.tools.annotation;version="[1.1.0,2.0.0)",
+ org.eclipse.ecf.ai.mcp.tools.service;version="1.1.0",
+ org.eclipse.ecf.ai.mcp.tools.util;version="[1.1.0,2.0.0)"
+Automatic-Module-Name: org.eclipse.ecf.examples.ai.mcp.pockets.api
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-17
