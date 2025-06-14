@@ -1,5 +1,7 @@
 package org.eclipse.ecf.examples.ai.mcp.pockets.api;
 
-public record PocketSpec(String profileId, String name, String type, String from) {
+import java.util.Map;
+
+public record PocketSpec(String name, String type, String from, Map<String, String> attributes) {
 
 }
