@@ -7,7 +7,7 @@ The [Model Context Protocol](https://modelcontextprotocol.io/introduction) is a 
 
 [Tools](https://modelcontextprotocol.io/docs/concepts/tools) are an important part of the specification, as they provide AI/LLMs with the ability to take actions, providing standardized meta-data (aka tool descriptions) that the AI/LLM can use to decide upon, provide input for and then take actions based upon the model context.
 
-The creation of MCP servers has/is [grwoing very quickly](https://github.com/modelcontextprotocol/servers).  Currently, however, most of these implementations do not support the ability to add and remove tools from MCP servers dynamically, and require a new server (and a new set of implemented tools) to used by clients.
+The creation of MCP servers has/is [growing very quickly](https://github.com/modelcontextprotocol/servers).  Currently, however, most of these implementations do not support the ability to add and remove tools from MCP servers dynamically, and require a new server (and a new set of implemented tools) to used by clients.
 
 Enter Remote Tools for MCP Servers.  [This repo](https://github.com/ECF/Py4j-RemoteServicesProvider) makes available a [Remote Services distribution provider](https://docs.osgi.org/specification/osgi.cmpn/7.0.0/service.remoteservices.html) based upon Py4j and Python <-> Java RPC framework used by [Apache Spark](https://spark.apache.org/) and others.  Combined with [iPOPO](https://ipopo.readthedocs.io/en/3.0.0/), which is a component framework for Python, and includes RSA and a py4j distribution provider, it's now easy to use Remote Services to dynamically extend/enhance MCP python servers (FastMCP below) with new Java implemented tools.
 
